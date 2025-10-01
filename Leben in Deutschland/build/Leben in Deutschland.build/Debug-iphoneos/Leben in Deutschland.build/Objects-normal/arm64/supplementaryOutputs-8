@@ -1,0 +1,23 @@
+{
+  "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/Leben in Deutschland/ContentView.swift" : {
+    "const-values" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/ContentView.d",
+    "diagnostics" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/ContentView.dia",
+    "object" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/ContentView.o",
+    "swift-dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/ContentView.swiftdeps"
+  },
+  "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/Leben in Deutschland/Leben_in_DeutschlandApp.swift" : {
+    "const-values" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/Leben_in_DeutschlandApp.swiftconstvalues",
+    "dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/Leben_in_DeutschlandApp.d",
+    "diagnostics" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/Leben_in_DeutschlandApp.dia",
+    "object" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/Leben_in_DeutschlandApp.o",
+    "swift-dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/Leben_in_DeutschlandApp.swiftdeps"
+  },
+  "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "object" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps"
+  }
+}

@@ -12,6 +12,7 @@
 
 /* Begin PBXFileReference section */
 		E612E89C2E8299CD00513716 /* Leben in Deutschland.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Leben in Deutschland.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E619899F2E8836B400A0B582 /* Leben in Deutschland.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Leben in Deutschland.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		E623807E2E82C0E2000C28AB /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -37,6 +38,7 @@
 		E612E8932E8299CD00513716 = {
 			isa = PBXGroup;
 			children = (
+				E619899F2E8836B400A0B582 /* Leben in Deutschland.xcodeproj */,
 				E623807E2E82C0E2000C28AB /* Launch Screen.storyboard */,
 				E612E89E2E8299CD00513716 /* Leben in Deutschland */,
 				E612E89D2E8299CD00513716 /* Products */,
@@ -48,6 +50,11 @@
 			children = (
 				E612E89C2E8299CD00513716 /* Leben in Deutschland.app */,
 			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E61989EE2E8AB31300A0B582 /* Products */ = {
+			isa = PBXGroup;
 			name = Products;
 			sourceTree = "<group>";
 		};
@@ -99,12 +106,19 @@
 				Base,
 				de,
 				ru,
+				uk,
 			);
 			mainGroup = E612E8932E8299CD00513716;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E612E89D2E8299CD00513716 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E61989EE2E8AB31300A0B582 /* Products */;
+					ProjectRef = E619899F2E8836B400A0B582 /* Leben in Deutschland.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E612E89B2E8299CD00513716 /* Leben in Deutschland */,
@@ -289,7 +303,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -327,7 +341,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

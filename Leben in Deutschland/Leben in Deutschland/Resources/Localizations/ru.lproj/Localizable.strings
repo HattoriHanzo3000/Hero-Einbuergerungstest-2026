@@ -1,0 +1,295 @@
+// =============================================================================
+//   ONBOARDING
+// =============================================================================
+
+// Eagle greeting
+"eagle_greeting" = "Привет! Я орлёнок Херо, и я помогу тебе подготовиться к тесту. Давай начнём!\nДля начала выбери язык приложения.";
+
+// Translation selection
+"translation_selection_title" = "Супер! А теперь выбери язык для перевода вопросов и ответов — на случай, если тебе понадобится подсказка.";
+
+// State selection
+"state_selection_title_general" = "Где ты будешь сдавать тест? Я добавлю 10 дополнительных вопросов про твою землю.";
+
+// Messages when selecting federal states
+"state_baden_württemberg" = "Здесь изобретают всё — даже дежурство по лестнице!";
+"state_bayern" = "Надел кожаные штаны — считай, сдал тест!";
+"state_brandenburg" = "Сосен больше, чем людей — зато тишина и покой!";
+"state_bremen" = "Маленький, но с мощью Бременских Музыкантов!";
+"state_hamburg" = "Мойн — и всегда против ветра!";
+"state_rheinland_pfalz" = "Где растёт вино, там растут и знания!";
+"state_sachsen_anhalt" = "Готовься к тесту и заодно считай замки!";
+"state_berlin" = "Здесь даже вопросы к тесту стильные!";
+"state_hessen" = "Рядом с банками и биржей твой мозг — лучшая инвестиция!";
+"state_mecklenburg_vorpommern" = "Между дюнами и волнами найдёшь правильный ответ!";
+"state_niedersachsen" = "Здесь всё плоско — кроме твоего ума!";
+"state_nordrhein_westfalen" = "Хелау, Алааф — и вперёд к тесту!";
+"state_saarland" = "Главное — вкусно поел… и ответил правильно!";
+"state_sachsen" = "Одно «Ну!» — и ты уже сдал!";
+"state_schleswig_holstein" = "Два моря, один тест — мы справимся!";
+"state_thüringen" = "Гёте учился здесь — теперь и ты!";
+
+// States
+"Baden-Württemberg" = "Баден-Вюртемберг";
+"Bayern" = "Бавария";
+"Berlin" = "Берлин";
+"Brandenburg" = "Бранденбург";
+"Bremen" = "Бремен";
+"Hamburg" = "Гамбург";
+"Hessen" = "Гессен";
+"Mecklenburg-Vorpommern" = "Мекленбург-Передняя Померания";
+"Niedersachsen" = "Нижняя Саксония";
+"Nordrhein-Westfalen" = "Северный Рейн-Вестфалия";
+"Rheinland-Pfalz" = "Рейнланд-Пфальц";
+"Saarland" = "Саар";
+"Sachsen" = "Саксония";
+"Sachsen-Anhalt" = "Саксония-Анхальт";
+"Schleswig-Holstein" = "Шлезвиг-Гольштейн";
+"Thüringen" = "Тюрингия";
+
+// Test date selection
+"test_date_selection_title" = "Когда ты сдаёшь тест? Я размещу небольшое напоминание на экране для тебя.";
+"SELECT_DATE" = "Выбрать дату";
+"SAVE_DATE" = "СОХРАНИТЬ ДАТУ";
+"CANCEL" = "ОТМЕНА";
+
+// Eagle dialogues
+"perfect_days_left" = "У нас осталось %d дней. Я с тобой!";
+"perfect_day_left" = "У нас остался %d день. Я с тобой!";
+"perfect_days_left_2_4" = "У нас осталось %d дня. Я с тобой!";
+"perfect_test_today" = "Отлично! Тест сегодня. Я с тобой!";
+"dont_know_date" = "Пока не знаю";
+"no_problem_later" = "Не проблема! Ты можешь добавить или изменить дату позже.";
+
+"NEXT" = "ДАЛЕЕ";
+"LET'S GO" = "ПОЕХАЛИ!";
+
+// =============================================================================
+//   MAIN SCREEN
+// =============================================================================
+
+// Main categories
+"main_category_study" = "Начать обучение";
+"main_category_all_questions" = "Изучать по темам";
+"main_category_favorites" = "Избранные";
+"main_category_test_simulation" = "Пройти тест";
+"spaced_repetition_title" = "Начать обучение";
+
+// Gamification - stage descriptions
+"eagle_desc_egg" = "Ты готов к тесту на %d%%. Ты только вылупился! Вперёд к знаниям!";
+"eagle_desc_chick" = "Ты готов на %d%%. Вперёд! Первые взмахи крыльев уже за тобой.";
+"eagle_desc_young" = "Ты готов на %d%%. Крылья крепнут! Продолжай в том же духе.";
+"eagle_desc_growing" = "Ты готов на %d%%. Отличный полёт! До вершины — рукой подать.";
+"eagle_desc_wise" = "Ты готов на %d%%. Осталось совсем чуть-чуть — не сбавляй высоты!";
+"eagle_desc_master" = "Ты готов на %d%%. Ты — настоящий орёл знаний!";
+
+// Language
+"language_title" = "Язык";
+"application_title" = "Язык приложения";
+"settings_translation_language_title" = "Язык перевода";
+
+// Federal State
+"federal_states_title" = "Федеральные земли";
+"change_state_confirmation_title" = "Изменить федеральную землю?";
+"change_state_confirmation_message" = "Вы действительно хотите изменить федеральную землю? Весь текущий прогресс будет потерян.";
+"change_state_confirmation_cancel" = "Отмена";
+"change_state_confirmation_confirm" = "Изменить";
+
+// Calendar
+"CLEAR_DATE" = "ОЧИСТИТЬ ДАТУ";
+
+// Settings
+"settings_title" = "Настройки";
+
+"settings_signals_title" = "Сигналы";
+"settings_sound_button" = "Звук";
+"settings_vibration_button" = "Вибрация";
+
+"on" = "Вкл";
+"off" = "Выкл";
+
+"settings_support_title" = "Поддержка";
+"settings_faq_button" = "FAQ";
+"settings_contact_button" = "Контакты";
+"settings_report_bug_button" = "Сообщить об ошибке";
+
+"legal_title" = "Правовое";
+"settings_impressum_button" = "Impressum";
+"terms_of_service" = "Условия использования";
+"privacy_policy" = "Политика конфиденциальности";
+
+"about_title" = "О приложении";
+"version" = "Версия";
+"whats_new_title" = "Что нового";
+"bug_fixes_general" = "Добавлены интерактивные туториалы для помощи в начале работы\nУлучшена система поддержки с доступом к FAQ\nУлучшен опыт оценки приложения\nЛучшая доступность и удобство использования\nИсправления ошибок и улучшения производительности";
+"rating_popup_title" = "Нравится приложение?";
+"rating_popup_message" = "Оставь оценку, чтобы помочь другим открыть для себя этот инструмент обучения";
+"rating_popup_rate_now" = "Оценить сейчас";
+"rating_popup_maybe_later" = "Может быть позже";
+
+// Updates
+"settings_updates_title" = "Обновления";
+"settings_check_updates_button" = "Проверить обновления";
+"settings_open_app_store_button" = "Открыть в App Store";
+"update_title" = "Доступно обновление";
+"update_message" = "Доступна новая версия приложения.";
+"update_required_title" = "Требуется обновление";
+"update_required_message" = "Пожалуйста, обнови приложение, чтобы продолжить использование.";
+"update_now" = "Обновить";
+"update_later" = "Позже";
+"update_latest_title" = "Актуальная версия";
+"update_latest_message" = "У тебя уже установлена последняя версия.";
+
+// Spaced Repetition Tutorial
+"spaced_repetition_tutorial_title" = "Подсказка";
+"spaced_repetition_tutorial_description" = "Этот метод обучения называется Spaced Repetition – научно обоснованная техника, которая помогает тебе запоминать вещи надолго.";
+"spaced_repetition_tutorial_questions" = "Вопросы будут появляться в случайном порядке. Если ответишь неправильно, вопрос скоро вернется. Если ответишь правильно, интервал станет длиннее.";
+"spaced_repetition_tutorial_mastered" = "Вопрос считается освоенным, если на него ответили правильно три раза или больше.";
+"spaced_repetition_tutorial_got_it" = "Понятно!";
+
+// Test Simulation Tutorial
+"test_simulation_tutorial_title" = "Подсказка";
+"test_simulation_tutorial_description" = "Здесь всё как на настоящем экзамене:";
+"test_simulation_tutorial_questions" = "• 33 вопроса: 30 федеральных и 3 земельных";
+"test_simulation_tutorial_time" = "• 60 минут на прохождение";
+"test_simulation_tutorial_no_help" = "• без перевода и подсказок";
+"test_simulation_tutorial_passing" = "• чтобы сдать, нужно ответить правильно минимум на 17";
+"test_simulation_tutorial_good_luck" = "Удачи — Херо с тобой!";
+"test_simulation_tutorial_got_it" = "Понятно!";
+
+"settings_statistics_title" = "Твой прогресс";
+"settings_delete_statistics" = "Cбросить приложение";
+"delete_statistics_warning_title" = "Удалить все данные и сбросить приложение?";
+"delete_statistics_warning_message" = "Это удалит все данные и прогресс. Приложение вернется к настройкам по умолчанию. Это действие нельзя отменить.";
+"delete_button" = "Удалить";
+"cancel" = "Отменить";
+
+// =============================================================================
+//   START PRACTICING
+// =============================================================================
+
+
+"question_label" = "Вопрос";
+
+"check_answer_button" = "ПРОВЕРИТЬ";
+"next_button" = "ДАЛЕЕ";
+
+// =============================================================================
+//   LEARN BY TOPICS
+// =============================================================================
+
+"all_questions_title" = "Изучать по темам";
+
+"search" = "Поиск";
+
+"Law and Constitution" = "Право и Конституция";
+"Family and Education" = "Семья и образование";
+"State" = "Государство";
+"Elections" = "Выборы";
+"State Institutions" = "Государственные органы";
+"Economy and Work" = "Экономика и работа";
+"Society and Culture" = "Общество и Культура";
+"History" = "История";
+"Europe" = "Европа";
+"Federal States" = "Федеральные земли";
+
+// =============================================================================
+//   TEST SIMULATION
+// =============================================================================
+
+"test_simulation_title" = "Пройти тест";
+"back" = "Назад";
+"next" = "Далее";
+
+"quit_test_title" = "Выйти из теста?";
+"quit_test_message" = "Ты действительно хочешь выйти из теста? Весь прогресс будет потерян.";
+"cancel" = "Отменить";
+"quit_test" = "Выйти из теста";
+
+"finish_test" = "ЗАВЕРШИТЬ ТЕСТ";
+
+"test_passed" = "Тест пройден!";
+"test_failed" = "Тест не пройден";
+"of" = "из";
+"questions_correct" = "вопросов правильно";
+"time_used" = "Затраченное время:";
+"minimum_requirement" = "Минимальное требование:";
+"your_result" = "Ваш результат:";
+"accuracy" = "Точность:";
+
+"view_answers" = "ПОСМОТРЕТЬ ОТВЕТЫ";
+"back_to_main_menu" = "ГЛАВНОЕ МЕНЮ";
+
+"your_answers" = "Твои ответы";
+
+// =============================================================================
+//   FAVORITES
+// =============================================================================
+
+"favorites_title" = "Избранное";
+"favorites_empty_title" = "Нет избранных вопросов";
+"favorites_empty_subtitle" = "Добавь вопросы в избранное, нажав на сердечко";
+"back" = "Назад";
+"next" = "Далее";
+
+// =============================================================================
+//   STATISTICS
+// =============================================================================
+
+"statistics_title" = "Твой прогресс";
+"statistics_wrong_title" = "Повтори - отвечен неправильно";
+"statistics_familiar_title" = "Знакомо - 1 раз правильно";
+"statistics_reinforced_title" = "Закреплено - 2 раза правильно";
+"statistics_mastered_title" = "Усвоено - 3 раза правильно";
+
+// =============================================================================
+//   GAMIFICATION
+// =============================================================================
+
+"eagle_stage_egg" = "Яйцо";
+"eagle_stage_chick" = "Птенец";
+"eagle_stage_young" = "Юный орёл";
+"eagle_stage_growing" = "Взрослеющий орёл";
+"eagle_stage_wise" = "Мудрый орёл";
+"eagle_stage_master" = "Орёл-мастер";
+
+//////////////////////////////////////////////////////////////
+"ok" = "ОК";
+"No questions found" = "Вопросы не найдены";
+"Loading questions..." = "Загрузка вопросов...";
+"Quiz completed!" = "Тест завершен!";
+"Your result" = "Ваш результат";
+"Correct" = "Правильно";
+"Incorrect" = "Неправильно";
+"show_explanation_button" = "Показать пояснение";
+"explanation_title" = "Пояснение";
+"explanation_text" = "Здесь будет пояснение к текущему вопросу. Эта функция будет доступна в будущих обновлениях.";
+"delete_button" = "Удалить";
+
+
+// Ad Removal
+"ad_removal_title" = "Убрать рекламу";
+"ad_removal_subtitle" = "Наслаждайся обучением без рекламы с неограниченным доступом ко всем функциям";
+"ad_removal_benefit_no_ads" = "Без рекламы";
+"ad_removal_benefit_no_ads_desc" = "Учись без перерывов на рекламу";
+"ad_removal_benefit_unlimited" = "Неограниченный доступ";
+"ad_removal_benefit_unlimited_desc" = "Доступ ко всем вопросам и функциям без ограничений";
+"ad_removal_benefit_faster" = "Быстрее";
+"ad_removal_benefit_faster_desc" = "Быстрая работа приложения без загрузки рекламы";
+"ad_removal_benefit_support" = "Поддержать разработку";
+"ad_removal_benefit_support_desc" = "Помоги нам улучшать приложение";
+"ad_removal_choose_plan" = "Выбери свой план";
+"ad_removal_monthly_plan" = "Ежемесячно";
+"ad_removal_monthly_price" = "2,99$/месяц";
+"ad_removal_monthly_desc" = "Убрать рекламу на месяц";
+"ad_removal_lifetime_plan" = "Навсегда";
+"ad_removal_lifetime_price" = "9,99$ один раз";
+"ad_removal_lifetime_desc" = "Убрать рекламу навсегда";
+"ad_removal_popular" = "Лучшая цена";
+"ad_removal_purchase_button" = "Убрать рекламу сейчас";
+"ad_removal_restore_button" = "Восстановить покупки";
+"ad_removal_terms_text" = "Покупая, ты соглашаешься с нашими Условиями использования и Политикой конфиденциальности. Ежемесячная подписка автоматически продлевается, если автопродление не отключено как минимум за 24 часа до окончания текущего периода.";
+"ad_removal_terms_of_service" = "Условия использования";
+"ad_removal_privacy_policy" = "Политика конфиденциальности";
+"ad_removal_restore_success" = "Покупки успешно восстановлены!";
+"ad_removal_error" = "Ошибка покупки";
