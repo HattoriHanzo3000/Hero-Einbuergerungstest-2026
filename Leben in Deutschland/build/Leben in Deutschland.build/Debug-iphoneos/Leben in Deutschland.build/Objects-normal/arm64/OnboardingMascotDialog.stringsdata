@@ -1,0 +1,24 @@
+{
+  "source": "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/Leben in Deutschland/Shared/Components/OnboardingMascotDialog.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Mascot",
+        "location": {
+          "startingColumn": 53,
+          "startingLine": 60
+        }
+      },
+      {
+        "comment": "",
+        "key": "Mascot",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 68
+        }
+      }
+    ]
+  },
+  "version": 1
+}

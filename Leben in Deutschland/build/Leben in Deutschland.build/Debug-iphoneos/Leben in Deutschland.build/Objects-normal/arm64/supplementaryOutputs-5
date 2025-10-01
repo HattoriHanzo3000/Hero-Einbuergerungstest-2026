@@ -1,0 +1,30 @@
+{
+  "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/Leben in Deutschland/Onboarding/Views/OnboardingDateView.swift" : {
+    "const-values" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingDateView.swiftconstvalues",
+    "dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingDateView.d",
+    "diagnostics" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingDateView.dia",
+    "object" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingDateView.o",
+    "swift-dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingDateView.swiftdeps"
+  },
+  "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/Leben in Deutschland/Onboarding/Views/OnboardingLanguageView.swift" : {
+    "const-values" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingLanguageView.swiftconstvalues",
+    "dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingLanguageView.d",
+    "diagnostics" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingLanguageView.dia",
+    "object" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingLanguageView.o",
+    "swift-dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingLanguageView.swiftdeps"
+  },
+  "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/Leben in Deutschland/Onboarding/Views/OnboardingSplashView.swift" : {
+    "const-values" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingSplashView.swiftconstvalues",
+    "dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingSplashView.d",
+    "diagnostics" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingSplashView.dia",
+    "object" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingSplashView.o",
+    "swift-dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingSplashView.swiftdeps"
+  },
+  "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/Leben in Deutschland/Onboarding/Views/OnboardingStartView.swift" : {
+    "const-values" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingStartView.swiftconstvalues",
+    "dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingStartView.d",
+    "diagnostics" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingStartView.dia",
+    "object" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingStartView.o",
+    "swift-dependencies" : "/Users/ildargizatullin/iOS Apps/Hero/Leben in Deutschland/build/Leben in Deutschland.build/Debug-iphoneos/Leben in Deutschland.build/Objects-normal/arm64/OnboardingStartView.swiftdeps"
+  }
+}
