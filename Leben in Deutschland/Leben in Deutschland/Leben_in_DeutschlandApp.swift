@@ -56,41 +56,12 @@ struct Leben_in_DeutschlandApp: App {
                 case .onboardingSplash:
                     OnboardingSplashView(onFinish: { appFlow.stage = .main })
                 case .main:
-                    // Replace with your real main view when ready
-                    ContentView()
+                    MainScreenView()
                 }
             }
             // Inject shared dependencies
             .environmentObject(languageManager)
+            .environmentObject(StateManager())
         }
-    }
-}
-
-// MARK: - Tiny placeholder to keep you moving
-private struct OnboardingPlaceholder: View {
-    let title: String
-    let buttonTitle: String
-    let action: () -> Void
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            Spacer()
-            Text(title)
-                .font(.system(size: 22, weight: .semibold, design: .rounded))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 24)
-            Button(buttonTitle, action: action)
-                .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundColor(Color(.systemGray6))
-                .padding(.vertical, 14)
-                .frame(maxWidth: 260)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.accentColor)
-                )
-            Spacer()
-        }
-        .padding()
-        .background(Color(.systemBackground))
     }
 }

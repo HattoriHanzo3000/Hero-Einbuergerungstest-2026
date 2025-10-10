@@ -1,2 +1,0 @@
-Target dependency graph (1 target)
-Target 'Leben in Deutschland' in project 'Leben in Deutschland' (no dependencies)

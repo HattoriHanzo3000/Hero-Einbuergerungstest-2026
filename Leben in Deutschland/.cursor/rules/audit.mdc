@@ -1,0 +1,10 @@
+---
+alwaysApply: false
+---
+⸻
+
+Commands:
+• audit - Run comprehensive code quality analysis on recently modified files
+  Checks for: dead code, unused imports, trailing blank lines, misleading comments
+
+⸻

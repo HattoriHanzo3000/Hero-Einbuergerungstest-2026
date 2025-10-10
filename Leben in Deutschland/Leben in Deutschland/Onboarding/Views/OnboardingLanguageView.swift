@@ -61,7 +61,7 @@ struct OnboardingLanguageView: View {
 #Preview {
     // Preview with a temporary manager
     let manager = LanguageManager()
-    let vm = OnboardingLanguageViewModel(languageManager: manager)
-    return OnboardingLanguageView(viewModel: vm)
+    let vm = OnboardingLanguageViewModel(languageManager: manager) { }
+    OnboardingLanguageView(viewModel: vm)
 }
 

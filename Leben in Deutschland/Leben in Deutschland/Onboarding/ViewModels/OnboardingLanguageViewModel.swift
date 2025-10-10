@@ -12,10 +12,14 @@ class OnboardingLanguageViewModel: ObservableObject {
     private let preferences: OnboardingPreferences
     private let onNext: () -> Void
     
-    init(languageManager: LanguageManager, preferences: OnboardingPreferences = .shared, onNext: @escaping () -> Void = {}) {
+    init(languageManager: LanguageManager, preferences: OnboardingPreferences, onNext: @escaping () -> Void) {
         self.languageManager = languageManager
         self.preferences = preferences
         self.onNext = onNext
+    }
+    
+    convenience init(languageManager: LanguageManager, onNext: @escaping () -> Void) {
+        self.init(languageManager: languageManager, preferences: OnboardingPreferences.shared, onNext: onNext)
     }
     
     // MARK: - Public Methods

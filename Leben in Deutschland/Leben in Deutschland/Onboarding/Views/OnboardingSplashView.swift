@@ -18,7 +18,6 @@ struct OnboardingSplashView: View {
                     .ignoresSafeArea()
                     .onAppear {
                         player.play()
-                        setupVideoCompletion()
                     }
                     .onDisappear {
                         player.pause()
@@ -43,38 +42,61 @@ struct OnboardingSplashView: View {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, options: [.mixWithOthers])
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
-            print("❌ AVAudioSession error: \(error)")
+            // AVAudioSession configuration failed - continue silently
         }
     }
     
     private func setupVideo() {
-        guard let url = Bundle.main.url(forResource: "splash_animation", withExtension: "mp4") else {
-            print("❌ Could not find splash_animation.mp4 in bundle")
-            // Fallback: complete onboarding after delay
+        // Find video file with multiple extension support
+        let possibleExtensions = ["mov", "mp4"]
+        var videoURL: URL?
+        for ext in possibleExtensions {
+            if let url = Bundle.main.url(forResource: "splash_animation", withExtension: ext) {
+                videoURL = url
+                break
+            }
+        }
+        
+        guard let resolvedURL = videoURL else {
+            // Video file not found - fallback to completion
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 completeOnboarding()
             }
             return
         }
         
-        let item = AVPlayerItem(url: url)
-        self.player = AVPlayer(playerItem: item)
-        self.player?.actionAtItemEnd = .pause
+        let playerItem = AVPlayerItem(url: resolvedURL)
         
-        // Respect sound setting (default to enabled if not set)
-        let soundEnabled = UserDefaults.standard.object(forKey: "sound_enabled") as? Bool ?? true
-        self.player?.isMuted = !soundEnabled
+        // Async video loading
+        Task { @MainActor in
+            do {
+                _ = try await playerItem.asset.load(.tracks)
+            } catch {
+                // Video track loading failed - continue with playback
+            }
+            
+            let player = AVPlayer(playerItem: playerItem)
+            player.actionAtItemEnd = .pause
+            
+            // Configure sound based on user settings
+            let soundEnabled = UserDefaults.standard.object(forKey: "sound_enabled") as? Bool ?? true
+            player.isMuted = !soundEnabled
+            
+            self.player = player
+            setupVideoCompletion(for: player)
+            player.play()
+        }
     }
     
-    private func setupVideoCompletion() {
-        guard let player = player else { return }
-        
+    private func setupVideoCompletion(for player: AVPlayer) {
         NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime,
             object: player.currentItem,
             queue: .main
         ) { _ in
-            completeOnboarding()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                completeOnboarding()
+            }
         }
     }
     

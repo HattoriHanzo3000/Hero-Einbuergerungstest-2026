@@ -1,0 +1,22 @@
+disabled_rules:
+  - trailing_whitespace
+  - todo
+opt_in_rules:
+  - empty_count
+  - implicit_return
+  - redundant_type_annotation
+  - closure_spacing
+  - attributes
+  - operator_usage_whitespace
+  - unused_declaration
+included:
+  - Sources
+  - App
+  - Features
+  - Shared
+excluded:
+  - Carthage
+  - Pods
+  - .build
+  - DerivedData
+reporter: "xcode"

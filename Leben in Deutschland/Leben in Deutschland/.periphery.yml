@@ -1,0 +1,36 @@
+project: YourApp.xcodeproj
+workspace: YourApp.xcworkspace
+schemes:
+  - YourApp
+targets:
+  - YourApp
+  - YourAppTests
+retain_public: true
+retain_objc_accessible: true
+retain_assign_only_properties: true
+retain_annotated: 
+  - "@IBInspectable"
+  - "@IBAction"
+  - "@IBSegueAction"
+  - "@objc"
+  - "@_dynamicReplacement"
+  - "@available"
+  - "@MainActor"
+exclude_syntax:
+  - "PreviewProvider"
+  - "UIApplicationMain"
+  - "NSApplicationMain"
+  - "main.swift"
+  - "#Preview"
+index_exclude:
+  - Carthage
+  - Pods
+  - .build
+  - DerivedData
+report_exclude:
+  - .*Generated.*
+  - .*\.g\.swift
+  - .*Mocks.*
+  - .*\.pbxproj
+  - .*\.xcassets/.*
+  - .*\.xcworkspace/.*

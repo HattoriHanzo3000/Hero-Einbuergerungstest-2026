@@ -47,7 +47,7 @@ struct OnboardingStartView: View {
         .onDisappear {
             cleanupPlayback()
         }
-        .onChange(of: scenePhase) { newPhase in
+        .onChange(of: scenePhase) { _, newPhase in
             // Keep AV pipeline quiet when app is not active
             switch newPhase {
             case .active:
@@ -67,7 +67,7 @@ struct OnboardingStartView: View {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, options: [.mixWithOthers])
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
-            print("❌ AVAudioSession error: \(error)")
+            // AVAudioSession configuration failed - continue silently
         }
     }
     
@@ -84,7 +84,7 @@ struct OnboardingStartView: View {
         }
         
         guard let resolvedURL = videoURL else {
-            print("❌ Could not find start_animation.mov or start_animation.mp4 in bundle")
+            // Video file not found - fallback to completion
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 onComplete()
             }
@@ -98,7 +98,7 @@ struct OnboardingStartView: View {
             do {
                 _ = try await playerItem.asset.load(.tracks)
             } catch {
-                print("⚠️ Video track loading failed: \(error)")
+                // Video track loading failed - continue with playback
             }
             
             let player = AVPlayer(playerItem: playerItem)
