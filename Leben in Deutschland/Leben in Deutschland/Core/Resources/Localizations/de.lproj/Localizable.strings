@@ -101,9 +101,13 @@
 // Settings
 "settings_title" = "Einstellungen";
 
-"settings_signals_title" = "Signale";
+"settings_personalisation_title" = "Personalisierung";
 "settings_sound_button" = "Ton";
 "settings_vibration_button" = "Vibration";
+"settings_appearance" = "Erscheinungsbild";
+"settings_appearance_light" = "Hell";
+"settings_appearance_dark" = "Dunkel";
+"settings_appearance_system" = "System";
 
 "on" = "An";
 "off" = "Aus";
@@ -120,8 +124,14 @@
 
 "about_title" = "Über";
 "version" = "Version";
-"whats_new_title" = "Was ist neu";
-"bug_fixes_general" = "Interaktive Tutorials hinzugefügt, um den Einstieg zu erleichtern\nSupport-System mit FAQ-Zugang verbessert\nApp-Bewertungserfahrung verbessert\nBessere Barrierefreiheit und Benutzerfreundlichkeit\nFehlerbehebungen und Leistungsverbesserungen";
+"version_description" = "Dieses Update bietet wichtige Verbesserungen und Fehlerbehebungen, einschließlich der folgenden Updates:";
+
+// Updates
+"update_1" = "Komplettes App-Redesign mit moderner Oberfläche";
+"update_2" = "Spaced-Repetition-Lernsystem hinzugefügt";
+"update_3" = "Verbesserter Testsimulationsmodus";
+"update_4" = "Erweiterte Barrierefreiheitsfunktionen";
+"update_5" = "Leistungsverbesserungen und Fehlerbehebungen";
 "rating_popup_title" = "Gefällt dir die App?";
 "rating_popup_message" = "Hinterlasse eine Bewertung, um anderen bei der Entdeckung dieses Lernwerkzeugs zu helfen";
 "rating_popup_rate_now" = "Jetzt bewerten";

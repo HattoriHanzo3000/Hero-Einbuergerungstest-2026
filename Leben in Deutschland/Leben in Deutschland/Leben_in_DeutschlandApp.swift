@@ -12,6 +12,7 @@ import Combine
 struct Leben_in_DeutschlandApp: App {
     @StateObject private var languageManager = LanguageManager()
     @StateObject private var appFlow = AppFlow()
+    @AppStorage("app_appearance") private var appAppearance: String = "system"
     
     var body: some Scene {
         WindowGroup {
@@ -62,6 +63,20 @@ struct Leben_in_DeutschlandApp: App {
             // Inject shared dependencies
             .environmentObject(languageManager)
             .environmentObject(StateManager())
+            // Apply appearance mode - updates immediately when @AppStorage changes
+            .preferredColorScheme(getColorScheme())
+        }
+    }
+    
+    // Convert saved appearance to ColorScheme
+    private func getColorScheme() -> ColorScheme? {
+        switch appAppearance {
+        case "light":
+            return .light
+        case "dark":
+            return .dark
+        default:
+            return nil // System default
         }
     }
 }

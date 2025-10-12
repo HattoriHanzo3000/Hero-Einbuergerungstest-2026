@@ -101,9 +101,13 @@
 // Settings
 "settings_title" = "Settings";
 
-"settings_signals_title" = "Signals";
+"settings_personalisation_title" = "Personalisation";
 "settings_sound_button" = "Sound";
 "settings_vibration_button" = "Vibration";
+"settings_appearance" = "Appearance";
+"settings_appearance_light" = "Light";
+"settings_appearance_dark" = "Dark";
+"settings_appearance_system" = "System";
 
 "on" = "On";
 "off" = "Off";
@@ -120,8 +124,14 @@
 
 "about_title" = "About";
 "version" = "Version";
-"whats_new_title" = "What's New";
-"bug_fixes_general" = "Added interactive tutorials to help users get started\nEnhanced support system with FAQ access\nImproved app rating experience\nBetter accessibility and usability\nBug fixes and performance improvements";
+"version_description" = "This update provides important improvements and bug fixes, including the following updates:";
+
+// Updates
+"update_1" = "Complete app redesign with modern interface";
+"update_2" = "Added spaced repetition learning system";
+"update_3" = "Improved test simulation mode";
+"update_4" = "Enhanced accessibility features";
+"update_5" = "Performance improvements and bug fixes";
 "rating_popup_title" = "Enjoying the app?";
 "rating_popup_message" = "Leave a rating to help others discover this learning tool";
 "rating_popup_rate_now" = "Rate Now";

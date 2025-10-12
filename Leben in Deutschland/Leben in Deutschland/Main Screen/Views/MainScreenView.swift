@@ -63,19 +63,8 @@ struct MainScreenView: View {
         }
         // MARK: - Sheets and Full Screen Covers
         .fullScreenCover(isPresented: $showSettings) {
-            NavigationView {
-                // SettingsView() - Will be implemented later
-                Text("Settings")
-                    .navigationTitle("settings_title".localized)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done") {
-                                showSettings = false
-                            }
-                        }
-                    }
-            }
+            SettingsView()
+                .environmentObject(languageManager)
         }
         .sheet(isPresented: $showDatePicker) {
             DatePickerSheet(
