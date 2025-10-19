@@ -13,9 +13,10 @@ struct MainScreenView: View {
     
     @EnvironmentObject var languageManager: LanguageManager
     @EnvironmentObject var stateManager: StateManager
+    @State private var router = AppRouter()
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $router.navigationPath) {
             VStack(spacing: 0) {
                 // Header section - Federal state button + Mascot (combined as one section)
                 MainHeaderContent(
@@ -54,7 +55,11 @@ struct MainScreenView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
+            .navigationDestination(for: AppRouter.Destination.self) { destination in
+                destinationView(for: destination)
+            }
         }
+        .environment(router)
         .onAppear {
             // Show dialog with delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -116,14 +121,44 @@ struct MainScreenView: View {
     
     // MARK: - Private Methods
     
+    @ViewBuilder
+    private func destinationView(for destination: AppRouter.Destination) -> some View {
+        switch destination {
+        case .categories:
+            CategoriesView()
+                .environmentObject(languageManager)
+        case .learning(let subcategoryName, let categoryName):
+            // Find the subcategory from ContentService
+            if let subcategory = ContentService.shared.findSubcategory(
+                named: subcategoryName,
+                in: categoryName,
+                language: languageManager.currentAppLanguage
+            ) {
+                LearningView(subcategory: subcategory)
+                    .environmentObject(languageManager)
+            } else {
+                // Fallback if subcategory not found
+                Text("Content not available")
+                    .foregroundColor(.secondary)
+            }
+        case .settings:
+            SettingsView()
+                .environmentObject(languageManager)
+        case .favorites:
+            // Will be implemented later
+            Text("Favorites View")
+                .navigationTitle("Favorites")
+        }
+    }
+    
     private func handleCategorySelection(_ destination: MainListModel.CategoryDestination) {
         switch destination {
         case .startLearning:
             // Navigate to StartLearningView - Will be implemented later
             print("Start Learning selected")
         case .learnByTopics:
-            // Navigate to LearnByTopicsView - Will be implemented later
-            print("Learn by Topics selected")
+            // Handled by NavigationLink in MainListContent
+            break
         case .favorites:
             // Navigate to FavoritesView - Will be implemented later
             print("Favorites selected")

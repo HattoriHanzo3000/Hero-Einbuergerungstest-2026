@@ -75,6 +75,12 @@
 "main_category_test_simulation" = "Пройти тест";
 "spaced_repetition_title" = "Начать обучение";
 
+// Learn by Topics
+"learn_by_topics_title" = "Изучать по темам";
+"no_categories_found" = "Категории не найдены";
+"no_search_results" = "Ничего не найдено";
+"question_label" = "Вопрос";
+
 // Gamification - stage descriptions
 "eagle_desc_egg" = "Ты готов к тесту на %d%%. Ты только вылупился! Вперёд к знаниям!";
 "eagle_desc_chick" = "Ты готов на %d%%. Вперёд! Первые взмахи крыльев уже за тобой.";

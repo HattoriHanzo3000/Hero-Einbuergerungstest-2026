@@ -66,12 +66,12 @@ private struct StateButton: View {
             
             if isSelected {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(Color("Fill"))
+                    .foregroundColor(.secondary)
                     .font(.title2)
                     .accessibilityLabel("Selected")
             } else {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(Color("Fill"))
+                    .foregroundColor(.secondary)
                     .font(.title2)
                     .opacity(0)
             }

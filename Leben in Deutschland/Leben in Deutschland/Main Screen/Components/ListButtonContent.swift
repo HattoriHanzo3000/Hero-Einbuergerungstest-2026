@@ -15,23 +15,23 @@ struct ListButtonContent: View {
                 // Square icon container
                 ZStack {
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color("CategoryButton"))
+                        .fill(Color("MainButton"))
                         .frame(width: MainScreenConstants.categoryIconSize, height: MainScreenConstants.categoryIconSize)
                     
                     Image(systemName: category.icon)
                         .font(.system(size: 32, weight: .semibold, design: .rounded))
-                        .foregroundColor(Color("CategoryText"))
+                        .foregroundColor(Color("MainButtonText"))
                 }
                 
                 // Rectangle text container
                 ZStack {
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color("CategoryButton"))
+                        .fill(Color("MainButton"))
                         .frame(height: MainScreenConstants.categoryIconSize)
                     
                     Text(category.title.localized)
                         .font(.system(size: 19, weight: .bold, design: .rounded))
-                        .foregroundColor(Color("CategoryText"))
+                        .foregroundColor(Color("MainButtonText"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 20)
                 }

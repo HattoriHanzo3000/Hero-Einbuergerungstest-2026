@@ -26,6 +26,7 @@ class StateManager: ObservableObject {
     // MARK: - Private Methods
     
     private func loadSavedState() {
-        selectedState = UserDefaults.standard.string(forKey: "selectedState")
+        // Load saved state, or default to "Berlin" if none exists
+        selectedState = UserDefaults.standard.string(forKey: "selectedState") ?? "Berlin"
     }
 }

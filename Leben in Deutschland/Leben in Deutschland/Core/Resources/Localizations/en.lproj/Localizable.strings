@@ -75,6 +75,12 @@
 "main_category_test_simulation" = "Take a Test";
 "spaced_repetition_title" = "Start Learning";
 
+// Learn by Topics
+"learn_by_topics_title" = "Learn by Topics";
+"no_categories_found" = "No categories found";
+"no_search_results" = "No results found";
+"question_label" = "Question";
+
 // Gamification - stage descriptions
 "eagle_desc_egg" = "You're %d%% ready for the test. You've just hatched! Time to learn and grow!";
 "eagle_desc_chick" = "You're %d%% ready. Let's go! You're learning to flap your wings.";

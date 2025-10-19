@@ -75,6 +75,12 @@
 "main_category_test_simulation" = "Test ablegen";
 "spaced_repetition_title" = "Lernen starten";
 
+// Learn by Topics
+"learn_by_topics_title" = "Lernen nach Themen";
+"no_categories_found" = "Keine Kategorien gefunden";
+"no_search_results" = "Keine Ergebnisse gefunden";
+"question_label" = "Aufgabe";
+
 // Gamification - stage descriptions
 "eagle_desc_egg" = "Du bist zu %d%% bereit für den Test. Du bist gerade geschlüpft! Auf zu neuen Erkenntnissen!";
 "eagle_desc_chick" = "Du bist zu %d%% bereit. Los geht's! Du hebst langsam ab.";

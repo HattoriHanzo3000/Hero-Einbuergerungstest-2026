@@ -197,6 +197,12 @@ class SettingsViewModel: ObservableObject {
         
         defaults.synchronize()
         
+        // Clear all learning answers
+        AnswersService.shared.clearAllAnswers()
+        
+        // Clear Categories view state
+        CategoriesStateService.shared.clearAllState()
+        
         // Reset to defaults
         isSoundEnabled = true
         isVibrationEnabled = true
