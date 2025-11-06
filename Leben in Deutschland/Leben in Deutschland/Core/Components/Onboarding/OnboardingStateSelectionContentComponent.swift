@@ -4,20 +4,38 @@ import SwiftUI
 struct OnboardingStateSelectionContentComponent: View {
     @Binding var selectedState: String?
     let onStateSelected: (String) -> Void
-    @Binding var showDialog: Bool
     
     private let states: [String] = [
-        "Baden-Württemberg","Bayern","Berlin","Brandenburg","Bremen","Hamburg","Hessen","Mecklenburg-Vorpommern","Niedersachsen","Nordrhein-Westfalen","Rheinland-Pfalz","Saarland","Sachsen","Sachsen-Anhalt","Schleswig-Holstein","Thüringen"
+        "Baden-Württemberg",
+        "Bayern",
+        "Berlin",
+        "Brandenburg",
+        "Bremen",
+        "Hamburg",
+        "Hessen",
+        "Mecklenburg-Vorpommern",
+        "Niedersachsen",
+        "Nordrhein-Westfalen",
+        "Rheinland-Pfalz",
+        "Saarland",
+        "Sachsen",
+        "Sachsen-Anhalt",
+        "Schleswig-Holstein",
+        "Thüringen"
     ]
     
     var body: some View {
         ScrollView {
             LazyVStack(spacing: OnboardingConstants.defaultSpacing) {
                 ForEach(states, id: \.self) { state in
-                    StateOptionRow(state: state, isSelected: selectedState == state) {
-                        HapticManager.shared.lightImpact()
-                        onStateSelected(state)
-                    }
+                    OnboardingStateOptionRowComponent(
+                        state: state,
+                        isSelected: selectedState == state,
+                        onTap: {
+                            HapticManager.shared.lightImpact()
+                            onStateSelected(state)
+                        }
+                    )
                 }
             }
             .transaction { t in t.animation = nil }
@@ -30,14 +48,14 @@ struct OnboardingStateSelectionContentComponent: View {
 }
 
 // MARK: - State Option Row (with press animation)
-private struct StateOptionRow: View {
+private struct OnboardingStateOptionRowComponent: View {
     let state: String
     let isSelected: Bool
-    let action: () -> Void
+    let onTap: () -> Void
     @State private var isPressed = false
     
     var body: some View {
-        Button(action: action) {
+        Button(action: onTap) {
             Text(state.localized)
                 .font(.body)
                 .fontWeight(.semibold)
@@ -48,7 +66,7 @@ private struct StateOptionRow: View {
                 .padding(.horizontal, 24)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(isSelected ? Color.accentColor : Color(.unselected))
+                        .fill(isSelected ? Color.accentColor : Color("Unselected"))
                 )
         }
         .buttonStyle(PlainButtonStyle())
@@ -56,5 +74,3 @@ private struct StateOptionRow: View {
         .buttonPressAnimation(isPressed: $isPressed)
     }
 }
-
-

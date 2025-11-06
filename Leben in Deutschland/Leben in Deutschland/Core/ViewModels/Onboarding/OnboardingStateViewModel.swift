@@ -2,11 +2,13 @@ import Foundation
 import SwiftUI
 import Combine
 
+// MARK: - Onboarding State ViewModel
 @MainActor
 class OnboardingStateViewModel: ObservableObject {
     @Published var selectedState: String?
     @Published var showDialog: Bool = false
-    /// Dialog message key for the header bubble
+    
+    // Dialog message key for the header bubble
     var dialogMessageKey: String { "state_selection_title_general" }
     
     let languageManager: LanguageManager
@@ -22,11 +24,11 @@ class OnboardingStateViewModel: ObservableObject {
     }
     
     func setupInitialState() {
-        // Restore previously saved state if any
-        if let saved = preferences.selectedState {
-            selectedState = saved
+        // Restore previously saved state if available
+        if let savedState = preferences.selectedState {
+            selectedState = savedState
         }
-        // Optionally show dialog after a small delay to match other onboarding screens
+        // Show dialog with delay to match other onboarding screens
         DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.dialogDelay) {
             self.showDialog = true
         }
@@ -40,5 +42,3 @@ class OnboardingStateViewModel: ObservableObject {
     func proceedToNext() { onNext?() }
     func goBack() { onBack?() }
 }
-
-

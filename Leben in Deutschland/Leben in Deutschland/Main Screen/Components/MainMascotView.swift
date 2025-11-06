@@ -51,7 +51,6 @@ struct MainMascotView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            let availableWidth = geometry.size.width
             let standardPadding: CGFloat = 16
             let spacing: CGFloat = 16 // Increased spacing between mascot and bubble
             // Mascot size - fixed

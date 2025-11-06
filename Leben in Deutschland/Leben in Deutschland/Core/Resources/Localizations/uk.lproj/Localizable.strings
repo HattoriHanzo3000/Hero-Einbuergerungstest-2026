@@ -273,6 +273,7 @@
 "ok" = "ОК";
 "No questions found" = "Питання не знайдено";
 "Loading questions..." = "Завантаження питань...";
+"LOADING" = "Завантаження...";
 "Quiz completed!" = "Тест завершено!";
 "Your result" = "Ваш результат";
 "Correct" = "Правильно";

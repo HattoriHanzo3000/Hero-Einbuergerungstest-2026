@@ -2,46 +2,31 @@ import SwiftUI
 
 // MARK: - Onboarding State View
 struct OnboardingStateView: View {
-    @ObservedObject var viewModel: OnboardingStateViewModel
-    @State private var nextPlayToken: UUID? = nil
+    @StateObject private var viewModel: OnboardingStateViewModel
+    
+    init(viewModel: OnboardingStateViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
-        ZStack {
-            Color(.systemBackground)
-                .ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                // Header island with progress and mascot
-                OnboardingHeaderComponent(
-                    currentStep: OnboardingConstants.stateStep,
-                    totalSteps: OnboardingConstants.totalSteps,
-                    messageKey: viewModel.dialogMessageKey,
-                    showDialog: $viewModel.showDialog,
-                    playSignal: nextPlayToken,
-                    onPlayCompleted: { viewModel.proceedToNext() }
-                )
-                .id(viewModel.selectedState)
-                .padding(.top, 8)
-                
-                OnboardingStateSelectionContentComponent(
-                    selectedState: $viewModel.selectedState,
-                    onStateSelected: viewModel.selectState,
-                    showDialog: $viewModel.showDialog
-                )
-                .padding(.vertical, 10)
-                
-                // Next Button with back button
-                OnboardingNextButtonComponent(
-                    isEnabled: viewModel.selectedState != nil,
-                    action: { nextPlayToken = UUID() },
-                    showDialog: $viewModel.showDialog,
-                    showBackButton: true,
-                    backAction: viewModel.goBack
-                )
-            }
+        OnboardingScreenContainer(
+            headerStep: OnboardingConstants.stateStep,
+            headerMessageKey: viewModel.dialogMessageKey,
+            headerId: viewModel.selectedState,
+            showDialog: $viewModel.showDialog,
+            isNextEnabled: viewModel.selectedState != nil,
+            showBackButton: true,
+            onNext: viewModel.proceedToNext,
+            onBack: viewModel.goBack,
+            onSetup: viewModel.setupInitialState,
+            languageManager: viewModel.languageManager,
+            contentPadding: EdgeInsets(top: 0, leading: 0, bottom: OnboardingConstants.contentVerticalPadding, trailing: 0)
+        ) {
+            OnboardingStateSelectionContentComponent(
+                selectedState: $viewModel.selectedState,
+                onStateSelected: viewModel.selectState
+            )
         }
-        .onAppear { viewModel.setupInitialState() }
-        .environmentObject(viewModel.languageManager)
     }
 }
 
@@ -49,5 +34,5 @@ struct OnboardingStateView: View {
 #Preview {
     let manager = LanguageManager()
     let vm = OnboardingStateViewModel(languageManager: manager)
-    return OnboardingStateView(viewModel: vm)
+    OnboardingStateView(viewModel: vm)
 }

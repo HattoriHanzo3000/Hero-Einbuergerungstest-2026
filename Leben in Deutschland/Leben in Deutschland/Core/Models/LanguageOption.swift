@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Language Option Model
 struct LanguageOption: Identifiable {
-    let id = UUID()
+    var id: String { languageCode } // Stable ID for SwiftUI diffing
     let name: String
     let nativeName: String
     let isSelected: Bool
@@ -44,4 +44,12 @@ extension LanguageOption {
             languageCode: "uk"
         )
     ]
+    
+    // MARK: - Helper Methods
+    
+    /// Returns the language code for a given language name (case-insensitive)
+    static func getLanguageCode(for languageName: String) -> String {
+        let lowercasedName = languageName.lowercased()
+        return availableLanguages.first { $0.name.lowercased() == lowercasedName }?.languageCode ?? "de"
+    }
 }

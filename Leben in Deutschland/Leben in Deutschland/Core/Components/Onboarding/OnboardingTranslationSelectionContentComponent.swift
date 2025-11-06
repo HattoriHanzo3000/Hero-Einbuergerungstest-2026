@@ -4,13 +4,12 @@ import SwiftUI
 struct OnboardingTranslationSelectionContentComponent: View {
     @Binding var selectedLanguage: String?
     let onLanguageSelected: (String) -> Void
-    @Binding var showDialog: Bool
     @EnvironmentObject var languageManager: LanguageManager
     
     var body: some View {
         VStack(spacing: OnboardingConstants.defaultSpacing) {
             ForEach(LanguageOption.availableLanguages) { language in
-                TranslationLanguageOptionRow(
+                OnboardingTranslationLanguageOptionRowComponent(
                     language: language,
                     isSelected: selectedLanguage == language.name,
                     isDisabled: isSameAsAppLanguage(languageName: language.name),
@@ -31,22 +30,13 @@ struct OnboardingTranslationSelectionContentComponent: View {
     }
     
     private func isSameAsAppLanguage(languageName: String) -> Bool {
-        let languageCode = getLanguageCode(for: languageName)
+        let languageCode = LanguageOption.getLanguageCode(for: languageName)
         return languageCode == languageManager.currentAppLanguage
-    }
-    
-    private func getLanguageCode(for languageName: String) -> String {
-        switch languageName.lowercased() {
-        case "deutsch": return "de"
-        case "english": return "en"
-        case "русский": return "ru"
-        case "українська": return "uk"
-        default: return "de"
-        }
     }
 }
 
-private struct TranslationLanguageOptionRow: View {
+// MARK: - Translation Language Option Row
+private struct OnboardingTranslationLanguageOptionRowComponent: View {
     let language: LanguageOption
     let isSelected: Bool
     let isDisabled: Bool
@@ -83,5 +73,3 @@ private struct TranslationLanguageOptionRow: View {
         .buttonPressAnimation(isPressed: $isPressed)
     }
 }
-
-

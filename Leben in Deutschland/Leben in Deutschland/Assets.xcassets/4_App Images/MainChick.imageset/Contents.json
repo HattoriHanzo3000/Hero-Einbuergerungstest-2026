@@ -1,7 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "MainChick.png",
+      "filename" : "1.1.png",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "1.2.png",
       "idiom" : "universal"
     }
   ],

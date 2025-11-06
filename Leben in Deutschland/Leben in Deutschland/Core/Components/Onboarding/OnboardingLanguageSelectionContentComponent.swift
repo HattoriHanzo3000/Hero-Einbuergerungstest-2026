@@ -4,7 +4,6 @@ import SwiftUI
 struct OnboardingLanguageSelectionContentComponent: View {
     @Binding var selectedLanguage: String?
     let onLanguageSelected: (String) -> Void
-    @Binding var showDialog: Bool
     
     var body: some View {
         VStack(spacing: OnboardingConstants.defaultSpacing) {
@@ -56,5 +55,3 @@ private struct OnboardingLanguageOptionRowComponent: View {
         .buttonPressAnimation(isPressed: $isPressed)
     }
 }
-
-

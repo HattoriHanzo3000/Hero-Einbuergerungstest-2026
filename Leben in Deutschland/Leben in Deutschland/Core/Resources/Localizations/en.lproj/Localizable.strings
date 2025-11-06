@@ -272,6 +272,7 @@
 "ok" = "OK";
 "No questions found" = "No questions found";
 "Loading questions..." = "Loading questions...";
+"LOADING" = "Loading...";
 "Quiz completed!" = "Quiz completed!";
 "Your result" = "Your result";
 "Correct" = "Correct";

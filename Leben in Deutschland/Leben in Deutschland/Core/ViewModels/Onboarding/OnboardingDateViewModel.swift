@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import Combine
 
+// MARK: - Onboarding Date ViewModel
 @MainActor
 class OnboardingDateViewModel: ObservableObject {
     @Published var selectedDate: Date?
@@ -23,13 +24,21 @@ class OnboardingDateViewModel: ObservableObject {
     
     // MARK: - Dialog content for header
     var dialogMessageKey: String {
-        guard let date = selectedDate, hasSelectedDate else {
-            return "test_date_selection_title"
+        if hasSelectedDate, let date = selectedDate {
+            let days = daysUntil(date)
+            if days == 0 {
+                return "perfect_test_today"
+            } else if days == 1 {
+                return "perfect_day_left"
+            } else if days >= 2 && days <= 4 {
+                return "perfect_days_left_2_4"
+            } else {
+                return "perfect_days_left"
+            }
+        } else if hasSelectedDontKnow {
+            return "no_problem_later"
         }
-        let days = daysUntil(date)
-        if days <= 0 { return "perfect_test_today" }
-        if days == 1 { return "perfect_day_left" }
-        return "perfect_days_left"
+        return "test_date_selection_title"
     }
     
     var dialogParameters: [String]? {
@@ -39,14 +48,16 @@ class OnboardingDateViewModel: ObservableObject {
     }
     
     func setupInitialState() {
-        if let saved = preferences.testDate {
-            selectedDate = saved
+        if let savedDate = preferences.testDate {
+            selectedDate = savedDate
             hasSelectedDate = true
             hasSelectedDontKnow = false
         } else if preferences.testDateDontKnow {
+            selectedDate = nil
             hasSelectedDate = false
             hasSelectedDontKnow = true
         }
+        // Show dialog with delay
         DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.dialogDelay) {
             self.showDialog = true
         }
@@ -57,6 +68,7 @@ class OnboardingDateViewModel: ObservableObject {
         hasSelectedDate = true
         hasSelectedDontKnow = false
         preferences.testDate = date
+        preferences.testDateDontKnow = false
     }
     
     func chooseDontKnow() {
@@ -78,5 +90,3 @@ class OnboardingDateViewModel: ObservableObject {
         return calendar.dateComponents([.day], from: start, to: end).day ?? 0
     }
 }
-
-

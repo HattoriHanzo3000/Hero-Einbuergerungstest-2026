@@ -4,7 +4,6 @@ import SwiftUI
 struct OnboardingNextButtonComponent: View {
     let isEnabled: Bool
     let action: () -> Void
-    @Binding var showDialog: Bool
     let showBackButton: Bool
     let backAction: (() -> Void)?
     let titleKey: String
@@ -18,14 +17,12 @@ struct OnboardingNextButtonComponent: View {
     init(
         isEnabled: Bool,
         action: @escaping () -> Void,
-        showDialog: Binding<Bool>,
         showBackButton: Bool = false,
         backAction: (() -> Void)? = nil,
         titleKey: String = "NEXT"
     ) {
         self.isEnabled = isEnabled
         self.action = action
-        self._showDialog = showDialog
         self.showBackButton = showBackButton
         self.backAction = backAction
         self.titleKey = titleKey
@@ -83,5 +80,3 @@ struct OnboardingNextButtonComponent: View {
         .background(Color(.systemBackground))
     }
 }
-
-

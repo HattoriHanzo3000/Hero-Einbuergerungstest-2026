@@ -1,56 +1,39 @@
 import SwiftUI
 
-
 // MARK: - Onboarding Date View
 struct OnboardingDateView: View {
-    @ObservedObject var viewModel: OnboardingDateViewModel
+    @StateObject private var viewModel: OnboardingDateViewModel
     @State private var showDatePicker: Bool = false
-    @State private var nextPlayToken: UUID? = nil
+    
+    init(viewModel: OnboardingDateViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
 
     var body: some View {
-        ZStack {
-            Color(.systemBackground)
-                .ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                // Header island with progress and mascot
-                OnboardingHeaderComponent(
-                    currentStep: OnboardingConstants.dateStep,
-                    totalSteps: OnboardingConstants.totalSteps,
-                    messageKey: viewModel.dialogMessageKey,
-                    messageParameters: viewModel.dialogParameters,
-                    showDialog: $viewModel.showDialog,
-                    playSignal: nextPlayToken,
-                    onPlayCompleted: { viewModel.proceedToNext() }
-                )
-                .id(viewModel.dialogMessageKey)
-                .padding(.top, 8)
-                
-                // Date selection section
-                OnboardingDateSelectionContentComponent(
-                    selectedDate: $viewModel.selectedDate,
-                    onSelectDate: { HapticManager.shared.lightImpact(); showDatePicker = true },
-                    onDontKnow: { viewModel.chooseDontKnow() },
-                    hasSelectedDate: viewModel.hasSelectedDate,
-                    hasSelectedDontKnow: viewModel.hasSelectedDontKnow,
-                    showDialog: $viewModel.showDialog
-                )
-                
-                Spacer()
-                
-                // Next Button with back button
-                OnboardingNextButtonComponent(
-                    isEnabled: viewModel.hasSelectedDate || viewModel.hasSelectedDontKnow,
-                    action: { nextPlayToken = UUID() },
-                    showDialog: $viewModel.showDialog,
-                    showBackButton: true,
-                    backAction: {
-                        HapticManager.shared.lightImpact()
-                        viewModel.goBack()
-                    },
-                    titleKey: "LET'S GO"
-                )
-            }
+        OnboardingScreenContainer(
+            headerStep: OnboardingConstants.dateStep,
+            headerMessageKey: viewModel.dialogMessageKey,
+            headerMessageParameters: viewModel.dialogParameters,
+            headerId: viewModel.dialogMessageKey,
+            showDialog: $viewModel.showDialog,
+            isNextEnabled: viewModel.hasSelectedDate || viewModel.hasSelectedDontKnow,
+            showBackButton: true,
+            nextButtonTitleKey: "LET'S GO",
+            onNext: viewModel.proceedToNext,
+            onBack: {
+                HapticManager.shared.lightImpact()
+                viewModel.goBack()
+            },
+            onSetup: viewModel.setupInitialState,
+            languageManager: viewModel.languageManager
+        ) {
+            OnboardingDateSelectionContentComponent(
+                selectedDate: $viewModel.selectedDate,
+                onSelectDate: { HapticManager.shared.lightImpact(); showDatePicker = true },
+                onDontKnow: { viewModel.chooseDontKnow() },
+                hasSelectedDate: viewModel.hasSelectedDate,
+                hasSelectedDontKnow: viewModel.hasSelectedDontKnow
+            )
         }
         .sheet(isPresented: $showDatePicker) {
             NavigationView {
@@ -67,13 +50,14 @@ struct OnboardingDateView: View {
                     )
                     .datePickerStyle(.wheel)
                     .labelsHidden()
-                    .environment(\.locale, currentLocale())
+                    .environment(\.locale, viewModel.languageManager.currentLocale)
                     .accentColor(Color.accentColor)
                     
                     Button("SAVE_DATE".localized) {
                         HapticManager.shared.lightImpact()
-                        viewModel.hasSelectedDate = true
-                        viewModel.hasSelectedDontKnow = false
+                        if let selectedDate = viewModel.selectedDate {
+                            viewModel.chooseDate(selectedDate)
+                        }
                         showDatePicker = false
                     }
                     .font(.system(size: 18, weight: .bold, design: .rounded))
@@ -103,39 +87,12 @@ struct OnboardingDateView: View {
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
         }
-        .onAppear { viewModel.setupInitialState() }
-        .environmentObject(viewModel.languageManager)
     }
-}
-
-// MARK: - Helpers
-extension OnboardingDateView {
-    private func currentLocale() -> Locale {
-        let code = UserDefaults.standard.string(forKey: "appLanguage") ?? "en"
-        switch code {
-        case "ru": return Locale(identifier: "ru_RU")
-        case "de": return Locale(identifier: "de_DE")
-        case "uk": return Locale(identifier: "uk_UA")
-        default: return Locale(identifier: "en_US")
-        }
-    }
-
-    private func formatDateForButton(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = currentLocale()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
-    }
-    
-    // (Dialog logic now lives in viewModel.dialogMessageKey)
 }
 
 // MARK: - Preview
 #Preview {
     let manager = LanguageManager()
     let vm = OnboardingDateViewModel(languageManager: manager)
-    return OnboardingDateView(viewModel: vm)
+    OnboardingDateView(viewModel: vm)
 }
-
-

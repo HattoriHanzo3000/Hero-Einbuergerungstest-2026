@@ -12,14 +12,10 @@ class OnboardingLanguageViewModel: ObservableObject {
     private let preferences: OnboardingPreferences
     private let onNext: () -> Void
     
-    init(languageManager: LanguageManager, preferences: OnboardingPreferences, onNext: @escaping () -> Void) {
+    init(languageManager: LanguageManager, preferences: OnboardingPreferences? = nil, onNext: @escaping () -> Void) {
         self.languageManager = languageManager
-        self.preferences = preferences
+        self.preferences = preferences ?? OnboardingPreferences.shared
         self.onNext = onNext
-    }
-    
-    convenience init(languageManager: LanguageManager, onNext: @escaping () -> Void) {
-        self.init(languageManager: languageManager, preferences: OnboardingPreferences.shared, onNext: onNext)
     }
     
     // MARK: - Public Methods
@@ -52,7 +48,7 @@ class OnboardingLanguageViewModel: ObservableObject {
     
     func selectLanguage(_ language: String) {
         selectedLanguage = language
-        let languageCode = getLanguageCode(for: language)
+        let languageCode = LanguageOption.getLanguageCode(for: language)
         languageManager.setAppLanguage(languageCode)
         
         // Ensure translation language stays different
@@ -68,21 +64,6 @@ class OnboardingLanguageViewModel: ObservableObject {
     
     // MARK: - Private Methods
     
-    private func getLanguageCode(for language: String) -> String {
-        switch language {
-        case "Deutsch":
-            return "de"
-        case "English":
-            return "en"
-        case "Русский":
-            return "ru"
-        case "Українська":
-            return "uk"
-        default:
-            return "de"
-        }
-    }
-    
     private func ensureTranslationLanguageDifferent() {
         let appLanguageCode = languageManager.currentAppLanguage
         let translationLanguageCode = preferences.translationLanguageCode
@@ -94,5 +75,3 @@ class OnboardingLanguageViewModel: ObservableObject {
         }
     }
 }
-
-

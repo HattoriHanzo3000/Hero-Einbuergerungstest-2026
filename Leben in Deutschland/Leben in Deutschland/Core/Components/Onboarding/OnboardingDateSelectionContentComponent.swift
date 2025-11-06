@@ -7,7 +7,7 @@ struct OnboardingDateSelectionContentComponent: View {
     let onDontKnow: () -> Void
     let hasSelectedDate: Bool
     let hasSelectedDontKnow: Bool
-    @Binding var showDialog: Bool
+    @EnvironmentObject var languageManager: LanguageManager
     @State private var isSelectDatePressed = false
     @State private var isDontKnowPressed = false
     
@@ -24,7 +24,7 @@ struct OnboardingDateSelectionContentComponent: View {
                     .padding(.horizontal, 24)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(hasSelectedDate ? Color.accentColor : Color(.unselected))
+                            .fill(hasSelectedDate ? Color.accentColor : Color("Unselected"))
                     )
             }
             .buttonStyle(PlainButtonStyle())
@@ -42,7 +42,7 @@ struct OnboardingDateSelectionContentComponent: View {
                     .padding(.horizontal, 24)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(hasSelectedDontKnow ? Color.accentColor : Color(.unselected))
+                            .fill(hasSelectedDontKnow ? Color.accentColor : Color("Unselected"))
                     )
             }
             .buttonStyle(PlainButtonStyle())
@@ -57,15 +57,9 @@ struct OnboardingDateSelectionContentComponent: View {
     }
     
     private func formatDate(_ date: Date) -> String {
-        let code = UserDefaults.standard.string(forKey: "appLanguage") ?? "en"
-        let locale: Locale = {
-            switch code { case "ru": return Locale(identifier: "ru_RU"); case "de": return Locale(identifier: "de_DE"); case "uk": return Locale(identifier: "uk_UA"); default: return Locale(identifier: "en_US") }
-        }()
         let formatter = DateFormatter()
-        formatter.locale = locale
+        formatter.locale = languageManager.currentLocale
         formatter.dateStyle = .medium
         return formatter.string(from: date)
     }
 }
-
-

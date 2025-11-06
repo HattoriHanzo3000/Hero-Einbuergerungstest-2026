@@ -26,7 +26,7 @@ struct OnboardingStartView: View {
                 VStack {
                     ProgressView()
                         .scaleEffect(1.5)
-                    Text("Loading...")
+                    Text("LOADING".localized)
                         .font(.headline)
                         .foregroundColor(.gray)
                         .padding(.top, 20)
@@ -37,7 +37,7 @@ struct OnboardingStartView: View {
             setupAudioSession()
             setupVideo()
             // Fallback: auto-advance even if video failed to finish rendering
-            DispatchQueue.main.asyncAfter(deadline: .now() + 6.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.videoFallbackDelay) {
                 if !didAdvance {
                     didAdvance = true
                     onComplete()
@@ -85,7 +85,7 @@ struct OnboardingStartView: View {
         
         guard let resolvedURL = videoURL else {
             // Video file not found - fallback to completion
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.videoNotFoundDelay) {
                 onComplete()
             }
             return
@@ -127,7 +127,7 @@ struct OnboardingStartView: View {
             object: player.currentItem,
             queue: .main
         ) { [onComplete] _ in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.videoCompletionDelay) {
                 if !didAdvance {
                     didAdvance = true
                     onComplete()

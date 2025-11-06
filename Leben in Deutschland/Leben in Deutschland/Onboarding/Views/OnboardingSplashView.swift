@@ -5,6 +5,7 @@ import AVFoundation
 struct OnboardingSplashView: View {
     @State private var player: AVPlayer?
     @State private var isVideoFinished = false
+    @State private var endObserver: NSObjectProtocol?
     let onFinish: () -> Void
     
     var body: some View {
@@ -33,6 +34,9 @@ struct OnboardingSplashView: View {
             setupAudioSession()
             setupVideo()
         }
+        .onDisappear {
+            cleanupPlayback()
+        }
     }
     
     // MARK: - Private Methods
@@ -59,7 +63,7 @@ struct OnboardingSplashView: View {
         
         guard let resolvedURL = videoURL else {
             // Video file not found - fallback to completion
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.videoNotFoundDelay) {
                 completeOnboarding()
             }
             return
@@ -89,14 +93,37 @@ struct OnboardingSplashView: View {
     }
     
     private func setupVideoCompletion(for player: AVPlayer) {
-        NotificationCenter.default.addObserver(
+        // Remove previous observer if any
+        if let token = endObserver {
+            NotificationCenter.default.removeObserver(token)
+            endObserver = nil
+        }
+        
+        endObserver = NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime,
             object: player.currentItem,
             queue: .main
         ) { _ in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.videoCompletionDelay) {
                 completeOnboarding()
             }
+        }
+    }
+    
+    private func cleanupPlayback() {
+        player?.pause()
+        player?.replaceCurrentItem(with: nil)
+        player = nil
+        
+        if let token = endObserver {
+            NotificationCenter.default.removeObserver(token)
+            endObserver = nil
+        }
+        
+        do {
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch {
+            // Non-fatal; OK to ignore in most cases
         }
     }
     
@@ -105,7 +132,7 @@ struct OnboardingSplashView: View {
         UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
         
         // Navigate to main app after a short delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.onboardingCompleteDelay) {
             onFinish()
         }
     }

@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // MARK: - Onboarding Header Component (Island Design)
 struct OnboardingHeaderComponent: View {
@@ -11,6 +12,7 @@ struct OnboardingHeaderComponent: View {
     let onPlayCompleted: (() -> Void)?
     
     private let standardPadding: CGFloat = 16
+    fileprivate static let mascotAssetName = "MainChick"
     
     init(
         currentStep: Int,
@@ -41,11 +43,9 @@ struct OnboardingHeaderComponent: View {
                 }
                 .frame(height: 44)
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, standardPadding)
-                .border(Color.yellow.opacity(0), width: 2)
+                .padding(.horizontal, OnboardingConstants.progressBarHorizontalPadding)
             }
             .frame(height: 44)
-            .border(Color.green.opacity(0), width: 2)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("Progress")
             .accessibilityValue("\(currentStep) of \(totalSteps)")
@@ -53,65 +53,53 @@ struct OnboardingHeaderComponent: View {
             OnboardingMascotRow(
                 messageKey: messageKey,
                 messageParameters: messageParameters,
-                showDialog: $showDialog,
                 horizontalPadding: standardPadding,
                 playSignal: playSignal,
                 onPlayCompleted: onPlayCompleted
             )
             .padding(.top, 12)
             .padding(.horizontal, standardPadding)
-            .border(Color.orange.opacity(0), width: 2)
         }
         .padding(.bottom, standardPadding * 2)
-        .border(Color.blue.opacity(0), width: 2)
         .background(
             RoundedRectangle(cornerRadius: 28)
                 .fill(Color.accentColor)
-                .border(Color.red.opacity(0), width: 2)
         )
         .padding(.horizontal)
         .padding(.top, 8)
     }
-    
-    private func circleIconButton(icon: String, tint: Color = Color.accentColor) -> some View {
-        ZStack {
-            Circle()
-                .fill(Color("MainButton"))
-                .frame(width: 30, height: 30)
-            Image(systemName: icon)
-                .font(.system(size: 14, weight: .bold))
-                .foregroundColor(tint)
-        }
-        .frame(width: 44, height: 44)
-        .contentShape(Circle())
-    }
 }
 
-// MARK: - Onboarding Mascot Row (Inside Header)
+// MARK: - Onboarding Mascot Dialog Row (Inside Header)
 struct OnboardingMascotRow: View {
     let messageKey: String
     let messageParameters: [String]?
-    @Binding var showDialog: Bool
     let horizontalPadding: CGFloat
     @State private var showMascotGif = false
     @State private var gifPlayToken: UUID = UUID()
     @EnvironmentObject var languageManager: LanguageManager
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
     
     let playSignal: UUID?
     let onPlayCompleted: (() -> Void)?
     
+    // MARK: - Constants
+    private static let spacing: CGFloat = 16
+    private static let mascotSize: CGFloat = 120
+    private static let mascotShadowRadius: CGFloat = 4
+    private static let mascotShadowOffset: CGSize = CGSize(width: 0, height: 2)
+    private static let mascotShadowOpacity: Double = 0.1
+    
     init(
         messageKey: String,
         messageParameters: [String]? = nil,
-        showDialog: Binding<Bool>,
         horizontalPadding: CGFloat,
         playSignal: UUID? = nil,
         onPlayCompleted: (() -> Void)? = nil
     ) {
         self.messageKey = messageKey
         self.messageParameters = messageParameters
-        self._showDialog = showDialog
         self.horizontalPadding = horizontalPadding
         self.playSignal = playSignal
         self.onPlayCompleted = onPlayCompleted
@@ -121,51 +109,61 @@ struct OnboardingMascotRow: View {
         let localizedString = messageKey.localized
         guard let parameters = messageParameters, !parameters.isEmpty else { return localizedString }
         var formattedString = localizedString
-        for (_, parameter) in parameters.enumerated() {
-            if let range = formattedString.range(of: "%d") {
-                formattedString = formattedString.replacingOccurrences(of: "%d", with: parameter, range: range)
-            }
+        // Replace all occurrences of %d with parameters
+        for parameter in parameters {
+            formattedString = formattedString.replacingOccurrences(of: "%d", with: parameter)
         }
         return formattedString
     }
     
+    private var staticMascotAssetName: String {
+        if colorScheme == .dark, UIImage(named: "MainChickDark") != nil {
+            return "MainChickDark"
+        }
+        return OnboardingHeaderComponent.mascotAssetName
+    }
+    
+    private var gifMascotAssetName: String {
+        colorScheme == .dark ? "MainChickDark" : OnboardingHeaderComponent.mascotAssetName
+    }
+    
     var body: some View {
-        let spacing: CGFloat = 16
-        let mascotSize: CGFloat = 120
-        
         HStack(alignment: .top, spacing: 0) {
             ZStack {
-                if UIImage(named: "MainChick") != nil {
-                    Image("MainChick")
+                if UIImage(named: staticMascotAssetName) != nil {
+                    Image(staticMascotAssetName)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: mascotSize)
-                        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                        .frame(width: Self.mascotSize, height: Self.mascotSize)
                         .accessibilityLabel("Mascot")
                         .opacity((showMascotGif && !reduceMotion) ? 0 : 1)
                 } else {
                     Color.clear
-                        .frame(width: mascotSize, height: mascotSize)
+                        .frame(width: Self.mascotSize, height: Self.mascotSize)
                         .accessibilityHidden(true)
                 }
                 
-                let gifName = "MainChick"
-                AnimatedGIFView(gifName: gifName, contentMode: .scaleAspectFit, shouldAnimate: showMascotGif && !reduceMotion)
+                AnimatedGIFView(gifName: gifMascotAssetName, contentMode: .scaleAspectFit, shouldAnimate: showMascotGif && !reduceMotion)
                     .id(gifPlayToken)
-                    .frame(width: mascotSize, height: mascotSize)
-                    .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                    .frame(width: Self.mascotSize, height: Self.mascotSize)
                     .accessibilityLabel("Mascot")
                     .opacity((showMascotGif && !reduceMotion) ? 1 : 0)
                     .allowsHitTesting(false)
             }
+            .frame(width: Self.mascotSize, height: Self.mascotSize)
+            .shadow(
+                color: .black.opacity(Self.mascotShadowOpacity),
+                radius: Self.mascotShadowRadius,
+                x: Self.mascotShadowOffset.width,
+                y: Self.mascotShadowOffset.height
+            )
             .contentShape(Rectangle())
             .onTapGesture {
                 HapticManager.shared.lightImpact()
                 if !reduceMotion { playGifOnly() }
             }
-            .border(Color.pink.opacity(0), width: 2)
             
-            Spacer().frame(width: spacing)
+            Spacer().frame(width: Self.spacing)
 
             VStack(alignment: .leading, spacing: 0) {
                 Text(formattedMessage)
@@ -188,12 +186,16 @@ struct OnboardingMascotRow: View {
                     .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
             )
             .padding(.trailing, horizontalPadding)
-            .border(Color.cyan.opacity(0), width: 2)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .border(Color.purple.opacity(0), width: 2)
         .onChange(of: playSignal) { _, _ in
-            if reduceMotion { onPlayCompleted?() } else { playGifThenComplete() }
+            if reduceMotion {
+                // Skip animation when reduce motion is enabled
+                onPlayCompleted?()
+            } else {
+                // Play animation then complete
+                playGifThenComplete()
+            }
         }
     }
     
@@ -212,5 +214,3 @@ struct OnboardingMascotRow: View {
         }
     }
 }
-
-

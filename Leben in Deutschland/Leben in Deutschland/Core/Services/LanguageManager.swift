@@ -31,6 +31,17 @@ class LanguageManager: ObservableObject {
         UserDefaults.standard.set(code, forKey: "translationLanguage")
     }
     
+    // MARK: - Locale
+    
+    var currentLocale: Locale {
+        switch currentAppLanguage {
+        case "ru": return Locale(identifier: "ru_RU")
+        case "de": return Locale(identifier: "de_DE")
+        case "uk": return Locale(identifier: "uk_UA")
+        default: return Locale(identifier: "en_US")
+        }
+    }
+    
     // MARK: - Private Methods
     
     private func loadSavedLanguages() {

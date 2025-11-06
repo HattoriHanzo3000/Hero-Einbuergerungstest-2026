@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import Combine
 
+// MARK: - Onboarding Translation ViewModel
 @MainActor
 class OnboardingTranslationViewModel: ObservableObject {
     @Published var selectedLanguage: String?
@@ -20,7 +21,12 @@ class OnboardingTranslationViewModel: ObservableObject {
     }
     
     func setupInitialState() {
-        // Preselect nothing; ensure dialog appears after delay
+        // Restore saved translation language if available
+        if let savedTranslationCode = preferences.translationLanguageCode,
+           let languageOption = LanguageOption.availableLanguages.first(where: { $0.languageCode == savedTranslationCode }) {
+            selectedLanguage = languageOption.name
+        }
+        // Show dialog with delay
         DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.dialogDelay) {
             self.showDialog = true
         }
@@ -28,23 +34,11 @@ class OnboardingTranslationViewModel: ObservableObject {
     
     func selectLanguage(_ language: String) {
         selectedLanguage = language
-        let code = getLanguageCode(for: language)
+        let code = LanguageOption.getLanguageCode(for: language)
         preferences.translationLanguageCode = code
         preferences.translationSelected = true
     }
     
     func proceedToNext() { onNext?() }
     func goBack() { onBack?() }
-    
-    private func getLanguageCode(for language: String) -> String {
-        switch language.lowercased() {
-        case "deutsch": return "de"
-        case "english": return "en"
-        case "русский": return "ru"
-        case "українська": return "uk"
-        default: return "de"
-        }
-    }
 }
-
-
