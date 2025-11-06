@@ -14,6 +14,7 @@ final class OnboardingPreferences {
         static let translationSelected = "translationSelected"
         static let translationLanguageCode = "translationLanguageCode"
         static let testDateDontKnow = "testDateDontKnow"
+        static let testDate = "testDate"
     }
     
     var hasLaunchedBefore: Bool {
@@ -23,6 +24,11 @@ final class OnboardingPreferences {
     
     func clearSelectedState() {
         defaults.removeObject(forKey: Keys.selectedState)
+    }
+
+    var selectedState: String? {
+        get { defaults.string(forKey: Keys.selectedState) }
+        set { defaults.set(newValue, forKey: Keys.selectedState) }
     }
 
     var translationSelected: Bool {
@@ -38,5 +44,20 @@ final class OnboardingPreferences {
     var testDateDontKnow: Bool {
         get { defaults.bool(forKey: Keys.testDateDontKnow) }
         set { defaults.set(newValue, forKey: Keys.testDateDontKnow) }
+    }
+
+    var testDate: Date? {
+        get {
+            let time = defaults.double(forKey: Keys.testDate)
+            return time == 0 ? nil : Date(timeIntervalSince1970: time)
+        }
+        set {
+            if let date = newValue {
+                defaults.set(date.timeIntervalSince1970, forKey: Keys.testDate)
+                testDateDontKnow = false
+            } else {
+                defaults.removeObject(forKey: Keys.testDate)
+            }
+        }
     }
 }

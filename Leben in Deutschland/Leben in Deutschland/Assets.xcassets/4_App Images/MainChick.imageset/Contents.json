@@ -3,16 +3,6 @@
     {
       "filename" : "MainChick.png",
       "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "MainChickDark.png",
-      "idiom" : "universal"
     }
   ],
   "info" : {

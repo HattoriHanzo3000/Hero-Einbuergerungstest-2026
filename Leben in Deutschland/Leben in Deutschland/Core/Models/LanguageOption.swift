@@ -36,6 +36,12 @@ extension LanguageOption {
             nativeName: "Русский",
             isSelected: false,
             languageCode: "ru"
+        ),
+        LanguageOption(
+            name: "Українська",
+            nativeName: "Українська",
+            isSelected: false,
+            languageCode: "uk"
         )
     ]
 }

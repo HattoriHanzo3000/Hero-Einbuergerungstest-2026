@@ -23,7 +23,9 @@ struct QuestionCard: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Question text
                     Text(question.text)
-                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .fontDesign(.rounded)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
@@ -31,7 +33,8 @@ struct QuestionCard: View {
                     if showTranslation, let translated = translatedQuestion {
                         if translated.text != question.text {
                             Text(translated.text)
-                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                .font(.subheadline)
+                                .fontDesign(.rounded)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.leading)
                                 .padding(.top, 8)
@@ -50,7 +53,8 @@ struct QuestionCard: View {
                             }) {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text(option)
-                                        .font(.system(size: 16, weight: .regular, design: .rounded))
+                                        .font(.body)
+                                        .fontDesign(.rounded)
                                         .foregroundColor(.primary)
                                         .multilineTextAlignment(.leading)
                                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -59,7 +63,8 @@ struct QuestionCard: View {
                                     if showTranslation, let translated = translatedQuestion {
                                         if index < translated.options.count && translated.options[index] != option {
                                             Text(translated.options[index])
-                                                .font(.system(size: 14, weight: .regular, design: .rounded))
+                                                .font(.subheadline)
+                                                .fontDesign(.rounded)
                                                 .foregroundColor(.secondary)
                                                 .multilineTextAlignment(.leading)
                                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -77,7 +82,7 @@ struct QuestionCard: View {
                     }
                 }
                 .padding(.horizontal, 12)
-                .padding(.vertical, 20)
+                .padding(.vertical, 8)
             }
         }
         .background(Color(.systemBackground))

@@ -1,44 +1,55 @@
 import SwiftUI
 
-// MARK: - Date Selection Content
-struct DateSelectionContent: View {
+// MARK: - Onboarding Date Selection Content Component
+struct OnboardingDateSelectionContentComponent: View {
     @Binding var selectedDate: Date?
     let onSelectDate: () -> Void
     let onDontKnow: () -> Void
     let hasSelectedDate: Bool
     let hasSelectedDontKnow: Bool
     @Binding var showDialog: Bool
+    @State private var isSelectDatePressed = false
+    @State private var isDontKnowPressed = false
     
     var body: some View {
         VStack(spacing: OnboardingConstants.defaultSpacing) {
             Button(action: onSelectDate) {
                 Text(selectedDate != nil ? formatDate(selectedDate!) : "SELECT_DATE".localized)
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .font(.body)
+                    .fontWeight(.semibold)
+                    .fontDesign(.rounded)
                     .foregroundColor(hasSelectedDate ? .white : .primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 15)
+                    .frame(height: 56)
                     .padding(.horizontal, 24)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(hasSelectedDate ? Color("Fill") : Color(.unselected))
+                            .fill(hasSelectedDate ? Color.accentColor : Color(.unselected))
                     )
             }
             .buttonStyle(PlainButtonStyle())
+            .scaleEffect(isSelectDatePressed ? 0.98 : 1.0)
+            .buttonPressAnimation(isPressed: $isSelectDatePressed)
             
             Button(action: onDontKnow) {
                 Text("dont_know_date".localized)
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .font(.body)
+                    .fontWeight(.semibold)
+                    .fontDesign(.rounded)
                     .foregroundColor(hasSelectedDontKnow ? .white : .primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 15)
+                    .frame(height: 56)
                     .padding(.horizontal, 24)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(hasSelectedDontKnow ? Color("Fill") : Color(.unselected))
+                            .fill(hasSelectedDontKnow ? Color.accentColor : Color(.unselected))
                     )
             }
             .buttonStyle(PlainButtonStyle())
+            .scaleEffect(isDontKnowPressed ? 0.98 : 1.0)
+            .buttonPressAnimation(isPressed: $isDontKnowPressed)
         }
+        .transaction { t in t.animation = nil }
         .frame(width: OnboardingConstants.getButtonWidth())
         .frame(maxWidth: .infinity, alignment: .center)
         .padding(.top, 16)

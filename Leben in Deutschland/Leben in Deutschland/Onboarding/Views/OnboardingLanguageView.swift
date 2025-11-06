@@ -16,37 +16,35 @@ struct OnboardingLanguageView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Header with Progress Bar
-                OnboardingHeader(
+                // Header island with progress and mascot
+                OnboardingHeaderComponent(
                     currentStep: OnboardingConstants.languageStep,
                     totalSteps: OnboardingConstants.totalSteps,
-                    showBackButton: false,
-                    backAction: nil
-                )
-                
-                // Mascot Dialog
-                OnboardingMascotDialog(
                     messageKey: "eagle_greeting",
                     showDialog: $viewModel.showDialog,
                     playSignal: nextPlayToken,
                     onPlayCompleted: { viewModel.proceedToNext() }
                 )
                 .id(viewModel.selectedLanguage)
+                .padding(.top, 8)
                 
                 // Language Selection Content
-                LanguageSelectionContent(
+                OnboardingLanguageSelectionContentComponent(
                     selectedLanguage: $viewModel.selectedLanguage,
                     onLanguageSelected: viewModel.selectLanguage,
                     showDialog: $viewModel.showDialog
                 )
+                .transaction { transaction in transaction.animation = nil }
                 
                 Spacer()
                 
-                // Next Button
-                OnboardingNextButton(
+                // Next Button (no back button on first screen)
+                OnboardingNextButtonComponent(
                     isEnabled: viewModel.selectedLanguage != nil,
                     action: { nextPlayToken = UUID() },
-                    showDialog: $viewModel.showDialog
+                    showDialog: $viewModel.showDialog,
+                    showBackButton: false,
+                    backAction: nil
                 )
             }
         }

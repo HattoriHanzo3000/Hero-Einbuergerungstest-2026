@@ -1,7 +1,7 @@
 import SwiftUI
 
-// MARK: - Translation Language Selection Content
-struct TranslationLanguageSelectionContent: View {
+// MARK: - Onboarding Translation Language Selection Component
+struct OnboardingTranslationSelectionContentComponent: View {
     @Binding var selectedLanguage: String?
     let onLanguageSelected: (String) -> Void
     @Binding var showDialog: Bool
@@ -23,13 +23,12 @@ struct TranslationLanguageSelectionContent: View {
                 )
             }
         }
+        .transaction { t in t.animation = nil }
         .frame(width: OnboardingConstants.getButtonWidth())
         .frame(maxWidth: .infinity, alignment: .center)
         .padding(.top, 16)
         .padding(.horizontal, 4)
     }
-    
-    // MARK: - Helper Methods
     
     private func isSameAsAppLanguage(languageName: String) -> Bool {
         let languageCode = getLanguageCode(for: languageName)
@@ -47,36 +46,42 @@ struct TranslationLanguageSelectionContent: View {
     }
 }
 
-// MARK: - Translation Language Option Row
-struct TranslationLanguageOptionRow: View {
+private struct TranslationLanguageOptionRow: View {
     let language: LanguageOption
     let isSelected: Bool
     let isDisabled: Bool
     let onTap: () -> Void
     
-    private var selectedFill: Color { Color("Fill") }
+    private var selectedFill: Color { Color.accentColor }
     private var unselectedFill: Color { Color("Unselected") }
+    @State private var isPressed = false
     
     var body: some View {
         Button(action: onTap) {
             Text(language.name)
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                .font(.body)
+                .fontWeight(.semibold)
+                .fontDesign(.rounded)
                 .foregroundColor(
-                    isDisabled ? Color(.secondaryLabel) : 
+                    isDisabled ? Color(.secondaryLabel) :
                     (isSelected ? .white : .primary)
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 15)
+                .frame(height: 56)
                 .padding(.horizontal, 24)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(
-                            isSelected ? selectedFill : 
+                            isSelected ? selectedFill :
                             (isDisabled ? Color(.systemGray5) : unselectedFill)
                         )
                 )
         }
         .buttonStyle(PlainButtonStyle())
         .disabled(isDisabled)
+        .scaleEffect(isPressed ? 0.98 : 1.0)
+        .buttonPressAnimation(isPressed: $isPressed)
     }
 }
+
+

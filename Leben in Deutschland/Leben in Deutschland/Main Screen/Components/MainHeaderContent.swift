@@ -7,72 +7,62 @@ struct MainHeaderContent: View {
     let onStateButtonTapped: () -> Void
     @State private var isStateButtonPressed = false
     
+    // Standard horizontal padding for consistency
+    private let standardPadding: CGFloat = 16
+    // Fixed header height to prevent stretching
+    private let headerHeight: CGFloat = 180
+    
     var body: some View {
-        VStack(spacing: 0) {
-            // Federal state button - top part (25% of header)
-            GeometryReader { geometry in
-                let sidePadding = MainScreenConstants.getHeaderSidePadding()
-                
-                VStack(spacing: 0) {
-                    Spacer() // Push content to bottom
-                    
-                    // Header content - federal state button in center
-                    HStack {
-                        Spacer()
-                        
-                        // Federal state button in the center
-                        if let selectedState = stateManager.selectedState {
-                            ZStack {
-                                Text(getLocalizedStateName(selectedState))
-                                    .font(.system(size: 22, weight: .bold, design: .rounded))
-                                    .foregroundColor(Color(.systemGray6))
-                                    .multilineTextAlignment(.center)
-                                    .fixedSize(horizontal: true, vertical: true)
-                                    .padding(.horizontal, 5)
-                                    .frame(maxWidth: MainScreenConstants.federalStateButtonMaxWidth)
-                            }
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color.clear)
-                            )
-                            .scaleEffect(isStateButtonPressed ? 0.97 : 1.0)
-                            .animation(.easeInOut(duration: 0.08), value: isStateButtonPressed)
-                            .contentShape(Rectangle())
-                            .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
-                                isStateButtonPressed = pressing
-                            }, perform: {
-                                HapticManager.shared.lightImpact()
-                                onStateButtonTapped()
-                            })
-                            .accessibilityLabel("Federal State")
-                            .accessibilityValue(getLocalizedStateName(selectedState))
-                            .accessibilityHint("Tap to change federal state")
-                            .accessibilityAddTraits(.isButton)
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal, sidePadding)
-                    .padding(.bottom, 10)
-                }
-            }
-            .frame(height: MainScreenConstants.getHeaderHeight() * 0.25) // 25% of header height for federal state
+        ZStack {
+            // Background that extends into safe area
+            RoundedRectangle(cornerRadius: 28)
+                .fill(Color.accentColor)
+                .ignoresSafeArea(edges: .top)
             
-            // Mascot section - bottom part of header (75% of header)
-            MainMascotView(
-                messageKey: "eagle_desc_chick", // Temporary message, will be dynamic later
-                showDialog: $showDialog
-            )
-            .frame(height: MainScreenConstants.getHeaderHeight() * 0.75) // 75% of header height for mascot
-        }
-        .background(
-            RoundedRectangle(cornerRadius: 0, style: .continuous)
-                .fill(Color("Fill"))
-                .clipShape(
-                    RoundedCorner(radius: 35, corners: [.bottomLeft, .bottomRight])
+            // Content
+            VStack(spacing: 12) {
+                // Row 1: Federal state (centered, single line)
+                if let selectedState = stateManager.selectedState {
+                    Button(action: {
+                        HapticManager.shared.lightImpact()
+                        onStateButtonTapped()
+                    }) {
+                        Text(getLocalizedStateName(selectedState))
+                            .font(.title2.bold())
+                            .fontDesign(.rounded)
+                            .foregroundColor(Color(.systemGray6))
+                            .multilineTextAlignment(.center)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .minimumScaleFactor(0.8)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                    }
+                    .scaleEffect(isStateButtonPressed ? 0.97 : 1.0)
+                    .animation(.easeInOut(duration: 0.08), value: isStateButtonPressed)
+                    .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
+                        isStateButtonPressed = pressing
+                    }, perform: {})
+                    .accessibilityLabel("Federal State")
+                    .accessibilityValue(getLocalizedStateName(selectedState))
+                    .accessibilityHint("Tap to change federal state")
+                    .accessibilityAddTraits(.isButton)
+                }
+                
+                // Row 2: Mascot with bubble (dynamic height)
+                MainMascotView(
+                    messageKey: "eagle_desc_chick",
+                    showDialog: $showDialog
                 )
-                .ignoresSafeArea(.all, edges: .top)
-        )
+                .frame(minHeight: 120) // Minimum height to match mascot size, but can grow
+            }
+            .padding(standardPadding) // Same padding on all 4 sides
+            .frame(height: headerHeight - (standardPadding * 2)) // Fixed height minus padding on top and bottom
+        }
+        .frame(height: headerHeight)
+        .padding(.horizontal)
+        .padding(.top, 8)
+        .padding(.bottom, 8)
     }
     
     private func getLocalizedStateName(_ stateName: String) -> String {

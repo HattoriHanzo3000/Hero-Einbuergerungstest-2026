@@ -1,7 +1,7 @@
 import SwiftUI
 
-// MARK: - Language Selection Content
-struct LanguageSelectionContent: View {
+// MARK: - Onboarding Language Selection Content Component
+struct OnboardingLanguageSelectionContentComponent: View {
     @Binding var selectedLanguage: String?
     let onLanguageSelected: (String) -> Void
     @Binding var showDialog: Bool
@@ -9,7 +9,7 @@ struct LanguageSelectionContent: View {
     var body: some View {
         VStack(spacing: OnboardingConstants.defaultSpacing) {
             ForEach(LanguageOption.availableLanguages) { language in
-                LanguageOptionRow(
+                OnboardingLanguageOptionRowComponent(
                     language: language,
                     isSelected: selectedLanguage == language.name,
                     onTap: {
@@ -26,22 +26,25 @@ struct LanguageSelectionContent: View {
     }
 }
 
-// MARK: - Language Option Row
-struct LanguageOptionRow: View {
+// MARK: - Language Option Row (press animated)
+private struct OnboardingLanguageOptionRowComponent: View {
     let language: LanguageOption
     let isSelected: Bool
     let onTap: () -> Void
     
-    private var selectedFill: Color { Color("Fill") }
+    private var selectedFill: Color { Color.accentColor }
     private var unselectedFill: Color { Color("Unselected") }
+    @State private var isPressed = false
     
     var body: some View {
         Button(action: onTap) {
             Text(language.name)
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                .font(.body)
+                .fontWeight(.semibold)
+                .fontDesign(.rounded)
                 .foregroundColor(isSelected ? .white : .primary)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 15)
+                .frame(height: 56)
                 .padding(.horizontal, 24)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
@@ -49,5 +52,9 @@ struct LanguageOptionRow: View {
                 )
         }
         .buttonStyle(PlainButtonStyle())
+        .scaleEffect(isPressed ? 0.98 : 1.0)
+        .buttonPressAnimation(isPressed: $isPressed)
     }
 }
+
+

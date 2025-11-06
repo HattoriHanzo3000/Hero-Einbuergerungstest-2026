@@ -16,25 +16,20 @@ struct OnboardingTranslationView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Header with Progress Bar
-                OnboardingHeader(
+                // Header island with progress and mascot
+                OnboardingHeaderComponent(
                     currentStep: OnboardingConstants.translationStep,
                     totalSteps: OnboardingConstants.totalSteps,
-                    showBackButton: true,
-                    backAction: viewModel.goBack
-                )
-                
-                // Mascot Dialog
-                OnboardingMascotDialog(
                     messageKey: "translation_selection_title",
                     showDialog: $viewModel.showDialog,
                     playSignal: nextPlayToken,
                     onPlayCompleted: { viewModel.proceedToNext() }
                 )
                 .id(viewModel.selectedLanguage)
+                .padding(.top, 8)
                 
                 // Translation Language Selection Content
-                TranslationLanguageSelectionContent(
+                OnboardingTranslationSelectionContentComponent(
                     selectedLanguage: $viewModel.selectedLanguage,
                     onLanguageSelected: viewModel.selectLanguage,
                     showDialog: $viewModel.showDialog
@@ -42,11 +37,13 @@ struct OnboardingTranslationView: View {
                 
                 Spacer()
                 
-                // Next Button
-                OnboardingNextButton(
+                // Next Button with back button
+                OnboardingNextButtonComponent(
                     isEnabled: viewModel.selectedLanguage != nil,
                     action: { nextPlayToken = UUID() },
-                    showDialog: $viewModel.showDialog
+                    showDialog: $viewModel.showDialog,
+                    showBackButton: true,
+                    backAction: viewModel.goBack
                 )
             }
         }

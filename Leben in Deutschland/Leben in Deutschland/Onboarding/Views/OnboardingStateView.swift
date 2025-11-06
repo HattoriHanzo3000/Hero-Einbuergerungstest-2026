@@ -11,32 +11,32 @@ struct OnboardingStateView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                OnboardingHeader(
+                // Header island with progress and mascot
+                OnboardingHeaderComponent(
                     currentStep: OnboardingConstants.stateStep,
                     totalSteps: OnboardingConstants.totalSteps,
-                    showBackButton: true,
-                    backAction: viewModel.goBack
-                )
-                
-                OnboardingMascotDialog(
                     messageKey: viewModel.dialogMessageKey,
                     showDialog: $viewModel.showDialog,
                     playSignal: nextPlayToken,
                     onPlayCompleted: { viewModel.proceedToNext() }
                 )
                 .id(viewModel.selectedState)
+                .padding(.top, 8)
                 
-                StateSelectionContent(
+                OnboardingStateSelectionContentComponent(
                     selectedState: $viewModel.selectedState,
                     onStateSelected: viewModel.selectState,
                     showDialog: $viewModel.showDialog
                 )
                 .padding(.vertical, 10)
                 
-                OnboardingNextButton(
+                // Next Button with back button
+                OnboardingNextButtonComponent(
                     isEnabled: viewModel.selectedState != nil,
                     action: { nextPlayToken = UUID() },
-                    showDialog: $viewModel.showDialog
+                    showDialog: $viewModel.showDialog,
+                    showBackButton: true,
+                    backAction: viewModel.goBack
                 )
             }
         }

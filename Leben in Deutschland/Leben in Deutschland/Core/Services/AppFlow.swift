@@ -14,10 +14,7 @@ final class AppFlow: ObservableObject {
     }
     
     @Published var stage: Stage = {
-        #if DEBUG
-        return .main  // Skip onboarding in development builds
-        #else
-        return .startAnimation
-        #endif
+        // Start with language selection view
+        return .onboardingLanguage
     }()
 }

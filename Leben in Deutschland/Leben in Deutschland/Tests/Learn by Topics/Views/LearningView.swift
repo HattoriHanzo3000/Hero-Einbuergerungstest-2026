@@ -14,6 +14,7 @@ struct LearningView: View {
     @StateObject private var viewModel: LearningViewModel
     @EnvironmentObject var languageManager: LanguageManager
     @Environment(AppRouter.self) private var router
+    // Press states removed to avoid gesture conflicts with Button taps
     
     init(subcategory: SubcategoryModel) {
         self.subcategory = subcategory
@@ -28,6 +29,7 @@ struct LearningView: View {
             // Question and answers content
             if !viewModel.questions.isEmpty {
                 questionContentView
+                    .padding(.top, 8)
             }
             
             Spacer()
@@ -44,71 +46,66 @@ struct LearningView: View {
     
     // MARK: - Header View
     private var headerView: some View {
-        VStack(spacing: 0) {
-            // Title block with back arrow
-            GeometryReader { geometry in
-                let screenWidth = geometry.size.width
-                let sidePadding = screenWidth * 0.05
-                
-                ZStack {
-                    // Back button
-                    HStack {
-                        Button(action: {
-                            HapticManager.shared.lightImpact()
-                            router.pop()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color(.systemGray6))
-                        }
-                        .padding(.leading, sidePadding)
-                        
-                        Spacer()
+        VStack(spacing: 12) {
+            // Row 1: Back + Title
+            ZStack {
+                HStack {
+                    Button(action: {
+                        HapticManager.shared.lightImpact()
+                        router.pop()
+                    }) {
+                        circleIconButton(icon: "chevron.left")
                     }
-                    
-                    // Centered title
-                    Text(subcategory.name)
-                        .font(.system(size: 22, weight: .bold, design: .rounded))
-                        .foregroundColor(Color(.systemGray6))
-                        .multilineTextAlignment(.center)
-                        .lineLimit(2)
-                        .truncationMode(.tail)
-                        .padding(.horizontal, sidePadding + 44)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-            .frame(height: UIScreen.main.bounds.height * 0.06)
-            
-            // Progress bar
-            GeometryReader { geometry in
-                let screenWidth = geometry.size.width
-                let sidePadding = screenWidth * 0.05
-                
-                VStack(spacing: 0) {
                     Spacer()
-                    
-                    ProgressView(value: Double(viewModel.answeredCount), total: Double(viewModel.questions.count))
-                        .progressViewStyle(LinearProgressViewStyle(tint: Color(.systemGray6)))
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 8)
-                        .padding(.horizontal, sidePadding)
-                        .padding(.bottom, 10)
                 }
+                Text(subcategory.name)
+                    .font(.title2.bold())
+                    .fontDesign(.rounded)
+                    .foregroundColor(Color(.systemGray6))
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .truncationMode(.tail)
+                    .minimumScaleFactor(0.9)
+                    .padding(.horizontal, 60)
             }
-            .frame(height: UIScreen.main.bounds.height * 0.02)
-            
-            // Action buttons
-            actionButtonsView
+
+            // Row 2: Progress bar
+            ProgressView(value: Double(viewModel.answeredCount), total: Double(viewModel.questions.count))
+                .progressViewStyle(LinearProgressViewStyle(tint: Color(.systemGray6)))
+                .frame(height: 8)
+                .clipShape(Capsule())
+
+            // Row 3: Question ID + Actions
+            HStack(spacing: 4) {
+                if let currentQuestion = viewModel.currentQuestion {
+                    Text("question_label".localized + " \(currentQuestion.id)")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .fontDesign(.rounded)
+                        .foregroundColor(Color(.systemGray6))
+                }
+                Spacer()
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    viewModel.resetCurrentQuestion()
+                }) { circleIconButton(icon: "arrow.counterclockwise") }
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    viewModel.toggleTranslation()
+                }) { circleIconButton(icon: "globe", tint: viewModel.showTranslation ? .orange : Color.accentColor) }
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    // TODO: Implement favorites
+                }) { circleIconButton(icon: "heart.fill") }
+            }
         }
+        .padding(16)
         .background(
-            RoundedRectangle(cornerRadius: 0, style: .continuous)
-                .fill(Color("Fill"))
-                .clipShape(
-                    RoundedCorner(radius: 35, corners: [.bottomLeft, .bottomRight])
-                )
-                .ignoresSafeArea(.all, edges: .top)
+            RoundedRectangle(cornerRadius: 28)
+                .fill(Color.accentColor)
         )
+        .padding(.horizontal)
+        .padding(.top, 8)
     }
     
     // MARK: - Action Buttons
@@ -133,9 +130,7 @@ struct LearningView: View {
                     HapticManager.shared.lightImpact()
                     viewModel.resetCurrentQuestion()
                 }) {
-                    Image(systemName: "arrow.counterclockwise")
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundColor(Color(.systemGray6))
+                    circleIconButton(icon: "arrow.counterclockwise")
                 }
                 
                 // Translate button
@@ -143,9 +138,7 @@ struct LearningView: View {
                     HapticManager.shared.lightImpact()
                     viewModel.toggleTranslation()
                 }) {
-                    Image(systemName: "globe")
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundColor(viewModel.showTranslation ? .orange : Color(.systemGray6))
+                    circleIconButton(icon: "globe", tint: viewModel.showTranslation ? .orange : Color("MainButtonText"))
                 }
                 
                 // Favorite button (placeholder for now)
@@ -153,9 +146,7 @@ struct LearningView: View {
                     HapticManager.shared.lightImpact()
                     // TODO: Implement favorites
                 }) {
-                    Image(systemName: "heart.fill")
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundColor(Color(.systemGray6))
+                    circleIconButton(icon: "heart.fill")
                 }
                 .padding(.trailing, sidePadding)
             }
@@ -178,7 +169,7 @@ struct LearningView: View {
                     }
                 )
                 .padding(.horizontal, 16)
-                .padding(.top, 24)
+                .padding(.top, 8)
             }
         }
     }
@@ -194,11 +185,13 @@ struct LearningView: View {
                 }) {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.headline)
+                            .fontWeight(.semibold)
                         Text("back".localized)
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.headline)
+                            .fontWeight(.semibold)
                     }
-                    .foregroundColor(viewModel.hasPrevious ? Color("Fill") : .gray)
+                    .foregroundColor(viewModel.hasPrevious ? Color.accentColor : .gray)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 10)
                     .background(Color(.systemBackground))
@@ -214,11 +207,13 @@ struct LearningView: View {
                 }) {
                     HStack(spacing: 4) {
                         Text("next".localized)
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.headline)
+                            .fontWeight(.semibold)
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.headline)
+                            .fontWeight(.semibold)
                     }
-                    .foregroundColor(viewModel.hasNext ? Color("Fill") : .gray)
+                    .foregroundColor(viewModel.hasNext ? Color.accentColor : .gray)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 10)
                     .background(Color(.systemBackground))
@@ -234,11 +229,13 @@ struct LearningView: View {
                 viewModel.checkAnswer()
             }) {
                 Text("check_answer_button".localized)
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .fontDesign(.rounded)
                     .foregroundColor(viewModel.canCheck ? Color(.systemGray6) : .gray)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(viewModel.canCheck ? Color("Fill") : Color.gray.opacity(0.3))
+                    .background(viewModel.canCheck ? Color.accentColor : Color.gray.opacity(0.3))
                     .cornerRadius(12)
             }
             .padding(.horizontal)
@@ -268,7 +265,8 @@ struct LearningView: View {
                                 .frame(width: 32, height: 32)
                                 .overlay(
                                     Text("\(index + 1)")
-                                        .font(.system(size: 14, weight: .semibold))
+                                        .font(.footnote)
+                                        .fontWeight(.semibold)
                                         .foregroundColor(circleTextColor(for: index))
                                 )
                         }
@@ -307,6 +305,22 @@ struct LearningView: View {
         } else {
             return .primary
         }
+    }
+}
+
+// MARK: - Circular Icon Button (matches island header buttons)
+private extension LearningView {
+    func circleIconButton(icon: String, tint: Color = Color.accentColor) -> some View {
+        ZStack {
+            Circle()
+                .fill(Color("MainButton"))
+                .frame(width: 30, height: 30)
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .bold))
+                .foregroundColor(tint)
+        }
+        .frame(width: 44, height: 44)
+        .contentShape(Circle())
     }
 }
 

@@ -15,7 +15,7 @@ struct MainButtonView: View {
         HStack(alignment: .center, spacing: 16) {
             // Square icon container
             ZStack {
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: 28)
                     .fill(Color("MainButton"))
                     .frame(width: MainScreenConstants.categoryIconSize, height: MainScreenConstants.categoryIconSize)
                 
@@ -26,7 +26,7 @@ struct MainButtonView: View {
             
             // Rectangle text container
             ZStack {
-                RoundedRectangle(cornerRadius: 12)
+                RoundedRectangle(cornerRadius: 28)
                     .fill(Color("MainButton"))
                     .frame(height: MainScreenConstants.categoryIconSize)
                 

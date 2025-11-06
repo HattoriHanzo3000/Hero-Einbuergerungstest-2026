@@ -1,10 +1,11 @@
 import SwiftUI
 
-// MARK: - Main Mascot View (Reusing existing components)
+// MARK: - Main Mascot View
 struct MainMascotView: View {
     @Binding var showDialog: Bool
     let messageKey: String
     let messageParameters: [String]?
+    let horizontalPadding: CGFloat
     @State private var showMascotGif = false
     @State private var gifPlayToken: UUID = UUID()
     @EnvironmentObject var languageManager: LanguageManager
@@ -17,6 +18,7 @@ struct MainMascotView: View {
         self.messageKey = messageKey
         self.messageParameters = nil
         self._showDialog = showDialog
+        self.horizontalPadding = 0 // Not used anymore, padding handled by parent
         self.playSignal = playSignal
         self.onPlayCompleted = onPlayCompleted
     }
@@ -25,6 +27,7 @@ struct MainMascotView: View {
         self.messageKey = messageKey
         self.messageParameters = messageParameters
         self._showDialog = showDialog
+        self.horizontalPadding = 0 // Not used anymore, padding handled by parent
         self.playSignal = playSignal
         self.onPlayCompleted = onPlayCompleted
     }
@@ -48,25 +51,17 @@ struct MainMascotView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            let sidePadding = MainScreenConstants.getMascotSidePadding()
-            let bubbleWidth = MainScreenConstants.getBubbleWidth()
-            let mascotSize = MainScreenConstants.getEmojiSize()
-            let spacing = MainScreenConstants.mascotBubbleSpacing
+            let availableWidth = geometry.size.width
+            let standardPadding: CGFloat = 16
+            let spacing: CGFloat = 16 // Increased spacing between mascot and bubble
+            // Mascot size - fixed
+            let mascotSize: CGFloat = 120
             
             HStack(alignment: .center, spacing: spacing) {
-                
                 // MARK: - Mascot (GIF preferred, fallback to static image)
                 ZStack {
-                    if showMascotGif {
-                        let gifName = UITraitCollection.current.userInterfaceStyle == .dark ? "MainChickDark" : "MainChick"
-                        if let _ = Bundle.main.url(forResource: gifName, withExtension: "gif") {
-                            AnimatedGIFView(gifName: gifName)
-                                .id(gifPlayToken)
-                                .frame(width: mascotSize, height: mascotSize)
-                                .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-                                .accessibilityLabel("Mascot")
-                        }
-                    } else if UIImage(named: "MainChick") != nil {
+                    // Base static image always visible
+                    if UIImage(named: "MainChick") != nil {
                         Image("MainChick")
                             .resizable()
                             .scaledToFit()
@@ -78,6 +73,16 @@ struct MainMascotView: View {
                             .frame(width: mascotSize, height: mascotSize)
                             .accessibilityHidden(true)
                     }
+
+                    // GIF overlay shown when playing (same asset for light/dark)
+                    let gifName = "MainChick"
+                    AnimatedGIFView(gifName: gifName, shouldAnimate: showMascotGif)
+                        .id(gifPlayToken)
+                        .frame(width: mascotSize, height: mascotSize)
+                        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                        .accessibilityLabel("Mascot")
+                        .opacity(showMascotGif ? 1 : 0)
+                        .allowsHitTesting(false)
                 }
                 .frame(width: mascotSize, height: mascotSize)
                 .contentShape(Rectangle())
@@ -86,8 +91,8 @@ struct MainMascotView: View {
                     playGifOnly()
                 }
 
-                // MARK: - Dialog Bubble
-                VStack(alignment: .leading, spacing: 8) {
+                // MARK: - Dialog Bubble (no tail, dynamic height, centered with mascot)
+                VStack(alignment: .leading, spacing: 0) {
                     Text(formattedMessage)
                         .font(.system(size: 16, weight: .medium, design: .rounded))
                         .foregroundColor(.primary)
@@ -95,34 +100,26 @@ struct MainMascotView: View {
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .frame(width: bubbleWidth - 10) // Subtract tail width for content
-                .offset(x: 10) // Offset content to the right to account for tail
+                .frame(maxHeight: mascotSize) // Max height to match mascot, but can be smaller
                 .background(
-                    DialogBubbleShape()
+                    RoundedRectangle(cornerRadius: 16)
                         .fill(Color(.systemGray6))
                         .overlay(
-                            DialogBubbleShape()
+                            RoundedRectangle(cornerRadius: 16)
                                 .stroke(Color.black, lineWidth: 1)
                         )
                         .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
                 )
                 
-                Spacer(minLength: sidePadding)
+                // Padding after bubble before right edge
+                Spacer()
+                    .frame(width: standardPadding)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(.trailing, sidePadding)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
-        .frame(height: MainScreenConstants.getMascotHeight())
-        .background(
-            RoundedRectangle(cornerRadius: 0, style: .continuous)
-                .fill(Color(MainScreenConstants.fillColorName))
-                .clipShape(
-                    RoundedCorner(radius: 35, corners: [.bottomLeft, .bottomRight])
-                )
-        )
         // Play when external signal changes
         .onChange(of: playSignal) { _, _ in
             playGifThenComplete()
@@ -130,8 +127,8 @@ struct MainMascotView: View {
     }
     
     private func playGifOnly() {
-        showMascotGif = true
         gifPlayToken = UUID()
+        showMascotGif = true
         DispatchQueue.main.asyncAfter(deadline: .now() + MainScreenConstants.gifAnimationDuration) {
             showMascotGif = false
         }
@@ -152,4 +149,5 @@ struct MainMascotView: View {
         showDialog: .constant(true)
     )
     .environmentObject(LanguageManager())
+    .frame(height: 120)
 }

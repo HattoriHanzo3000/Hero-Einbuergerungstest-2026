@@ -13,68 +13,68 @@ struct MainFooterContent: View {
     let onSettingsTapped: () -> Void
     let onPremiumTapped: () -> Void
     
+    // Standard padding for consistency
+    private let standardPadding: CGFloat = 16
+    // Fixed footer height
+    private let footerHeight: CGFloat = 100
+    
     var body: some View {
-        GeometryReader { geometry in
-            let sidePadding = MainScreenConstants.getFooterSidePadding()
-            
-            VStack(spacing: 0) {
-                // Footer content - four icons with equal spacing, vertically centered
-                HStack(spacing: 0) {
-                    // Language button (globe icon)
-                    FooterButtonContent(
-                        icon: "globe",
-                        isPressed: $isGlobeTapped,
-                        action: {
-                            onLanguageTapped()
-                        }
-                    )
-                    .accessibilityLabel("Language")
-                    .accessibilityHint("Tap to change app language")
-                    
-                    // Date button (calendar icon or days counter)
-                    DateButtonContent(
-                        savedTestDate: $savedTestDate,
-                        isPressed: $isCalendarTapped,
-                        action: {
-                            onDateTapped()
-                        }
-                    )
-                    
-                    // Settings button (gear icon)
-                    FooterButtonContent(
-                        icon: "gearshape.fill",
-                        isPressed: $isSettingsTapped,
-                        action: {
-                            onSettingsTapped()
-                        }
-                    )
-                    .accessibilityLabel("Settings")
-                    .accessibilityHint("Tap to open settings")
-                    
-                    // Premium button (crown icon)
-                    FooterButtonContent(
-                        icon: "crown.fill",
-                        isPressed: $isPremiumTapped,
-                        action: {
-                            onPremiumTapped()
-                        }
-                    )
-                    .accessibilityLabel("Premium")
-                    .accessibilityHint("Tap to view premium features")
-                }
-                .frame(maxHeight: .infinity, alignment: .center)
-                .padding(.horizontal, sidePadding)
-            }
-        }
-        .frame(height: MainScreenConstants.getFooterHeight())
-        .background(
-            RoundedRectangle(cornerRadius: 0, style: .continuous)
+        ZStack {
+            // Background island
+            RoundedRectangle(cornerRadius: 28)
                 .fill(Color("AppOrange"))
-                .clipShape(
-                    RoundedCorner(radius: 35, corners: [.topLeft, .topRight])
+                .ignoresSafeArea(edges: .bottom)
+            
+            // Content: 1 row with 4 buttons
+            HStack(spacing: 12) {
+                // Language button (globe icon)
+                FooterButtonContent(
+                    icon: "globe",
+                    isPressed: $isGlobeTapped,
+                    action: {
+                        onLanguageTapped()
+                    }
                 )
-                .ignoresSafeArea(.all, edges: .bottom)
-        )
+                .accessibilityLabel("Language")
+                .accessibilityHint("Tap to change app language")
+                
+                // Date button (calendar icon or days counter)
+                DateButtonContent(
+                    savedTestDate: $savedTestDate,
+                    isPressed: $isCalendarTapped,
+                    action: {
+                        onDateTapped()
+                    }
+                )
+                
+                // Settings button (gear icon)
+                FooterButtonContent(
+                    icon: "gearshape.fill",
+                    isPressed: $isSettingsTapped,
+                    action: {
+                        onSettingsTapped()
+                    }
+                )
+                .accessibilityLabel("Settings")
+                .accessibilityHint("Tap to open settings")
+                
+                // Premium button (crown icon)
+                FooterButtonContent(
+                    icon: "crown.fill",
+                    isPressed: $isPremiumTapped,
+                    action: {
+                        onPremiumTapped()
+                    }
+                )
+                .accessibilityLabel("Premium")
+                .accessibilityHint("Tap to view premium features")
+            }
+            .padding(standardPadding) // Standard padding on all 4 sides
+            .frame(height: footerHeight - (standardPadding * 2)) // Fixed height minus padding
+        }
+        .frame(height: footerHeight)
+        .padding(.horizontal)
+        .padding(.bottom, 8)
     }
 }
 
@@ -84,23 +84,32 @@ struct FooterButtonContent: View {
     @Binding var isPressed: Bool
     let action: () -> Void
     
+    // Standard padding for buttons
+    private let standardPadding: CGFloat = 16
+    
     var body: some View {
-        ZStack {
+        Button(action: {
+            HapticManager.shared.lightImpact()
+            action()
+        }) {
             Image(systemName: icon)
-                .font(.system(size: 30))
-                .fontWeight(.heavy)
+                .font(.title)
+                .fontWeight(.semibold)
+                .fontDesign(.rounded)
                 .foregroundColor(Color(.systemGray6))
+                .frame(maxWidth: .infinity)
+                .padding(standardPadding) // Standard padding on all 4 sides
+                .background(
+                    RoundedRectangle(cornerRadius: 28)
+                        .fill(Color(.systemGray6).opacity(0.2))
+                )
         }
-        .contentShape(Rectangle())
+        .buttonStyle(PlainButtonStyle())
         .scaleEffect(isPressed ? 0.97 : 1.0)
         .animation(.easeInOut(duration: 0.08), value: isPressed)
         .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
             isPressed = pressing
-        }, perform: {
-            HapticManager.shared.lightImpact()
-            action()
-        })
-        .frame(maxWidth: .infinity)
+        }, perform: {})
     }
 }
 
@@ -109,6 +118,9 @@ struct DateButtonContent: View {
     @Binding var savedTestDate: Date?
     @Binding var isPressed: Bool
     let action: () -> Void
+    
+    // Standard padding for buttons
+    private let standardPadding: CGFloat = 16
     
     var body: some View {
         Group {
@@ -119,22 +131,42 @@ struct DateButtonContent: View {
                 let daysUntilTest = calendar.dateComponents([.day], from: today, to: testDateStart).day ?? 0
                 
                 if daysUntilTest > 0 {
-                    // Dynamic rounded rectangle with days count (supports up to year 9999 ≈ 2.9M days)
+                    // Dynamic rounded rectangle with days count
                     let digitCount = String(daysUntilTest).count
                     let width: CGFloat = CGFloat(34 + (digitCount - 1) * 10) + 8  // +8 for padding
                     
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color(.systemGray6), lineWidth: 4)
-                        .frame(width: width, height: 34)
-                        .overlay(
-                            Text("\(daysUntilTest)")
-                                .font(.system(size: 20, weight: .heavy, design: .rounded))
-                                .foregroundColor(Color(.systemGray6))
-                                .padding(.horizontal, 4)
-                        )
-                        .accessibilityLabel("Test Date")
-                        .accessibilityValue("\(daysUntilTest) days until test")
-                        .accessibilityHint("Tap to change test date")
+                    Button(action: {
+                        HapticManager.shared.lightImpact()
+                        action()
+                    }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 28)
+                                .fill(Color(.systemGray6).opacity(0.2))
+                            
+                            RoundedRectangle(cornerRadius: 28)
+                                .stroke(Color(.systemGray6), lineWidth: 2)
+                                .frame(width: width, height: 40)
+                                .overlay(
+                                    Text("\(daysUntilTest)")
+                                        .font(.title)
+                                        .fontWeight(.heavy)
+                                        .fontDesign(.rounded)
+                                        .foregroundColor(Color(.systemGray6))
+                                        .padding(.horizontal, 4)
+                                )
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(standardPadding) // Standard padding on all 4 sides
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .scaleEffect(isPressed ? 0.97 : 1.0)
+                    .animation(.easeInOut(duration: 0.08), value: isPressed)
+                    .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
+                        isPressed = pressing
+                    }, perform: {})
+                    .accessibilityLabel("Test Date")
+                    .accessibilityValue("\(daysUntilTest) days until test")
+                    .accessibilityHint("Tap to change test date")
                 } else {
                     // Show calendar icon if test date is today or past
                     FooterButtonContent(
@@ -158,15 +190,6 @@ struct DateButtonContent: View {
                 .accessibilityHint("Tap to set test date")
             }
         }
-        .contentShape(Rectangle())
-        .scaleEffect(isPressed ? 0.97 : 1.0)
-        .animation(.easeInOut(duration: 0.08), value: isPressed)
-        .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
-            isPressed = pressing
-        }, perform: {
-            HapticManager.shared.lightImpact()
-            action()
-        })
         .frame(maxWidth: .infinity)
     }
 }

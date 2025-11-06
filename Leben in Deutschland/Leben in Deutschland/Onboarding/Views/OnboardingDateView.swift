@@ -13,19 +13,10 @@ struct OnboardingDateView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Header
-                OnboardingHeader(
+                // Header island with progress and mascot
+                OnboardingHeaderComponent(
                     currentStep: OnboardingConstants.dateStep,
                     totalSteps: OnboardingConstants.totalSteps,
-                    showBackButton: true,
-                    backAction: {
-                        HapticManager.shared.lightImpact()
-                        viewModel.goBack()
-                    }
-                )
-                
-                // Mascot Dialog
-                OnboardingMascotDialog(
                     messageKey: viewModel.dialogMessageKey,
                     messageParameters: viewModel.dialogParameters,
                     showDialog: $viewModel.showDialog,
@@ -33,9 +24,10 @@ struct OnboardingDateView: View {
                     onPlayCompleted: { viewModel.proceedToNext() }
                 )
                 .id(viewModel.dialogMessageKey)
+                .padding(.top, 8)
                 
                 // Date selection section
-                DateSelectionContent(
+                OnboardingDateSelectionContentComponent(
                     selectedDate: $viewModel.selectedDate,
                     onSelectDate: { HapticManager.shared.lightImpact(); showDatePicker = true },
                     onDontKnow: { viewModel.chooseDontKnow() },
@@ -46,11 +38,17 @@ struct OnboardingDateView: View {
                 
                 Spacer()
                 
-                // Next Button
-                OnboardingNextButton(
+                // Next Button with back button
+                OnboardingNextButtonComponent(
                     isEnabled: viewModel.hasSelectedDate || viewModel.hasSelectedDontKnow,
                     action: { nextPlayToken = UUID() },
-                    showDialog: $viewModel.showDialog
+                    showDialog: $viewModel.showDialog,
+                    showBackButton: true,
+                    backAction: {
+                        HapticManager.shared.lightImpact()
+                        viewModel.goBack()
+                    },
+                    titleKey: "LET'S GO"
                 )
             }
         }

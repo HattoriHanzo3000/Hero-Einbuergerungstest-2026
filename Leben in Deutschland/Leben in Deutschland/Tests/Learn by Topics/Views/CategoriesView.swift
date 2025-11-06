@@ -64,337 +64,256 @@ struct CategoriesView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            // Header with rounded corners and shadow
-            ZStack(alignment: .top) {
-                // Shadow layer (stays in place)
-                RoundedCorner(radius: 35, corners: [.bottomLeft, .bottomRight])
-                    .fill(Color("Fill"))
-                    .brightness(-0.3)
-                    .frame(height: UIScreen.main.bounds.height * 0.1)
-                    .ignoresSafeArea(.all, edges: .top)
-                
-                // Header content (moved up)
-                GeometryReader { geometry in
-                    let screenWidth = geometry.size.width
-                    let sidePadding = screenWidth * 0.05
-                    
-                    ZStack {
-                        // Back button (left arrow for navigation)
-                        HStack {
-                            ZStack {
-                                // Rounded square background
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color("MainButton"))
-                                    .frame(width: 30, height: 30)
-                                
-                                // Cartoon-style glass effect - sharp highlight (2/3 coverage)
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(
-                                        LinearGradient(
-                                            gradient: Gradient(stops: [
-                                                .init(color: .clear, location: 0.0),
-                                                .init(color: .clear, location: 0.60),
-                                                .init(color: .white.opacity(0.6), location: 0.63),
-                                                .init(color: .white.opacity(0.6), location: 0.68),
-                                                .init(color: .clear, location: 0.70)
-                                            ]),
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        )
-                                    )
-                                    .frame(width: 30, height: 30)
-                                
-                                // Stroke
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                                    .frame(width: 30, height: 30)
-                                
-                                // Icon
-                                Image(systemName: "chevron.left")
-                                    .font(.system(size: 14, weight: .bold))
-                                    .foregroundColor(Color("MainButtonText"))
-                            }
-                            .background(
-                                // Shadow layer
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color(.systemGray))
-                                    .frame(width: 30, height: isBackButtonPressed ? 31 : 34)
-                                    .opacity(0.3)
-                                    .offset(y: isBackButtonPressed ? 1 : 2)
-                            )
-                            .offset(y: isBackButtonPressed ? 1 : 0)
-                            .scaleEffect(isBackButtonPressed ? 0.98 : 1.0)
-                            .animation(.easeInOut(duration: 0.1), value: isBackButtonPressed)
-                            .contentShape(RoundedRectangle(cornerRadius: 8))
-                            .onTapGesture {
-                                // Brief press animation on tap
-                                isBackButtonPressed = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    isBackButtonPressed = false
-                                }
-                                HapticManager.shared.lightImpact()
-                                dismiss()
-                            }
-                            .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
-                                isBackButtonPressed = pressing
-                            }, perform: {})
-                            .padding(.leading, sidePadding)
-                            .accessibilityLabel("Back")
-                            .accessibilityHint("Go back to main screen")
-                            
-                            Spacer()
-                            
-                            // Search button
-                            ZStack {
-                                // Rounded square background
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color("MainButton"))
-                                    .frame(width: 30, height: 30)
-                                
-                                // Cartoon-style glass effect - sharp highlight (2/3 coverage)
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(
-                                        LinearGradient(
-                                            gradient: Gradient(stops: [
-                                                .init(color: .clear, location: 0.0),
-                                                .init(color: .clear, location: 0.60),
-                                                .init(color: .white.opacity(0.6), location: 0.63),
-                                                .init(color: .white.opacity(0.6), location: 0.68),
-                                                .init(color: .clear, location: 0.70)
-                                            ]),
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        )
-                                    )
-                                    .frame(width: 30, height: 30)
-                                
-                                // Stroke
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                                    .frame(width: 30, height: 30)
-                                
-                                // Icon
-                                Image(systemName: isSearchVisible ? "xmark" : "magnifyingglass")
-                                    .font(.system(size: 14, weight: .bold))
-                                    .foregroundColor(Color("MainButtonText"))
-                                    .animation(.none, value: isSearchVisible)
-                            }
-                            .background(
-                                // Shadow layer
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color(.systemGray))
-                                    .frame(width: 30, height: isSearchButtonPressed ? 31 : 34)
-                                    .opacity(0.3)
-                                    .offset(y: isSearchButtonPressed ? 1 : 2)
-                            )
-                            .offset(y: isSearchButtonPressed ? 1 : 0)
-                            .scaleEffect(isSearchButtonPressed ? 0.98 : 1.0)
-                            .animation(.easeInOut(duration: 0.1), value: isSearchButtonPressed)
-                            .contentShape(RoundedRectangle(cornerRadius: 8))
-                            .onTapGesture {
-                                // Brief press animation on tap
-                                isSearchButtonPressed = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    isSearchButtonPressed = false
-                                }
-                                HapticManager.shared.lightImpact()
-                                withAnimation {
-                                    isSearchVisible.toggle()
-                                    if !isSearchVisible {
-                                        searchText = ""
-                                        isSearchFocused = false
-                                    }
-                                }
-                            }
-                            .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
-                                isSearchButtonPressed = pressing
-                            }, perform: {})
-                            .padding(.trailing, sidePadding)
-                            .accessibilityLabel(isSearchVisible ? "Close search" : "Search categories")
-                        }
-                        
-                        // Title
-                        Text("learn_by_topics_title".localized)
-                            .font(.system(size: 22, weight: .bold, design: .rounded))
-                            .foregroundColor(Color(.systemGray6))
-                            .multilineTextAlignment(.center)
-                            .lineLimit(2)
-                            .truncationMode(.tail)
-                            .padding(.horizontal, sidePadding + 44)
-                            .accessibilityAddTraits(.isHeader)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-                .frame(height: UIScreen.main.bounds.height * 0.1)
-                .background(
-                    RoundedRectangle(cornerRadius: 0, style: .continuous)
-                        .fill(Color("Fill"))
-                        .clipShape(
-                            RoundedCorner(radius: 35, corners: [.bottomLeft, .bottomRight])
-                        )
-                        .ignoresSafeArea(.all, edges: .top)
-                )
-                .offset(y: -6)
-            }
-            .frame(height: UIScreen.main.bounds.height * 0.1 + 6)
+        ZStack {
+            // Background
+            Color(.systemBackground)
+                .ignoresSafeArea()
             
-            // Content area with system white background
-            ZStack {
-                Color(.systemBackground)
-                    .ignoresSafeArea(edges: .bottom)
-                
-                if viewModel.isLoading || viewModel.categories.isEmpty && viewModel.errorMessage == nil {
-                    ProgressView()
-                        .scaleEffect(1.5)
-                        .progressViewStyle(CircularProgressViewStyle())
-                        .tint(Color("AppOrange"))
-                } else if let errorMessage = viewModel.errorMessage {
-                    VStack(spacing: 16) {
-                        Image(systemName: "exclamationmark.triangle")
-                            .font(.system(size: 48))
-                            .foregroundColor(.secondary)
-                        
-                        Text(errorMessage)
-                            .font(.system(size: 16, weight: .medium, design: .rounded))
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 32)
+            VStack(spacing: 0) {
+                // Header - Apple Design Awards quality: clarity, elegance, accessibility
+                // Perfect centering technique: equal-width buttons + Spacers ensure title is always centered
+                HStack(alignment: .center, spacing: 0) {
+                    // Left button - fixed 44pt width ensures perfect centering
+                    Button(action: {
+                        isBackButtonPressed = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            isBackButtonPressed = false
+                        }
+                        HapticManager.shared.lightImpact()
+                        dismiss()
+                    }) {
+                        ZStack {
+                            Circle()
+                                .fill(Color("MainButton"))
+                                .frame(width: 30, height: 30)
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(Color.accentColor)
+                        }
+                        .scaleEffect(isBackButtonPressed ? 0.95 : 1.0)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isBackButtonPressed)
                     }
-                } else if isSearchVisible {
-                    // Show search bar inside white sheet
-                    VStack(spacing: 0) {
-                        // Search bar at top
-                        HStack(spacing: 8) {
-                            TextField("search".localized, text: $searchText)
-                                .focused($isSearchFocused)
-                                .textInputAutocapitalization(.never)
-                                .disableAutocorrection(true)
-                                .font(.system(size: 16))
-                                .foregroundColor(.primary)
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(width: 44, height: 44) // Apple HIG: minimum tap target
+                    .accessibilityLabel("Back")
+                    .accessibilityHint("Go back to main screen")
+                    .accessibilityAddTraits(.isButton)
+                    
+                    // Title - perfectly centered with Spacers on both sides
+                    Spacer(minLength: 0)
+                    
+                    Text("learn_by_topics_title".localized)
+                        .font(.title2.bold())
+                        .foregroundColor(Color(.systemGray6))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .minimumScaleFactor(0.8) // Adapts to Dynamic Type
+                        .accessibilityAddTraits(.isHeader)
+                    
+                    Spacer(minLength: 0)
+                    
+                    // Right button - fixed 44pt width matching left for perfect centering
+                    Button(action: {
+                        isSearchButtonPressed = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            isSearchButtonPressed = false
+                        }
+                        HapticManager.shared.lightImpact()
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            isSearchVisible.toggle()
+                            if !isSearchVisible {
+                                searchText = ""
+                                isSearchFocused = false
+                            }
+                        }
+                    }) {
+                        ZStack {
+                            Circle()
+                                .fill(Color("MainButton"))
+                                .frame(width: 30, height: 30)
+                            Image(systemName: isSearchVisible ? "xmark" : "magnifyingglass")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(Color.accentColor)
+                                .animation(.none, value: isSearchVisible)
+                        }
+                        .scaleEffect(isSearchButtonPressed ? 0.95 : 1.0)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isSearchButtonPressed)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .frame(width: 44, height: 44) // Apple HIG: minimum tap target
+                    .accessibilityLabel(isSearchVisible ? "Close search" : "Search categories")
+                    .accessibilityAddTraits(.isButton)
+                }
+                .padding(.horizontal) // System padding: adapts to device & Dynamic Type
+                .padding(.vertical, 12) // Equal top/bottom padding for inner elements
+                .frame(minHeight: 68) // Consistent minimum height across devices
+                .background(
+                    RoundedRectangle(cornerRadius: 28)
+                        .fill(Color.accentColor)
+                )
+                .padding(.horizontal) // System padding for island effect
+                .padding(.top, 8) // Visual spacing from safe area
+                
+                // Spacing between header and content
+                Spacer()
+                    .frame(height: 8)
+                
+                // Content area with system white background
+                ZStack {
+                    Color(.systemBackground)
+                        .ignoresSafeArea(edges: .bottom)
+                    
+                    if viewModel.isLoading || viewModel.categories.isEmpty && viewModel.errorMessage == nil {
+                        ProgressView()
+                            .scaleEffect(1.5)
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .tint(Color.accentColor)
+                    } else if let errorMessage = viewModel.errorMessage {
+                        VStack(spacing: 16) {
+                            Image(systemName: "exclamationmark.triangle")
+                                .font(.system(size: 48))
+                                .foregroundColor(.secondary)
                             
-                            if !searchText.isEmpty {
-                                Button(action: {
-                                    HapticManager.shared.lightImpact()
-                                    searchText = ""
-                                }) {
-                                    Image(systemName: "xmark.circle.fill")
-                                        .font(.system(size: 16))
-                                        .foregroundColor(.primary)
-                                }
-                                .accessibilityLabel("Clear search")
-                            }
+                            Text(errorMessage)
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 32)
                         }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color(.systemGray6).opacity(0.1))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.gray.opacity(0.2), lineWidth: 2)
-                                )
-                        )
-                        .padding(.horizontal, 24)
-                        .padding(.top, 24)
-                        .onChange(of: isSearchFocused) { oldValue, newValue in
-                            if newValue {
-                                HapticManager.shared.lightImpact()
-                            }
-                        }
-                        .onAppear {
-                            isSearchFocused = true
-                        }
-                        
-                        // Search results or empty state
-                        if !searchText.isEmpty {
-                            if !searchResults.isEmpty {
-                                ScrollView {
-                                    LazyVStack(spacing: 12) {
-                                        ForEach(searchResults, id: \.question.id) { result in
-                                            SearchQuestionCard(
-                                                question: result.question,
-                                                subcategoryName: result.subcategory
-                                            )
-                                            .environmentObject(languageManager)
-                                        }
+                    } else if isSearchVisible {
+                        // Show search bar inside white sheet
+                        VStack(spacing: 0) {
+                            // Search bar at top
+                            HStack(spacing: 8) {
+                                TextField("search".localized, text: $searchText)
+                                    .focused($isSearchFocused)
+                                    .textInputAutocapitalization(.never)
+                                    .disableAutocorrection(true)
+                                    .font(.system(size: 16))
+                                    .foregroundColor(.primary)
+                                
+                                if !searchText.isEmpty {
+                                    Button(action: {
+                                        HapticManager.shared.lightImpact()
+                                        searchText = ""
+                                    }) {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .font(.system(size: 16))
+                                            .foregroundColor(.primary)
                                     }
-                                    .padding(.horizontal, 24)
-                                    .padding(.top, 16)
-                                    .padding(.bottom, 32)
+                                    .accessibilityLabel("Clear search")
+                                }
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .background(
+                                RoundedRectangle(cornerRadius: 28)
+                                    .fill(Color(.systemGray6).opacity(0.1))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 28)
+                                            .stroke(Color.gray.opacity(0.2), lineWidth: 2)
+                                    )
+                            )
+                            .padding(.horizontal, 24)
+                            .padding(.top, 24)
+                            .onChange(of: isSearchFocused) { oldValue, newValue in
+                                if newValue {
+                                    HapticManager.shared.lightImpact()
+                                }
+                            }
+                            .onAppear {
+                                isSearchFocused = true
+                            }
+                            
+                            // Search results or empty state
+                            if !searchText.isEmpty {
+                                if !searchResults.isEmpty {
+                                    ScrollView {
+                                        LazyVStack(spacing: 12) {
+                                            ForEach(searchResults, id: \.question.id) { result in
+                                                SearchQuestionCard(
+                                                    question: result.question,
+                                                    subcategoryName: result.subcategory
+                                                )
+                                                .environmentObject(languageManager)
+                                            }
+                                        }
+                                        .padding(.horizontal, 24)
+                                        .padding(.top, 16)
+                                        .padding(.bottom, 32)
+                                    }
+                                } else {
+                                    // No search results
+                                    VStack(spacing: 16) {
+                                        Spacer()
+                                        
+                                        Image(systemName: "magnifyingglass")
+                                            .font(.system(size: 48))
+                                            .foregroundColor(.secondary)
+                                        
+                                        Text("no_search_results".localized)
+                                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                                            .foregroundColor(.secondary)
+                                            .multilineTextAlignment(.center)
+                                            .padding(.horizontal, 32)
+                                        
+                                        Spacer()
+                                    }
                                 }
                             } else {
-                                // No search results
-                                VStack(spacing: 16) {
-                                    Spacer()
-                                    
-                                    Image(systemName: "magnifyingglass")
-                                        .font(.system(size: 48))
-                                        .foregroundColor(.secondary)
-                                    
-                                    Text("no_search_results".localized)
-                                        .font(.system(size: 16, weight: .medium, design: .rounded))
-                                        .foregroundColor(.secondary)
-                                        .multilineTextAlignment(.center)
-                                        .padding(.horizontal, 32)
-                                    
-                                    Spacer()
-                                }
+                                // Blank white space when search bar is empty
+                                Spacer()
                             }
-                        } else {
-                            // Blank white space when search bar is empty
-                            Spacer()
                         }
-                    }
-                } else {
-                    // Show normal category view
-                    ScrollViewReader { scrollProxy in
-                        ZStack {
-                            ScrollView {
-                                VStack(spacing: 16) {
-                                    // Scroll target for top
-                                    Rectangle()
-                                        .fill(Color.clear)
-                                        .frame(height: 1)
-                                        .id("top")
-                                    
-                                    ForEach(viewModel.categories) { category in
-                                        ExpandableCategoryView(
-                                            category: category,
-                                            isExpanded: expandedCategoryNames.contains(category.name),
-                                            onToggle: {
-                                                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                                    if expandedCategoryNames.contains(category.name) {
-                                                        expandedCategoryNames.remove(category.name)
-                                                    } else {
-                                                        expandedCategoryNames.insert(category.name)
+                    } else {
+                        // Show normal category view
+                        ScrollViewReader { scrollProxy in
+                            ZStack {
+                                ScrollView {
+                                    VStack(spacing: 16) {
+                                        // Scroll target for top
+                                        Rectangle()
+                                            .fill(Color.clear)
+                                            .frame(height: 1)
+                                            .id("top")
+                                        
+                                        ForEach(viewModel.categories) { category in
+                                            ExpandableCategoryView(
+                                                category: category,
+                                                isExpanded: expandedCategoryNames.contains(category.name),
+                                                onToggle: {
+                                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                                        if expandedCategoryNames.contains(category.name) {
+                                                            expandedCategoryNames.remove(category.name)
+                                                        } else {
+                                                            expandedCategoryNames.insert(category.name)
+                                                        }
                                                     }
-                                                }
-                                                // Save state immediately
-                                                stateService.saveExpandedCategories(expandedCategoryNames)
-                                                HapticManager.shared.lightImpact()
-                                            },
-                                            answersService: answersService
-                                        )
+                                                    // Save state immediately
+                                                    stateService.saveExpandedCategories(expandedCategoryNames)
+                                                    HapticManager.shared.lightImpact()
+                                                },
+                                                answersService: answersService
+                                            )
+                                        }
+                                        
+                                        // Scroll target for bottom
+                                        Rectangle()
+                                            .fill(Color.clear)
+                                            .frame(height: 1)
+                                            .id("bottom")
                                     }
-                                    
-                                    // Scroll target for bottom
-                                    Rectangle()
-                                        .fill(Color.clear)
-                                        .frame(height: 1)
-                                        .id("bottom")
+                                    .padding(.horizontal, 24)
+                                    .padding(.top, 4)
+                                    .padding(.bottom, 32)
                                 }
-                                .padding(.horizontal, 24)
-                                .padding(.top, 24)
-                                .padding(.bottom, 32)
                             }
                         }
                     }
                 }
             }
-            .offset(y: -3)
         }
-        .background(Color(.systemBackground))
         .navigationBarHidden(true)
         .task {
             await viewModel.loadCategories(for: languageManager.currentAppLanguage)
@@ -467,96 +386,37 @@ private struct ExpandableCategoryView: View {
             HStack(alignment: .center, spacing: 12) {
                     // Square icon container
                     ZStack {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color("MainButton"))
-                            .frame(width: 60, height: 60)
-                        
-                        // Cartoon-style glass effect - sharp highlight (2/3 coverage)
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(
-                                LinearGradient(
-                                    gradient: Gradient(stops: [
-                                        .init(color: .clear, location: 0.0),
-                                        .init(color: .clear, location: 0.60),
-                                        .init(color: .white.opacity(0.6), location: 0.63),
-                                        .init(color: .white.opacity(0.6), location: 0.68),
-                                        .init(color: .clear, location: 0.70)
-                                    ]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .frame(width: 60, height: 60)
-                        
-                        // Thin stroke
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 28)
+                            .fill(Color.accentColor)
                             .frame(width: 60, height: 60)
                         
                         Image(systemName: categoryIcon)
                             .font(.system(size: 28, weight: .semibold, design: .rounded))
-                            .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color("MainButtonText"))
+                            .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color(.systemBackground))
                     }
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(.systemGray))
-                            .frame(width: 60, height: isPressed ? 61 : 64)
-                            .opacity(0.3)
-                            .offset(y: isPressed ? 1 : 2)
-                    )
-                    .offset(y: isPressed ? 1 : 0)
                     
                     // Rectangle text container
                     ZStack {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color("MainButton"))
-                            .frame(height: 60)
-                        
-                        // Cartoon-style glass effect - sharp highlight (2/3 coverage)
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(
-                                LinearGradient(
-                                    gradient: Gradient(stops: [
-                                        .init(color: .clear, location: 0.0),
-                                        .init(color: .clear, location: 0.60),
-                                        .init(color: .white.opacity(0.6), location: 0.63),
-                                        .init(color: .white.opacity(0.6), location: 0.68),
-                                        .init(color: .clear, location: 0.70)
-                                    ]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .frame(height: 60)
-                        
-                        // Thin stroke
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 28)
+                            .fill(Color.accentColor)
                             .frame(height: 60)
                         
                         HStack(spacing: 8) {
                             Text(category.name)
-                                .font(.system(size: 17, weight: .bold, design: .rounded))
-                                .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color("MainButtonText"))
+                                .font(.headline.bold())
+                                .fontDesign(.rounded)
+                                .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color(.systemBackground))
                                 .multilineTextAlignment(.leading)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color("MainButtonText"))
+                                .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color(.systemBackground))
                                 .rotationEffect(.degrees(isExpanded ? 90 : 0))
                         }
                         .padding(.horizontal, 16)
                     }
                     .frame(maxWidth: .infinity)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(.systemGray))
-                            .frame(height: isPressed ? 61 : 64)
-                            .opacity(0.3)
-                            .offset(y: isPressed ? 1 : 2)
-                    )
-                    .offset(y: isPressed ? 1 : 0)
                 }
                 .padding(16)
             .contentShape(Rectangle())
@@ -590,22 +450,8 @@ private struct ExpandableCategoryView: View {
             }
         }
         .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color("Block"))
-        )
-        .overlay(
-            // Thin stroke (same as buttons)
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-        )
-        .background(
-            // Shadow layer (same as buttons)
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemGray))
-                .opacity(0.3)
-                .offset(y: 1)
-                .padding(.top, -1)
-                .padding(.bottom, -3)
+            RoundedRectangle(cornerRadius: 28)
+                .fill(Color(.systemGray6))
         )
         }
     }
@@ -630,7 +476,9 @@ private struct SubcategoryButton: View {
             HStack(spacing: 12) {
                 // Subcategory name
                 Text(subcategory.name)
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .fontDesign(.rounded)
                     .foregroundColor(.primary)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -647,46 +495,17 @@ private struct SubcategoryButton: View {
             .background(
                 ZStack {
                     // Base background
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color(.systemGray6))
+                    RoundedRectangle(cornerRadius: 28)
+                        .fill(Color(.systemGray5))
                     
                     // Progress bar filling from left to right
                     GeometryReader { geometry in
-                        RoundedRectangle(cornerRadius: 12)
+                        RoundedRectangle(cornerRadius: 28)
                             .fill(Color("AppOrange"))
                             .frame(width: geometry.size.width * completionPercentage)
                     }
-                    
-                    // Cartoon-style glass effect - sharp highlight (2/3 coverage)
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(
-                            LinearGradient(
-                                gradient: Gradient(stops: [
-                                    .init(color: .clear, location: 0.0),
-                                    .init(color: .clear, location: 0.60),
-                                    .init(color: .white.opacity(0.6), location: 0.63),
-                                    .init(color: .white.opacity(0.6), location: 0.68),
-                                    .init(color: .clear, location: 0.70)
-                                ]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                    
-                    // Thin stroke on top
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.gray.opacity(0.2), lineWidth: 1)
                 }
             )
-            .background(
-                // Shadow layer
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemGray))
-                    .frame(height: isPressed ? 56 : 59)
-                    .opacity(0.3)
-                    .offset(y: isPressed ? 1 : 2)
-            )
-            .offset(y: isPressed ? 1 : 0)
             .contentShape(Rectangle())
         }
         .buttonStyle(NoEffectButtonStyle())
@@ -705,13 +524,7 @@ private struct SubcategoryButton: View {
     }
 }
 
-// MARK: - Custom Button Style
-struct NoEffectButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            // No opacity, color, or scale changes - completely static
-    }
-}
+// NoEffectButtonStyle is now defined in Core/Shared/Modifiers/NoEffectButtonStyle.swift
 
 // MARK: - Search Question Card
 private struct SearchQuestionCard: View {
@@ -752,10 +565,6 @@ private struct SearchQuestionCard: View {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color(.systemBackground))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.gray.opacity(0.2), lineWidth: 2)
-                    )
             )
         }
         .buttonStyle(PlainButtonStyle())
@@ -770,14 +579,9 @@ private struct SearchQuestionCard: View {
 }
 
 // MARK: - Preview
-#Preview {
-    @Previewable @State var router = AppRouter()
-    
-    NavigationStack(path: $router.navigationPath) {
+struct CategoriesView_Previews: PreviewProvider {
+    static var previews: some View {
         CategoriesView()
             .environmentObject(LanguageManager())
-            .environment(router)
     }
 }
-
-

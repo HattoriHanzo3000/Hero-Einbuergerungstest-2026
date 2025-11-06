@@ -31,6 +31,7 @@ struct MainScreenView: View {
                     handleCategorySelection(destination)
                 }
                 .padding(.horizontal)
+                .padding(.top, 8)
                 
                 Spacer()
                 
