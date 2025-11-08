@@ -65,6 +65,8 @@ struct Leben_in_DeutschlandApp: App {
             .environmentObject(StateManager())
             // Apply appearance mode - updates immediately when @AppStorage changes
             .preferredColorScheme(getColorScheme())
+            // Limit Dynamic Type scale up to XXXLarge to preserve layout integrity
+            .dynamicTypeSize(.xSmall ... .xxxLarge)
         }
     }
     

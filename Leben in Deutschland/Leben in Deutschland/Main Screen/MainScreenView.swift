@@ -10,55 +10,75 @@ struct MainScreenView: View {
     @State private var showPremium = false
     @State private var selectedDate = Date()
     @State private var savedTestDate: Date? = UserDefaults.standard.object(forKey: "selectedTestDate") as? Date
+    @State private var showDateTooFarDialog = false
     
     @EnvironmentObject var languageManager: LanguageManager
     @EnvironmentObject var stateManager: StateManager
     @State private var router = AppRouter()
     
     var body: some View {
-        NavigationStack(path: $router.navigationPath) {
-            VStack(spacing: 0) {
-                // Header section - Federal state button + Mascot (combined as one section)
-                MainHeaderContent(
-                    showDialog: $showDialog,
-                    onStateButtonTapped: {
-                        showFederalStatesSelection = true
+        ZStack {
+            NavigationStack(path: $router.navigationPath) {
+                VStack(spacing: 0) {
+                    // Header section - Federal state button + Mascot (combined as one section)
+                    MainHeaderContent(
+                        showDialog: $showDialog,
+                        savedTestDate: $savedTestDate,
+                        onStateButtonTapped: {
+                            showFederalStatesSelection = true
+                        }
+                    )
+                    
+                    // Main categories section (scrollable to fit older iPhones)
+                    ScrollView(showsIndicators: false) {
+                        VStack(spacing: 16) {
+                            MainListContent { destination in
+                                handleCategorySelection(destination)
+                            }
+                            .padding(.top, 8)
+                            Spacer(minLength: 0)
+                        }
+                        .padding(.horizontal)
                     }
-                )
-                
-                // Main categories section
-                MainListContent { destination in
-                    handleCategorySelection(destination)
+                    .frame(maxWidth: .infinity)
+                    
+                    // Footer section - 4 buttons
+                    MainFooterContent(
+                        savedTestDate: $savedTestDate,
+                        onLanguageTapped: {
+                            showLanguageSelection = true
+                        },
+                        onDateTapped: {
+                            // Load saved date or use today
+                            selectedDate = savedTestDate ?? Date()
+                            showDatePicker = true
+                        },
+                        onSettingsTapped: {
+                            showSettings = true
+                        },
+                        onPremiumTapped: {
+                            showPremium = true
+                        }
+                    )
+                    .padding(.top, MainScreenConstants.adaptiveValue(8))
                 }
-                .padding(.horizontal)
-                .padding(.top, 8)
-                
-                Spacer()
-                
-                // Footer section - 4 buttons
-                MainFooterContent(
-                    savedTestDate: $savedTestDate,
-                    onLanguageTapped: {
-                        showLanguageSelection = true
-                    },
-                    onDateTapped: {
-                        // Load saved date or use today
-                        selectedDate = savedTestDate ?? Date()
-                        showDatePicker = true
-                    },
-                    onSettingsTapped: {
-                        showSettings = true
-                    },
-                    onPremiumTapped: {
-                        showPremium = true
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarHidden(true)
+                .navigationDestination(for: AppRouter.Destination.self) { destination in
+                    destinationView(for: destination)
+                }
+            }
+            .zIndex(0)
+            
+            DateTooFarDialog(
+                isPresented: showDateTooFarDialog,
+                onDismiss: {
+                    withAnimation {
+                        showDateTooFarDialog = false
                     }
-                )
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarHidden(true)
-            .navigationDestination(for: AppRouter.Destination.self) { destination in
-                destinationView(for: destination)
-            }
+                }
+            )
+            .zIndex(1)
         }
         .environment(router)
         .onAppear {
@@ -78,16 +98,26 @@ struct MainScreenView: View {
                 locale: getLocale(for: languageManager.currentAppLanguage),
                 hasExistingDate: savedTestDate != nil,
                 onSave: { date in
+                    let tooFar = isDateTooFar(date)
                     HapticManager.shared.lightImpact()
-                    UserDefaults.standard.set(date, forKey: "selectedTestDate")
-                    savedTestDate = date  // Update footer state
-                    showDatePicker = false
+                    if tooFar {
+                        showDatePicker = false
+                        withAnimation {
+                            showDateTooFarDialog = true
+                        }
+                    } else {
+                        UserDefaults.standard.set(date, forKey: "selectedTestDate")
+                        savedTestDate = date  // Update footer state
+                        showDatePicker = false
+                        showDateTooFarDialog = false
+                    }
                 },
                 onClear: {
                     HapticManager.shared.lightImpact()
                     UserDefaults.standard.removeObject(forKey: "selectedTestDate")
                     savedTestDate = nil  // Clear footer state
                     showDatePicker = false
+                    showDateTooFarDialog = false
                 },
                 onCancel: {
                     HapticManager.shared.lightImpact()
@@ -181,6 +211,17 @@ struct MainScreenView: View {
         default: return Locale.current
         }
     }
+    
+    private func isDateTooFar(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: Date())
+        let end = calendar.startOfDay(for: date)
+        guard let days = calendar.dateComponents([.day], from: start, to: end).day else {
+            return false
+        }
+        // Warn if the selected date is more than 12 months (approx. 365 days) away
+        return days > 365
+    }
 }
 
 // MARK: - Preview
@@ -188,4 +229,18 @@ struct MainScreenView: View {
     MainScreenView()
         .environmentObject(LanguageManager())
         .environmentObject(StateManager())
+}
+
+#Preview("Medium") {
+    MainScreenView()
+        .environmentObject(LanguageManager())
+        .environmentObject(StateManager())
+        .environment(\.dynamicTypeSize, .medium)
+}
+
+#Preview("xxxLarge") {
+    MainScreenView()
+        .environmentObject(LanguageManager())
+        .environmentObject(StateManager())
+        .environment(\.dynamicTypeSize, .xxxLarge)
 }

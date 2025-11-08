@@ -26,6 +26,9 @@ class OnboardingDateViewModel: ObservableObject {
     var dialogMessageKey: String {
         if hasSelectedDate, let date = selectedDate {
             let days = daysUntil(date)
+            if days > 365 {
+                return "test_date_selection_title"
+            }
             if days == 0 {
                 return "perfect_test_today"
             } else if days == 1 {
@@ -44,6 +47,7 @@ class OnboardingDateViewModel: ObservableObject {
     var dialogParameters: [String]? {
         guard let date = selectedDate, hasSelectedDate else { return nil }
         let days = max(0, daysUntil(date))
+        guard days <= 365 else { return nil }
         return [String(days)]
     }
     

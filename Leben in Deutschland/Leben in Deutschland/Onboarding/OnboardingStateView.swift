@@ -19,8 +19,7 @@ struct OnboardingStateView: View {
             onNext: viewModel.proceedToNext,
             onBack: viewModel.goBack,
             onSetup: viewModel.setupInitialState,
-            languageManager: viewModel.languageManager,
-            contentPadding: EdgeInsets(top: 0, leading: 0, bottom: OnboardingConstants.contentVerticalPadding, trailing: 0)
+            languageManager: viewModel.languageManager
         ) {
             OnboardingStateSelectionContentComponent(
                 selectedState: $viewModel.selectedState,
@@ -35,4 +34,19 @@ struct OnboardingStateView: View {
     let manager = LanguageManager()
     let vm = OnboardingStateViewModel(languageManager: manager)
     OnboardingStateView(viewModel: vm)
+        .environment(\.dynamicTypeSize, .large)
+}
+
+#Preview("Medium") {
+    let manager = LanguageManager()
+    let vm = OnboardingStateViewModel(languageManager: manager)
+    OnboardingStateView(viewModel: vm)
+        .environment(\.dynamicTypeSize, .medium)
+}
+
+#Preview("xxxLarge") {
+    let manager = LanguageManager()
+    let vm = OnboardingStateViewModel(languageManager: manager)
+    OnboardingStateView(viewModel: vm)
+        .environment(\.dynamicTypeSize, .xxxLarge)
 }

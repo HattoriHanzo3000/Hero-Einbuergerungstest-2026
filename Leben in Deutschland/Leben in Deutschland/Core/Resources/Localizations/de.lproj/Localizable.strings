@@ -89,6 +89,12 @@
 "eagle_desc_wise" = "Du bist zu %d%% bereit. Nur noch ein kleiner Flug – du schaffst das!";
 "eagle_desc_master" = "Du bist zu %d%% bereit. Du bist ein echter Wissens-Adler!";
 
+"main_header_test_today" = "Der Test ist heute.";
+"main_header_test_in_days" = "Der Test ist in %d %@.";
+"date_too_far_title" = "Das ist ziemlich weit entfernt";
+"date_too_far_message" = "Zeitreisen sind cool, aber lass den Test innerhalb des nächsten Jahres – ok?";
+"ok_button" = "OK";
+
 // Language
 "language_title" = "Sprache";
 "application_title" = "Anwendungssprache";

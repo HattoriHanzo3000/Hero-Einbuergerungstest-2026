@@ -13,20 +13,21 @@ struct MainFooterContent: View {
     let onSettingsTapped: () -> Void
     let onPremiumTapped: () -> Void
     
-    // Standard padding for consistency
-    private let standardPadding: CGFloat = 16
-    // Fixed footer height
-    private let footerHeight: CGFloat = 100
+    // Adaptive spacing
+    private var standardPadding: CGFloat { MainScreenConstants.adaptiveValue(16) }
+    private var footerHeight: CGFloat { MainScreenConstants.adaptiveValue(96) }
+    private var cornerRadius: CGFloat { MainScreenConstants.adaptiveValue(28) }
+    private var buttonSpacing: CGFloat { MainScreenConstants.adaptiveValue(12) }
     
     var body: some View {
         ZStack {
             // Background island
-            RoundedRectangle(cornerRadius: 28)
+            RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(Color("AppOrange"))
                 .ignoresSafeArea(edges: .bottom)
             
             // Content: 1 row with 4 buttons
-            HStack(spacing: 12) {
+            HStack(spacing: buttonSpacing) {
                 // Language button (globe icon)
                 FooterButtonContent(
                     icon: "globe",
@@ -85,7 +86,8 @@ struct FooterButtonContent: View {
     let action: () -> Void
     
     // Standard padding for buttons
-    private let standardPadding: CGFloat = 16
+    private var standardPadding: CGFloat { MainScreenConstants.adaptiveValue(16) }
+    private var cornerRadius: CGFloat { MainScreenConstants.adaptiveValue(24) }
     
     var body: some View {
         Button(action: {
@@ -93,14 +95,12 @@ struct FooterButtonContent: View {
             action()
         }) {
             Image(systemName: icon)
-                .font(.title)
-                .fontWeight(.semibold)
-                .fontDesign(.rounded)
+                .font(.system(.title2, design: .rounded).weight(.semibold))
                 .foregroundColor(Color(.systemGray6))
                 .frame(maxWidth: .infinity)
                 .padding(standardPadding) // Standard padding on all 4 sides
                 .background(
-                    RoundedRectangle(cornerRadius: 28)
+                    RoundedRectangle(cornerRadius: cornerRadius)
                         .fill(Color(.systemGray6).opacity(0.2))
                 )
         }
@@ -130,54 +130,14 @@ struct DateButtonContent: View {
                 let testDateStart = calendar.startOfDay(for: testDate)
                 let daysUntilTest = calendar.dateComponents([.day], from: today, to: testDateStart).day ?? 0
                 
-                if daysUntilTest > 0 {
-                    // Dynamic rounded rectangle with days count
-                    let digitCount = String(daysUntilTest).count
-                    let width: CGFloat = CGFloat(34 + (digitCount - 1) * 10) + 8  // +8 for padding
-                    
-                    Button(action: {
-                        HapticManager.shared.lightImpact()
-                        action()
-                    }) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 28)
-                                .fill(Color(.systemGray6).opacity(0.2))
-                            
-                            RoundedRectangle(cornerRadius: 28)
-                                .stroke(Color(.systemGray6), lineWidth: 2)
-                                .frame(width: width, height: 40)
-                                .overlay(
-                                    Text("\(daysUntilTest)")
-                                        .font(.title)
-                                        .fontWeight(.heavy)
-                                        .fontDesign(.rounded)
-                                        .foregroundColor(Color(.systemGray6))
-                                        .padding(.horizontal, 4)
-                                )
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(standardPadding) // Standard padding on all 4 sides
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .scaleEffect(isPressed ? 0.97 : 1.0)
-                    .animation(.easeInOut(duration: 0.08), value: isPressed)
-                    .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
-                        isPressed = pressing
-                    }, perform: {})
-                    .accessibilityLabel("Test Date")
-                    .accessibilityValue("\(daysUntilTest) days until test")
-                    .accessibilityHint("Tap to change test date")
-                } else {
-                    // Show calendar icon if test date is today or past
-                    FooterButtonContent(
-                        icon: "calendar",
-                        isPressed: $isPressed,
-                        action: action
-                    )
-                    .accessibilityLabel("Test Date")
-                    .accessibilityValue("Test is today or past")
-                    .accessibilityHint("Tap to change test date")
-                }
+                FooterButtonContent(
+                    icon: "calendar",
+                    isPressed: $isPressed,
+                    action: action
+                )
+                .accessibilityLabel("Test Date")
+                .accessibilityValue(daysUntilTest > 0 ? "\(daysUntilTest) days until test" : "Test is today or past")
+                .accessibilityHint("Tap to change test date")
             } else {
                 // Show calendar icon if no test date set
                 FooterButtonContent(

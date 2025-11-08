@@ -46,7 +46,7 @@ struct DatePickerSheet: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color("Fill"))
+                        .background(Color.accentColor)
                         .cornerRadius(12)
                         .scaleEffect(isSavePressed ? 0.97 : 1.0)
                         .animation(.easeInOut(duration: 0.08), value: isSavePressed)

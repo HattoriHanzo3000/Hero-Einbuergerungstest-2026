@@ -23,8 +23,9 @@ struct OnboardingConstants {
     
     // Spacing
     static let defaultSpacing: CGFloat = 12
-    static let headerTopPadding: CGFloat = 8
-    static let contentVerticalPadding: CGFloat = 10
+    static let headerTopPadding: CGFloat = 4
+    static let contentVerticalPadding: CGFloat = 6
+    static let containerSectionSpacing: CGFloat = 8
     static let progressBarHorizontalPadding: CGFloat = 30
 }
 

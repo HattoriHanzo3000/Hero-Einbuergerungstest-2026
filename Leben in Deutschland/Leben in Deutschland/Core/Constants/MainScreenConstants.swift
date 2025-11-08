@@ -3,28 +3,10 @@ import UIKit
 
 // MARK: - Main Screen Constants
 struct MainScreenConstants {
-    // Layout Ratios (based on old project structure)
-    static let headerHeightRatio: CGFloat = 0.24   // 24% of screen height (6% federal state + 18% mascot)
-    static let mascotHeightRatio: CGFloat = 0.18   // 18% of screen height  
-    static let footerHeightRatio: CGFloat = 0.08   // 8% of screen height
-    
-    // Header
-    static let headerSidePaddingRatio: CGFloat = 0.06  // 6% of screen width
-    static let federalStateButtonMaxWidth: CGFloat = 300
-    
-    // Mascot Section
-    static let mascotSidePaddingRatio: CGFloat = 0.05  // 5% of screen width
-    static let emojiSizeRatio: CGFloat = 0.28          // 28% of screen width
-    static let bubbleWidthRatio: CGFloat = 0.56        // 56% of screen width
-    static let mascotBubbleSpacing: CGFloat = 12       // Fixed spacing
-    
-    // Footer
-    static let footerSidePaddingRatio: CGFloat = 0.02  // 2% of screen width
-    
     // Categories Grid
-    static let categorySpacing: CGFloat = 24
-    static let categoryButtonHeight: CGFloat = 72
-    static let categoryIconSize: CGFloat = 72
+    static var categorySpacing: CGFloat { adaptiveValue(24) }
+    static var categoryButtonHeight: CGFloat { adaptiveValue(70) }
+    static var categoryIconSize: CGFloat { adaptiveValue(66) }
     static let categorySidePadding: CGFloat = 20
     
     // Animation
@@ -37,43 +19,23 @@ struct MainScreenConstants {
 
 // MARK: - Screen Dimensions Helper
 extension MainScreenConstants {
+    private static let referenceScreenHeight: CGFloat = 844 // Base on iPhone 14/15
+    private static let minimumScale: CGFloat = 0.82
+    
+    static func scaleFactor(for screenHeight: CGFloat = UIScreen.main.bounds.height) -> CGFloat {
+        let factor = screenHeight / referenceScreenHeight
+        return min(1.0, max(minimumScale, factor))
+    }
+    
+    static func adaptiveValue(_ base: CGFloat) -> CGFloat {
+        base * scaleFactor()
+    }
+    
     static func getScreenWidth() -> CGFloat {
         return UIScreen.main.bounds.width
     }
     
     static func getScreenHeight() -> CGFloat {
         return UIScreen.main.bounds.height
-    }
-    
-    static func getHeaderHeight() -> CGFloat {
-        return getScreenHeight() * headerHeightRatio
-    }
-    
-    static func getMascotHeight() -> CGFloat {
-        return getScreenHeight() * mascotHeightRatio
-    }
-    
-    static func getFooterHeight() -> CGFloat {
-        return getScreenHeight() * footerHeightRatio
-    }
-    
-    static func getHeaderSidePadding() -> CGFloat {
-        return getScreenWidth() * headerSidePaddingRatio
-    }
-    
-    static func getMascotSidePadding() -> CGFloat {
-        return getScreenWidth() * mascotSidePaddingRatio
-    }
-    
-    static func getFooterSidePadding() -> CGFloat {
-        return getScreenWidth() * footerSidePaddingRatio
-    }
-    
-    static func getEmojiSize() -> CGFloat {
-        return getScreenWidth() * emojiSizeRatio
-    }
-    
-    static func getBubbleWidth() -> CGFloat {
-        return getScreenWidth() * bubbleWidthRatio
     }
 }

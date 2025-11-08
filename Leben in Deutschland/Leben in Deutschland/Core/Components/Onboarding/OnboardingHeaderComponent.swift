@@ -167,9 +167,7 @@ struct OnboardingMascotRow: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 Text(formattedMessage)
-                    .font(.callout)
-                    .fontWeight(.medium)
-                    .fontDesign(.rounded)
+                    .font(.system(.subheadline, design: .rounded).weight(.regular))
                     .foregroundColor(.black)
                     .id(languageManager.currentAppLanguage)
                     .multilineTextAlignment(.leading)

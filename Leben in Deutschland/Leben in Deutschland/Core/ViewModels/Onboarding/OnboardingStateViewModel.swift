@@ -9,12 +9,36 @@ class OnboardingStateViewModel: ObservableObject {
     @Published var showDialog: Bool = false
     
     // Dialog message key for the header bubble
-    var dialogMessageKey: String { "state_selection_title_general" }
+    var dialogMessageKey: String {
+        guard let selectedState, let sloganKey = Self.stateSloganKeys[selectedState] else {
+            return "state_selection_title_general"
+        }
+        return sloganKey
+    }
     
     let languageManager: LanguageManager
     private let preferences: OnboardingPreferences
     private let onNext: (() -> Void)?
     private let onBack: (() -> Void)?
+    
+    private static let stateSloganKeys: [String: String] = [
+        "Baden-Württemberg": "state_baden_württemberg",
+        "Bayern": "state_bayern",
+        "Berlin": "state_berlin",
+        "Brandenburg": "state_brandenburg",
+        "Bremen": "state_bremen",
+        "Hamburg": "state_hamburg",
+        "Hessen": "state_hessen",
+        "Mecklenburg-Vorpommern": "state_mecklenburg_vorpommern",
+        "Niedersachsen": "state_niedersachsen",
+        "Nordrhein-Westfalen": "state_nordrhein_westfalen",
+        "Rheinland-Pfalz": "state_rheinland_pfalz",
+        "Saarland": "state_saarland",
+        "Sachsen": "state_sachsen",
+        "Sachsen-Anhalt": "state_sachsen_anhalt",
+        "Schleswig-Holstein": "state_schleswig_holstein",
+        "Thüringen": "state_thüringen"
+    ]
     
     init(languageManager: LanguageManager, preferences: OnboardingPreferences? = nil, onNext: (() -> Void)? = nil, onBack: (() -> Void)? = nil) {
         self.languageManager = languageManager
@@ -37,6 +61,7 @@ class OnboardingStateViewModel: ObservableObject {
     func selectState(_ state: String) {
         selectedState = state
         preferences.selectedState = state
+        showDialog = true
     }
     
     func proceedToNext() { onNext?() }

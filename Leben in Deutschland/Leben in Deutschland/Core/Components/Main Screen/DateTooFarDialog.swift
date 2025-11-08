@@ -28,26 +28,26 @@ struct DateTooFarDialog: View {
                 // Dialog card
                 VStack(spacing: 16) {
                     Text("date_too_far_title".localized)
-                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                        .font(.system(.headline, design: .rounded).weight(.semibold))
                         .multilineTextAlignment(.center)
                         .foregroundColor(.primary)
                         .padding(.top, 16)
                     
                     Text("date_too_far_message".localized)
-                        .font(.system(size: 15, weight: .regular, design: .rounded))
+                        .font(.system(.body, design: .rounded))
                         .multilineTextAlignment(.center)
                         .foregroundColor(.secondary)
                         .padding(.horizontal, 16)
                     
                     // OK Button
                     Text("ok_button".localized)
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
-                        .foregroundColor(.white)
+                        .font(.system(.callout, design: .rounded).weight(.medium))
+                        .foregroundColor(Color(.systemGray6))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(Color("Fill"))
+                                .fill(Color.accentColor)
                         )
                         .scaleEffect(isOKPressed ? 0.97 : 1.0)
                         .animation(.easeInOut(duration: 0.08), value: isOKPressed)

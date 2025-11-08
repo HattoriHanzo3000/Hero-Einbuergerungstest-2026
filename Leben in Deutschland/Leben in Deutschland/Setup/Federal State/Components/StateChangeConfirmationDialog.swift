@@ -46,12 +46,12 @@ struct StateChangeConfirmationDialog: View {
                         Button(action: onCancel) {
                             Text("change_state_confirmation_cancel".localized)
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(.systemGray6))
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 12)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color("Fill"))
+                                        .fill(Color.accentColor)
                                 )
                         }
                         .accessibilityLabel("Cancel")

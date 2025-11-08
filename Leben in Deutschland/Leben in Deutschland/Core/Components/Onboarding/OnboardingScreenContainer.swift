@@ -61,7 +61,7 @@ struct OnboardingScreenContainer<Content: View>: View {
             Color(.systemBackground)
                 .ignoresSafeArea()
             
-            VStack(spacing: 0) {
+            VStack(spacing: OnboardingConstants.containerSectionSpacing) {
                 // Header island with progress and mascot
                 OnboardingHeaderComponent(
                     currentStep: headerStep,
@@ -75,20 +75,28 @@ struct OnboardingScreenContainer<Content: View>: View {
                 .id(headerId)
                 .padding(.top, OnboardingConstants.headerTopPadding)
                 
-                // Content
-                Group {
-                    if disableContentAnimation {
-                        content
-                            .transaction { transaction in
-                                transaction.animation = nil
+                // Scrollable content block
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        Group {
+                            if disableContentAnimation {
+                                content
+                                    .transaction { transaction in
+                                        transaction.animation = nil
+                                    }
+                            } else {
+                                content
                             }
-                    } else {
-                        content
+                        }
+                        .applyPadding(contentPadding)
+                        .padding(.top, OnboardingConstants.contentVerticalPadding)
+                        .padding(.bottom, OnboardingConstants.contentVerticalPadding)
+                        .frame(maxWidth: .infinity)
                     }
                 }
-                .applyPadding(contentPadding)
-                
-                Spacer()
+                .frame(maxWidth: .infinity)
+                .frame(maxHeight: .infinity, alignment: .top)
+                .scrollDismissesKeyboard(.interactively)
                 
                 // Next Button
                 OnboardingNextButtonComponent(
@@ -98,6 +106,7 @@ struct OnboardingScreenContainer<Content: View>: View {
                     backAction: onBack,
                     titleKey: nextButtonTitleKey
                 )
+                .padding(.bottom, OnboardingConstants.containerSectionSpacing)
             }
         }
         .onAppear {

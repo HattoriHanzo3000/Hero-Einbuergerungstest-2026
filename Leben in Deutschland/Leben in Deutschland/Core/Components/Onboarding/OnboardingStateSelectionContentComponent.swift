@@ -25,7 +25,6 @@ struct OnboardingStateSelectionContentComponent: View {
     ]
     
     var body: some View {
-        ScrollView {
             LazyVStack(spacing: OnboardingConstants.defaultSpacing) {
                 ForEach(states, id: \.self) { state in
                     OnboardingStateOptionRowComponent(
@@ -43,7 +42,6 @@ struct OnboardingStateSelectionContentComponent: View {
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.top, 16)
             .padding(.horizontal, 4)
-        }
     }
 }
 
@@ -53,6 +51,18 @@ private struct OnboardingStateOptionRowComponent: View {
     let isSelected: Bool
     let onTap: () -> Void
     @State private var isPressed = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    
+    private var verticalPadding: CGFloat {
+        switch dynamicTypeSize {
+        case .xSmall, .small, .medium:
+            return 12
+        case .large, .xLarge, .xxLarge:
+            return 14
+        default:
+            return 16
+        }
+    }
     
     var body: some View {
         Button(action: onTap) {
@@ -61,9 +71,12 @@ private struct OnboardingStateOptionRowComponent: View {
                 .fontWeight(.semibold)
                 .fontDesign(.rounded)
                 .foregroundColor(isSelected ? .white : .primary)
+                .multilineTextAlignment(.leading)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .frame(height: 56)
                 .padding(.horizontal, 24)
+                .padding(.vertical, verticalPadding)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(isSelected ? Color.accentColor : Color("Unselected"))

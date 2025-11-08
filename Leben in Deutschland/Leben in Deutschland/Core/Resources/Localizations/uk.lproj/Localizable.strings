@@ -89,6 +89,12 @@
 "eagle_desc_wise" = "Ти готовий на %d%%. Залишилося зовсім трохи — не збавляй висоти!";
 "eagle_desc_master" = "Ти готовий на %d%%. Ти — справжній орел знань!";
 
+"main_header_test_today" = "Тест уже сьогодні.";
+"main_header_test_in_days" = "Тест через %d %@.";
+"date_too_far_title" = "Це доволі далеко";
+"date_too_far_message" = "Подорожі в часі — це круто, але давай залишимо тест у межах наступного року, гаразд?";
+"ok_button" = "Гаразд";
+
 // Language
 "language_title" = "Мова";
 "application_title" = "Мова додатку";

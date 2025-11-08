@@ -34,4 +34,19 @@ struct OnboardingTranslationView: View {
     let manager = LanguageManager()
     let vm = OnboardingTranslationViewModel(languageManager: manager)
     OnboardingTranslationView(viewModel: vm)
+        .environment(\.dynamicTypeSize, .large)
+}
+
+#Preview("Medium") {
+    let manager = LanguageManager()
+    let vm = OnboardingTranslationViewModel(languageManager: manager)
+    OnboardingTranslationView(viewModel: vm)
+        .environment(\.dynamicTypeSize, .medium)
+}
+
+#Preview("xxxLarge") {
+    let manager = LanguageManager()
+    let vm = OnboardingTranslationViewModel(languageManager: manager)
+    OnboardingTranslationView(viewModel: vm)
+        .environment(\.dynamicTypeSize, .xxxLarge)
 }

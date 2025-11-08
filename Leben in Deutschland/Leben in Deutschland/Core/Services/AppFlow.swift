@@ -13,8 +13,6 @@ final class AppFlow: ObservableObject {
         case main
     }
     
-    @Published var stage: Stage = {
-        // Start with language selection view
-        return .onboardingLanguage
-    }()
+    /// Controls the current top-level navigation stage. Defaults to the main experience.
+    @Published var stage: Stage = .main
 }

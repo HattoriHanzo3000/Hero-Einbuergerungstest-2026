@@ -89,6 +89,12 @@
 "eagle_desc_wise" = "You're %d%% ready. Just one more flight — you've got this!";
 "eagle_desc_master" = "You're %d%% ready. You're a true knowledge eagle!";
 
+"main_header_test_today" = "The test is today.";
+"main_header_test_in_days" = "The test is in %d %@.";
+"date_too_far_title" = "That's quite far away";
+"date_too_far_message" = "Time travel’s cool, but let’s keep the test within the next year—deal?";
+"ok_button" = "OK";
+
 // Language
 "language_title" = "Language";
 "application_title" = "Application Language";

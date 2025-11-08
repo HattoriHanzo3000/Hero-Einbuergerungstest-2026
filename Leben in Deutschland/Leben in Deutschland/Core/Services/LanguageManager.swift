@@ -7,6 +7,10 @@ class LanguageManager: ObservableObject {
     @Published var currentAppLanguage: String = "en"
     @Published var currentTranslationLanguage: String = "de"
     
+    static var currentAppLanguageCode: String {
+        UserDefaults.standard.string(forKey: "appLanguage") ?? "en"
+    }
+    
     init() {
         loadSavedLanguages()
     }
