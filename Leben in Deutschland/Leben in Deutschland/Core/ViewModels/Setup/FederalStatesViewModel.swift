@@ -14,19 +14,30 @@ class FederalStatesViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var showStateChangeWarning = false
     @Published var pendingStateChange: String?
+    @Published var selectedState: String?
+    private var originalState: String?
     
     // MARK: - Data
     let states = FederalStateModel.allStates
     
     // MARK: - Public Methods
     
+    func initializeState(from stateManager: StateManager) {
+        originalState = stateManager.selectedState
+        selectedState = originalState
+        pendingStateChange = nil
+        showStateChangeWarning = false
+    }
+    
     /// Handles state selection with confirmation if needed
     func handleStateSelection(_ newState: String, stateManager: StateManager, onDismiss: @escaping () -> Void) {
         HapticManager.shared.lightImpact()
+        selectedState = newState
         
         // If no state is currently selected or it's the same state, change directly
-        if stateManager.selectedState == nil || stateManager.selectedState == newState {
+        if originalState == nil || originalState == newState {
             stateManager.setSelectedState(newState)
+            originalState = newState
             onDismiss()
         } else {
             // Show confirmation dialog
@@ -40,6 +51,7 @@ class FederalStatesViewModel: ObservableObject {
         HapticManager.shared.lightImpact()
         showStateChangeWarning = false
         pendingStateChange = nil
+        selectedState = originalState
     }
     
     /// Confirms state change and clears progress
@@ -57,6 +69,8 @@ class FederalStatesViewModel: ObservableObject {
         // Update the state
         if let newState = pendingStateChange {
             stateManager.setSelectedState(newState)
+            originalState = newState
+            selectedState = newState
         }
         
         showStateChangeWarning = false

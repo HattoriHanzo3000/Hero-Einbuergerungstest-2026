@@ -15,7 +15,7 @@ struct StateSelectionList: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            VStack(spacing: 24) {
+            VStack(spacing: MainScreenConstants.adaptiveValue(16)) {
                 VStack(spacing: 0) {
                     ScrollView {
                         VStack(spacing: 12) {
@@ -23,16 +23,15 @@ struct StateSelectionList: View {
                                 stateButton(for: state)
                             }
                         }
-                        .padding()
-                        .padding(.bottom, 24)
+                        .padding(.horizontal, MainScreenConstants.adaptiveValue(16))
+                        .padding(.vertical, MainScreenConstants.adaptiveValue(16))
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(.systemGray6))
-                .cornerRadius(12)
+                .background(Color.clear)
             }
             .padding(.horizontal, 24)
-            .padding(.top, 24)
+            .padding(.top, MainScreenConstants.adaptiveValue(8))
             
             Spacer()
         }
@@ -59,7 +58,7 @@ private struct StateButton: View {
     var body: some View {
         HStack {
             Text(state.localizedName)
-                .font(.system(size: 16, weight: .medium, design: .rounded))
+                .font(.system(.body, design: .rounded).weight(.semibold))
                 .foregroundColor(.primary)
             
             Spacer()
@@ -67,12 +66,12 @@ private struct StateButton: View {
             if isSelected {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.secondary)
-                    .font(.title2)
+                    .font(.system(.body, design: .rounded).weight(.semibold))
                     .accessibilityLabel("Selected")
             } else {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.secondary)
-                    .font(.title2)
+                    .font(.system(.body, design: .rounded).weight(.semibold))
                     .opacity(0)
             }
         }
@@ -103,4 +102,22 @@ private struct StateButton: View {
         selectedState: "Berlin",
         onStateSelected: { _ in }
     )
+}
+
+#Preview("Medium") {
+    StateSelectionList(
+        states: FederalStateModel.allStates,
+        selectedState: "Berlin",
+        onStateSelected: { _ in }
+    )
+    .environment(\.dynamicTypeSize, .medium)
+}
+
+#Preview("xxxLarge") {
+    StateSelectionList(
+        states: FederalStateModel.allStates,
+        selectedState: "Berlin",
+        onStateSelected: { _ in }
+    )
+    .environment(\.dynamicTypeSize, .xxxLarge)
 }

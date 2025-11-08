@@ -102,3 +102,25 @@ struct SettingsView: View {
         }
     }
 }
+
+// MARK: - Previews
+#Preview {
+    SettingsView()
+        .environmentObject(StateManager())
+        .environmentObject(LanguageManager())
+        .environment(\.dynamicTypeSize, .large)
+}
+
+#Preview("Medium") {
+    SettingsView()
+        .environmentObject(StateManager())
+        .environmentObject(LanguageManager())
+        .environment(\.dynamicTypeSize, .medium)
+}
+
+#Preview("xxxLarge") {
+    SettingsView()
+        .environmentObject(StateManager())
+        .environmentObject(LanguageManager())
+        .environment(\.dynamicTypeSize, .xxxLarge)
+}

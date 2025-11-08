@@ -14,6 +14,8 @@ struct UpdateAlertDialog: View {
     let message: String
     let onDismiss: () -> Void
     
+    @State private var isDismissPressed: Bool = false
+    
     var body: some View {
         ZStack {
             if isPresented {
@@ -29,32 +31,46 @@ struct UpdateAlertDialog: View {
                 VStack(spacing: 16) {
                     // Title
                     Text(title)
-                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                        .font(.system(.title3, design: .rounded).weight(.semibold))
                         .foregroundColor(.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 20)
                         .padding(.top, 16)
                         .accessibilityAddTraits(.isHeader)
                     
                     // Message
                     Text(message)
-                        .font(.system(size: 15, weight: .regular, design: .rounded))
-                        .multilineTextAlignment(.center)
+                        .font(.system(.body, design: .rounded))
+                        .multilineTextAlignment(.leading)
                         .foregroundColor(.secondary)
-                        .padding(.horizontal, 16)
+                        .padding(.horizontal, 20)
                     
                     // OK Button
                     Button(action: onDismiss) {
                         Text("ok".localized)
-                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                            .font(.system(.body, design: .rounded).weight(.semibold))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 12)
+                            .padding(.vertical, 14)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
                                     .fill(Color("Fill"))
                             )
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 16)
+                    .scaleEffect(isDismissPressed ? 0.97 : 1.0)
+                    .animation(.easeInOut(duration: 0.08), value: isDismissPressed)
+                    .onLongPressGesture(
+                        minimumDuration: 0,
+                        maximumDistance: .infinity,
+                        pressing: { pressing in
+                            isDismissPressed = pressing
+                        },
+                        perform: {
+                            onDismiss()
+                        }
+                    )
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
                     .accessibilityLabel("OK")
                 }
                 .background(

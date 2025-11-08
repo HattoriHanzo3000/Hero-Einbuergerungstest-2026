@@ -57,3 +57,15 @@ struct LanguageView: View {
     LanguageView()
         .environmentObject(LanguageManager())
 }
+
+#Preview("Medium") {
+    LanguageView()
+        .environmentObject(LanguageManager())
+        .environment(\.dynamicTypeSize, .medium)
+}
+
+#Preview("xxxLarge") {
+    LanguageView()
+        .environmentObject(LanguageManager())
+        .environment(\.dynamicTypeSize, .xxxLarge)
+}

@@ -23,24 +23,24 @@ struct DeleteConfirmationDialog: View {
             // Dialog card
             VStack(spacing: 16) {
                 Text("delete_statistics_warning_title".localized)
-                    .font(.system(size: 18, weight: .semibold, design: .rounded))
-                    .multilineTextAlignment(.center)
+                    .font(.system(.title3, design: .rounded).weight(.semibold))
                     .foregroundColor(.primary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
                     .padding(.top, 16)
                 
                 Text("delete_statistics_warning_message".localized)
-                    .font(.system(size: 15, weight: .regular, design: .rounded))
-                    .multilineTextAlignment(.center)
+                    .font(.system(.body, design: .rounded))
+                    .multilineTextAlignment(.leading)
                     .foregroundColor(.secondary)
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, 20)
                 
                 HStack(spacing: 12) {
-                    // Cancel Button
                     Text("cancel".localized)
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .font(.system(.body, design: .rounded).weight(.semibold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
+                        .padding(.vertical, 14)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(Color("Fill"))
@@ -54,16 +54,16 @@ struct DeleteConfirmationDialog: View {
                                 isCancelPressed = pressing
                             },
                             perform: {
+                                HapticManager.shared.lightImpact()
                                 onCancel()
                             }
                         )
                     
-                    // Delete Button
                     Text("delete_button".localized)
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .font(.system(.body, design: .rounded).weight(.semibold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
+                        .padding(.vertical, 14)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(Color.red)
@@ -77,12 +77,13 @@ struct DeleteConfirmationDialog: View {
                                 isDeletePressed = pressing
                             },
                             perform: {
+                                HapticManager.shared.heavyImpact()
                                 onConfirm()
                             }
                         )
                 }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 16)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
             }
             .background(
                 RoundedRectangle(cornerRadius: 16)

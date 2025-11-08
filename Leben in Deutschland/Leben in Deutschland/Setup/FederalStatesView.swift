@@ -12,13 +12,7 @@ struct FederalStatesView: View {
     @EnvironmentObject var stateManager: StateManager
     @Environment(\.dismiss) private var dismiss
     
-    @StateObject private var viewModel: FederalStatesViewModel
-    
-    // MARK: - Initialization
-    init() {
-        // Initialize ViewModel - dependencies passed via method parameters
-        _viewModel = StateObject(wrappedValue: FederalStatesViewModel())
-    }
+    @StateObject private var viewModel = FederalStatesViewModel()
     
     // MARK: - Body
     var body: some View {
@@ -31,13 +25,15 @@ struct FederalStatesView: View {
             // State Selection List
             StateSelectionList(
                 states: viewModel.states,
-                selectedState: stateManager.selectedState,
+                selectedState: viewModel.selectedState,
                 onStateSelected: { state in
                     viewModel.handleStateSelection(state, stateManager: stateManager) {
                         dismiss()
                     }
                 }
             )
+            .padding(.top, MainScreenConstants.adaptiveValue(8))
+            .padding(.bottom, MainScreenConstants.adaptiveValue(16))
         }
         .background(Color(.systemBackground))
         .overlay(
@@ -54,6 +50,13 @@ struct FederalStatesView: View {
                 }
             )
         )
+        .onAppear {
+            viewModel.initializeState(from: stateManager)
+        }
+        .onChange(of: stateManager.selectedState) { _, newValue in
+            guard viewModel.selectedState != newValue else { return }
+            viewModel.initializeState(from: stateManager)
+        }
     }
 }
 
@@ -61,4 +64,16 @@ struct FederalStatesView: View {
 #Preview {
     FederalStatesView()
         .environmentObject(StateManager())
+}
+
+#Preview("Medium") {
+    FederalStatesView()
+        .environmentObject(StateManager())
+        .environment(\.dynamicTypeSize, .medium)
+}
+
+#Preview("xxxLarge") {
+    FederalStatesView()
+        .environmentObject(StateManager())
+        .environment(\.dynamicTypeSize, .xxxLarge)
 }

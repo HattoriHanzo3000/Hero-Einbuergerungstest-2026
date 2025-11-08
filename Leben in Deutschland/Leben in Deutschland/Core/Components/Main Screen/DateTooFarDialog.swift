@@ -28,41 +28,46 @@ struct DateTooFarDialog: View {
                 // Dialog card
                 VStack(spacing: 16) {
                     Text("date_too_far_title".localized)
-                        .font(.system(.headline, design: .rounded).weight(.semibold))
-                        .multilineTextAlignment(.center)
+                        .font(.system(.title3, design: .rounded).weight(.semibold))
                         .foregroundColor(.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 20)
                         .padding(.top, 16)
                     
                     Text("date_too_far_message".localized)
                         .font(.system(.body, design: .rounded))
-                        .multilineTextAlignment(.center)
                         .foregroundColor(.secondary)
-                        .padding(.horizontal, 16)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 20)
                     
-                    // OK Button
-                    Text("ok_button".localized)
-                        .font(.system(.callout, design: .rounded).weight(.medium))
-                        .foregroundColor(Color(.systemGray6))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.accentColor)
-                        )
-                        .scaleEffect(isOKPressed ? 0.97 : 1.0)
-                        .animation(.easeInOut(duration: 0.08), value: isOKPressed)
-                        .onLongPressGesture(
-                            minimumDuration: 0,
-                            maximumDistance: .infinity,
-                            pressing: { pressing in
-                                isOKPressed = pressing
-                            },
-                            perform: {
-                                onDismiss()
-                            }
-                        )
-                        .padding(.horizontal, 16)
-                        .padding(.bottom, 16)
+                    Button {
+                        HapticManager.shared.lightImpact()
+                        onDismiss()
+                    } label: {
+                        Text("ok_button".localized)
+                            .font(.system(.body, design: .rounded).weight(.semibold))
+                            .foregroundColor(Color(.systemGray6))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color.accentColor)
+                            )
+                    }
+                    .scaleEffect(isOKPressed ? 0.97 : 1.0)
+                    .animation(.easeInOut(duration: 0.08), value: isOKPressed)
+                    .onLongPressGesture(
+                        minimumDuration: 0,
+                        maximumDistance: .infinity,
+                        pressing: { pressing in
+                            isOKPressed = pressing
+                        },
+                        perform: {
+                            onDismiss()
+                        }
+                    )
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
                 }
                 .background(
                     RoundedRectangle(cornerRadius: 16)

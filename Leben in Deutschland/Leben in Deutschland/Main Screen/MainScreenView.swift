@@ -29,7 +29,7 @@ struct MainScreenView: View {
                         }
                     )
                     
-                    // Main categories section (scrollable to fit older iPhones)
+                    // Main categories section (scrollable)
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 16) {
                             MainListContent { destination in

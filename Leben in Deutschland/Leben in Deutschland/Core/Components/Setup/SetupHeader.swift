@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import UIKit
 
 // MARK: - Setup Header
 struct SetupHeader: View {
@@ -16,16 +15,21 @@ struct SetupHeader: View {
     private var cornerRadius: CGFloat { MainScreenConstants.adaptiveValue(28) }
     private var horizontalPadding: CGFloat { MainScreenConstants.adaptiveValue(20) }
     private var verticalPadding: CGFloat { MainScreenConstants.adaptiveValue(18) }
-    private var topInset: CGFloat { MainScreenConstants.adaptiveValue(12) }
-    private var controlSize: CGFloat { MainScreenConstants.adaptiveValue(36) }
-    private var controlPadding: CGFloat { MainScreenConstants.adaptiveValue(8) }
-    private var topSafeArea: CGFloat {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {
-            return 0
+    private var topInset: CGFloat { MainScreenConstants.adaptiveValue(18) }
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    private var controlSize: CGFloat {
+        switch dynamicTypeSize {
+        case .xSmall, .small, .medium:
+            return MainScreenConstants.adaptiveValue(36)
+        case .large:
+            return MainScreenConstants.adaptiveValue(40)
+        case .xLarge, .xxLarge:
+            return MainScreenConstants.adaptiveValue(44)
+        default:
+            return MainScreenConstants.adaptiveValue(48)
         }
-        return window.safeAreaInsets.top
     }
+    private var controlPadding: CGFloat { controlSize * 0.25 }
     
     var body: some View {
         VStack(alignment: .leading, spacing: MainScreenConstants.adaptiveValue(12)) {
@@ -69,7 +73,7 @@ struct SetupHeader: View {
                         y: MainScreenConstants.adaptiveValue(6))
         )
         .padding(.horizontal)
-        .padding(.top, topSafeArea + topInset)
+        .padding(.top, topInset)
     }
 }
 
@@ -78,5 +82,19 @@ struct SetupHeader: View {
     SetupHeader(title: "federal_states_title", onDismiss: {})
         .environmentObject(StateManager())
         .environmentObject(LanguageManager())
+}
+
+#Preview("Medium") {
+    SetupHeader(title: "federal_states_title", onDismiss: {})
+        .environmentObject(StateManager())
+        .environmentObject(LanguageManager())
+        .environment(\.dynamicTypeSize, .medium)
+}
+
+#Preview("xxxLarge") {
+    SetupHeader(title: "federal_states_title", onDismiss: {})
+        .environmentObject(StateManager())
+        .environmentObject(LanguageManager())
+        .environment(\.dynamicTypeSize, .xxxLarge)
 }
 
