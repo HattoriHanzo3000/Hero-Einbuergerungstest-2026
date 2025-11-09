@@ -1,0 +1,101 @@
+//
+//  TranslationLanguageSection.swift
+//  Leben in Deutschland
+//
+//  Translation language selection component
+//
+
+import SwiftUI
+
+// MARK: - Translation Language Section
+struct TranslationLanguageSection: View {
+    let languages: [LanguageOptionModel]
+    let selectedLanguage: String
+    let appLanguage: String
+    let onLanguageSelected: (String) -> Void
+    
+    var body: some View {
+        SectionContainer(title: "settings_translation_language_title", spacing: 12) {
+            ForEach(languages) { language in
+                languageButton(for: language)
+            }
+        }
+    }
+    
+    // MARK: - Language Button
+    @ViewBuilder
+    private func languageButton(for language: LanguageOptionModel) -> some View {
+        TranslationLanguageButton(
+            language: language,
+            isSelected: selectedLanguage == language.code,
+            isDisabled: appLanguage == language.code,
+            onTap: { onLanguageSelected(language.code) }
+        )
+    }
+}
+
+// MARK: - Translation Language Button Component
+private struct TranslationLanguageButton: View {
+    let language: LanguageOptionModel
+    let isSelected: Bool
+    let isDisabled: Bool
+    let onTap: () -> Void
+    @State private var isPressed = false
+    
+    var body: some View {
+        HStack {
+            Text(language.name)
+                .font(.system(.body, design: .rounded).weight(.medium))
+                .foregroundColor(isDisabled ? Color(.tertiaryLabel) : .primary)
+            
+            Spacer()
+            
+            if isSelected {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundColor(.secondary)
+                    .font(.system(.body, design: .rounded).weight(.medium))
+                    .accessibilityLabel("Selected")
+            } else {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundColor(.secondary)
+                    .font(.system(.body, design: .rounded).weight(.medium))
+                    .opacity(0)
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(isSelected ? Color.blue.opacity(0.2) : Color(.systemGray5))
+        )
+        .scaleEffect(isPressed ? 0.97 : 1.0)
+        .animation(.easeInOut(duration: 0.08), value: isPressed)
+        .contentShape(Rectangle())
+        .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
+            if !isDisabled {
+                isPressed = pressing
+            }
+        }, perform: {
+            if !isDisabled {
+                onTap()
+            }
+        })
+        .allowsHitTesting(!isDisabled)
+        .accessibilityLabel(language.name)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityHint(isDisabled ? "Translation language cannot be the same as app language" : 
+                          (isSelected ? "Currently selected translation language" : "Tap to select this translation language"))
+    }
+}
+
+// MARK: - Preview
+#Preview {
+    TranslationLanguageSection(
+        languages: LanguageOptionModel.allLanguages,
+        selectedLanguage: "de",
+        appLanguage: "en",
+        onLanguageSelected: { _ in }
+    )
+    .padding()
+}
+
