@@ -23,7 +23,7 @@ struct MainHeaderContent: View {
                         onStateButtonTapped()
                     }) {
                         Text(getLocalizedStateName(selectedState))
-                            .font(.title2.bold())
+                            .font(.title.bold())
                             .fontDesign(.rounded)
                             .foregroundColor(Color(.systemGray6))
                             .multilineTextAlignment(.leading)
@@ -146,7 +146,7 @@ private struct FederalStateSloganBlock: View {
     
     var body: some View {
         Text(localizedSlogan(for: stateName))
-            .font(.system(.callout, design: .rounded).weight(.medium))
+            .font(.system(.body, design: .rounded).weight(.semibold))
             .foregroundColor(Color(.systemGray6))
             .multilineTextAlignment(.leading)
             .lineLimit(3)

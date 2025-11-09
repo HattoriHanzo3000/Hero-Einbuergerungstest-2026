@@ -41,6 +41,22 @@ struct MainScreenView: View {
                         .padding(.horizontal)
                     }
                     .frame(maxWidth: .infinity)
+
+                    // Temporary Ad Placeholder
+                    VStack {
+                        Text("Ad Placeholder")
+                            .font(.system(.caption, design: .rounded).weight(.medium))
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: MainScreenConstants.adaptiveValue(60))
+                    .padding(.horizontal, MainScreenConstants.adaptiveValue(16))
+                    .padding(.vertical, MainScreenConstants.adaptiveValue(8))
+                    .background(
+                        RoundedRectangle(cornerRadius: MainScreenConstants.adaptiveValue(16))
+                            .stroke(style: StrokeStyle(lineWidth: 2, dash: [6, 3]))
+                            .foregroundColor(Color.green.opacity(0.7))
+                    )
                     
                     // Footer section - 4 buttons
                     MainFooterContent(

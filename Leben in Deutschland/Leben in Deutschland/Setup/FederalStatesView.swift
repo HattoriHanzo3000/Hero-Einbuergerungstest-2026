@@ -34,6 +34,22 @@ struct FederalStatesView: View {
             )
             .padding(.top, MainScreenConstants.adaptiveValue(8))
             .padding(.bottom, MainScreenConstants.adaptiveValue(16))
+
+            // Temporary Ad Placeholder matching main screen
+            VStack {
+                Text("Ad Placeholder")
+                    .font(.system(.caption, design: .rounded).weight(.medium))
+                    .foregroundColor(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: MainScreenConstants.adaptiveValue(60))
+            .padding(.horizontal, MainScreenConstants.adaptiveValue(16))
+            .padding(.bottom, MainScreenConstants.adaptiveValue(16))
+            .background(
+                RoundedRectangle(cornerRadius: MainScreenConstants.adaptiveValue(16))
+                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [6, 3]))
+                    .foregroundColor(Color.green.opacity(0.7))
+            )
         }
         .background(Color(.systemBackground))
         .overlay(

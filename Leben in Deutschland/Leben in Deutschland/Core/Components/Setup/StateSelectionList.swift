@@ -58,7 +58,7 @@ private struct StateButton: View {
     var body: some View {
         HStack {
             Text(state.localizedName)
-                .font(.system(.body, design: .rounded).weight(.semibold))
+                .font(.system(.body, design: .rounded).weight(.medium))
                 .foregroundColor(.primary)
             
             Spacer()
@@ -66,12 +66,12 @@ private struct StateButton: View {
             if isSelected {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.secondary)
-                    .font(.system(.body, design: .rounded).weight(.semibold))
+                    .font(.system(.body, design: .rounded).weight(.medium))
                     .accessibilityLabel("Selected")
             } else {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.secondary)
-                    .font(.system(.body, design: .rounded).weight(.semibold))
+                    .font(.system(.body, design: .rounded).weight(.medium))
                     .opacity(0)
             }
         }

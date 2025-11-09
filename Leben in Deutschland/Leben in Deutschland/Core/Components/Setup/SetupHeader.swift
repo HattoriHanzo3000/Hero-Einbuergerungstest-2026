@@ -22,11 +22,13 @@ struct SetupHeader: View {
         case .xSmall, .small, .medium:
             return MainScreenConstants.adaptiveValue(36)
         case .large:
+            return MainScreenConstants.adaptiveValue(38)
+        case .xLarge:
             return MainScreenConstants.adaptiveValue(40)
-        case .xLarge, .xxLarge:
-            return MainScreenConstants.adaptiveValue(44)
+        case .xxLarge, .xxxLarge:
+            return MainScreenConstants.adaptiveValue(42)
         default:
-            return MainScreenConstants.adaptiveValue(48)
+            return MainScreenConstants.adaptiveValue(44)
         }
     }
     private var controlPadding: CGFloat { controlSize * 0.25 }
@@ -55,7 +57,7 @@ struct SetupHeader: View {
             }
             
             Text(title.localized)
-                .font(.system(.title2, design: .rounded).weight(.bold))
+                .font(.title.bold())
                 .foregroundColor(Color(.systemGray6))
                 .multilineTextAlignment(.leading)
                 .lineLimit(2)

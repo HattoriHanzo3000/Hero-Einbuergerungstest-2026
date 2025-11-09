@@ -18,7 +18,7 @@ struct AppLanguageSection: View {
             // Section title
             HStack {
                 Text("application_title".localized)
-                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                    .font(.system(.title3, design: .rounded).weight(.semibold))
                     .foregroundColor(.primary)
                 
                 Spacer()
@@ -55,7 +55,7 @@ private struct LanguageButton: View {
     var body: some View {
         HStack {
             Text(language.name)
-                .font(.system(size: 16, weight: .medium, design: .rounded))
+                .font(.system(.body, design: .rounded).weight(.medium))
                 .foregroundColor(.primary)
             
             Spacer()
@@ -63,12 +63,12 @@ private struct LanguageButton: View {
             if isSelected {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.secondary)
-                    .font(.title2)
+                    .font(.system(.body, design: .rounded).weight(.medium))
                     .accessibilityLabel("Selected")
             } else {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.secondary)
-                    .font(.title2)
+                    .font(.system(.body, design: .rounded).weight(.medium))
                     .opacity(0)
             }
         }
