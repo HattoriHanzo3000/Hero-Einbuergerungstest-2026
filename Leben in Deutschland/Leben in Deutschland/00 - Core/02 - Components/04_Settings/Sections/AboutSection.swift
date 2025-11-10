@@ -5,49 +5,61 @@ struct AboutSection: View {
     @ObservedObject var viewModel: SettingsViewModel
     
     var body: some View {
-        SectionContainer(title: "about_title") {
-            // MARK: - Buttons
-            VStack(spacing: 12) {
-                // MARK: - App Version
-                SettingsButton(
+        SettingsListSection(titleKey: "about_title") {
+            SettingsListRow(
                     icon: "info.circle.fill",
                     title: "version".localized,
                     trailingText: viewModel.getAppVersion(),
                     trailingColor: .secondary,
+                tintColor: .accentColor,
+                showsChevron: true,
                     action: {
                         viewModel.handleAction(.showVersion)
                     }
                 )
+            .listRowInsets(.init(top: 0, leading: 0, bottom: MainScreenConstants.adaptiveValue(6), trailing: 0))
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
                 
-                // MARK: - Check for Updates
-                SettingsButton(
+            SettingsListRow(
                     icon: "arrow.down.circle.fill",
                     title: "settings_check_updates_button".localized,
+                tintColor: .blue,
+                showsChevron: true,
                     action: {
                         viewModel.handleAction(.checkUpdates)
                     }
                 )
+            .listRowInsets(.init(top: 0, leading: 0, bottom: MainScreenConstants.adaptiveValue(6), trailing: 0))
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
                 
-                // MARK: - Open App Store
-                SettingsButton(
+            SettingsListRow(
                     icon: "app.badge.fill",
                     title: "settings_open_app_store_button".localized,
+                tintColor: .indigo,
+                showsChevron: true,
                     action: {
                         viewModel.handleAction(.openAppStore)
                     }
                 )
+            .listRowInsets(.init(top: 0, leading: 0, bottom: MainScreenConstants.adaptiveValue(6), trailing: 0))
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
                 
-                // MARK: - Test Alerts
-                SettingsButton(
+            SettingsListRow(
                     icon: "flask.fill",
                     title: "Test Alerts",
-                    backgroundColor: Color.orange.opacity(0.2),
+                tintColor: .orange,
                     foregroundColor: .orange,
+                showsChevron: true,
                     action: {
                         viewModel.handleAction(.testAlerts)
                     }
                 )
-            }
+            .listRowInsets(.init(top: 0, leading: 0, bottom: MainScreenConstants.adaptiveValue(6), trailing: 0))
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
         }
     }
 }

@@ -19,7 +19,7 @@ struct MainListModel: Identifiable, Hashable {
     static let allCategories = [
         MainListModel(
             title: "main_category_study",
-            icon: "book.fill",
+            icon: "brain.head.profile",
             accessibilityLabel: "Start Learning",
             accessibilityHint: "Begin spaced repetition learning",
             destination: .startLearning

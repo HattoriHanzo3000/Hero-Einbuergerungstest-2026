@@ -2,61 +2,38 @@ import SwiftUI
 
 // Main Settings View
 struct SettingsView: View {
-    @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = SettingsViewModel()
     @AppStorage("app_appearance") private var appAppearance: String = "system"
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: MainScreenConstants.adaptiveValue(28)) {
-                // Header island
-                SetupHeader(
-                    title: "settings_title".localized,
-                    onDismiss: {
-                        HapticManager.shared.lightImpact()
-                        dismiss()
-                    }
-                )
+        ZStack {
+            SettingsBackgroundView()
+                .ignoresSafeArea()
+            
+            List {
+                Section {
+                    SettingsHeaderView()
+                        .padding(.top, MainScreenConstants.adaptiveValue(18))
+                        .padding(.bottom, MainScreenConstants.adaptiveValue(12))
+                        .listRowInsets(.init(top: 0, leading: MainScreenConstants.adaptiveValue(20), bottom: 0, trailing: MainScreenConstants.adaptiveValue(20)))
+                }
+                .listRowBackground(Color.clear)
+                .listSectionSpacing(.custom(MainScreenConstants.adaptiveValue(12)))
+                .listRowSeparator(.hidden)
                 
-                // Content sections
-                VStack(spacing: MainScreenConstants.adaptiveValue(28)) {
-                    // About Section
                     AboutSection(viewModel: viewModel)
-                    
-                    // Personalisation Section
                     PersonalisationSection(viewModel: viewModel)
-                    
-                    // Support Section
                     SupportSection(viewModel: viewModel)
-                    
-                    // Legal Section
                     LegalSection(viewModel: viewModel)
-                    
-                    // Statistics Section
                     StatisticsSection(viewModel: viewModel)
                 }
-                .padding(.horizontal, MainScreenConstants.adaptiveValue(24))
-                .padding(.bottom, MainScreenConstants.adaptiveValue(24))
-            }
-            .padding(.top, MainScreenConstants.adaptiveValue(16))
-        }
-        .safeAreaInset(edge: .bottom) {
-            VStack {
-                Text("Ad Placeholder")
-                    .font(.system(.caption, design: .rounded).weight(.medium))
-                    .foregroundColor(.secondary)
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: MainScreenConstants.adaptiveValue(60))
-            .padding(.horizontal, MainScreenConstants.adaptiveValue(16))
-            .padding(.bottom, MainScreenConstants.adaptiveValue(16))
-            .background(
-                RoundedRectangle(cornerRadius: MainScreenConstants.adaptiveValue(16))
-                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [6, 3]))
-                    .foregroundColor(Color.green.opacity(0.7))
-            )
-            .background(Color(.systemBackground).ignoresSafeArea())
+            .listStyle(.plain)
+            .listSectionSpacing(.custom(MainScreenConstants.adaptiveValue(24)))
+            .scrollIndicators(.hidden)
+            .scrollContentBackground(.hidden)
         }
         .preferredColorScheme(getColorScheme())
+        .toolbar(.hidden, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $viewModel.showVersionSheet) {
             VersionSheet()
         }
@@ -143,4 +120,36 @@ struct SettingsView: View {
     SettingsView()
         .environmentObject(StateManager())
         .environmentObject(LanguageManager())
+}
+
+// MARK: - Settings Header
+private struct SettingsHeaderView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: MainScreenConstants.adaptiveValue(8)) {
+            Text("settings_title".localized)
+                .font(.system(size: MainScreenConstants.adaptiveValue(36), weight: .bold, design: .rounded))
+                .foregroundStyle(.primary)
+                .accessibilityAddTraits(.isHeader)
+            
+            Text("settings_subtitle".localized)
+                .font(.system(.body, design: .rounded).weight(.medium))
+                .foregroundStyle(.secondary)
+                .accessibilityLabel("settings_subtitle".localized)
+        }
+    }
+}
+
+// MARK: - Settings Background
+private struct SettingsBackgroundView: View {
+    var body: some View {
+        LinearGradient(
+            colors: [
+                Color.accentColor.opacity(0.22),
+                Color(.systemBackground).opacity(0.95)
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .background(Color(.systemBackground))
+    }
 }

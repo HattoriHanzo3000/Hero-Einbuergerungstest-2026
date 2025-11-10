@@ -83,7 +83,7 @@ struct OnboardingSplashView: View {
             player.actionAtItemEnd = .pause
             
             // Configure sound based on user settings
-            let soundEnabled = UserDefaults.standard.object(forKey: "sound_enabled") as? Bool ?? true
+            let soundEnabled = SoundManager.shared.isSoundEnabled
             player.isMuted = !soundEnabled
             
             self.player = player

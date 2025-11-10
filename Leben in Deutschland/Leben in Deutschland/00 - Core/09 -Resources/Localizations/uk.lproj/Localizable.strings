@@ -1,3 +1,7 @@
+"settings_current_version" = "Поточна версія";
+"settings_installed_version" = "Встановлена версія";
+"settings_latest_updates" = "Останні оновлення";
+"settings_version_updates" = "У цьому оновленні: підвищено продуктивність, оновлено дизайн розділу налаштувань та додано швидкі переходи до преміум-функцій.";
 // =============================================================================
 //   ONBOARDING
 // =============================================================================
@@ -155,6 +159,7 @@
 "settings_open_app_store_button" = "Відкрити в App Store";
 "update_title" = "Доступне оновлення";
 "update_message" = "Доступна нова версія додатку.";
+"update_message_with_version" = "Доступна нова версія застосунку (%@).";
 "update_required_title" = "Потрібне оновлення";
 "update_required_message" = "Будь ласка, онови додаток, щоб продовжити користування.";
 "update_now" = "Оновити";
@@ -316,3 +321,33 @@
 "ad_removal_privacy_policy" = "Політика конфіденційності";
 "ad_removal_restore_success" = "Покупки успішно відновлено!";
 "ad_removal_error" = "Помилка покупки";
+
+"tab_home_title" = "Головна";
+"tab_learn_title" = "Навчання";
+"tab_premium_title" = "Преміум";
+"tab_settings_title" = "Налаштування";
+"tab_settings_beta_title" = "Settings BETA";
+"main_tab_bar_accessibility_label" = "Основна навігація";
+"settings_subtitle" = "Налаштуй додаток під свій стиль навчання.";
+"settings_beta_title" = "Settings Beta";
+"settings_beta_detail_placeholder" = "Ми ще наповнюємо цей розділ. Твій відгук допоможе вирішити, що тут залишити.";
+"settings_test_alerts_button" = "Тестові сповіщення";
+"settings_app_language" = "Мова застосунку";
+"settings_translation_language" = "Мова перекладу";
+"settings_federal_state" = "Земля";
+"settings_test_date" = "Дата теста";
+"settings_test_date_not_set" = "Вкажіть дату";
+"settings_sound_toggle" = "Звук";
+"settings_language_option_english" = "Англійська";
+"settings_language_option_german" = "Німецька";
+"settings_language_option_russian" = "Російська";
+"settings_language_option_ukrainian" = "Українська";
+"settings_haptics_toggle" = "Гаптичний відгук";
+"settings_appearance_title" = "Оформлення";
+"settings_premium_title" = "Преміум";
+"settings_reset_app" = "Скинути застосунок";
+"settings_current_version" = "Поточна версія";
+"settings_installed_version" = "Встановлена версія";
+"settings_latest_updates" = "Останні оновлення";
+"settings_version_updates" = "У цьому оновленні: підвищено продуктивність, оновлено дизайн розділу налаштувань та додано швидкі переходи до преміум-функцій.";
+

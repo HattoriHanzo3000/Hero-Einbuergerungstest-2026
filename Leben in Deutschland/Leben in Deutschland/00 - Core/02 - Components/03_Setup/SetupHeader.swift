@@ -9,8 +9,14 @@ import SwiftUI
 
 // MARK: - Setup Header
 struct SetupHeader: View {
+    enum PresentationStyle {
+        case modal
+        case navigation
+    }
+    
     let title: String
     let onDismiss: () -> Void
+    var presentationStyle: PresentationStyle
     
     private var cornerRadius: CGFloat { MainScreenConstants.adaptiveValue(28) }
     private var horizontalPadding: CGFloat { MainScreenConstants.adaptiveValue(20) }
@@ -33,25 +39,20 @@ struct SetupHeader: View {
     }
     private var controlPadding: CGFloat { controlSize * 0.25 }
     
+    init(
+        title: String,
+        presentationStyle: PresentationStyle = .modal,
+        onDismiss: @escaping () -> Void
+    ) {
+        self.title = title
+        self.presentationStyle = presentationStyle
+        self.onDismiss = onDismiss
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: MainScreenConstants.adaptiveValue(12)) {
             HStack {
-                Button(action: {
-                    HapticManager.shared.lightImpact()
-                    onDismiss()
-                }) {
-                    Image(systemName: "chevron.down")
-                        .font(.system(.title3, design: .rounded).weight(.semibold))
-                        .foregroundColor(Color(.systemGray6))
-                        .frame(width: controlSize, height: controlSize)
-                        .background(
-                            Circle()
-                                .fill(Color.white.opacity(0.18))
-                        )
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Close")
-                .accessibilityHint("Dismiss")
+                headerButton
                 
                 Spacer()
             }
@@ -76,6 +77,22 @@ struct SetupHeader: View {
         )
         .padding(.horizontal)
         .padding(.top, topInset)
+    }
+}
+
+private extension SetupHeader {
+    @ViewBuilder
+    var headerButton: some View {
+        switch presentationStyle {
+        case .modal:
+            AdaptiveIconButton.dismissButton {
+                onDismiss()
+            }
+        case .navigation:
+            AdaptiveIconButton.backButton {
+                onDismiss()
+            }
+        }
     }
 }
 

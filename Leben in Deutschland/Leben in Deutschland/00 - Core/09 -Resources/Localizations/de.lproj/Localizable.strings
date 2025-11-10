@@ -1,3 +1,7 @@
+"settings_current_version" = "Aktuelle Version";
+"settings_installed_version" = "Installierte Version";
+"settings_latest_updates" = "Neueste Aktualisierungen";
+"settings_version_updates" = "Dieses Update bringt Leistungsverbesserungen, ein verfeinertes Erscheinungsbild der Einstellungen und neue Shortcuts zu Premium-Funktionen.";
 // =============================================================================
 //   ONBOARDING
 // =============================================================================
@@ -155,12 +159,11 @@
 "settings_open_app_store_button" = "Im App Store öffnen";
 "update_title" = "Update verfügbar";
 "update_message" = "Eine neuere Version der App ist verfügbar.";
+"update_message_with_version" = "Eine neuere Version (%@) der App ist verfügbar.";
 "update_required_title" = "Update erforderlich";
 "update_required_message" = "Bitte aktualisiere die App, um sie weiter zu verwenden.";
 "update_now" = "Jetzt aktualisieren";
 "update_later" = "Später";
-"update_latest_title" = "Alles aktuell";
-"update_latest_message" = "Du hast bereits die neueste Version installiert.";
 
 // Spaced Repetition Tutorial
 "spaced_repetition_tutorial_title" = "Kleiner Tipp";
@@ -316,3 +319,33 @@
 "ad_removal_privacy_policy" = "Datenschutzerklärung";
 "ad_removal_restore_success" = "Käufe erfolgreich wiederhergestellt!";
 "ad_removal_error" = "Kauffehler";
+
+"tab_home_title" = "Startseite";
+"tab_learn_title" = "Lernen";
+"tab_premium_title" = "Premium";
+"tab_settings_title" = "Einstellungen";
+"tab_settings_beta_title" = "Settings BETA";
+"main_tab_bar_accessibility_label" = "Hauptnavigation";
+"settings_subtitle" = "Passe die App an, damit sie perfekt zu deinem Lernen passt.";
+"settings_beta_title" = "Settings BETA";
+"settings_beta_detail_placeholder" = "Wir arbeiten gerade an diesem Bereich. Dein Feedback hilft uns zu entscheiden, was hier bleiben soll.";
+"settings_test_alerts_button" = "Testwarnungen";
+"settings_app_language" = "App-Sprache";
+"settings_translation_language" = "Übersetzungssprache";
+"settings_federal_state" = "Bundesland";
+"settings_test_date" = "Prüfungstermin";
+"settings_test_date_not_set" = "Datum festlegen";
+"settings_sound_toggle" = "Ton";
+"settings_language_option_english" = "Englisch";
+"settings_language_option_german" = "Deutsch";
+"settings_language_option_russian" = "Russisch";
+"settings_language_option_ukrainian" = "Ukrainisch";
+"settings_haptics_toggle" = "Haptisches Feedback";
+"settings_appearance_title" = "Darstellung";
+"settings_premium_title" = "Premium";
+"settings_reset_app" = "App zurücksetzen";
+"settings_current_version" = "Aktuelle Version";
+"settings_installed_version" = "Installierte Version";
+"settings_latest_updates" = "Neueste Aktualisierungen";
+"settings_version_updates" = "Dieses Update bringt Leistungsverbesserungen, ein verfeinertes Erscheinungsbild der Einstellungen und neue Shortcuts zu Premium-Funktionen.";
+

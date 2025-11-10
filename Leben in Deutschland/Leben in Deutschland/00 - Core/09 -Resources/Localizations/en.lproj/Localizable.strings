@@ -1,3 +1,7 @@
+"settings_current_version" = "Current Version";
+"settings_installed_version" = "Installed version";
+"settings_latest_updates" = "Latest updates";
+"settings_version_updates" = "This release includes stability improvements, UI refinements, and new shortcuts to premium features.";
 // =============================================================================
 //   ONBOARDING
 // =============================================================================
@@ -155,6 +159,7 @@
 "settings_open_app_store_button" = "Open in App Store";
 "update_title" = "Update available";
 "update_message" = "A newer version of the app is available.";
+"update_message_with_version" = "A newer version (%@) of the app is available.";
 "update_required_title" = "Update required";
 "update_required_message" = "Please update to continue using the app.";
 "update_now" = "Update Now";
@@ -315,3 +320,33 @@
 "ad_removal_privacy_policy" = "Privacy Policy";
 "ad_removal_restore_success" = "Purchases restored successfully!";
 "ad_removal_error" = "Purchase Error";
+
+"tab_home_title" = "Home";
+"tab_learn_title" = "Learn";
+"tab_premium_title" = "Premium";
+"tab_settings_title" = "Settings";
+"tab_settings_beta_title" = "Settings BETA";
+"main_tab_bar_accessibility_label" = "Primary navigation";
+"settings_subtitle" = "Personalize the app experience to match how you learn.";
+"settings_beta_title" = "Settings BETA";
+"settings_beta_detail_placeholder" = "We’re shaping this area right now. Your feedback will help us decide what belongs here.";
+"settings_test_alerts_button" = "Test Alerts";
+"settings_app_language" = "App Language";
+"settings_translation_language" = "Translation Language";
+"settings_federal_state" = "Federal State";
+"settings_test_date" = "Test Date";
+"settings_test_date_not_set" = "Set the date";
+"settings_sound_toggle" = "Sound";
+"settings_language_option_english" = "English";
+"settings_language_option_german" = "German";
+"settings_language_option_russian" = "Russian";
+"settings_language_option_ukrainian" = "Ukrainian";
+"settings_haptics_toggle" = "Haptic Feedback";
+"settings_appearance_title" = "Appearance";
+"settings_premium_title" = "Premium";
+"settings_reset_app" = "Reset App";
+"settings_current_version" = "Current Version";
+"settings_installed_version" = "Installed version";
+"settings_latest_updates" = "Latest updates";
+"settings_version_updates" = "This release includes stability improvements, UI refinements, and new shortcuts to premium features.";
+

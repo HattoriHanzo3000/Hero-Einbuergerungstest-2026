@@ -1,3 +1,7 @@
+"settings_current_version" = "Текущая версия";
+"settings_installed_version" = "Установленная версия";
+"settings_latest_updates" = "Последние обновления";
+"settings_version_updates" = "В этом обновлении: улучшенная производительность, обновлённый экран настроек и быстрый доступ к премиум-функциям.";
 // =============================================================================
 //   ONBOARDING
 // =============================================================================
@@ -155,12 +159,11 @@
 "settings_open_app_store_button" = "Открыть в App Store";
 "update_title" = "Доступно обновление";
 "update_message" = "Доступна новая версия приложения.";
+"update_message_with_version" = "Доступна новая версия приложения (%@).";
 "update_required_title" = "Требуется обновление";
 "update_required_message" = "Пожалуйста, обнови приложение, чтобы продолжить использование.";
 "update_now" = "Обновить";
 "update_later" = "Позже";
-"update_latest_title" = "Актуальная версия";
-"update_latest_message" = "У тебя уже установлена последняя версия.";
 
 // Spaced Repetition Tutorial
 "spaced_repetition_tutorial_title" = "Подсказка";
@@ -316,3 +319,32 @@
 "ad_removal_privacy_policy" = "Политика конфиденциальности";
 "ad_removal_restore_success" = "Покупки успешно восстановлены!";
 "ad_removal_error" = "Ошибка покупки";
+
+"tab_home_title" = "Главная";
+"tab_learn_title" = "Учиться";
+"tab_premium_title" = "Премиум";
+"tab_settings_title" = "Настройки";
+"tab_settings_beta_title" = "Settings BETA";
+"main_tab_bar_accessibility_label" = "Основная навигация";
+"settings_subtitle" = "Настрой приложение так, как удобно тебе учиться.";
+"settings_beta_title" = "Settings BETA";
+"settings_beta_detail_placeholder" = "Мы ещё создаём этот раздел. Твоё мнение поможет понять, что здесь нужно оставить.";
+"settings_test_alerts_button" = "Тестовые уведомления";
+"settings_app_language" = "Язык приложения";
+"settings_translation_language" = "Язык перевода";
+"settings_federal_state" = "Земля";
+"settings_test_date" = "Дата теста";
+"settings_test_date_not_set" = "Укажите дату";
+"settings_sound_toggle" = "Звук";
+"settings_language_option_english" = "Английский";
+"settings_language_option_german" = "Немецкий";
+"settings_language_option_russian" = "Русский";
+"settings_language_option_ukrainian" = "Украинский";
+"settings_haptics_toggle" = "Тактильная отдача";
+"settings_appearance_title" = "Оформление";
+"settings_premium_title" = "Премиум";
+"settings_reset_app" = "Сбросить приложение";
+"settings_current_version" = "Текущая версия";
+"settings_installed_version" = "Установленная версия";
+"settings_latest_updates" = "Последние обновления";
+

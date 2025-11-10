@@ -11,6 +11,7 @@ import SwiftUI
 struct CategoriesView: View {
     @EnvironmentObject var languageManager: LanguageManager
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     @StateObject private var viewModel = CategoriesViewModel()
     @ObservedObject private var answersService = AnswersService.shared
@@ -21,10 +22,22 @@ struct CategoriesView: View {
     @State private var isSearchVisible = false
     @FocusState private var isSearchFocused: Bool
     @State private var isAtBottom = false
-    @State private var isSearchButtonPressed = false
-    @State private var isBackButtonPressed = false
-    
     private let stateService = CategoriesStateService.shared
+    
+    private var controlSize: CGFloat {
+        switch dynamicTypeSize {
+        case .xSmall, .small, .medium:
+            return MainScreenConstants.adaptiveValue(36)
+        case .large:
+            return MainScreenConstants.adaptiveValue(38)
+        case .xLarge:
+            return MainScreenConstants.adaptiveValue(40)
+        case .xxLarge, .xxxLarge:
+            return MainScreenConstants.adaptiveValue(42)
+        default:
+            return MainScreenConstants.adaptiveValue(44)
+        }
+    }
     
     // Flat list of matching questions for search
     var searchResults: [(question: QuestionModel, subcategory: String)] {
@@ -59,7 +72,7 @@ struct CategoriesView: View {
             }
         }
         
-        // Limit to 50 results like old version
+        // Limit to 50 results
         return Array(results.prefix(50))
     }
     
@@ -71,55 +84,17 @@ struct CategoriesView: View {
             
             VStack(spacing: 0) {
                 // Header - Apple Design Awards quality: clarity, elegance, accessibility
-                // Perfect centering technique: equal-width buttons + Spacers ensure title is always centered
-                HStack(alignment: .center, spacing: 0) {
-                    // Left button - fixed 44pt width ensures perfect centering
-                    Button(action: {
-                        isBackButtonPressed = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            isBackButtonPressed = false
-                        }
-                        HapticManager.shared.lightImpact()
+                VStack(alignment: .leading, spacing: MainScreenConstants.adaptiveValue(12)) {
+                    HStack {
+                        AdaptiveIconButton.backButton {
                         dismiss()
-                    }) {
-                        ZStack {
-                            Circle()
-                                .fill(Color("MainButton"))
-                                .frame(width: 30, height: 30)
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(Color.accentColor)
                         }
-                        .scaleEffect(isBackButtonPressed ? 0.95 : 1.0)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isBackButtonPressed)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .frame(width: 44, height: 44) // Apple HIG: minimum tap target
-                    .accessibilityLabel("Back")
-                    .accessibilityHint("Go back to main screen")
-                    .accessibilityAddTraits(.isButton)
-                    
-                    // Title - perfectly centered with Spacers on both sides
-                    Spacer(minLength: 0)
-                    
-                    Text("learn_by_topics_title".localized)
-                        .font(.title2.bold())
-                        .foregroundColor(Color(.systemGray6))
-                        .multilineTextAlignment(.center)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                        .minimumScaleFactor(0.8) // Adapts to Dynamic Type
-                        .accessibilityAddTraits(.isHeader)
-                    
-                    Spacer(minLength: 0)
-                    
-                    // Right button - fixed 44pt width matching left for perfect centering
-                    Button(action: {
-                        isSearchButtonPressed = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            isSearchButtonPressed = false
-                        }
-                        HapticManager.shared.lightImpact()
+                        
+                        Spacer()
+                        
+                        AdaptiveIconButton(
+                            systemName: isSearchVisible ? "xmark" : "magnifyingglass",
+                            action: {
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                             isSearchVisible.toggle()
                             if !isSearchVisible {
@@ -127,26 +102,23 @@ struct CategoriesView: View {
                                 isSearchFocused = false
                             }
                         }
-                    }) {
-                        ZStack {
-                            Circle()
-                                .fill(Color("MainButton"))
-                                .frame(width: 30, height: 30)
-                            Image(systemName: isSearchVisible ? "xmark" : "magnifyingglass")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(Color.accentColor)
+                            },
+                            accessibilityLabel: isSearchVisible ? "Close search" : "Search categories",
+                            accessibilityHint: "Toggle search mode"
+                        )
                                 .animation(.none, value: isSearchVisible)
                         }
-                        .scaleEffect(isSearchButtonPressed ? 0.95 : 1.0)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isSearchButtonPressed)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .frame(width: 44, height: 44) // Apple HIG: minimum tap target
-                    .accessibilityLabel(isSearchVisible ? "Close search" : "Search categories")
-                    .accessibilityAddTraits(.isButton)
+                    
+                    Text("learn_by_topics_title".localized)
+                        .font(.system(.title, design: .rounded).weight(.bold))
+                        .foregroundColor(Color(.systemGray6))
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8) // Adapts to Dynamic Type
+                        .accessibilityAddTraits(.isHeader)
                 }
-                .padding(.horizontal) // System padding: adapts to device & Dynamic Type
-                .padding(.vertical, 12) // Equal top/bottom padding for inner elements
+                .padding(.vertical, MainScreenConstants.adaptiveValue(18))
+                .padding(.horizontal, MainScreenConstants.adaptiveValue(20))
                 .frame(minHeight: 68) // Consistent minimum height across devices
                 .background(
                     RoundedRectangle(cornerRadius: 28)
@@ -190,7 +162,7 @@ struct CategoriesView: View {
                                     .focused($isSearchFocused)
                                     .textInputAutocapitalization(.never)
                                     .disableAutocorrection(true)
-                                    .font(.system(size: 16))
+                                    .font(.body)
                                     .foregroundColor(.primary)
                                 
                                 if !searchText.isEmpty {
@@ -199,7 +171,7 @@ struct CategoriesView: View {
                                         searchText = ""
                                     }) {
                                         Image(systemName: "xmark.circle.fill")
-                                            .font(.system(size: 16))
+                                            .font(.body)
                                             .foregroundColor(.primary)
                                     }
                                     .accessibilityLabel("Clear search")
@@ -315,6 +287,23 @@ struct CategoriesView: View {
             }
         }
         .navigationBarHidden(true)
+        .safeAreaInset(edge: .bottom) {
+            VStack {
+                Text("Ad Placeholder")
+                    .font(.system(.caption, design: .rounded).weight(.medium))
+                    .foregroundColor(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: MainScreenConstants.adaptiveValue(60))
+            .padding(.horizontal, MainScreenConstants.adaptiveValue(16))
+            .padding(.bottom, MainScreenConstants.adaptiveValue(16))
+            .background(
+                RoundedRectangle(cornerRadius: MainScreenConstants.adaptiveValue(16))
+                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [6, 3]))
+                    .foregroundColor(Color.green.opacity(0.7))
+            )
+            .background(Color(.systemBackground).ignoresSafeArea())
+        }
         .task {
             await viewModel.loadCategories(for: languageManager.currentAppLanguage)
         }
@@ -344,6 +333,7 @@ private struct ExpandableCategoryView: View {
     let onToggle: () -> Void
     @ObservedObject var answersService: AnswersService
     @State private var isPressed = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     // Check if all subcategories are completed
     private var isCategoryCompleted: Bool {
@@ -380,30 +370,57 @@ private struct ExpandableCategoryView: View {
         }
     }
     
+    private var iconContainerSize: CGFloat {
+        switch dynamicTypeSize {
+        case .xSmall, .small, .medium:
+            return 60
+        case .large:
+            return 66
+        case .xLarge:
+            return 72
+        case .xxLarge, .xxxLarge:
+            return 80
+        default:
+            return 88
+        }
+    }
+    
+    private var textContainerMinHeight: CGFloat {
+        iconContainerSize
+    }
+    
+    private var containerPadding: CGFloat {
+        switch dynamicTypeSize {
+        case .xSmall, .small, .medium:
+            return 16
+        case .large:
+            return 18
+        case .xLarge:
+            return 20
+        default:
+            return 22
+        }
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
-            // Category header button - two-part design inside white block
-            HStack(alignment: .center, spacing: 12) {
-                    // Square icon container
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 28)
-                            .fill(Color.accentColor)
-                            .frame(width: 60, height: 60)
-                        
+            Button(action: {
+                isPressed = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    isPressed = false
+                }
+                HapticManager.shared.lightImpact()
+                onToggle()
+            }) {
+                VStack(alignment: .leading, spacing: 12) {
                         Image(systemName: categoryIcon)
-                            .font(.system(size: 28, weight: .semibold, design: .rounded))
+                        .font(.system(.title, design: .rounded).weight(.semibold))
                             .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color(.systemBackground))
-                    }
-                    
-                    // Rectangle text container
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 28)
-                            .fill(Color.accentColor)
-                            .frame(height: 60)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        HStack(spacing: 8) {
+                    HStack(spacing: 12) {
                             Text(category.name)
-                                .font(.headline.bold())
+                            .font(.title3.weight(.semibold))
                                 .fontDesign(.rounded)
                                 .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color(.systemBackground))
                                 .multilineTextAlignment(.leading)
@@ -414,25 +431,19 @@ private struct ExpandableCategoryView: View {
                                 .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color(.systemBackground))
                                 .rotationEffect(.degrees(isExpanded ? 90 : 0))
                         }
-                        .padding(.horizontal, 16)
                     }
-                    .frame(maxWidth: .infinity)
-                }
-                .padding(16)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, containerPadding)
+                .padding(.horizontal, containerPadding)
+                .background(
+                    RoundedRectangle(cornerRadius: 28)
+                        .fill(Color.accentColor)
+                )
+            }
             .contentShape(Rectangle())
             .animation(.easeInOut(duration: 0.1), value: isPressed)
-            .onTapGesture {
-                // Brief press animation on tap
-                isPressed = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    isPressed = false
-                }
-                HapticManager.shared.lightImpact()
-                onToggle()
-            }
-            .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
-                isPressed = pressing
-            }, perform: {})
+            .buttonStyle(.plain)
+            .scaleEffect(isPressed ? 0.98 : 1.0)
             
             // Subcategories (expandable - inside the same card)
             if isExpanded {
@@ -462,9 +473,12 @@ private struct SubcategoryButton: View {
     @ObservedObject var answersService: AnswersService
     @Environment(AppRouter.self) private var router
     @State private var isPressed = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     var body: some View {
         let completionPercentage = answersService.getCompletionPercentage(for: subcategory)
+        let rowHeight = rowHeightForDynamicType()
+        let horizontalPadding = horizontalPaddingForDynamicType()
         
         Button {
             HapticManager.shared.lightImpact()
@@ -476,8 +490,7 @@ private struct SubcategoryButton: View {
             HStack(spacing: 12) {
                 // Subcategory name
                 Text(subcategory.name)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .font(.body.weight(.semibold))
                     .fontDesign(.rounded)
                     .foregroundColor(.primary)
                     .multilineTextAlignment(.leading)
@@ -487,11 +500,11 @@ private struct SubcategoryButton: View {
                 
                 // Question count
                 Text("\(subcategory.questionCount)")
-                    .font(.system(size: 40, weight: .heavy, design: .rounded))
+                    .font(.system(.title2, design: .rounded).weight(.heavy))
                     .foregroundColor(.primary)
             }
-            .frame(height: 55)
-            .padding(.horizontal, 16)
+            .frame(minHeight: rowHeight)
+            .padding(.horizontal, horizontalPadding)
             .background(
                 ZStack {
                     // Base background
@@ -522,6 +535,34 @@ private struct SubcategoryButton: View {
             }
         }, perform: {})
     }
+    
+    private func rowHeightForDynamicType() -> CGFloat {
+        switch dynamicTypeSize {
+        case .xSmall, .small, .medium:
+            return 55
+        case .large:
+            return 60
+        case .xLarge:
+            return 68
+        case .xxLarge, .xxxLarge:
+            return 76
+        default:
+            return 84
+        }
+    }
+    
+    private func horizontalPaddingForDynamicType() -> CGFloat {
+        switch dynamicTypeSize {
+        case .xSmall, .small, .medium:
+            return 16
+        case .large:
+            return 18
+        case .xLarge:
+            return 20
+        default:
+            return 22
+        }
+    }
 }
 
 // NoEffectButtonStyle is now defined in Core/Shared/Modifiers/NoEffectButtonStyle.swift
@@ -538,11 +579,12 @@ private struct SearchQuestionCard: View {
             name: subcategoryName,
             categoryName: "",
             questions: [question]
-        )).environmentObject(languageManager)) {
+        ), usesRouterNavigation: false).environmentObject(languageManager)) {
             VStack(alignment: .leading, spacing: 8) {
                 // Question text
                 Text(question.text)
-                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                    .font(.callout.weight(.semibold))
+                    .fontDesign(.rounded)
                     .foregroundColor(.primary)
                     .multilineTextAlignment(.leading)
                     .lineLimit(3)
@@ -550,12 +592,14 @@ private struct SearchQuestionCard: View {
                 // Question ID and subcategory
                 HStack(spacing: 8) {
                     Text("question_label".localized + " \(question.id)")
-                        .font(.system(size: 13, weight: .semibold, design: .rounded))
+                        .font(.caption.weight(.semibold))
+                        .fontDesign(.rounded)
                         .foregroundColor(.secondary)
                         .lineLimit(1)
                     
                     Text(subcategoryName)
-                        .font(.system(size: 13, weight: .regular, design: .rounded))
+                        .font(.caption)
+                        .fontDesign(.rounded)
                         .foregroundColor(.secondary)
                         .lineLimit(1)
                 }
@@ -579,9 +623,12 @@ private struct SearchQuestionCard: View {
 }
 
 // MARK: - Preview
-struct CategoriesView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
+    @Previewable @State var router = AppRouter()
+
+    NavigationStack(path: $router.navigationPath) {
         CategoriesView()
             .environmentObject(LanguageManager())
+            .environment(router)
     }
 }

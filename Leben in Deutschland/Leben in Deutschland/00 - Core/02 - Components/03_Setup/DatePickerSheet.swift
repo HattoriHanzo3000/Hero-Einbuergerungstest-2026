@@ -15,19 +15,18 @@ struct DatePickerSheet: View {
     let onSave: (Date) -> Void
     let onClear: (() -> Void)?
     let onCancel: () -> Void
-    
-    @State private var isSavePressed = false
-    @State private var isClearPressed = false
-    
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var tempDate: Date = Date()
+
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 20) {
                 Spacer()
-                
-                // Date Picker Wheel
+
                 DatePicker(
                     "SELECT_DATE".localized,
-                    selection: $selectedDate,
+                    selection: $tempDate,
                     in: Date()...,
                     displayedComponents: .date
                 )
@@ -35,60 +34,43 @@ struct DatePickerSheet: View {
                 .labelsHidden()
                 .environment(\.locale, locale)
                 .tint(Color("Fill"))
-                
+
                 Spacer()
-                
-                // Buttons
-                VStack(spacing: 12) {
-                    // Save Button
-                    Text("SAVE_DATE".localized)
-                        .font(.title3.bold())
-                        .fontDesign(.rounded)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.accentColor)
-                        .cornerRadius(12)
-                        .scaleEffect(isSavePressed ? 0.97 : 1.0)
-                        .animation(.easeInOut(duration: 0.08), value: isSavePressed)
-                        .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
-                            isSavePressed = pressing
-                        }, perform: {
-                            onSave(selectedDate)
-                        })
-                    
-                    // Clear Button (only if date exists)
+
+                VStack(spacing: 0) {
+                    Button("SAVE_DATE".localized) {
+                        HapticManager.shared.lightImpact()
+                        onSave(tempDate)
+                        dismiss()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+
                     if hasExistingDate, let clearAction = onClear {
-                        Text("CLEAR_DATE".localized)
-                            .font(.title3.bold())
-                        .fontDesign(.rounded)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.red)
-                            .cornerRadius(12)
-                            .scaleEffect(isClearPressed ? 0.97 : 1.0)
-                            .animation(.easeInOut(duration: 0.08), value: isClearPressed)
-                            .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
-                                isClearPressed = pressing
-                            }, perform: {
-                                clearAction()
-                            })
+                        Divider().background(Color(.separator))
+                        Button("CLEAR_DATE".localized, role: .destructive) {
+                            HapticManager.shared.lightImpact()
+                            clearAction()
+                            dismiss()
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
                     }
                 }
+                .background(Color(.systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .stroke(Color(.separator), lineWidth: 0.5)
+                )
                 .padding(.horizontal)
-                .padding(.bottom, 30)
+
+                Spacer(minLength: 24)
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("CANCEL".localized) {
-                        onCancel()
-                    }
-                    .font(.title3.bold())
-                        .fontDesign(.rounded)
-                    .tint(Color("Fill"))
-                }
+            .padding(.horizontal)
+            .navigationBarHidden(true)
+            .onAppear {
+                tempDate = selectedDate
             }
         }
         .presentationDetents([.medium])

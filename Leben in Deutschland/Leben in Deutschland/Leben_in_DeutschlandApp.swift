@@ -11,6 +11,7 @@ import Combine
 @main
 struct Leben_in_DeutschlandApp: App {
     @StateObject private var languageManager = LanguageManager()
+    @StateObject private var soundManager = SoundManager.shared
     @StateObject private var appFlow = AppFlow()
     @AppStorage("app_appearance") private var appAppearance: String = "system"
     
@@ -57,11 +58,12 @@ struct Leben_in_DeutschlandApp: App {
                 case .onboardingSplash:
                     OnboardingSplashView(onFinish: { appFlow.stage = .main })
                 case .main:
-                    MainScreenView()
+                    MainTabView()
                 }
             }
             // Inject shared dependencies
             .environmentObject(languageManager)
+            .environmentObject(soundManager)
             .environmentObject(StateManager())
             // Apply appearance mode - updates immediately when @AppStorage changes
             .preferredColorScheme(getColorScheme())

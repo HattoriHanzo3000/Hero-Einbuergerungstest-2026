@@ -5,53 +5,55 @@ struct PersonalisationSection: View {
     @ObservedObject var viewModel: SettingsViewModel
     
     var body: some View {
-        SectionContainer(title: "settings_personalisation_title") {
-            // MARK: - Buttons
-            VStack(spacing: 12) {
-                // MARK: - Sound Toggle
-                SettingsButton(
+        SettingsListSection(titleKey: "settings_personalisation_title") {
+            SettingsListRow(
                     icon: "speaker.wave.2.fill",
                     title: "settings_sound_button".localized,
-                    backgroundColor: viewModel.isSoundEnabled ? Color.blue.opacity(0.2) : Color(.systemGray5),
+                tintColor: viewModel.isSoundEnabled ? .blue : Color(.systemGray4),
                     action: {
                         viewModel.toggleSound()
                     },
                     trailingContent: {
                         Text(viewModel.isSoundEnabled ? "on".localized : "off".localized)
-                            .font(.system(.body, design: .rounded).weight(.medium))
                             .foregroundColor(.secondary)
                     }
                 )
+            .listRowInsets(.init(top: 0, leading: 0, bottom: MainScreenConstants.adaptiveValue(6), trailing: 0))
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
                 
-                // MARK: - Vibration Toggle
-                SettingsButton(
+            SettingsListRow(
                     icon: "iphone.radiowaves.left.and.right",
                     title: "settings_vibration_button".localized,
-                    backgroundColor: viewModel.isVibrationEnabled ? Color.blue.opacity(0.2) : Color(.systemGray5),
+                tintColor: viewModel.isVibrationEnabled ? .blue : Color(.systemGray4),
                     action: {
                         viewModel.toggleVibration()
                     },
                     trailingContent: {
                         Text(viewModel.isVibrationEnabled ? "on".localized : "off".localized)
-                            .font(.system(.body, design: .rounded).weight(.medium))
                             .foregroundColor(.secondary)
                     }
                 )
+            .listRowInsets(.init(top: 0, leading: 0, bottom: MainScreenConstants.adaptiveValue(6), trailing: 0))
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
                 
-                // MARK: - Appearance Mode
-                SettingsButton(
+            SettingsListRow(
                     icon: "paintbrush.fill",
                     title: "settings_appearance".localized,
+                tintColor: .purple,
+                showsChevron: true,
                     action: {
                         viewModel.cycleAppearance()
                     },
                     trailingContent: {
                         Text(viewModel.appearanceMode.displayName)
-                            .font(.system(.body, design: .rounded).weight(.medium))
                             .foregroundColor(.secondary)
                     }
                 )
-            }
+            .listRowInsets(.init(top: 0, leading: 0, bottom: MainScreenConstants.adaptiveValue(6), trailing: 0))
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
         }
     }
 }

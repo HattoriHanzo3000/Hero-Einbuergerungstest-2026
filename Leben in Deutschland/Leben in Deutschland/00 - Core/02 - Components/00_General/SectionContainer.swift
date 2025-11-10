@@ -42,13 +42,27 @@ struct SectionContainer<Content: View>: View {
 
 private struct SectionContainerStyle: ViewModifier {
     func body(content: Content) -> some View {
-        content
-            .padding()
-            .background(Color(.systemGray6))
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: MainScreenConstants.adaptiveValue(28),
-                    style: .continuous
+        let cornerRadius = MainScreenConstants.adaptiveValue(28)
+        
+        return content
+            .padding(MainScreenConstants.adaptiveValue(20))
+            .background(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(.thinMaterial)
+                    .shadow(color: Color.black.opacity(0.08), radius: 14, y: 6)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [
+                                        Color.white.opacity(0.55),
+                                        Color.white.opacity(0.12)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 0.8
+                            )
                 )
             )
     }

@@ -3,14 +3,8 @@ import SwiftUI
 // MARK: - Main Screen View
 struct MainScreenView: View {
     @State private var showDialog = false
-    @State private var showDatePicker = false
-    @State private var showLanguageSelection = false
     @State private var showFederalStatesSelection = false
-    @State private var showPremium = false
-    @State private var showSettings = false
-    @State private var selectedDate = Date()
     @State private var savedTestDate: Date? = UserDefaults.standard.object(forKey: "selectedTestDate") as? Date
-    @State private var showDateTooFarDialog = false
     
     @EnvironmentObject var languageManager: LanguageManager
     @EnvironmentObject var stateManager: StateManager
@@ -29,54 +23,20 @@ struct MainScreenView: View {
                         }
                     )
                     
-                    // Main categories section (scrollable)
+                    // Scrollable main categories section
                     ScrollView(showsIndicators: false) {
-                        VStack(spacing: 16) {
-                            MainListContent { destination in
+                        VStack(spacing: MainScreenConstants.adaptiveValue(16)) {
+                            MainListContent(fillHeight: false) { destination in
                                 handleCategorySelection(destination)
                             }
-                            .padding(.top, 8)
-                            Spacer(minLength: 0)
+                            .padding(.top, MainScreenConstants.adaptiveValue(8))
+
+                            Spacer(minLength: MainScreenConstants.adaptiveValue(24))
                         }
                         .padding(.horizontal)
+                        .padding(.bottom, MainScreenConstants.adaptiveValue(16))
                     }
                     .frame(maxWidth: .infinity)
-
-                    // Temporary Ad Placeholder
-                    VStack {
-                        Text("Ad Placeholder")
-                            .font(.system(.caption, design: .rounded).weight(.medium))
-                            .foregroundColor(.secondary)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: MainScreenConstants.adaptiveValue(60))
-                    .padding(.horizontal, MainScreenConstants.adaptiveValue(16))
-                    .padding(.vertical, MainScreenConstants.adaptiveValue(8))
-                    .background(
-                        RoundedRectangle(cornerRadius: MainScreenConstants.adaptiveValue(16))
-                            .stroke(style: StrokeStyle(lineWidth: 2, dash: [6, 3]))
-                            .foregroundColor(Color.green.opacity(0.7))
-                    )
-                    
-                    // Footer section - 4 buttons
-                    MainFooterContent(
-                        savedTestDate: $savedTestDate,
-                        onLanguageTapped: {
-                            showLanguageSelection = true
-                        },
-                        onDateTapped: {
-                            // Load saved date or use today
-                            selectedDate = savedTestDate ?? Date()
-                            showDatePicker = true
-                        },
-                        onSettingsTapped: {
-                            showSettings = true
-                        },
-                        onPremiumTapped: {
-                            showPremium = true
-                        }
-                    )
-                    .padding(.top, MainScreenConstants.adaptiveValue(8))
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarHidden(true)
@@ -86,15 +46,6 @@ struct MainScreenView: View {
             }
             .zIndex(0)
             
-            DateTooFarDialog(
-                isPresented: showDateTooFarDialog,
-                onDismiss: {
-                    withAnimation {
-                        showDateTooFarDialog = false
-                    }
-                }
-            )
-            .zIndex(1)
         }
         .environment(router)
         .onAppear {
@@ -103,68 +54,11 @@ struct MainScreenView: View {
                 showDialog = true
             }
         }
+        
         // MARK: - Sheets
-        .sheet(isPresented: $showSettings) {
-            NavigationStack {
-                SettingsView()
-                    .environmentObject(languageManager)
-            }
-        }
-        .sheet(isPresented: $showDatePicker) {
-            DatePickerSheet(
-                selectedDate: $selectedDate,
-                locale: getLocale(for: languageManager.currentAppLanguage),
-                hasExistingDate: savedTestDate != nil,
-                onSave: { date in
-                    let tooFar = isDateTooFar(date)
-                    HapticManager.shared.lightImpact()
-                    if tooFar {
-                        showDatePicker = false
-                        withAnimation {
-                            showDateTooFarDialog = true
-                        }
-                    } else {
-                        UserDefaults.standard.set(date, forKey: "selectedTestDate")
-                        savedTestDate = date  // Update footer state
-                        showDatePicker = false
-                        showDateTooFarDialog = false
-                    }
-                },
-                onClear: {
-                    HapticManager.shared.lightImpact()
-                    UserDefaults.standard.removeObject(forKey: "selectedTestDate")
-                    savedTestDate = nil  // Clear footer state
-                    showDatePicker = false
-                    showDateTooFarDialog = false
-                },
-                onCancel: {
-                    HapticManager.shared.lightImpact()
-                    showDatePicker = false
-                }
-            )
-        }
-        .sheet(isPresented: $showLanguageSelection) {
-            LanguageView()
-                .environmentObject(languageManager)
-        }
         .sheet(isPresented: $showFederalStatesSelection) {
             FederalStatesView()
                 .environmentObject(stateManager)
-        }
-        .sheet(isPresented: $showPremium) {
-            NavigationView {
-                // AdRemovalView() - Will be implemented later
-                Text("Premium Features")
-                    .navigationTitle("Premium")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done") {
-                                showPremium = false
-                            }
-                        }
-                    }
-            }
         }
     }
     
@@ -215,30 +109,6 @@ struct MainScreenView: View {
             // Navigate to TestSimulationView - Will be implemented later
             print("Take Test selected")
         }
-    }
-    
-    // MARK: - Helper Methods
-    
-    /// Returns locale for given language code
-    private func getLocale(for languageCode: String) -> Locale {
-        switch languageCode {
-        case "ru": return Locale(identifier: "ru_RU")
-        case "de": return Locale(identifier: "de_DE")
-        case "en": return Locale(identifier: "en_US")
-        case "uk": return Locale(identifier: "uk_UA")
-        default: return Locale.current
-        }
-    }
-    
-    private func isDateTooFar(_ date: Date) -> Bool {
-        let calendar = Calendar.current
-        let start = calendar.startOfDay(for: Date())
-        let end = calendar.startOfDay(for: date)
-        guard let days = calendar.dateComponents([.day], from: start, to: end).day else {
-            return false
-        }
-        // Warn if the selected date is more than 12 months (approx. 365 days) away
-        return days > 365
     }
 }
 

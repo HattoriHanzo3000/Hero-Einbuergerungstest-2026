@@ -23,7 +23,7 @@ struct QuestionCard: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Question text
                     Text(question.text)
-                        .font(.title3)
+                        .font(.headline)
                         .fontWeight(.semibold)
                         .fontDesign(.rounded)
                         .multilineTextAlignment(.leading)
@@ -33,7 +33,7 @@ struct QuestionCard: View {
                     if showTranslation, let translated = translatedQuestion {
                         if translated.text != question.text {
                             Text(translated.text)
-                                .font(.subheadline)
+                                .font(.footnote)
                                 .fontDesign(.rounded)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.leading)
@@ -53,7 +53,7 @@ struct QuestionCard: View {
                             }) {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text(option)
-                                        .font(.body)
+                                        .font(.callout)
                                         .fontDesign(.rounded)
                                         .foregroundColor(.primary)
                                         .multilineTextAlignment(.leading)
@@ -63,7 +63,7 @@ struct QuestionCard: View {
                                     if showTranslation, let translated = translatedQuestion {
                                         if index < translated.options.count && translated.options[index] != option {
                                             Text(translated.options[index])
-                                                .font(.subheadline)
+                                                .font(.footnote)
                                                 .fontDesign(.rounded)
                                                 .foregroundColor(.secondary)
                                                 .multilineTextAlignment(.leading)
