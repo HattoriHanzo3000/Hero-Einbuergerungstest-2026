@@ -1,0 +1,239 @@
+//
+//  TestSessionView.swift
+//  Leben in Deutschland
+//
+//  Main test session view with timer, questions, and navigation
+//
+
+import SwiftUI
+import UIKit
+
+struct TestSessionView: View {
+    @StateObject private var viewModel = TestSessionViewModel()
+    @EnvironmentObject private var languageManager: LanguageManager
+    @EnvironmentObject private var favoritesManager: FavoritesManager
+    @EnvironmentObject private var stateManager: StateManager
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.layoutMetrics) private var layoutMetrics
+    @Environment(AppRouter.self) private var router
+    
+    @State private var showingResults = false
+    @State private var showingConfirmation = false
+    @State private var showingTimerPopup = false
+    @State private var lastHorizontalScrollHapticTs: Double = 0.0
+    @State private var isLoading = true
+    
+    private let contentService = ContentService.shared
+    
+    @State private var zoomedAsset: TestSessionQuestionCard.ZoomedAsset?
+    
+    var body: some View {
+        Group {
+            if viewModel.currentQuestion != nil {
+                TestSessionQuestionCard(
+                    viewModel: viewModel,
+                    showingConfirmation: $showingConfirmation,
+                    showingTimerPopup: $showingTimerPopup,
+                    zoomedAsset: $zoomedAsset,
+                    onFinish: {
+                        viewModel.finishTest()
+                        showingResults = true
+                    },
+                    onDismiss: {
+                        dismiss()
+                    }
+                )
+                .environmentObject(languageManager)
+                .environmentObject(favoritesManager)
+            } else if isLoading {
+                // Loading screen
+                VStack {
+                    Spacer()
+                    ProgressView()
+                        .scaleEffect(1.5)
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(liquidGlassBackground)
+            }
+        }
+        .background(Color(.systemBackground))
+        .navigationBarHidden(true)
+        .hidesTabBar()
+        .tabBarHidden(true) // Force hide using UIKit for reliability
+        .onAppear {
+            initializeTest()
+        }
+        .onDisappear {
+            viewModel.stopTimer()
+            // Restore tab bar when leaving test session
+            restoreTabBar()
+        }
+        .fullScreenCover(isPresented: $showingResults) {
+            TestResultsView(
+                viewModel: viewModel,
+                onBackToMainMenu: {
+                    showingResults = false
+                    // Pop to root to return to HomeView
+                    router.popToRoot()
+                }
+            )
+                .environmentObject(languageManager)
+                .environmentObject(favoritesManager)
+                .interactiveDismissDisabled(true)
+        }
+        .alert(
+            "quit_test_title".localized,
+            isPresented: $showingConfirmation,
+            actions: {
+                Button("cancel".localized, role: .cancel) {
+                                HapticManager.shared.lightImpact()
+                }
+                Button("quit_test".localized, role: .destructive) {
+                                HapticManager.shared.heavyImpact()
+                                dismiss()
+                }
+            },
+            message: {
+                Text("quit_test_message".localized)
+            }
+        )
+        .onChange(of: viewModel.remainingTime) { _, remainingTime in
+            // Auto-finish only if time runs out (regardless of whether all questions are answered)
+            if remainingTime <= 0 && viewModel.finishTime == nil {
+                viewModel.finishTest()
+                showingResults = true
+            }
+        }
+    }
+    
+    
+    // MARK: - Helper Functions
+    
+    private func restoreTabBar() {
+        DispatchQueue.main.async {
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first,
+               let tabBarController = findTabBarController(in: window.rootViewController) {
+                tabBarController.tabBar.isHidden = false
+            }
+                        }
+                    }
+    
+    private func findTabBarController(in viewController: UIViewController?) -> UITabBarController? {
+        guard let viewController = viewController else { return nil }
+        
+        if let tabBarController = viewController as? UITabBarController {
+            return tabBarController
+        }
+        
+        for child in viewController.children {
+            if let tabBarController = findTabBarController(in: child) {
+                return tabBarController
+            }
+        }
+        
+        if let presented = viewController.presentedViewController {
+            return findTabBarController(in: presented)
+                }
+        
+        return nil
+    }
+    
+    func initializeTest() {
+        Task {
+            // Ensure content is loaded (including question images)
+            if contentService.categories.isEmpty || contentService.isLoading {
+                await contentService.loadContent(for: languageManager.currentAppLanguage)
+                await HintService.shared.loadHints(for: languageManager.currentAppLanguage)
+            }
+            
+            // Wait for loading to complete
+            while contentService.isLoading {
+                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
+            }
+            
+            let federalQuestions = contentService.getTestFederalQuestions(language: languageManager.currentAppLanguage)
+            var stateQuestions = contentService.getTestStateQuestions(for: stateManager.selectedState, language: languageManager.currentAppLanguage)
+            
+            // Limit regional questions to 10
+            if stateQuestions.count > 10 {
+                stateQuestions = Array(stateQuestions.prefix(10))
+            }
+            
+            if federalQuestions.isEmpty && stateQuestions.isEmpty {
+                // Fallback: create test questions
+                let testQuestions = createTestQuestions()
+                viewModel.initializeTest(generalQuestions: testQuestions, regionalQuestions: [])
+            } else if stateQuestions.isEmpty {
+                // If no regional questions, use 33 federal ones
+                let additionalFederalQuestions = Array(federalQuestions.shuffled().prefix(33))
+                viewModel.initializeTest(generalQuestions: additionalFederalQuestions, regionalQuestions: [])
+            } else {
+                viewModel.initializeTest(generalQuestions: federalQuestions, regionalQuestions: stateQuestions)
+            }
+            
+            isLoading = false
+        }
+    }
+    
+    func createTestQuestions() -> [TestQuestion] {
+        return [
+            TestQuestion(
+                id: 1,
+                originalId: "test_1",
+                text: "Was ist die Hauptstadt von Deutschland?",
+                options: ["Berlin", "München", "Hamburg", "Köln"],
+                correctIndex: 0,
+                isRegional: false,
+                category: "Staat"
+            )
+        ]
+    }
+    
+    var liquidGlassBackground: some View {
+        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
+            .fill(
+                LinearGradient(
+                    colors: [
+                        Color("AppBlueLagoon").opacity(0.9),
+                        Color("AppBlueLagoon").opacity(0.65),
+                        Color("AppCaribean").opacity(0.45)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(0.20),
+                        Color.white.opacity(0.05),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.45),
+                                Color.white.opacity(0.12)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 0.6
+                    )
+            )
+            .background(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
+                    .fill(Color.white.opacity(0.05))
+            )
+    }
+}
+

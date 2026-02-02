@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 
 // MARK: - Onboarding Constants
 struct OnboardingConstants {
@@ -29,17 +28,3 @@ struct OnboardingConstants {
     static let progressBarHorizontalPadding: CGFloat = 30
 }
 
-// MARK: - Screen Dimensions Helper
-extension OnboardingConstants {
-    static func getScreenWidth() -> CGFloat {
-        return UIScreen.main.bounds.width
-    }
-    
-    static func getScreenHeight() -> CGFloat {
-        return UIScreen.main.bounds.height
-    }
-    
-    static func getButtonWidth() -> CGFloat {
-        return getScreenWidth() * buttonWidthRatio
-    }
-}

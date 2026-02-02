@@ -1,41 +1,50 @@
-import Foundation
-import UIKit
+import SwiftUI
 
-// MARK: - Main Screen Constants
-struct MainScreenConstants {
-    // Categories Grid
-    static var categorySpacing: CGFloat { adaptiveValue(24) }
-    static var categoryButtonHeight: CGFloat { adaptiveValue(70) }
-    static var categoryIconSize: CGFloat { adaptiveValue(66) }
-    static let categorySidePadding: CGFloat = 20
+// MARK: - Layout Metrics
+struct LayoutMetrics {
+    static let referenceScreenHeight: CGFloat = 844
+    static let referenceScreenWidth: CGFloat = 390
+    static let minimumScale: CGFloat = 0.82
     
-    // Animation
     static let buttonTapAnimationDuration: Double = 0.22
     static let gifAnimationDuration: Double = 1.1
+    static let totalFederalQuestions: Int = 310
     
-    // Colors
-    static let fillColorName = "Fill"  // Primary accent color for the app
+    let scale: CGFloat
+    let screenSize: CGSize
+    
+    static func make(for size: CGSize) -> LayoutMetrics {
+        let heightFactor = size.height / referenceScreenHeight
+        let clamped = min(1.0, max(minimumScale, heightFactor))
+        return LayoutMetrics(scale: clamped, screenSize: size)
+    }
+    
+    func adaptive(_ base: CGFloat) -> CGFloat {
+        base * scale
+    }
+    
+    var screenWidth: CGFloat { screenSize.width }
+    var screenHeight: CGFloat { screenSize.height }
 }
 
-// MARK: - Screen Dimensions Helper
-extension MainScreenConstants {
-    private static let referenceScreenHeight: CGFloat = 844 // Base on iPhone 14/15
-    private static let minimumScale: CGFloat = 0.82
-    
-    static func scaleFactor(for screenHeight: CGFloat = UIScreen.main.bounds.height) -> CGFloat {
-        let factor = screenHeight / referenceScreenHeight
-        return min(1.0, max(minimumScale, factor))
+// MARK: - Environment Support
+private struct LayoutMetricsKey: EnvironmentKey {
+    static let defaultValue = LayoutMetrics(scale: 1.0, screenSize: .zero)
+}
+
+extension EnvironmentValues {
+    var layoutMetrics: LayoutMetrics {
+        get { self[LayoutMetricsKey.self] }
+        set { self[LayoutMetricsKey.self] = newValue }
+    }
+}
+
+extension View {
+    func layoutMetrics(_ metrics: LayoutMetrics) -> some View {
+        environment(\.layoutMetrics, metrics)
     }
     
-    static func adaptiveValue(_ base: CGFloat) -> CGFloat {
-        base * scaleFactor()
-    }
-    
-    static func getScreenWidth() -> CGFloat {
-        return UIScreen.main.bounds.width
-    }
-    
-    static func getScreenHeight() -> CGFloat {
-        return UIScreen.main.bounds.height
+    func layoutMetrics(size: CGSize) -> some View {
+        layoutMetrics(LayoutMetrics.make(for: size))
     }
 }

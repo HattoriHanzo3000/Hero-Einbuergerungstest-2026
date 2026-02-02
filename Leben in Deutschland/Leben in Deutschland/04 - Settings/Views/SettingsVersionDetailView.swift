@@ -21,7 +21,6 @@ struct SettingsVersionDetailView: View {
                     )
 
                     Button {
-                        HapticManager.shared.mediumImpact()
                         if let url = viewModel.appStoreDestination() {
                             UIApplication.shared.open(url)
                         }
@@ -29,6 +28,7 @@ struct SettingsVersionDetailView: View {
                         Text("settings_update_now".localized)
                             .font(.headline)
                             .frame(maxWidth: .infinity)
+                            .padding(.vertical, 8)
                     }
                     .buttonStyle(.borderedProminent)
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))

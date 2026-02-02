@@ -17,7 +17,9 @@ struct SettingsDashboardView: View {
     var body: some View {
         NavigationStack(path: $viewModel.navigationPath) {
             List {
-                SettingsVersionSectionView(viewModel: viewModel.versionViewModel)
+                SettingsVersionSectionView(viewModel: viewModel.versionViewModel) {
+                    viewModel.navigationPath.append(.version)
+                }
                 SettingsPremiumSectionView(viewModel: viewModel.premiumViewModel)
                 if let regionalViewModel = viewModel.regionalViewModel {
                     SettingsRegionalSectionView(viewModel: regionalViewModel)
@@ -31,9 +33,10 @@ struct SettingsDashboardView: View {
                     SettingsDangerSectionView(viewModel: dangerViewModel)
                 }
             }
-            .navigationTitle("settings_beta_title".localized)
+            .navigationTitle("settings_title".localized)
             .navigationBarTitleDisplayMode(.large)
             .listStyle(.insetGrouped)
+            .federalStateAlert(viewModel: viewModel.regionalViewModel)
             .navigationDestination(for: SettingsDashboardRoute.self) { route in
                 switch route {
                 case .version:
@@ -98,7 +101,7 @@ struct SettingsDashboardView: View {
     SettingsDashboardView()
         .environmentObject(LanguageManager())
         .environmentObject(SoundManager.shared)
-        .environmentObject(StateManager())
+        .environmentObject(StateManager.shared)
         .environmentObject(AppFlow())
 }
 

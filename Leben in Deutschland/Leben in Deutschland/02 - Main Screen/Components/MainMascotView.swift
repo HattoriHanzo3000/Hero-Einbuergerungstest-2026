@@ -14,6 +14,7 @@ struct MainMascotView: View {
     @EnvironmentObject var languageManager: LanguageManager
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.layoutMetrics) private var layoutMetrics
     
     // External playback trigger and completion callback
     let playSignal: UUID?
@@ -65,7 +66,7 @@ struct MainMascotView: View {
     }
     
     var body: some View {
-        HStack(alignment: .center, spacing: Self.spacing) {
+        HStack(alignment: .center, spacing: spacing) {
             VStack(spacing: 0) {
                 Spacer()
                 mascotView
@@ -79,7 +80,7 @@ struct MainMascotView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.trailing, Self.trailingInset)
+        .padding(.trailing, trailingInset)
         .onChange(of: playSignal) { _, _ in
             if reduceMotion {
                 onPlayCompleted?()
@@ -111,14 +112,14 @@ struct MainMascotView: View {
         guard !reduceMotion else { return }
         gifPlayToken = UUID()
         showMascotGif = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + MainScreenConstants.gifAnimationDuration) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + LayoutMetrics.gifAnimationDuration) {
             showMascotGif = false
         }
     }
 
     private func playGifThenComplete() {
         playGifOnly()
-        DispatchQueue.main.asyncAfter(deadline: .now() + MainScreenConstants.gifAnimationDuration) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + LayoutMetrics.gifAnimationDuration) {
             onPlayCompleted?()
         }
     }
@@ -126,11 +127,11 @@ struct MainMascotView: View {
 
 // MARK: - Private Helpers
 private extension MainMascotView {
-    static var spacing: CGFloat { MainScreenConstants.adaptiveValue(16) }
-    static var mascotSize: CGFloat { MainScreenConstants.adaptiveValue(120) }
-    static var mascotCornerRadius: CGFloat { MainScreenConstants.adaptiveValue(24) }
-    static var bubbleCornerRadius: CGFloat { MainScreenConstants.adaptiveValue(16) }
-    static var trailingInset: CGFloat { MainScreenConstants.adaptiveValue(20) }
+    var spacing: CGFloat { layoutMetrics.adaptive(16) }
+    var mascotSize: CGFloat { layoutMetrics.adaptive(120) }
+    var mascotCornerRadius: CGFloat { layoutMetrics.adaptive(24) }
+    var bubbleCornerRadius: CGFloat { layoutMetrics.adaptive(16) }
+    var trailingInset: CGFloat { layoutMetrics.adaptive(20) }
     
     var staticMascotAssetName: String {
         if colorScheme == .dark, UIImage(named: "MainChickDark") != nil {
@@ -152,13 +153,13 @@ private extension MainMascotView {
                 Image(staticMascotAssetName)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: Self.mascotSize, height: Self.mascotSize)
+                    .frame(width: mascotSize, height: mascotSize)
                     .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
                     .accessibilityLabel("Mascot")
                     .opacity((showMascotGif && !reduceMotion) ? 0 : 1)
             } else {
                 Color.clear
-                    .frame(width: Self.mascotSize, height: Self.mascotSize)
+                    .frame(width: mascotSize, height: mascotSize)
                     .accessibilityHidden(true)
             }
             
@@ -168,13 +169,13 @@ private extension MainMascotView {
                 shouldAnimate: showMascotGif && !reduceMotion
             )
             .id(gifPlayToken)
-            .frame(width: Self.mascotSize, height: Self.mascotSize)
+            .frame(width: mascotSize, height: mascotSize)
             .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
             .accessibilityLabel("Mascot")
             .opacity((showMascotGif && !reduceMotion) ? 1 : 0)
             .allowsHitTesting(false)
         }
-        .frame(width: Self.mascotSize, height: Self.mascotSize)
+        .frame(width: mascotSize, height: mascotSize)
         .contentShape(Rectangle())
         .onTapGesture {
             HapticManager.shared.lightImpact()
@@ -187,7 +188,7 @@ private extension MainMascotView {
     }
     
     var dialogBubble: some View {
-        VStack(alignment: .leading, spacing: MainScreenConstants.adaptiveValue(6)) {
+        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(6)) {
             Text(combinedMessage)
                 .font(.system(.body, design: .rounded).weight(.medium))
                 .lineSpacing(4)
@@ -198,34 +199,23 @@ private extension MainMascotView {
                 .fixedSize(horizontal: false, vertical: true)
                 .dynamicTypeSize(.large)
         }
-        .padding(.horizontal, MainScreenConstants.adaptiveValue(18))
-        .padding(.vertical, MainScreenConstants.adaptiveValue(14))
+        .padding(.horizontal, layoutMetrics.adaptive(18))
+        .padding(.vertical, layoutMetrics.adaptive(14))
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .background(bubbleBackground)
         .overlay(bubbleHighlight)
         .overlay(bubbleStroke)
-        .innerShadow(shape: RoundedRectangle(cornerRadius: Self.bubbleCornerRadius), color: Color.black.opacity(0.08), lineWidth: 1, blur: 2, offset: CGSize(width: 0, height: 1))
-        .shadow(color: Color.black.opacity(0.08), radius: MainScreenConstants.adaptiveValue(12), y: MainScreenConstants.adaptiveValue(10))
+        .innerShadow(shape: RoundedRectangle(cornerRadius: bubbleCornerRadius), color: Color.black.opacity(0.08), lineWidth: 1, blur: 2, offset: CGSize(width: 0, height: 1))
     }
     
     var bubbleBackground: some View {
-        RoundedRectangle(cornerRadius: Self.bubbleCornerRadius)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(0.58),
-                        Color.white.opacity(0.22),
-                        Color.white.opacity(0.08)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: Self.bubbleCornerRadius))
+        RoundedRectangle(cornerRadius: bubbleCornerRadius)
+            .fill(Color.white.opacity(0.38))
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: bubbleCornerRadius))
     }
     
     var bubbleHighlight: some View {
-        RoundedRectangle(cornerRadius: Self.bubbleCornerRadius)
+        RoundedRectangle(cornerRadius: bubbleCornerRadius)
         .stroke(
             LinearGradient(
                 colors: [
@@ -240,7 +230,7 @@ private extension MainMascotView {
         .blendMode(.screen)
     }
     var bubbleStroke: some View {
-        RoundedRectangle(cornerRadius: Self.bubbleCornerRadius)
+        RoundedRectangle(cornerRadius: bubbleCornerRadius)
         .stroke(
             LinearGradient(
                 colors: [

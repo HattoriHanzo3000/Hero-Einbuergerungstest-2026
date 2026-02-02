@@ -10,6 +10,7 @@ struct OnboardingDateSelectionContentComponent: View {
     @EnvironmentObject var languageManager: LanguageManager
     @State private var isSelectDatePressed = false
     @State private var isDontKnowPressed = false
+    @Environment(\.layoutMetrics) private var layoutMetrics
     
     var body: some View {
         VStack(spacing: OnboardingConstants.defaultSpacing) {
@@ -50,7 +51,7 @@ struct OnboardingDateSelectionContentComponent: View {
             .buttonPressAnimation(isPressed: $isDontKnowPressed)
         }
         .transaction { t in t.animation = nil }
-        .frame(width: OnboardingConstants.getButtonWidth())
+        .frame(width: layoutMetrics.screenWidth * OnboardingConstants.buttonWidthRatio)
         .frame(maxWidth: .infinity, alignment: .center)
         .padding(.top, 16)
         .padding(.horizontal, 4)

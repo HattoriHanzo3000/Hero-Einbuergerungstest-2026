@@ -12,33 +12,32 @@ final class SettingsDangerViewModel: ObservableObject {
     private let completion: @MainActor () -> Void
 
     init(
-        resetService: SettingsResetServicing = SettingsResetService.shared,
+        resetService: SettingsResetServicing,
         soundManager: SoundManager,
         languageManager: LanguageManager,
         stateManager: StateManager,
-        onboardingPreferences: OnboardingPreferences = .shared,
+        onboardingPreferences: OnboardingPreferences? = nil,
         completion: @escaping @MainActor () -> Void = {}
     ) {
         self.resetService = resetService
         self.soundManager = soundManager
         self.languageManager = languageManager
         self.stateManager = stateManager
-        self.onboardingPreferences = onboardingPreferences
+        self.onboardingPreferences = onboardingPreferences ?? OnboardingPreferences.shared
         self.completion = completion
     }
 
     func requestConfirmation() {
-        HapticManager.shared.heavyImpact()
+        HapticManager.shared.warning()
         isPresentingConfirmation = true
     }
 
     func cancel() {
-        HapticManager.shared.lightImpact()
         isPresentingConfirmation = false
     }
 
     func confirm() {
-        HapticManager.shared.heavyImpact()
+        HapticManager.shared.warning()
         isPresentingConfirmation = false
         resetService.performReset(
             soundManager: soundManager,

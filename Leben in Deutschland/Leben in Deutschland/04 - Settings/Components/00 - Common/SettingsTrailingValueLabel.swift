@@ -29,12 +29,11 @@ struct SettingsTrailingValueLabel: View {
     }
 }
 
-#Preview("Trailing Value Label") {
+#Preview("Trailing Value Label", traits: .sizeThatFitsLayout) {
     SettingsTrailingValueLabel(
         text: "System",
         systemImage: "chevron.up.chevron.down"
     )
     .padding()
-    .previewLayout(.sizeThatFits)
 }
 

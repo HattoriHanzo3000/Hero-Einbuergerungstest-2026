@@ -14,40 +14,40 @@ struct AdaptiveIconButton: View {
         case compact
         case accessibility
         
-        func controlSize(for dynamicType: DynamicTypeSize) -> CGFloat {
+        func baseControlSize(for dynamicType: DynamicTypeSize) -> CGFloat {
             switch self {
             case .standard:
                 switch dynamicType {
                 case .xSmall, .small, .medium:
-                return MainScreenConstants.adaptiveValue(36)
+                return 36
                 case .large:
-                return MainScreenConstants.adaptiveValue(38)
+                return 38
                 case .xLarge:
-                return MainScreenConstants.adaptiveValue(40)
+                return 40
                 default:
-                return MainScreenConstants.adaptiveValue(44)
+                return 44
                 }
             case .compact:
                 switch dynamicType {
                 case .xSmall, .small, .medium:
-                    return MainScreenConstants.adaptiveValue(36)
+                    return 36
                 case .large:
-                    return MainScreenConstants.adaptiveValue(38)
+                    return 38
                 case .xLarge:
-                    return MainScreenConstants.adaptiveValue(40)
+                    return 40
                 default:
-                    return MainScreenConstants.adaptiveValue(44)
+                    return 44
                 }
             case .accessibility:
                 switch dynamicType {
                 case .xSmall, .small, .medium:
-                    return MainScreenConstants.adaptiveValue(52)
+                    return 52
                 case .large:
-                    return MainScreenConstants.adaptiveValue(56)
+                    return 56
                 case .xLarge:
-                    return MainScreenConstants.adaptiveValue(60)
+                    return 60
                 default:
-                    return MainScreenConstants.adaptiveValue(64)
+                    return 64
                 }
             }
         }
@@ -62,6 +62,7 @@ struct AdaptiveIconButton: View {
     var sizePreset: SizePreset = .standard
     
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.layoutMetrics) private var layoutMetrics
     
     var body: some View {
         Button(action: {
@@ -84,7 +85,7 @@ struct AdaptiveIconButton: View {
     }
     
     private var controlSize: CGFloat {
-        sizePreset.controlSize(for: dynamicTypeSize)
+        layoutMetrics.adaptive(sizePreset.baseControlSize(for: dynamicTypeSize))
     }
 }
 

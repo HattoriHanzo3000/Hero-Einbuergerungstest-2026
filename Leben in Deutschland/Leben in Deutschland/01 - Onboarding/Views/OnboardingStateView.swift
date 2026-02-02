@@ -32,7 +32,7 @@ struct OnboardingStateView: View {
 // MARK: - Preview
 #Preview {
     let manager = LanguageManager()
-    let stateManager = StateManager()
+    let stateManager = StateManager.shared
     let vm = OnboardingStateViewModel(languageManager: manager, stateManager: stateManager)
     OnboardingStateView(viewModel: vm)
         .environmentObject(stateManager)

@@ -5,15 +5,19 @@ import Combine
 // MARK: - State Manager
 @MainActor
 class StateManager: ObservableObject {
+    static let shared = StateManager()
+    
     @Published var selectedState: String?
     
-    init() {
+    private init() {
         loadSavedState()
     }
     
     // MARK: - State Management
     
     func setSelectedState(_ state: String) {
+        guard selectedState != state else { return }
+        objectWillChange.send()
         selectedState = state
         UserDefaults.standard.set(state, forKey: "selectedState")
     }

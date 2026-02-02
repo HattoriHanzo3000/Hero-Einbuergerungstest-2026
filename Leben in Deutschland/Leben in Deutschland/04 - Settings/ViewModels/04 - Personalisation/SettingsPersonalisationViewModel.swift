@@ -35,21 +35,18 @@ final class SettingsPersonalisationViewModel: ObservableObject {
         guard appearanceMode != mode else { return }
         appearanceMode = mode
         defaults.set(mode.rawValue, forKey: Keys.appearance)
-        HapticManager.shared.lightImpact()
     }
 
     func setSoundEnabled(_ enabled: Bool) {
         guard isSoundEnabled != enabled else { return }
         isSoundEnabled = enabled
         soundManager.setSoundEnabled(enabled)
-        HapticManager.shared.lightImpact()
     }
 
     func setHapticsEnabled(_ enabled: Bool) {
         guard isHapticsEnabled != enabled else { return }
         isHapticsEnabled = enabled
         defaults.set(enabled, forKey: Keys.haptics)
-        HapticManager.shared.lightImpact()
     }
 
     private func observeSoundManager() {

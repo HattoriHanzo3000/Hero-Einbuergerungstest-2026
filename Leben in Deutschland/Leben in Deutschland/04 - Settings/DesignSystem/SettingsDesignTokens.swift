@@ -11,6 +11,7 @@ enum SettingsDesignTokens {
         static let legal = SwiftUI.Color(red: 0.16, green: 0.28, blue: 0.47)
         static let danger = SwiftUI.Color(uiColor: .systemRed)
         static let trailingValue = SwiftUI.Color.secondary
+        static let notification = SwiftUI.Color(uiColor: .systemRed)
     }
 
     enum Layout {
@@ -19,14 +20,15 @@ enum SettingsDesignTokens {
         static let cornerRadius: CGFloat = 12
         static let iconCornerRadius: CGFloat = 8
         static let iconStrokeWidth: CGFloat = 0.6
-        static let rowVerticalPadding: CGFloat = 8
+        static let rowVerticalPadding: CGFloat = 4
     }
 
     enum Icon {
-        static let containerSize: CGFloat = 24
-        static let symbolSize: CGFloat = 12
-        static let trailingChevronSize: CGFloat = 13
+        static let containerSize: CGFloat = 32
+        static let symbolSize: CGFloat = 16
+        static let trailingChevronSize: CGFloat = 14
         static let trailingChevronWeight: Font.Weight = .semibold
+        static let badgeSize: CGFloat = 10
     }
 }
 

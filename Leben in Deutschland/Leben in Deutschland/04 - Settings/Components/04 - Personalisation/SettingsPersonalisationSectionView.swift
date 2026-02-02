@@ -103,7 +103,7 @@ private struct SettingsAppearanceRow: View {
         .listStyle(.insetGrouped)
     }
     .environmentObject(LanguageManager())
-    .environmentObject(StateManager())
+    .environmentObject(StateManager.shared)
     .environmentObject(SoundManager.shared)
 }
 

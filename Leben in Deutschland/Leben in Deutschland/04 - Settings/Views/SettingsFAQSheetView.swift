@@ -10,7 +10,6 @@ struct SettingsFAQSheetView: UIViewControllerRepresentable {
         configuration.barCollapsingEnabled = true
 
         let controller = SFSafariViewController(url: url, configuration: configuration)
-        controller.preferredControlTintColor = UIColor(Color.accentColor)
         controller.delegate = context.coordinator
         return controller
     }

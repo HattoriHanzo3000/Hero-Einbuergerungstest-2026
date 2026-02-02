@@ -11,7 +11,6 @@ final class SettingsPremiumViewModel: ObservableObject {
     }
 
     func handleTap() {
-        HapticManager.shared.lightImpact()
         onPresentPremium()
     }
 }

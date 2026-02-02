@@ -1,7 +1,3 @@
-"settings_current_version" = "Aktuelle Version";
-"settings_installed_version" = "Installierte Version";
-"settings_latest_updates" = "Neueste Aktualisierungen";
-"settings_version_updates" = "Dieses Update bringt Leistungsverbesserungen, ein verfeinertes Erscheinungsbild der Einstellungen und neue Shortcuts zu Premium-Funktionen.";
 // =============================================================================
 //   ONBOARDING
 // =============================================================================
@@ -77,6 +73,11 @@
 "main_category_all_questions" = "Lernen nach Themen";
 "main_category_favorites" = "Favoriten";
 "main_category_test_simulation" = "Test ablegen";
+
+"home_learn_section_title" = "Lernen";
+"home_learn_spaced_repetition" = "Wiederholung mit Abstand";
+"home_learn_by_topics" = "Nach Themen lernen";
+"home_learn_favorites" = "Favoriten";
 "spaced_repetition_title" = "Lernen starten";
 
 // Learn by Topics
@@ -95,9 +96,32 @@
 
 "main_header_test_today" = "Der Test ist heute.";
 "main_header_test_in_days" = "Der Test ist in %d %@.";
+"main_header_state_accessibility_label" = "Bundesland";
+"main_header_state_accessibility_hint" = "Aktuelles Bundesland. Du kannst es in den Einstellungen ändern.";
+"main_header_state_slogan_accessibility_label" = "Bundesland-Slogan";
+"home_statistics_title" = "Dein Fortschritt";
+"home_statistics_description" = "Du bist zu %d%% bereit für den Test. Bleib dran – kleine Schritte zählen jeden Tag.";
+"home_statistics_caption" = "Bereit für den Test";
+"home_statistics_accessibility_label" = "Bereitschaftsfortschritt";
+"home_statistics_accessibility_value" = "%d Prozent vorbereitet";
+"back_button_accessibility_label" = "Zurück";
+"spaced_translation_button_accessibility_label" = "Übersetzung anzeigen";
+"spaced_favorite_button_accessibility_label" = "Als Favorit speichern";
+"hint_button_title" = "Tipp";
 "date_too_far_title" = "Das ist ziemlich weit entfernt";
 "date_too_far_message" = "Zeitreisen sind cool, aber lass den Test innerhalb des nächsten Jahres – ok?";
 "ok_button" = "OK";
+
+// Carousel
+"learn_option_spaced_repetition_title" = "Spaced Repetition";
+"learn_option_topics_title" = "Themenweise lernen";
+"learn_option_test_title" = "Test absolvieren";
+"learn_option_favorites_title" = "Favoriten";
+
+"learn_option_spaced_repetition_description" = "Lerne clever – schwierige Fragen kommen zurück, bis du sie sicher kannst";
+"learn_option_topics_description" = "Themenweise lernen – ganz entspannt und Schritt für Schritt";
+"learn_option_test_description" = "Wie in der echten Prüfung – 33 Fragen, 60 Minuten, keine Tipps";
+"learn_option_favorites_description" = "Speichere Fragen, die du magst oder noch üben willst";
 
 // Language
 "language_title" = "Sprache";
@@ -116,9 +140,18 @@
 
 // Settings
 "settings_title" = "Einstellungen";
+"settings_current_version" = "Aktuelle Version";
+"settings_update_available" = "Update verfügbar";
+"settings_version_updates" = "• Interaktive Tutorials helfen dir beim Start.\n• Verbesserte Support-Erfahrung mit FAQ-Zugang.\n• Optimiertes Bewertungserlebnis für die App.\n• Verbesserte Barrierefreiheit und Bedienbarkeit.\n• Fehlerbehebungen und Leistungsverbesserungen.";
+"settings_version_updates_placeholder" = "Eine neuere Version wartet mit zusätzlichen Verbesserungen und Funktionen.";
+"settings_update_now" = "Jetzt aktualisieren";
+"settings_update_button_hint" = "Öffnet den App Store, um die neueste Version zu installieren.";
+"version" = "Version";
+"settings_installed_version" = "Installierte Version";
+"settings_latest_updates" = "Neueste Aktualisierungen";
 
 "settings_personalisation_title" = "Personalisierung";
-"settings_sound_button" = "Ton";
+"settings_sound_button" = "Sound";
 "settings_vibration_button" = "Vibration";
 "settings_appearance" = "Erscheinungsbild";
 "settings_appearance_light" = "Hell";
@@ -139,7 +172,6 @@
 "privacy_policy" = "Datenschutzerklärung";
 
 "about_title" = "Über";
-"version" = "Version";
 "version_description" = "Dieses Update bietet wichtige Verbesserungen und Fehlerbehebungen, einschließlich der folgenden Updates:";
 
 // Updates
@@ -254,6 +286,7 @@
 "favorites_title" = "Favoriten";
 "favorites_empty_title" = "Keine Favoriten";
 "favorites_empty_subtitle" = "Füge Fragen zu deinen Favoriten hinzu, indem du auf das Herz klickst";
+"favorites_empty_message" = "Deine Favoritenliste ist leer. Während du übst, tippe auf das Herz-Symbol, um Fragen zu markieren, zu denen du später zurückkehren möchtest.";
 "back" = "Zurück";
 "next" = "Weiter";
 
@@ -322,11 +355,14 @@
 
 "tab_home_title" = "Startseite";
 "tab_learn_title" = "Lernen";
+"tab_test_title" = "Test";
 "tab_premium_title" = "Premium";
 "tab_settings_title" = "Einstellungen";
+"learn_header_title" = "Lernen";
+"learn_header_dialog_message" = "Ich bereite gerade deine neue Lernreise vor. Bald starten wir gemeinsam!";
 "tab_settings_beta_title" = "Settings BETA";
+"tab_settings_beta2_title" = "Settings BETA 2";
 "main_tab_bar_accessibility_label" = "Hauptnavigation";
-"settings_subtitle" = "Passe die App an, damit sie perfekt zu deinem Lernen passt.";
 "settings_beta_title" = "Settings BETA";
 "settings_beta_detail_placeholder" = "Wir arbeiten gerade an diesem Bereich. Dein Feedback hilft uns zu entscheiden, was hier bleiben soll.";
 "settings_test_alerts_button" = "Testwarnungen";
@@ -344,8 +380,85 @@
 "settings_appearance_title" = "Darstellung";
 "settings_premium_title" = "Premium";
 "settings_reset_app" = "App zurücksetzen";
-"settings_current_version" = "Aktuelle Version";
-"settings_installed_version" = "Installierte Version";
-"settings_latest_updates" = "Neueste Aktualisierungen";
-"settings_version_updates" = "Dieses Update bringt Leistungsverbesserungen, ein verfeinertes Erscheinungsbild der Einstellungen und neue Shortcuts zu Premium-Funktionen.";
+
+"premium_hub_placeholder_title" = "Premium startet bald";
+"premium_hub_placeholder_message" = "Wir schnüren gerade neue Boosts, Übungspakete und Extras für dich. Bleib dran!";
+
+"premium_unlock_message" = "Erlebe die volle Hero-Erfahrung mit Premium";
+"premium_unlock_title" = "Erlebe die volle Hero-Erfahrung";
+"premium_unlock_description" = "Premium gibt dir vollen Zugang zu allen Lernmaterialien, Fortschrittsverfolgung und mehr.";
+"premium_table_benefits" = "Vorteile";
+"premium_table_free" = "Kostenlos";
+"premium_table_premium" = "Premium";
+"premium_feature_daily_lessons" = "Tägliche Lektionen";
+"premium_feature_unlimited_learning" = "Unbegrenztes Lernen";
+"premium_feature_no_ads" = "Keine Werbung";
+"premium_feature_detailed_progress" = "Detaillierter Fortschritt";
+"premium_feature_hints" = "Hinweise";
+"premium_feature_favorites" = "Favoriten";
+"premium_subscribe_now" = "Jetzt abonnieren";
+"premium_choose_plan" = "Wähle deinen Plan";
+"premium_plan_monthly" = "Monatlich";
+"premium_plan_lifetime" = "Lebenslang";
+"premium_per_month" = "pro Monat";
+"premium_limited_offer" = "Zeitlich begrenztes Angebot";
+"premium_regular_price" = "Regulärer Preis";
+"premium_continue" = "Weiter";
+"premium_terms_monthly_part1" = "Bei Abonnierung wird dein Apple-Konto mit {price}€ belastet. Dein Hero Premium-Abonnement verlängert sich automatisch zum gleichen Preis am Ende deiner aktuellen Abonnementlaufzeit, es sei denn, es wird mindestens 24 Stunden vor Ablauf der Laufzeit gekündigt.";
+"premium_terms_lifetime_part1" = "Bei Abonnierung wird dein Apple-Konto einmalig mit {price}€ für lebenslangen Zugang belastet. Dies ist eine einmalige Zahlung ohne automatische Verlängerung.";
+"premium_terms_common" = "Du kannst jederzeit in den Einstellungen des App Stores kündigen. Weitere Details findest du in unseren Nutzungsbedingungen und der Datenschutzerklärung.";
+"premium_terms_lifetime_common" = "Weitere Details findest du in unseren Nutzungsbedingungen und der Datenschutzerklärung.";
+"premium_trial_active" = "Kostenlose Testversion aktiv";
+"premium_trial_days_remaining" = "Noch {days} Tage";
+"premium_trial_ending_soon" = "Endet bald";
+"premium_trial_offer_title" = "Starte mit 3 Tagen kostenlos";
+"premium_trial_offer_description" = "Teste Premium-Funktionen kostenlos, dann weiter mit Abonnement";
+"premium_trial_badge" = "3 Tage kostenlos";
+"premium_start_trial" = "Kostenlose Testversion starten";
+"premium_favorites_alert_title" = "Auf Premium upgraden";
+"premium_favorites_alert_message" = "Upgrade auf Premium, um deine Favoriten zu sehen";
+"premium_favorites_alert_cancel" = "Abbrechen";
+"premium_favorites_alert_upgrade" = "Upgraden";
+
+// =============================================================================
+//   FEEDBACK / FRAGE MELDEN
+// =============================================================================
+
+"report_question" = "Frage melden";
+"question_id" = "Fragen-ID";
+"category" = "Kategorie";
+"question_info" = "Frageninformationen";
+"feedback_type" = "Feedback-Typ";
+"what_would_you_like_to_report" = "Was möchtest du melden?";
+"additional_details" = "Zusätzliche Details";
+"feedback_details_hint" = "Bitte beschreibe das Problem im Detail. Das hilft uns, es schneller zu beheben.";
+"email_optional" = "E-Mail (optional)";
+"contact_info" = "Kontaktinformationen";
+"feedback_email_hint" = "Wenn du deine E-Mail angibst, können wir auf dein Feedback antworten.";
+"submit" = "Absenden";
+"feedback_submitted" = "Feedback gesendet";
+"feedback_submitted_message" = "Vielen Dank für dein Feedback! Wir werden es prüfen und Verbesserungen vornehmen.";
+"error" = "Fehler";
+"feedback_type_question_error" = "Fragenfehler";
+"feedback_type_question_unclear" = "Frage unklar";
+"feedback_type_answer_incorrect" = "Falsche Antwort";
+"feedback_type_translation_issue" = "Übersetzungsproblem";
+"feedback_type_other" = "Sonstiges";
+
+// =============================================================================
+//   HINWEISE
+// =============================================================================
+
+"hint_title" = "Hinweis";
+"close" = "Schließen";
+"no_hint_available" = "Für diese Frage ist noch kein Hinweis verfügbar.";
+
+// =============================================================================
+//   APP-BEWERTUNG
+// =============================================================================
+
+"rating_prompt_title" = "Hero gefällt dir?";
+"rating_prompt_message" = "Wenn Hero dir dabei hilft, die Fragen zu meistern, würden wir gerne davon hören! Eine kurze Bewertung hilft auch anderen Lernenden, uns zu entdecken.";
+"rating_prompt_rate_now" = "Jetzt bewerten";
+"rating_prompt_ask_later" = "Später fragen";
 

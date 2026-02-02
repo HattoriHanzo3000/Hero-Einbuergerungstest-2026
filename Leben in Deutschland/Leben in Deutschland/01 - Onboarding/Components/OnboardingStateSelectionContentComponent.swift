@@ -4,6 +4,7 @@ import SwiftUI
 struct OnboardingStateSelectionContentComponent: View {
     @Binding var selectedState: String?
     let onStateSelected: (String) -> Void
+    @Environment(\.layoutMetrics) private var layoutMetrics
     
     private let states: [String] = [
         "Baden-Württemberg",
@@ -38,7 +39,7 @@ struct OnboardingStateSelectionContentComponent: View {
                 }
             }
             .transaction { t in t.animation = nil }
-            .frame(width: OnboardingConstants.getButtonWidth())
+            .frame(width: layoutMetrics.screenWidth * OnboardingConstants.buttonWidthRatio)
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.top, 16)
             .padding(.horizontal, 4)

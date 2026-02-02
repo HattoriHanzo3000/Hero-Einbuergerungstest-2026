@@ -30,6 +30,15 @@ final class LearnOptionsViewModel: ObservableObject {
     func select(_ option: LearnOptionModel) {
         selectionHandler?(option)
     }
+    
+    /// Highlights a specific option by its title key (useful for navigation positioning).
+    func highlightOption(withTitleKey titleKey: String) {
+        guard let option = options.first(where: { $0.titleKey == titleKey }) else { return }
+        highlightedOptionID = option.id
+    }
+    
+    /// Published property for the highlighted option ID (used by carousel).
+    @Published var highlightedOptionID: UUID?
 }
 
 // MARK: - Private Helpers

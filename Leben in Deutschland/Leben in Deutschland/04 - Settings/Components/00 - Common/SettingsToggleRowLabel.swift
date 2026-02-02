@@ -40,7 +40,7 @@ struct SettingsToggleRowLabel: View {
     }
 }
 
-#Preview("Settings Toggle Label") {
+#Preview("Settings Toggle Label", traits: .sizeThatFitsLayout) {
     SettingsToggleRowLabel(
         title: "Sound effects",
         iconSystemName: "speaker.wave.2.fill",
@@ -48,6 +48,5 @@ struct SettingsToggleRowLabel: View {
         subtitle: "Plays helpful cues during quizzes."
     )
     .padding()
-    .previewLayout(.sizeThatFits)
 }
 

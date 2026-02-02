@@ -41,11 +41,13 @@ struct SectionContainer<Content: View>: View {
 // MARK: - Section Container Style
 
 private struct SectionContainerStyle: ViewModifier {
+    @Environment(\.layoutMetrics) private var layoutMetrics
+    
     func body(content: Content) -> some View {
-        let cornerRadius = MainScreenConstants.adaptiveValue(28)
+        let cornerRadius = layoutMetrics.adaptive(28)
         
         return content
-            .padding(MainScreenConstants.adaptiveValue(20))
+            .padding(layoutMetrics.adaptive(20))
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .fill(.thinMaterial)

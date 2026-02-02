@@ -10,6 +10,7 @@ struct SettingsRegionalSectionView: View {
             SettingsFederalStateRow(viewModel: viewModel)
             SettingsTestDateRow(viewModel: viewModel)
         }
+        .federalStateAlert(viewModel: viewModel)
     }
 }
 
@@ -55,7 +56,6 @@ private struct SettingsAppLanguageRow: View {
             get: { viewModel.appLanguage },
             set: { option in
                 viewModel.setAppLanguage(option)
-                HapticManager.shared.lightImpact()
             }
         )
     }
@@ -68,7 +68,7 @@ private struct SettingsTranslationLanguageRow: View {
 
     var body: some View {
         HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
-            SettingsIconView(systemName: "book", tint: SettingsDesignTokens.Palette.regional)
+            SettingsIconView(systemName: "translate", tint: SettingsDesignTokens.Palette.regional)
             Text("settings_translation_language".localized)
                 .font(.body)
                 .foregroundStyle(.primary)
@@ -103,7 +103,6 @@ private struct SettingsTranslationLanguageRow: View {
             get: { viewModel.translationLanguage },
             set: { option in
                 viewModel.setTranslationLanguage(option)
-                HapticManager.shared.lightImpact()
             }
         )
     }
@@ -151,7 +150,6 @@ private struct SettingsFederalStateRow: View {
             get: { viewModel.federalStateName },
             set: { name in
                 viewModel.setFederalState(name: name)
-                HapticManager.shared.lightImpact()
             }
         )
     }
@@ -165,44 +163,47 @@ private struct SettingsTestDateRow: View {
     @State private var isUpdatingFromViewModel = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
-                SettingsIconView(systemName: "calendar.badge.clock", tint: SettingsDesignTokens.Palette.regional)
-                Text("settings_test_date".localized)
-                    .font(.body)
-                    .foregroundStyle(.primary)
-                Spacer()
-                HStack(spacing: 8) {
-                    if viewModel.selectedTestDate != nil {
-                        datePicker
-                    } else {
-                        ZStack(alignment: .leading) {
-                            datePicker.opacity(0.01)
-                            Text("settings_test_date_not_set".localized)
-                                .font(.callout)
-                                .foregroundStyle(.secondary)
-                                .frame(width: 160, alignment: .leading)
-                                .padding(.horizontal, 4)
-                                .allowsHitTesting(false)
-                        }
-                    }
-                    if viewModel.selectedTestDate != nil {
-                        Button {
-                            HapticManager.shared.lightImpact()
-                            isUpdatingFromViewModel = true
-                            viewModel.clearTestDate()
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .symbolRenderingMode(.palette)
-                                .foregroundStyle(Color.secondary.opacity(0.2), Color.secondary)
-                                .imageScale(.medium)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(Text("CLEAR_DATE".localized))
-                    }
+        VStack(alignment: .leading, spacing: 12) {
+            Toggle(isOn: toggleBinding.animation(.easeInOut(duration: 0.2))) {
+                HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
+                    SettingsIconView(systemName: "calendar.badge.clock", tint: SettingsDesignTokens.Palette.regional)
+                    Text("settings_test_date".localized)
+                        .font(.body)
+                        .foregroundStyle(.primary)
                 }
             }
+            .toggleStyle(.switch)
             .padding(.vertical, SettingsDesignTokens.Layout.rowVerticalPadding)
+            .accessibilityLabel(Text("settings_test_date".localized))
+            .accessibilityValue(Text(accessibilityValueDescription))
+            if viewModel.isTestDateTrackingEnabled {
+                Divider()
+                    .padding(
+                        .leading,
+                        SettingsDesignTokens.Icon.containerSize + (SettingsDesignTokens.Layout.rowSpacing * 2)
+                    )
+
+                HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
+                    SettingsIconView(systemName: "1.calendar", tint: SettingsDesignTokens.Palette.regional)
+                    Text("settings_test_date_not_set".localized)
+                        .font(.body)
+                        .foregroundStyle(.primary)
+                    Spacer(minLength: 0)
+                    DatePicker(
+                        "",
+                        selection: dateBinding,
+                        in: Date()...,
+                        displayedComponents: .date
+                    )
+                    .labelsHidden()
+                    .datePickerStyle(.compact)
+                    .environment(\.locale, viewModel.currentLocale)
+                }
+                .padding(.vertical, SettingsDesignTokens.Layout.rowVerticalPadding)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("settings_test_date".localized))
+                .accessibilityValue(Text(accessibilityValueDescription))
+            }
         }
         .onAppear {
             isUpdatingFromViewModel = true
@@ -214,32 +215,21 @@ private struct SettingsTestDateRow: View {
             dateValue = newValue ?? Date()
             isUpdatingFromViewModel = false
         }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(Text("settings_test_date".localized))
-        .accessibilityValue(Text(accessibilityValueDescription))
     }
 
-    private var datePicker: some View {
-        DatePicker(
-            "",
-            selection: Binding(
-                get: { dateValue },
-                set: { newValue in
-                    if isUpdatingFromViewModel {
-                        return
-                    }
-                    dateValue = newValue
-                    viewModel.saveTestDate(newValue)
+    private var toggleBinding: Binding<Bool> {
+        Binding(
+            get: { viewModel.isTestDateTrackingEnabled },
+            set: { isEnabled in
+                if isEnabled {
+                    viewModel.activateTestDateTracking()
+                    dateValue = viewModel.selectedTestDate ?? Date()
+                } else {
                     HapticManager.shared.lightImpact()
+                    viewModel.clearTestDate()
                 }
-            ),
-            in: Date()...,
-            displayedComponents: .date
+            }
         )
-        .datePickerStyle(.compact)
-        .labelsHidden()
-        .environment(\.locale, viewModel.currentLocale)
-        .frame(width: 160)
     }
 
     private var accessibilityValueDescription: String {
@@ -251,11 +241,24 @@ private struct SettingsTestDateRow: View {
         }
         return "settings_test_date_not_set".localized
     }
+
+    private var dateBinding: Binding<Date> {
+        Binding(
+            get: { dateValue },
+            set: { newValue in
+                if isUpdatingFromViewModel {
+                    return
+                }
+                dateValue = newValue
+                viewModel.saveTestDate(newValue)
+            }
+        )
+    }
 }
 
 #Preview("Regional Section") {
     let languageManager = LanguageManager()
-    let stateManager = StateManager()
+    let stateManager = StateManager.shared
     let viewModel = SettingsRegionalViewModel(
         languageManager: languageManager,
         stateManager: stateManager

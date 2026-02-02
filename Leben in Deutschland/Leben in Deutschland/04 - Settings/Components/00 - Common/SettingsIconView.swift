@@ -31,10 +31,9 @@ struct SettingsIconView: View {
     }
 }
 
-#Preview("Settings Icon") {
+#Preview("Settings Icon", traits: .sizeThatFitsLayout) {
     SettingsIconView(systemName: "info.circle.fill", tint: .blue)
         .padding()
         .background(Color(uiColor: .secondarySystemBackground))
-        .previewLayout(.sizeThatFits)
 }
 

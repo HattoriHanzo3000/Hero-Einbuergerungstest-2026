@@ -37,13 +37,14 @@ final class SettingsDashboardViewModel: ObservableObject {
     func configureRegionalSection(
         languageManager: LanguageManager,
         stateManager: StateManager,
-        onboardingPreferences: OnboardingPreferences = .shared
+        onboardingPreferences: OnboardingPreferences? = nil
     ) {
         guard regionalViewModel == nil else { return }
+        let resolvedPreferences = onboardingPreferences ?? OnboardingPreferences.shared
         regionalViewModel = SettingsRegionalViewModel(
             languageManager: languageManager,
             stateManager: stateManager,
-            onboardingPreferences: onboardingPreferences
+            onboardingPreferences: resolvedPreferences
         )
     }
 
@@ -62,15 +63,17 @@ final class SettingsDashboardViewModel: ObservableObject {
         soundManager: SoundManager,
         languageManager: LanguageManager,
         stateManager: StateManager,
-        onboardingPreferences: OnboardingPreferences = .shared,
+        onboardingPreferences: OnboardingPreferences? = nil,
         resetCompletion: @escaping @MainActor () -> Void = {}
     ) {
         guard dangerViewModel == nil else { return }
+        let resolvedPreferences = onboardingPreferences ?? OnboardingPreferences.shared
         dangerViewModel = SettingsDangerViewModel(
+            resetService: SettingsResetService.shared,
             soundManager: soundManager,
             languageManager: languageManager,
             stateManager: stateManager,
-            onboardingPreferences: onboardingPreferences,
+            onboardingPreferences: resolvedPreferences,
             completion: resetCompletion
         )
     }

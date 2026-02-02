@@ -3,17 +3,24 @@ import SwiftUI
 struct SettingsVersionSectionView: View {
     @ObservedObject var viewModel: SettingsVersionViewModel
     @Environment(\.openURL) private var openURL
+    var onOpenVersion: () -> Void
+
+    init(viewModel: SettingsVersionViewModel, onOpenVersion: @escaping () -> Void = {}) {
+        self.viewModel = viewModel
+        self.onOpenVersion = onOpenVersion
+    }
 
     var body: some View {
         Section {
-            NavigationLink(value: SettingsDashboardRoute.version) {
+            Button {
+                onOpenVersion()
+            } label: {
                 versionSummaryRow
             }
             .buttonStyle(.plain)
 
             Button {
                 guard let url = viewModel.appStoreDestination() else { return }
-                HapticManager.shared.lightImpact()
                 openURL(url)
             } label: {
                 SettingsRowButtonLabel(
@@ -28,28 +35,15 @@ struct SettingsVersionSectionView: View {
     }
 
     private var versionSummaryRow: some View {
-        HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
-            SettingsIconView(
-                systemName: "info.circle.fill",
-                tint: SettingsDesignTokens.Palette.updates
-            )
-            Text("version".localized)
-                .font(.body)
-                .foregroundStyle(.primary)
-            Spacer()
-        }
-        .padding(.vertical, SettingsDesignTokens.Layout.rowVerticalPadding)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(
-            Text(
-                String(
-                    format: "%@: %@",
-                    "version".localized,
-                    viewModel.versionInfo.currentVersion
-                )
-            )
+        SettingsRowButtonLabel(
+            title: "version".localized,
+            iconSystemName: "info.circle.fill",
+            tint: SettingsDesignTokens.Palette.updates,
+            showsBadge: viewModel.latestVersionIsNewer,
+            showsChevron: true
         )
     }
+
 }
 
 #Preview("Version Section") {

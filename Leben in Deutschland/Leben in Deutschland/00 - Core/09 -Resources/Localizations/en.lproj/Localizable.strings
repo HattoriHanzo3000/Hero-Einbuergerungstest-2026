@@ -1,7 +1,4 @@
-"settings_current_version" = "Current Version";
-"settings_installed_version" = "Installed version";
-"settings_latest_updates" = "Latest updates";
-"settings_version_updates" = "This release includes stability improvements, UI refinements, and new shortcuts to premium features.";
+
 // =============================================================================
 //   ONBOARDING
 // =============================================================================
@@ -77,6 +74,11 @@
 "main_category_all_questions" = "Learn by Topics";
 "main_category_favorites" = "Favorites";
 "main_category_test_simulation" = "Take a Test";
+
+"home_learn_section_title" = "Learn";
+"home_learn_spaced_repetition" = "Spaced Repetition";
+"home_learn_by_topics" = "Learn by Topics";
+"home_learn_favorites" = "Favorites";
 "spaced_repetition_title" = "Start Learning";
 
 // Learn by Topics
@@ -95,9 +97,32 @@
 
 "main_header_test_today" = "The test is today.";
 "main_header_test_in_days" = "The test is in %d %@.";
+"main_header_state_accessibility_label" = "Federal state";
+"main_header_state_accessibility_hint" = "Current federal state. Change it in Settings.";
+"main_header_state_slogan_accessibility_label" = "State slogan";
+"home_statistics_title" = "Your progress";
+"home_statistics_description" = "You're %d%% ready for the test. Keep going—small steps count every day.";
+"home_statistics_caption" = "Ready for the test";
+"home_statistics_accessibility_label" = "Readiness progress";
+"home_statistics_accessibility_value" = "%d percent prepared";
+"back_button_accessibility_label" = "Back";
+"spaced_translation_button_accessibility_label" = "Toggle translation";
+"spaced_favorite_button_accessibility_label" = "Toggle favorite";
+"hint_button_title" = "Hint";
 "date_too_far_title" = "That's quite far away";
 "date_too_far_message" = "Time travel’s cool, but let’s keep the test within the next year—deal?";
 "ok_button" = "OK";
+
+// Carousel
+"learn_option_spaced_repetition_title" = "Spaced Repetition";
+"learn_option_topics_title" = "Learn by Topics";
+"learn_option_test_title" = "Take a Test";
+"learn_option_favorites_title" = "Favorites";
+
+"learn_option_spaced_repetition_description" = "Learn smart — tough questions come back until you master them";
+"learn_option_topics_description" = "Study by topics — take it easy, step by step";
+"learn_option_test_description" = "Just like the real exam — 33 questions, 60 minutes, no hints";
+"learn_option_favorites_description" = "Save your favorite or tricky questions to practice later";
 
 // Language
 "language_title" = "Language";
@@ -116,6 +141,17 @@
 
 // Settings
 "settings_title" = "Settings";
+"tab_settings_title" = "Settings";
+
+"settings_current_version" = "Current Version";
+"settings_update_available" = "Update Available";
+"settings_version_updates" = "• Added interactive tutorials to help users get started.\n• Enhanced support system with FAQ access.\n• Improved app rating experience.\n• Better accessibility and usability.\n• Bug fixes and performance improvements.";
+"settings_version_updates_placeholder" = "A newer version is ready with additional improvements and features.";
+"settings_update_now" = "Update Now";
+"settings_update_button_hint" = "Opens the App Store to install the latest version.";
+"version" = "Version";
+"settings_installed_version" = "Installed version";
+"settings_latest_updates" = "Latest updates";
 
 "settings_personalisation_title" = "Personalisation";
 "settings_sound_button" = "Sound";
@@ -139,7 +175,6 @@
 "privacy_policy" = "Privacy Policy";
 
 "about_title" = "About";
-"version" = "Version";
 "version_description" = "This update provides important improvements and bug fixes, including the following updates:";
 
 // Updates
@@ -153,7 +188,6 @@
 "rating_popup_rate_now" = "Rate Now";
 "rating_popup_maybe_later" = "Maybe Later";
 
-// Updates
 "settings_updates_title" = "Updates";
 "settings_check_updates_button" = "Check for Updates";
 "settings_open_app_store_button" = "Open in App Store";
@@ -255,6 +289,7 @@
 "favorites_title" = "Favorites";
 "favorites_empty_title" = "No Favorites";
 "favorites_empty_subtitle" = "Add questions to your favorites by clicking the heart";
+"favorites_empty_message" = "Your favorites list is empty. As you practice, tap the heart icon to bookmark questions you'd like to revisit.";
 "back" = "Back";
 "next" = "Next";
 
@@ -323,11 +358,14 @@
 
 "tab_home_title" = "Home";
 "tab_learn_title" = "Learn";
+"tab_test_title" = "Test";
 "tab_premium_title" = "Premium";
 "tab_settings_title" = "Settings";
+"learn_header_title" = "Learn";
+"learn_header_dialog_message" = "I'm preparing a fresh learning journey for you. We'll unlock it together soon!";
 "tab_settings_beta_title" = "Settings BETA";
+"tab_settings_beta2_title" = "Settings BETA 2";
 "main_tab_bar_accessibility_label" = "Primary navigation";
-"settings_subtitle" = "Personalize the app experience to match how you learn.";
 "settings_beta_title" = "Settings BETA";
 "settings_beta_detail_placeholder" = "We’re shaping this area right now. Your feedback will help us decide what belongs here.";
 "settings_test_alerts_button" = "Test Alerts";
@@ -335,7 +373,7 @@
 "settings_translation_language" = "Translation Language";
 "settings_federal_state" = "Federal State";
 "settings_test_date" = "Test Date";
-"settings_test_date_not_set" = "Set the date";
+"settings_test_date_not_set" = "Set the Date";
 "settings_sound_toggle" = "Sound";
 "settings_language_option_english" = "English";
 "settings_language_option_german" = "German";
@@ -345,8 +383,85 @@
 "settings_appearance_title" = "Appearance";
 "settings_premium_title" = "Premium";
 "settings_reset_app" = "Reset App";
-"settings_current_version" = "Current Version";
-"settings_installed_version" = "Installed version";
-"settings_latest_updates" = "Latest updates";
-"settings_version_updates" = "This release includes stability improvements, UI refinements, and new shortcuts to premium features.";
+
+"premium_hub_placeholder_title" = "Premium is coming soon";
+"premium_hub_placeholder_message" = "We're preparing fresh boosts, practice packs, and more goodies. Stay tuned!";
+
+"premium_unlock_message" = "Unlock the full Hero experience with Premium";
+"premium_unlock_title" = "Unlock the full Hero experience";
+"premium_unlock_description" = "Premium gives you full access to all study materials, progress tracking, and more.";
+"premium_table_benefits" = "Benefits";
+"premium_table_free" = "Free";
+"premium_table_premium" = "Premium";
+"premium_feature_daily_lessons" = "Daily lessons";
+"premium_feature_unlimited_learning" = "Unlimited learning";
+"premium_feature_no_ads" = "No ads";
+"premium_feature_detailed_progress" = "Detailed progress";
+"premium_feature_hints" = "Hints";
+"premium_feature_favorites" = "Favorites";
+"premium_subscribe_now" = "Subscribe Now";
+"premium_choose_plan" = "Choose Your Plan";
+"premium_plan_monthly" = "Monthly";
+"premium_plan_lifetime" = "Lifetime";
+"premium_per_month" = "per month";
+"premium_limited_offer" = "Limited Time Offer";
+"premium_regular_price" = "Regular price";
+"premium_continue" = "Continue";
+"premium_terms_monthly_part1" = "Upon subscribing, your Apple account will be charged {price}€. Your Hero Premium subscription will automatically renew at the same price at the end of your current subscription period unless cancelled at least 24 hours before the end of the period.";
+"premium_terms_lifetime_part1" = "Upon subscribing, your Apple account will be charged {price}€ for lifetime access. This is a one-time payment with no auto-renewal.";
+"premium_terms_common" = "You can cancel anytime in your App Store settings. View our Terms of Use and Privacy Policy for more details.";
+"premium_terms_lifetime_common" = "View our Terms of Use and Privacy Policy for more details.";
+"premium_trial_active" = "Free Trial Active";
+"premium_trial_days_remaining" = "{days} days remaining";
+"premium_trial_ending_soon" = "Ending soon";
+"premium_trial_offer_title" = "Start with 3 Days Free";
+"premium_trial_offer_description" = "Try Premium features for free, then continue with subscription";
+"premium_trial_badge" = "3 Days Free";
+"premium_start_trial" = "Start Free Trial";
+"premium_favorites_alert_title" = "Upgrade to Premium";
+"premium_favorites_alert_message" = "Upgrade to premium to see your favorites";
+"premium_favorites_alert_cancel" = "Cancel";
+"premium_favorites_alert_upgrade" = "Upgrade";
+
+// =============================================================================
+//   FEEDBACK / REPORT QUESTION
+// =============================================================================
+
+"report_question" = "Report Question";
+"question_id" = "Question ID";
+"category" = "Category";
+"question_info" = "Question Information";
+"feedback_type" = "Feedback Type";
+"what_would_you_like_to_report" = "What would you like to report?";
+"additional_details" = "Additional Details";
+"feedback_details_hint" = "Please describe the issue in detail. This helps us fix it faster.";
+"email_optional" = "Email (optional)";
+"contact_info" = "Contact Information";
+"feedback_email_hint" = "If you provide your email, we can respond to your feedback.";
+"submit" = "Submit";
+"feedback_submitted" = "Feedback Submitted";
+"feedback_submitted_message" = "Thank you for your feedback! We'll review it and make improvements.";
+"error" = "Error";
+"feedback_type_question_error" = "Question Error";
+"feedback_type_question_unclear" = "Question Unclear";
+"feedback_type_answer_incorrect" = "Incorrect Answer";
+"feedback_type_translation_issue" = "Translation Issue";
+"feedback_type_other" = "Other";
+
+// =============================================================================
+//   HINTS
+// =============================================================================
+
+"hint_title" = "Hint";
+"close" = "Close";
+"no_hint_available" = "No hint is available for this question yet.";
+
+// =============================================================================
+//   APP RATING
+// =============================================================================
+
+"rating_prompt_title" = "Loving Hero?";
+"rating_prompt_message" = "If Hero's been helping you ace those questions, we'd love to hear about it! A quick rating helps other learners discover us too.";
+"rating_prompt_rate_now" = "Do it now";
+"rating_prompt_ask_later" = "Ask later";
 

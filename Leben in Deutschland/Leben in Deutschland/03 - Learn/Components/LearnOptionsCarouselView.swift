@@ -15,17 +15,20 @@ struct LearnOptionsCarouselView: View {
     let horizontalSafeInset: CGFloat
     let descriptionHorizontalPadding: CGFloat
     
-    @State private var highlightedOptionID: UUID?
+    @Binding var highlightedOptionID: UUID?
     @State private var displayedOptionID: UUID?
+    @Environment(\.layoutMetrics) private var layoutMetrics
     
     init(
         options: [LearnOptionModel],
+        highlightedOptionID: Binding<UUID?>,
         onSelect: @escaping (LearnOptionModel) -> Void,
         containerWidth: CGFloat,
         horizontalSafeInset: CGFloat,
-        descriptionHorizontalPadding: CGFloat = MainScreenConstants.adaptiveValue(20)
+        descriptionHorizontalPadding: CGFloat = 20
     ) {
         self.options = options
+        self._highlightedOptionID = highlightedOptionID
         self.onSelect = onSelect
         self.containerWidth = containerWidth
         self.horizontalSafeInset = horizontalSafeInset
@@ -33,11 +36,11 @@ struct LearnOptionsCarouselView: View {
     }
     
     // MARK: - Layout Constants
-    private var sectionSpacing: CGFloat { MainScreenConstants.adaptiveValue(20) }
-    private var iconCarouselHeight: CGFloat { MainScreenConstants.adaptiveValue(240) }
-    private var iconSize: CGFloat { MainScreenConstants.adaptiveValue(68) * 1.5 }
-    private var descriptionCornerRadius: CGFloat { MainScreenConstants.adaptiveValue(28) }
-    private var descriptionPadding: CGFloat { MainScreenConstants.adaptiveValue(22) }
+    private var sectionSpacing: CGFloat { layoutMetrics.adaptive(20) }
+    private var iconCarouselHeight: CGFloat { layoutMetrics.adaptive(240) }
+    private var iconSize: CGFloat { layoutMetrics.adaptive(68) * 1.5 }
+    private var descriptionCornerRadius: CGFloat { layoutMetrics.adaptive(28) }
+    private var descriptionPadding: CGFloat { layoutMetrics.adaptive(22) }
     
     var body: some View {
         VStack(spacing: sectionSpacing) {
@@ -48,15 +51,20 @@ struct LearnOptionsCarouselView: View {
             LearnOptionDescriptionCardView(
                 option: highlightedOption(),
                 cornerRadius: descriptionCornerRadius,
-                horizontalInset: descriptionHorizontalPadding,
+                horizontalInset: layoutMetrics.adaptive(descriptionHorizontalPadding),
                 contentPadding: descriptionPadding
             )
         }
-        .padding(.top, MainScreenConstants.adaptiveValue(4))
+        .padding(.top, layoutMetrics.adaptive(4))
         .onAppear {
-            guard highlightedOptionID == nil else { return }
+            // Initialize if not set
+            if highlightedOptionID == nil {
             highlightedOptionID = options.first?.id
-            displayedOptionID = options.first?.id
+            }
+            // Sync displayedOptionID with highlightedOptionID
+            if displayedOptionID != highlightedOptionID {
+                displayedOptionID = highlightedOptionID ?? options.first?.id
+            }
         }
         .onChange(of: highlightedOptionID) { _, newValue in
             guard let newValue else { return }
@@ -92,9 +100,6 @@ private extension LearnOptionsCarouselView {
         guard displayedOptionID != id else { return }
         withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
             displayedOptionID = id
-            if let option = highlightedOption() {
-                onSelect(option)
-            }
             HapticManager.shared.lightImpact()
         }
     }
@@ -123,6 +128,7 @@ private extension LearnOptionsCarouselView {
                     Button {
                         HapticManager.shared.lightImpact()
                         updateHighlight(with: option.id)
+                        onSelect(option)
                     } label: {
                         LearnOptionIconView(
                             option: option,
@@ -166,7 +172,7 @@ private extension LearnOptionsCarouselView {
         let title = highlightedOption?.titleKey.localized ?? "learn_options_section_title".localized
         let accentColor = highlightedOption?.palette.accentColor ?? Color.primary
         
-        return VStack(spacing: MainScreenConstants.adaptiveValue(12)) {
+        return VStack(spacing: layoutMetrics.adaptive(12)) {
             Text(title)
                 .font(.system(.title, design: .rounded).weight(.bold))
                 .foregroundColor(accentColor)
@@ -180,21 +186,28 @@ private extension LearnOptionsCarouselView {
 }
 
 // MARK: - Preview
-#Preview("Learn Options Carousel") {
-    let viewModel = LearnOptionsViewModel()
-    
-    return LearnOptionsCarouselView(
+#Preview("Learn Options Carousel", traits: .sizeThatFitsLayout) {
+    struct PreviewWrapper: View {
+        @StateObject private var viewModel = LearnOptionsViewModel()
+
+        var body: some View {
+            LearnOptionsCarouselView(
         options: viewModel.options,
+                highlightedOptionID: $viewModel.highlightedOptionID,
         onSelect: { _ in },
         containerWidth: 360,
-        horizontalSafeInset: MainScreenConstants.adaptiveValue(24)
+        horizontalSafeInset: 24
     )
-        .environmentObject(LanguageManager())
-        .dynamicTypeSize(.medium ... .accessibility5)
-        .environment(\.sizeCategory, .accessibilityExtraLarge)
-        .padding(.vertical)
-        .background(Color(.systemGroupedBackground))
-        .previewLayout(.sizeThatFits)
+    .environmentObject(LanguageManager())
+    .dynamicTypeSize(.medium ... .accessibility5)
+    .environment(\.sizeCategory, .accessibilityExtraLarge)
+    .padding(.vertical)
+    .background(Color(.systemGroupedBackground))
+    .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
+        }
+    }
+    
+    return PreviewWrapper()
 }
 
 // MARK: - Learn Option Icon
@@ -242,8 +255,10 @@ private struct LearnScrollIndicatorView: View {
     let currentIndex: Int
     let activeColor: Color
     
-    private var dotSize: CGFloat { MainScreenConstants.adaptiveValue(6) }
-    private var dotSpacing: CGFloat { MainScreenConstants.adaptiveValue(6) }
+    @Environment(\.layoutMetrics) private var layoutMetrics
+    
+    private var dotSize: CGFloat { layoutMetrics.adaptive(6) }
+    private var dotSpacing: CGFloat { layoutMetrics.adaptive(6) }
     
     var body: some View {
         HStack(spacing: dotSpacing) {
@@ -265,15 +280,17 @@ private struct LearnOptionDescriptionCardView: View {
     let horizontalInset: CGFloat
     let contentPadding: CGFloat
     
+    @Environment(\.layoutMetrics) private var layoutMetrics
+    
     var body: some View {
         Group {
             if let option {
-                VStack(spacing: MainScreenConstants.adaptiveValue(12)) {
+                VStack(spacing: layoutMetrics.adaptive(12)) {
                     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                         .fill(Color.clear)
                         .frame(height: contentPadding)
                     
-                    VStack(alignment: .leading, spacing: MainScreenConstants.adaptiveValue(12)) {
+                    VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
                         Text(option.descriptionKey.localized)
                             .font(.system(.body, design: .rounded).weight(.semibold))
                             .foregroundColor(option.palette.accentColor.opacity(0.95))

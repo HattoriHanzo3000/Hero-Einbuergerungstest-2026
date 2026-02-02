@@ -29,7 +29,7 @@ Resources/Localizations/
 // Using the String+Localization extension
 Text("eagle_greeting".localized)
 Text("NEXT".localized)
-Text("settings_title".localized)
+Text("tab_settings_title".localized)
 ```
 
 ## Adding New Languages

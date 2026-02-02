@@ -18,6 +18,9 @@ final class AppRouter {
         case learning(subcategoryName: String, categoryName: String)
         case settings
         case favorites
+        case spacedRepetition
+        case testSimulation
+        case premium
     }
     
     // MARK: - Navigation Methods

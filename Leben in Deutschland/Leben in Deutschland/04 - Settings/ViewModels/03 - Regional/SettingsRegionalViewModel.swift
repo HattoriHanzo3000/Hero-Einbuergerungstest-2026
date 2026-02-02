@@ -6,8 +6,10 @@ final class SettingsRegionalViewModel: ObservableObject {
     @Published private(set) var appLanguage: SettingsAppLanguageOption
     @Published private(set) var translationLanguage: SettingsTranslationLanguageOption
     @Published private(set) var translationOptions: [SettingsTranslationLanguageOption]
-    @Published private(set) var federalStateName: String
+    @Published var federalStateName: String
     @Published private(set) var selectedTestDate: Date?
+    @Published private(set) var isTestDateTrackingEnabled: Bool
+    @Published var showStateChangeWarning: Bool = false
 
     var currentLocale: Locale {
         languageManager.currentLocale
@@ -19,16 +21,18 @@ final class SettingsRegionalViewModel: ObservableObject {
     private let defaults: UserDefaults
 
     private var cancellables = Set<AnyCancellable>()
+    private var originalState: String?
+    private var pendingStateName: String?
 
     init(
         languageManager: LanguageManager,
         stateManager: StateManager,
-        onboardingPreferences: OnboardingPreferences = .shared,
+        onboardingPreferences: OnboardingPreferences? = nil,
         defaults: UserDefaults = .standard
     ) {
         self.languageManager = languageManager
         self.stateManager = stateManager
-        self.onboardingPreferences = onboardingPreferences
+        self.onboardingPreferences = onboardingPreferences ?? OnboardingPreferences.shared
         self.defaults = defaults
 
         let initialAppLanguage = SettingsAppLanguageOption(rawValue: languageManager.currentAppLanguage) ?? .english
@@ -40,10 +44,13 @@ final class SettingsRegionalViewModel: ObservableObject {
         self.appLanguage = initialAppLanguage
         self.translationLanguage = initialTranslationLanguage
         self.translationOptions = Self.availableTranslationOptions(excluding: initialAppLanguage)
-        self.federalStateName = stateManager.selectedState ?? FederalStateModel.allStates.first?.name ?? "Berlin"
+        let initialState = self.onboardingPreferences.selectedState ?? stateManager.selectedState ?? FederalStateModel.allStates.first?.name ?? "Berlin"
+        self.federalStateName = initialState
+        self.originalState = self.onboardingPreferences.selectedState ?? stateManager.selectedState ?? initialState
 
-        let initialDate = onboardingPreferences.testDate ?? defaults.object(forKey: UserDefaultsKey.testDateRaw) as? Date
+        let initialDate = self.onboardingPreferences.testDate ?? defaults.object(forKey: UserDefaultsKey.testDateRaw) as? Date
         self.selectedTestDate = initialDate
+        self.isTestDateTrackingEnabled = initialDate != nil
 
         bindLanguageManager()
         bindStateManager()
@@ -60,21 +67,38 @@ final class SettingsRegionalViewModel: ObservableObject {
     }
 
     func setFederalState(name: String) {
-        stateManager.setSelectedState(name)
+        HapticManager.shared.lightImpact()
+        
+        guard name != stateManager.selectedState else {
+            federalStateName = name
+            return
+        }
+        
+        pendingStateName = name
+        federalStateName = name
+        showStateChangeWarning = true
     }
 
     func saveTestDate(_ date: Date) {
         selectedTestDate = date
-        onboardingPreferences.testDate = date
-        onboardingPreferences.testDateDontKnow = false
+        isTestDateTrackingEnabled = true
+        self.onboardingPreferences.testDate = date
+        self.onboardingPreferences.testDateDontKnow = false
         defaults.set(date, forKey: UserDefaultsKey.testDateRaw)
     }
 
     func clearTestDate() {
         selectedTestDate = nil
-        onboardingPreferences.testDate = nil
-        onboardingPreferences.testDateDontKnow = true
+        isTestDateTrackingEnabled = false
+        self.onboardingPreferences.testDate = nil
+        self.onboardingPreferences.testDateDontKnow = true
         defaults.removeObject(forKey: UserDefaultsKey.testDateRaw)
+    }
+
+    func activateTestDateTracking() {
+        HapticManager.shared.lightImpact()
+        let dateToPersist = selectedTestDate ?? Date()
+        saveTestDate(dateToPersist)
     }
 
     func localizedStateName(_ name: String) -> String {
@@ -86,6 +110,24 @@ final class SettingsRegionalViewModel: ObservableObject {
         guard localized.count > maxLength else { return localized }
         let index = localized.index(localized.startIndex, offsetBy: max(0, maxLength - 1))
         return String(localized[..<index]).trimmingCharacters(in: .whitespacesAndNewlines) + "…"
+    }
+
+    func cancelPendingStateChange() {
+        HapticManager.shared.lightImpact()
+        showStateChangeWarning = false
+        pendingStateName = nil
+        federalStateName = stateManager.selectedState ?? originalState ?? federalStateName
+    }
+
+    func confirmPendingStateChange() {
+        guard let pendingStateName else {
+            showStateChangeWarning = false
+            return
+        }
+
+        HapticManager.shared.heavyImpact()
+        applyStateChange(name: pendingStateName, shouldResetProgress: true)
+        showStateChangeWarning = false
     }
 
     private func bindLanguageManager() {
@@ -120,6 +162,7 @@ final class SettingsRegionalViewModel: ObservableObject {
                 guard let self else { return }
                 let selected = newValue ?? FederalStateModel.allStates.first?.name ?? "Berlin"
                 self.federalStateName = selected
+                self.originalState = selected
                 self.onboardingPreferences.selectedState = selected
             }
             .store(in: &cancellables)
@@ -139,6 +182,18 @@ final class SettingsRegionalViewModel: ObservableObject {
             return fallback
         }
         return currentOption
+    }
+
+    private func applyStateChange(name: String, shouldResetProgress: Bool) {
+        if shouldResetProgress {
+            FederalStateProgressResetService.reset()
+        }
+
+        stateManager.setSelectedState(name)
+        originalState = name
+        federalStateName = name
+        pendingStateName = nil
+        self.onboardingPreferences.selectedState = name
     }
 
     private enum UserDefaultsKey {

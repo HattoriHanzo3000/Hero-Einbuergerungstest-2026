@@ -19,4 +19,8 @@ extension String {
         }
         return NSLocalizedString(self, comment: "")
     }
+    
+    func localizedUppercased() -> String {
+        localized.uppercased(with: Locale(identifier: LanguageManager.currentAppLanguageCode))
+    }
 }

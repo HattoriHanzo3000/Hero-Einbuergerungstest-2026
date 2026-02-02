@@ -8,7 +8,6 @@ struct SettingsSupportSectionView: View {
     var body: some View {
         Section {
             Button {
-                HapticManager.shared.lightImpact()
                 viewModel.presentFAQ()
             } label: {
                 SettingsRowButtonLabel(
@@ -21,7 +20,6 @@ struct SettingsSupportSectionView: View {
             .buttonStyle(.plain)
 
             Button {
-                HapticManager.shared.lightImpact()
                 viewModel.contactSupport()
             } label: {
                 SettingsRowButtonLabel(
@@ -34,7 +32,6 @@ struct SettingsSupportSectionView: View {
             .buttonStyle(.plain)
 
             Button {
-                HapticManager.shared.lightImpact()
                 viewModel.reportBug(deviceInfoProvider: Self.deviceInfo)
             } label: {
                 SettingsRowButtonLabel(
@@ -78,7 +75,7 @@ struct SettingsSupportSectionView: View {
         }
     }
 
-    private static func deviceInfo() -> String {
+    @MainActor private static func deviceInfo() -> String {
         let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
         let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
         let deviceModel = UIDevice.current.model
@@ -102,7 +99,7 @@ struct SettingsSupportSectionView: View {
 #Preview("Support Section") {
     SettingsSupportSectionView(viewModel: SettingsSupportViewModel())
         .environmentObject(LanguageManager())
-        .environmentObject(StateManager())
+        .environmentObject(StateManager.shared)
         .environmentObject(SoundManager.shared)
 }
 

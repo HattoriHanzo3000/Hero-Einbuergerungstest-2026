@@ -5,7 +5,6 @@ struct SettingsLegalSectionView: View {
     var body: some View {
         Section {
             Button {
-                HapticManager.shared.lightImpact()
                 viewModel.presentImpressum()
             } label: {
                 SettingsRowButtonLabel(
@@ -18,7 +17,6 @@ struct SettingsLegalSectionView: View {
             .buttonStyle(.plain)
 
             Button {
-                HapticManager.shared.lightImpact()
                 viewModel.presentTerms()
             } label: {
                 SettingsRowButtonLabel(
@@ -31,7 +29,6 @@ struct SettingsLegalSectionView: View {
             .buttonStyle(.plain)
 
             Button {
-                HapticManager.shared.lightImpact()
                 viewModel.presentPrivacy()
             } label: {
                 SettingsRowButtonLabel(
@@ -54,7 +51,7 @@ struct SettingsLegalSectionView: View {
 #Preview("Legal Section") {
     SettingsLegalSectionView(viewModel: SettingsLegalViewModel())
         .environmentObject(LanguageManager())
-        .environmentObject(StateManager())
+        .environmentObject(StateManager.shared)
         .environmentObject(SoundManager.shared)
 }
 

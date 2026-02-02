@@ -2,43 +2,27 @@ import SwiftUI
 
 // MARK: - Main Header Content
 struct MainHeaderContent: View {
-    @EnvironmentObject var stateManager: StateManager
+    let readinessPercentage: Int
     @Binding var showDialog: Bool
     @Binding var savedTestDate: Date?
     private let debugBordersEnabled = false
     
+    @EnvironmentObject private var stateManager: StateManager
+    @Environment(\.layoutMetrics) private var layoutMetrics
+    
+    private var selectedState: String? {
+        stateManager.selectedState
+    }
+    
     // Adaptive layout metrics
-    private var standardPadding: CGFloat { MainScreenConstants.adaptiveValue(16) }
-    private var containerCornerRadius: CGFloat { MainScreenConstants.adaptiveValue(28) }
-    private var headerSpacing: CGFloat { MainScreenConstants.adaptiveValue(10) }
+    private var topPadding: CGFloat { layoutMetrics.adaptive(56) }
+    private var bottomPadding: CGFloat { layoutMetrics.adaptive(18) }
+    private var horizontalPadding: CGFloat { layoutMetrics.adaptive(24) }
+    private var headerSpacing: CGFloat { layoutMetrics.adaptive(12) }
     
     var body: some View {
         VStack(alignment: .leading, spacing: headerSpacing) {
-            if let selectedState = stateManager.selectedState ?? OnboardingPreferences.shared.selectedState {
-                VStack(alignment: .leading, spacing: MainScreenConstants.adaptiveValue(4)) {
-                    Text(getLocalizedStateName(selectedState))
-                        .font(.title.bold())
-                        .fontDesign(.rounded)
-                        .foregroundColor(Color(.systemGray6))
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityLabel("Federal State")
-                        .accessibilityValue(getLocalizedStateName(selectedState))
-                        .accessibilityHint("Currently selected federal state. Change it from Settings.")
-                        .accessibilityAddTraits(.isStaticText)
-                        .debugBorder(Color.blue.opacity(0.8), cornerRadius: 20, isVisible: debugBordersEnabled)
-                                        
-                    FederalStateSloganBlock(stateName: selectedState)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .debugBorder(Color.cyan.opacity(0.8), cornerRadius: 16, isVisible: debugBordersEnabled)
-                        .transition(.opacity.combined(with: .move(edge: .top)))
-                        .padding(.bottom, MainScreenConstants.adaptiveValue(8))
-                }
-            }
+            stateInformationSection
             
             MainMascotView(
                 messageKey: "eagle_desc_chick",
@@ -49,17 +33,17 @@ struct MainHeaderContent: View {
             )
             .debugBorder(Color.green.opacity(0.8), cornerRadius: 20, isVisible: debugBordersEnabled)
         }
+        .padding(.top, topPadding)
+        .padding(.bottom, bottomPadding)
+        .padding(.horizontal, horizontalPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, standardPadding + 4)
-        .padding(.horizontal, standardPadding)
-        .background(
-            RoundedRectangle(cornerRadius: containerCornerRadius)
-                .fill(Color.accentColor)
-        )
-        .debugBorder(Color.red.opacity(0.85), cornerRadius: containerCornerRadius, isVisible: debugBordersEnabled)
-        .padding(.horizontal)
-        .padding(.top, MainScreenConstants.adaptiveValue(8))
-        .padding(.bottom, MainScreenConstants.adaptiveValue(8))
+        .background {
+            HeroHeaderBackground()
+                .ignoresSafeArea(edges: .top)
+        }
+        .shadow(color: Color.black.opacity(0.08), radius: 12, y: 10)
+        .debugBorder(Color.red.opacity(0.85), cornerRadius: 0, isVisible: debugBordersEnabled)
+        .accessibilityAddTraits(.isHeader)
     }
     
     private func getLocalizedStateName(_ stateName: String) -> String {
@@ -90,14 +74,6 @@ struct MainHeaderContent: View {
         )
     }
     
-    private var readinessPercentage: Int {
-        let storedValue = UserDefaults.standard.integer(forKey: "readinessPercentage")
-        if storedValue > 0 {
-            return min(storedValue, 100)
-        }
-        return 65
-    }
-    
     private func localizedDayWord(for days: Int, languageCode: String) -> String {
         switch languageCode {
         case "de":
@@ -126,23 +102,55 @@ struct MainHeaderContent: View {
     }
 }
 
+private extension MainHeaderContent {
+    @ViewBuilder
+    var stateInformationSection: some View {
+        Group {
+            if let selectedState = selectedState {
+                VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
+                    Text(getLocalizedStateName(selectedState))
+                        .font(.system(.largeTitle, design: .rounded).bold())
+                        .foregroundColor(Color(.label))
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .id("state_title_\(selectedState)")
+                        .accessibilityLabel("main_header_state_accessibility_label".localized)
+                        .accessibilityValue(getLocalizedStateName(selectedState))
+                        .accessibilityHint("main_header_state_accessibility_hint".localized)
+                        .accessibilityAddTraits(.isStaticText)
+                        .debugBorder(Color.blue.opacity(0.8), cornerRadius: 20, isVisible: debugBordersEnabled)
+                    
+                    FederalStateSloganBlock(stateName: selectedState)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .debugBorder(Color.cyan.opacity(0.8), cornerRadius: 16, isVisible: debugBordersEnabled)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+                        .padding(.bottom, layoutMetrics.adaptive(8))
+                        .id(selectedState)
+                }
+            }
+        }
+        .id(selectedState ?? "no_state")
+    }
+}
+
 // MARK: - Federal State Slogan Block
 private struct FederalStateSloganBlock: View {
     @EnvironmentObject private var languageManager: LanguageManager
+    @Environment(\.layoutMetrics) private var layoutMetrics
     
     let stateName: String
     
     var body: some View {
         Text(localizedSlogan(for: stateName))
             .font(.system(.body, design: .rounded).weight(.semibold))
-            .foregroundColor(Color(.systemGray6))
+            .foregroundColor(Color(.label))
             .multilineTextAlignment(.leading)
             .lineLimit(3)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 2)
-            .accessibilityLabel("State Slogan")
+            .padding(.vertical, layoutMetrics.adaptive(2))
+            .accessibilityLabel("main_header_state_slogan_accessibility_label".localized)
             .accessibilityValue(localizedSlogan(for: stateName))
             .id(languageManager.currentAppLanguage)
     }
@@ -186,8 +194,10 @@ private extension View {
 // MARK: - Preview
 #Preview {
     MainHeaderContent(
+        readinessPercentage: 72,
         showDialog: .constant(true),
         savedTestDate: .constant(nil)
     )
-    .environmentObject(StateManager())
+    .environmentObject(LanguageManager())
+    .environmentObject(StateManager.shared)
 }

@@ -4,6 +4,7 @@ import SwiftUI
 struct OnboardingLanguageSelectionContentComponent: View {
     @Binding var selectedLanguage: String?
     let onLanguageSelected: (String) -> Void
+    @Environment(\.layoutMetrics) private var layoutMetrics
     
     var body: some View {
         VStack(spacing: OnboardingConstants.defaultSpacing) {
@@ -18,7 +19,7 @@ struct OnboardingLanguageSelectionContentComponent: View {
                 )
             }
         }
-        .frame(width: OnboardingConstants.getButtonWidth())
+        .frame(width: layoutMetrics.screenWidth * OnboardingConstants.buttonWidthRatio)
         .frame(maxWidth: .infinity, alignment: .center)
         .padding(.top, 16)
         .padding(.horizontal, 4)

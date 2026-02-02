@@ -11,7 +11,6 @@ struct SettingsPremiumDetailView: View {
                     .font(.body)
                     .foregroundStyle(.secondary)
                 Button {
-                    HapticManager.shared.success()
                 } label: {
                     Text("premium_cta_button".localized)
                         .font(.headline)

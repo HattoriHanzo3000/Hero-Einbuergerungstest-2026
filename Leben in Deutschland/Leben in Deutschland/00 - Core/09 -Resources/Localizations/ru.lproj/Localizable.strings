@@ -1,7 +1,3 @@
-"settings_current_version" = "Текущая версия";
-"settings_installed_version" = "Установленная версия";
-"settings_latest_updates" = "Последние обновления";
-"settings_version_updates" = "В этом обновлении: улучшенная производительность, обновлённый экран настроек и быстрый доступ к премиум-функциям.";
 // =============================================================================
 //   ONBOARDING
 // =============================================================================
@@ -77,6 +73,11 @@
 "main_category_all_questions" = "Изучать по темам";
 "main_category_favorites" = "Избранные";
 "main_category_test_simulation" = "Пройти тест";
+
+"home_learn_section_title" = "Обучение";
+"home_learn_spaced_repetition" = "Интервальное повторение";
+"home_learn_by_topics" = "Учить по темам";
+"home_learn_favorites" = "Избранное";
 "spaced_repetition_title" = "Начать обучение";
 
 // Learn by Topics
@@ -95,9 +96,32 @@
 
 "main_header_test_today" = "Тест уже сегодня.";
 "main_header_test_in_days" = "Тест через %d %@.";
+"main_header_state_accessibility_label" = "Федеральная земля";
+"main_header_state_accessibility_hint" = "Текущая земля. Ты можешь изменить её в настройках.";
+"main_header_state_slogan_accessibility_label" = "Слоган земли";
+"home_statistics_title" = "Твой прогресс";
+"home_statistics_description" = "Ты готов на %d%% к тесту. Продолжай — каждый маленький шаг работает.";
+"home_statistics_caption" = "Готов к тесту";
+"home_statistics_accessibility_label" = "Прогресс готовности";
+"home_statistics_accessibility_value" = "%d процентов готовности";
+"back_button_accessibility_label" = "Назад";
+"spaced_translation_button_accessibility_label" = "Показать перевод";
+"spaced_favorite_button_accessibility_label" = "Добавить в избранное";
+"hint_button_title" = "Подсказка";
 "date_too_far_title" = "Это довольно далеко";
 "date_too_far_message" = "Путешествия во времени — это круто, но давай оставим тест в пределах следующего года, договорились?";
 "ok_button" = "ОК";
+
+// Carousel
+"learn_option_spaced_repetition_title" = "Повторение по интервалам";
+"learn_option_topics_title" = "Учить по темам";
+"learn_option_test_title" = "Пройти тест";
+"learn_option_favorites_title" = "Избранное";
+
+"learn_option_spaced_repetition_description" = "Учись с умом — сложные вопросы возвращаются, пока не запомнишь их";
+"learn_option_topics_description" = "Разбирай темы спокойно, шаг за шагом";
+"learn_option_test_description" = "Как на настоящем экзамене — 33 вопроса, 60 минут, без подсказок";
+"learn_option_favorites_description" = "Сохраняй вопросы, которые тебе нравятся или с которыми хочешь потренироваться";
 
 // Language
 "language_title" = "Язык";
@@ -116,6 +140,16 @@
 
 // Settings
 "settings_title" = "Настройки";
+"tab_settings_title" = "Настройки";
+"settings_current_version" = "Текущая версия";
+"settings_update_available" = "Доступно обновление";
+"settings_version_updates" = "• Добавлены интерактивные обучающие материалы для быстрого старта.\n• Улучшена служба поддержки с доступом к FAQ.\n• Улучшен процесс оценки приложения.\n• Повышена доступность и удобство использования.\n• Исправлены ошибки и улучшена производительность.";
+"settings_version_updates_placeholder" = "Доступна новая версия с дополнительными улучшениями и функциями.";
+"settings_update_now" = "Обновить сейчас";
+"settings_update_button_hint" = "Открывает App Store, чтобы установить последнюю версию.";
+"version" = "Версия";
+"settings_installed_version" = "Установленная версия";
+"settings_latest_updates" = "Последние обновления";
 
 "settings_personalisation_title" = "Персонализация";
 "settings_sound_button" = "Звук";
@@ -139,7 +173,6 @@
 "privacy_policy" = "Политика конфиденциальности";
 
 "about_title" = "О приложении";
-"version" = "Версия";
 "version_description" = "Это обновление включает важные улучшения и исправления ошибок, включая следующие обновления:";
 
 // Updates
@@ -254,6 +287,7 @@
 "favorites_title" = "Избранное";
 "favorites_empty_title" = "Нет избранных вопросов";
 "favorites_empty_subtitle" = "Добавь вопросы в избранное, нажав на сердечко";
+"favorites_empty_message" = "Твой список избранного пуст. Во время практики нажимай на сердечко, чтобы сохранить вопросы, к которым хочешь вернуться.";
 "back" = "Назад";
 "next" = "Далее";
 
@@ -322,11 +356,14 @@
 
 "tab_home_title" = "Главная";
 "tab_learn_title" = "Учиться";
+"tab_test_title" = "Тест";
 "tab_premium_title" = "Премиум";
 "tab_settings_title" = "Настройки";
+"learn_header_title" = "Учиться";
+"learn_header_dialog_message" = "Я готовлю для тебя новое учебное путешествие. Совсем скоро начнём!";
 "tab_settings_beta_title" = "Settings BETA";
+"tab_settings_beta2_title" = "Settings BETA 2";
 "main_tab_bar_accessibility_label" = "Основная навигация";
-"settings_subtitle" = "Настрой приложение так, как удобно тебе учиться.";
 "settings_beta_title" = "Settings BETA";
 "settings_beta_detail_placeholder" = "Мы ещё создаём этот раздел. Твоё мнение поможет понять, что здесь нужно оставить.";
 "settings_test_alerts_button" = "Тестовые уведомления";
@@ -344,7 +381,85 @@
 "settings_appearance_title" = "Оформление";
 "settings_premium_title" = "Премиум";
 "settings_reset_app" = "Сбросить приложение";
-"settings_current_version" = "Текущая версия";
-"settings_installed_version" = "Установленная версия";
-"settings_latest_updates" = "Последние обновления";
+
+"premium_hub_placeholder_title" = "Премиум скоро появится";
+"premium_hub_placeholder_message" = "Мы готовим новые бусты, тренировки и бонусы для тебя. Следи за новостями!";
+
+"premium_unlock_message" = "Открой полный опыт Hero с Premium";
+"premium_unlock_title" = "Открой полный опыт Hero";
+"premium_unlock_description" = "Premium даёт тебе полный доступ ко всем учебным материалам, отслеживанию прогресса и многому другому.";
+"premium_table_benefits" = "Возможности";
+"premium_table_free" = "Бесплатно";
+"premium_table_premium" = "Premium";
+"premium_feature_daily_lessons" = "Ежедневные уроки";
+"premium_feature_unlimited_learning" = "Неограниченное обучение";
+"premium_feature_no_ads" = "Без рекламы";
+"premium_feature_detailed_progress" = "Детальный прогресс";
+"premium_feature_hints" = "Подсказки";
+"premium_feature_favorites" = "Избранное";
+"premium_subscribe_now" = "Подписаться сейчас";
+"premium_choose_plan" = "Выбери свой план";
+"premium_plan_monthly" = "Ежемесячно";
+"premium_plan_lifetime" = "Навсегда";
+"premium_per_month" = "в месяц";
+"premium_limited_offer" = "Ограниченное предложение";
+"premium_regular_price" = "Обычная цена";
+"premium_continue" = "Продолжить";
+"premium_terms_monthly_part1" = "При подписке с твоего Apple-аккаунта будет списано {price}€. Твоя подписка Hero Premium будет автоматически продлеваться по той же цене в конце текущего периода подписки, если не отменить её не менее чем за 24 часа до окончания периода.";
+"premium_terms_lifetime_part1" = "При подписке с твоего Apple-аккаунта будет списано {price}€ за пожизненный доступ. Это разовый платёж без автоматического продления.";
+"premium_terms_common" = "Ты можешь отменить подписку в любое время в настройках App Store. Подробности смотри в наших Условиях использования и Политике конфиденциальности.";
+"premium_terms_lifetime_common" = "Подробности смотри в наших Условиях использования и Политике конфиденциальности.";
+"premium_trial_active" = "Бесплатный пробный период активен";
+"premium_trial_days_remaining" = "Осталось {days} дней";
+"premium_trial_ending_soon" = "Скоро закончится";
+"premium_trial_offer_title" = "Начни с 3 дней бесплатно";
+"premium_trial_offer_description" = "Попробуй Premium функции бесплатно, затем продолжай с подпиской";
+"premium_trial_badge" = "3 дня бесплатно";
+"premium_start_trial" = "Начать бесплатный пробный период";
+"premium_favorites_alert_title" = "Обнови до Premium";
+"premium_favorites_alert_message" = "Обнови до Premium, чтобы видеть свои избранные";
+"premium_favorites_alert_cancel" = "Отмена";
+"premium_favorites_alert_upgrade" = "Обновить";
+
+// =============================================================================
+//   ОБРАТНАЯ СВЯЗЬ / СООБЩИТЬ О ВОПРОСЕ
+// =============================================================================
+
+"report_question" = "Сообщить о вопросе";
+"question_id" = "ID вопроса";
+"category" = "Категория";
+"question_info" = "Информация о вопросе";
+"feedback_type" = "Тип обратной связи";
+"what_would_you_like_to_report" = "О чём ты хочешь сообщить?";
+"additional_details" = "Дополнительные детали";
+"feedback_details_hint" = "Пожалуйста, опиши проблему подробно. Это поможет нам быстрее её исправить.";
+"email_optional" = "Email (необязательно)";
+"contact_info" = "Контактная информация";
+"feedback_email_hint" = "Если ты укажешь свой email, мы сможем ответить на твою обратную связь.";
+"submit" = "Отправить";
+"feedback_submitted" = "Обратная связь отправлена";
+"feedback_submitted_message" = "Спасибо за твою обратную связь! Мы её рассмотрим и внесём улучшения.";
+"error" = "Ошибка";
+"feedback_type_question_error" = "Ошибка в вопросе";
+"feedback_type_question_unclear" = "Вопрос неясен";
+"feedback_type_answer_incorrect" = "Неверный ответ";
+"feedback_type_translation_issue" = "Проблема с переводом";
+"feedback_type_other" = "Другое";
+
+// =============================================================================
+//   ПОДСКАЗКИ
+// =============================================================================
+
+"hint_title" = "Подсказка";
+"close" = "Закрыть";
+"no_hint_available" = "Для этого вопроса пока нет подсказки.";
+
+// =============================================================================
+//   ОЦЕНКА ПРИЛОЖЕНИЯ
+// =============================================================================
+
+"rating_prompt_title" = "Нравится Hero?";
+"rating_prompt_message" = "Если Hero помогает тебе справляться с вопросами, мы будем рады узнать об этом! Быстрая оценка помогает другим ученикам тоже нас найти.";
+"rating_prompt_rate_now" = "Сделать сейчас";
+"rating_prompt_ask_later" = "Спросить позже";
 

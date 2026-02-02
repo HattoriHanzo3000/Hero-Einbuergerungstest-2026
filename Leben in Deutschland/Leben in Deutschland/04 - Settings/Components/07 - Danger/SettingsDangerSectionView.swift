@@ -39,14 +39,15 @@ struct SettingsDangerSectionView: View {
 
 #Preview("Danger Section") {
     let languageManager = LanguageManager()
-    let stateManager = StateManager()
+    let stateManager = StateManager.shared
     let soundManager = SoundManager.shared
     let viewModel = SettingsDangerViewModel(
+        resetService: SettingsResetService.shared,
         soundManager: soundManager,
         languageManager: languageManager,
         stateManager: stateManager
     )
-    return SettingsDangerSectionView(
+    SettingsDangerSectionView(
         viewModel: viewModel
     )
     .environmentObject(languageManager)

@@ -11,10 +11,12 @@ import SwiftUI
 struct LearnHeaderContent: View {
     @Binding var showDialog: Bool
     
-    private var topPadding: CGFloat { MainScreenConstants.adaptiveValue(56) }
-    private var bottomPadding: CGFloat { MainScreenConstants.adaptiveValue(18) }
-    private var horizontalPadding: CGFloat { MainScreenConstants.adaptiveValue(24) }
-    private var interItemSpacing: CGFloat { MainScreenConstants.adaptiveValue(12) }
+    @Environment(\.layoutMetrics) private var layoutMetrics
+    
+    private var topPadding: CGFloat { layoutMetrics.adaptive(56) }
+    private var bottomPadding: CGFloat { layoutMetrics.adaptive(18) }
+    private var horizontalPadding: CGFloat { layoutMetrics.adaptive(24) }
+    private var interItemSpacing: CGFloat { layoutMetrics.adaptive(12) }
     
     var body: some View {
         VStack(alignment: .leading, spacing: interItemSpacing) {
@@ -29,31 +31,11 @@ struct LearnHeaderContent: View {
         .padding(.horizontal, horizontalPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            skyGradientBackground
+            HeroHeaderBackground()
                 .ignoresSafeArea(edges: .top)
         }
         .shadow(color: Color.black.opacity(0.08), radius: 12, y: 10)
         .accessibilityAddTraits(.isHeader)
-    }
-}
-
-private extension LearnHeaderContent {
-    var skyGradientBackground: some View {
-        ZStack {
-            Rectangle()
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            Color("AppBlueLagoon").opacity(0.45),
-                            Color("AppBlueLagoon").opacity(0.18),
-                            Color.clear
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-            
-        }
     }
 }
 
@@ -63,5 +45,6 @@ private extension LearnHeaderContent {
     
     LearnHeaderContent(showDialog: $showDialog)
         .environmentObject(LanguageManager())
+        .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
 
