@@ -44,26 +44,26 @@ private struct SectionContainerStyle: ViewModifier {
     @Environment(\.layoutMetrics) private var layoutMetrics
     
     func body(content: Content) -> some View {
-        let cornerRadius = layoutMetrics.adaptive(28)
+        let cornerRadius = layoutMetrics.adaptive(32)
         
         return content
-            .padding(layoutMetrics.adaptive(20))
+            .padding(layoutMetrics.adaptive(22))
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(.thinMaterial)
-                    .shadow(color: Color.black.opacity(0.08), radius: 14, y: 6)
+                    .fill(Color(.secondarySystemGroupedBackground))
+                    .shadow(color: Color.black.opacity(0.06), radius: 12, y: 4)
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                             .stroke(
                                 LinearGradient(
                                     colors: [
-                                        Color.white.opacity(0.55),
-                                        Color.white.opacity(0.12)
+                                        Color.white.opacity(0.45),
+                                        Color.white.opacity(0.1)
                                     ],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 ),
-                                lineWidth: 0.8
+                                lineWidth: 0.6
                             )
                 )
             )

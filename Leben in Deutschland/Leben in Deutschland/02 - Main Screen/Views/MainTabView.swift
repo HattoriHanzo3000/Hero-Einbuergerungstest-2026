@@ -9,6 +9,7 @@ struct MainTabView: View {
     enum Tab: Hashable {
         case home
         case test
+        case progress
         case premium
         case settings
     }
@@ -39,6 +40,16 @@ struct MainTabView: View {
                 }
                 .tag(Tab.test)
             
+            ProgressTabView()
+                .tabItem {
+                    Label {
+                        Text("tab_progress_title".localized)
+                    } icon: {
+                        Image(systemName: "chart.bar.fill")
+                    }
+                }
+                .tag(Tab.progress)
+            
             PremiumHubView()
                 .tabItem {
                     Label {
@@ -58,6 +69,10 @@ struct MainTabView: View {
                     }
                 }
                 .tag(Tab.settings)
+        }
+        .tint(Color("AppOrange"))
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            Color.clear.frame(height: 24)
         }
         .accessibilityLabel("main_tab_bar_accessibility_label".localized)
     }

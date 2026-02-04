@@ -15,8 +15,8 @@ struct HomeLearnSection: View {
     @State private var showPremiumAlert = false
     
     var body: some View {
-        SectionContainer(title: "home_learn_section_title") {
-            VStack(spacing: layoutMetrics.adaptive(12)) {
+        SectionContainer(title: "home_learn_section_title", spacing: 18) {
+            VStack(spacing: layoutMetrics.adaptive(16)) {
                 Button {
                     HapticManager.shared.lightImpact()
                     router.push(.spacedRepetition)
@@ -27,7 +27,7 @@ struct HomeLearnSection: View {
                         color: Color("AppBlueLagoon")
                     )
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(BouncyScaleButtonStyle())
                 
                 Button {
                     HapticManager.shared.lightImpact()
@@ -39,7 +39,7 @@ struct HomeLearnSection: View {
                         color: Color("AppCaribean")
                     )
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(BouncyScaleButtonStyle())
                 
                 Button {
                     HapticManager.shared.lightImpact()
@@ -56,7 +56,7 @@ struct HomeLearnSection: View {
                         isLocked: !premiumManager.isPremium
                     )
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(BouncyScaleButtonStyle())
                 .alert("premium_favorites_alert_title".localized, isPresented: $showPremiumAlert) {
                     Button("premium_favorites_alert_cancel".localized, role: .cancel) { }
                     Button("premium_favorites_alert_upgrade".localized) {
@@ -67,6 +67,7 @@ struct HomeLearnSection: View {
                 }
             }
         }
+        .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
     }
 }
 
@@ -94,27 +95,38 @@ private struct LearnButtonContent: View {
                         .offset(x: layoutMetrics.adaptive(12), y: -layoutMetrics.adaptive(12))
                 }
             }
-            .frame(width: layoutMetrics.adaptive(48), height: layoutMetrics.adaptive(48))
+            .frame(width: layoutMetrics.adaptive(52), height: layoutMetrics.adaptive(52))
             .background(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(12), style: .continuous)
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
                     .fill(color)
             )
             
             Text(title.localized)
                 .font(.system(.headline, design: .rounded).weight(.semibold))
                 .foregroundColor(.primary)
+                .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             Image(systemName: "chevron.right")
-                .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold))
+                .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold, design: .rounded))
                 .foregroundColor(.secondary)
         }
-        .padding(layoutMetrics.adaptive(16))
+        .padding(layoutMetrics.adaptive(18))
         .background(
-            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
-                .fill(Color(.systemGray6).opacity(0.4))
+            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(20), style: .continuous)
+                .fill(Color(.tertiarySystemBackground).opacity(0.9))
         )
         .contentShape(Rectangle())
+    }
+}
+
+// MARK: - Bouncy Scale Button Style
+/// Playful press scale for a friendly, cartoon-like feel.
+private struct BouncyScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .animation(.spring(response: 0.35, dampingFraction: 0.7), value: configuration.isPressed)
     }
 }
 
@@ -122,6 +134,7 @@ private struct LearnButtonContent: View {
 #Preview {
     HomeLearnSection()
         .environment(AppRouter())
+        .environmentObject(PremiumManager.shared)
         .padding()
         .background(Color(.systemBackground))
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))

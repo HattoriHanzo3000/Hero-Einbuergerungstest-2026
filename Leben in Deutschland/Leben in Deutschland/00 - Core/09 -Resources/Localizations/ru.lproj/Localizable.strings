@@ -296,10 +296,15 @@
 // =============================================================================
 
 "statistics_title" = "Твой прогресс";
-"statistics_wrong_title" = "Повтори - отвечен неправильно";
-"statistics_familiar_title" = "Знакомо - 1 раз правильно";
-"statistics_reinforced_title" = "Закреплено - 2 раза правильно";
-"statistics_mastered_title" = "Усвоено - 3 раза правильно";
+"statistics_wrong_title" = "Неправильно";
+"statistics_familiar_title" = "Знакомо";
+"statistics_reinforced_title" = "Закреплено";
+"statistics_mastered_title" = "Усвоено";
+"statistics_wrong_description" = "Отвечено неправильно";
+"statistics_familiar_description" = "1 раз правильно";
+"statistics_reinforced_description" = "2 раза правильно";
+"statistics_mastered_description" = "3 раза и более правильно";
+"statistics_card_flip_hint" = "Двойное нажатие переворачивает карточку";
 
 // =============================================================================
 //   GAMIFICATION
@@ -357,6 +362,7 @@
 "tab_home_title" = "Главная";
 "tab_learn_title" = "Учиться";
 "tab_test_title" = "Тест";
+"tab_progress_title" = "Прогресс";
 "tab_premium_title" = "Премиум";
 "tab_settings_title" = "Настройки";
 "learn_header_title" = "Учиться";

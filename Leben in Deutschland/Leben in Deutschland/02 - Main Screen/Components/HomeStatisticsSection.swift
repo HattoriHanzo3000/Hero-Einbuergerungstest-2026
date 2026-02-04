@@ -1,180 +1,298 @@
 import SwiftUI
 
 // MARK: - Home Statistics Section
-/// Displays the learner's readiness as a radial progress indicator with contextual messaging.
+/// Displays the learner's readiness using the B2 Beruf–style multi-ring chart and gradient stat cards.
 struct HomeStatisticsSection: View {
     let statistics: HomeStatisticsModel
     @Environment(\.layoutMetrics) private var layoutMetrics
-    
-    private var normalizedProgress: Double {
-        let clamped = min(max(statistics.readinessPercentage, 0), 100)
-        return Double(clamped) / 100.0
-    }
-    
-    var body: some View {
-        SectionContainer(title: "home_statistics_title") {
-            VStack(spacing: layoutMetrics.adaptive(24)) {
-                HomeReadinessRingView(
-                    readinessPercentage: statistics.readinessPercentage,
-                    progress: normalizedProgress
-                )
+    @Environment(\.colorScheme) private var colorScheme
 
-                HomeStatisticsBreakdownView(statistics: statistics)
+    var body: some View {
+        SectionContainer(title: "home_statistics_title", spacing: 18) {
+            VStack(spacing: layoutMetrics.adaptive(20)) {
+                HomeRingChartView(
+                    progress: (wrong: statistics.wrong, familiar: statistics.familiar, reinforced: statistics.reinforced, mastered: statistics.mastered, total: statistics.totalTrackedQuestions),
+                    readinessPercentage: statistics.readinessPercentage,
+                    colorScheme: colorScheme
+                )
+                .frame(maxWidth: .infinity)
+                .frame(height: layoutMetrics.adaptive(320))
+
+                HomeStatisticsGridView(statistics: statistics)
             }
             .frame(maxWidth: .infinity, alignment: .center)
         }
+        .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
         .accessibilityElement(children: .contain)
     }
 }
 
-private extension HomeStatisticsSection {
+// MARK: - Ring Chart View (B2-style multi-ring)
+private struct HomeRingChartView: View {
+    let progress: (wrong: Int, familiar: Int, reinforced: Int, mastered: Int, total: Int)
+    let readinessPercentage: Int
+    let colorScheme: ColorScheme
 
+    @State private var isPulsing = false
+    @Environment(\.layoutMetrics) private var layoutMetrics
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var ringThickness: CGFloat { layoutMetrics.adaptive(70) }
+    private var baseRadius: CGFloat { layoutMetrics.adaptive(130) }
+    private var chartSize: CGFloat { baseRadius * 2 }
+
+    private var rings: [(value: Double, color: Color, title: String, maxValue: Int)] {
+        let total = Double(max(progress.total, 1))
+        let backgroundRingColor = colorScheme == .dark ? Color.black : Color(.systemGray4)
+        let backgroundRing = (1.0, backgroundRingColor, "", 0)
+        let dataRings = [
+            (Double(progress.mastered) / total, Color("AppGreen"), "statistics_mastered_title".localized, progress.mastered),
+            (Double(progress.reinforced) / total, Color("AppBlue"), "statistics_reinforced_title".localized, progress.reinforced),
+            (Double(progress.familiar) / total, Color("AppYellow"), "statistics_familiar_title".localized, progress.familiar),
+            (Double(progress.wrong) / total, Color("AppRed"), "statistics_wrong_title".localized, progress.wrong)
+        ]
+        let sortedDataRings = dataRings.sorted { $0.3 > $1.3 }
+        return [backgroundRing] + sortedDataRings
+    }
+
+    var body: some View {
+        ZStack {
+            ForEach(Array(rings.enumerated()), id: \.offset) { index, ring in
+                HomeRingView(
+                    progress: ring.value,
+                    color: ring.color,
+                    ringIndex: index,
+                    totalRings: rings.count,
+                    ringThickness: ringThickness,
+                    baseRadius: baseRadius
+                )
+            }
+
+            Text("\(readinessPercentage)%")
+                .font(.system(.title2, design: .rounded).weight(.bold))
+                .foregroundColor(.primary)
+                .frame(width: chartSize, height: chartSize)
+                .contentShape(Rectangle())
+                .scaleEffect(isPulsing ? 1.1 : 1.0)
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.9).repeatForever(autoreverses: true), value: isPulsing)
+                .onAppear {
+                    guard !reduceMotion else { return }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        isPulsing = true
+                    }
+                }
+                .onDisappear { isPulsing = false }
+        }
+        .frame(width: chartSize, height: chartSize)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("home_statistics_accessibility_label".localized)
+        .accessibilityValue(String(format: "home_statistics_accessibility_value".localized, readinessPercentage))
+    }
 }
 
-// MARK: - Readiness Ring View
-/// Animated circular progress visualization for the readiness percentage.
-private struct HomeReadinessRingView: View {
-    let readinessPercentage: Int
+// MARK: - Single Ring View
+private struct HomeRingView: View {
     let progress: Double
-    
+    let color: Color
+    let ringIndex: Int
+    let totalRings: Int
+    let ringThickness: CGFloat
+    let baseRadius: CGFloat
+
     @State private var animatedProgress: Double = 0
-    @Environment(\.layoutMetrics) private var layoutMetrics
-    
-    private var ringSize: CGFloat { layoutMetrics.adaptive(196) }
-    private var ringLineWidth: CGFloat { layoutMetrics.adaptive(24) }
-    
+
     var body: some View {
         ZStack {
             Circle()
-                .stroke(Color(.systemGray5), lineWidth: ringLineWidth)
-            
+                .stroke(Color.clear, lineWidth: ringThickness)
+                .frame(width: baseRadius * 2, height: baseRadius * 2)
+
             Circle()
                 .trim(from: 0, to: animatedProgress)
-                .stroke(
-                    AngularGradient(
-                        colors: [
-                            Color("AppBlueLagoon"),
-                            Color("AppBlueLagoon").opacity(0.8),
-                            Color("AccentColor")
-                        ],
-                        center: .center
-                    ),
-                    style: StrokeStyle(lineWidth: ringLineWidth, lineCap: .round)
-                )
+                .stroke(color, style: StrokeStyle(lineWidth: ringThickness, lineCap: .round))
+                .frame(width: baseRadius * 2, height: baseRadius * 2)
                 .rotationEffect(.degrees(-90))
-                .animation(.spring(response: 0.7, dampingFraction: 0.85), value: animatedProgress)
-            
-            VStack(spacing: layoutMetrics.adaptive(6)) {
-                Text("\(readinessPercentage)%")
-                    .font(.system(size: layoutMetrics.adaptive(36), weight: .bold, design: .rounded))
-                    .foregroundColor(.primary)
-                
-                Text("home_statistics_caption".localized)
-                    .font(.system(.callout, design: .rounded).weight(.semibold))
-                    .foregroundColor(Color.secondary.opacity(0.9))
-            }
         }
-        .frame(width: ringSize, height: ringSize)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("home_statistics_accessibility_label".localized)
-        .accessibilityValue(
-            String(
-                format: "home_statistics_accessibility_value".localized,
-                readinessPercentage
-            )
-        )
         .onAppear {
-            animatedProgress = progress
+            if ringIndex == 0 {
+                animatedProgress = progress
+            } else {
+                animatedProgress = 0
+                withAnimation(.easeOut(duration: 1.0).delay(Double(ringIndex - 1) * 0.15)) {
+                    animatedProgress = progress
+                }
+            }
         }
         .onChange(of: progress) { _, newValue in
-            animatedProgress = newValue
-        }
-    }
-}
-
-// MARK: - Statistics Breakdown View
-/// Grid that surfaces the spaced-repetition buckets (wrong, familiar, reinforced, mastered).
-private struct HomeStatisticsBreakdownView: View {
-    let statistics: HomeStatisticsModel
-    @Environment(\.layoutMetrics) private var layoutMetrics
-    
-    private var gridColumns: [GridItem] {
-        [
-            GridItem(.flexible(), spacing: layoutMetrics.adaptive(16)),
-            GridItem(.flexible(), spacing: layoutMetrics.adaptive(16))
-        ]
-    }
-    
-    private var entries: [Entry] {
-        [
-            Entry(
-                id: "wrong",
-                titleKey: "statistics_wrong_title",
-                count: statistics.wrong,
-                color: .init(uiColor: .systemRed)
-            ),
-            Entry(
-                id: "familiar",
-                titleKey: "statistics_familiar_title",
-                count: statistics.familiar,
-                color: Color(red: 1.0, green: 0.7, blue: 0.0)
-            ),
-            Entry(
-                id: "reinforced",
-                titleKey: "statistics_reinforced_title",
-                count: statistics.reinforced,
-                color: .init(uiColor: .systemBlue)
-            ),
-            Entry(
-                id: "mastered",
-                titleKey: "statistics_mastered_title",
-                count: statistics.mastered,
-                color: .init(uiColor: .systemGreen)
-            )
-        ]
-    }
-    
-    var body: some View {
-        LazyVGrid(columns: gridColumns, spacing: layoutMetrics.adaptive(16)) {
-            ForEach(entries) { entry in
-                VStack(spacing: layoutMetrics.adaptive(8)) {
-                    Text("\(entry.count)")
-                        .font(.system(size: layoutMetrics.adaptive(24), weight: .bold, design: .rounded))
-                        .foregroundColor(entry.color)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    Text(entry.titleKey.localized)
-                        .font(.system(.subheadline, design: .rounded).weight(.semibold))
-                        .foregroundColor(.primary)
-                        .multilineTextAlignment(.leading)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(layoutMetrics.adaptive(14))
-                .background(
-                    RoundedRectangle(cornerRadius: layoutMetrics.adaptive(20), style: .continuous)
-                        .fill(Color(.systemGray6).opacity(0.55))
-                )
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(entry.accessibilityLabel)
+            withAnimation(.easeOut(duration: 0.8)) {
+                animatedProgress = newValue
             }
         }
     }
 }
 
-private extension HomeStatisticsBreakdownView {
-    struct Entry: Identifiable {
-        let id: String
-        let titleKey: String
-        let count: Int
-        let color: Color
-        
-        var accessibilityLabel: String {
-            String(
-                format: "%@ – %d",
-                titleKey.localized,
-                count
+// MARK: - Statistics Grid View (B2-style 2x2 gradient cards)
+private struct HomeStatisticsGridView: View {
+    let statistics: HomeStatisticsModel
+    @Environment(\.layoutMetrics) private var layoutMetrics
+
+    private var columns: [GridItem] {
+        [
+            GridItem(.flexible(), spacing: layoutMetrics.adaptive(12)),
+            GridItem(.flexible(), spacing: layoutMetrics.adaptive(12))
+        ]
+    }
+
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: layoutMetrics.adaptive(12)) {
+            HomeStatisticsGridCard(
+                titleKey: "statistics_wrong_title",
+                count: statistics.wrong,
+                descriptionKey: "statistics_wrong_description",
+                gradient: LinearGradient(
+                    colors: [
+                        Color("AppRed"),
+                        Color("AppRed").opacity(0.85),
+                        Color("AppRed").opacity(0.7)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                layoutMetrics: layoutMetrics
+            )
+            HomeStatisticsGridCard(
+                titleKey: "statistics_familiar_title",
+                count: statistics.familiar,
+                descriptionKey: "statistics_familiar_description",
+                gradient: LinearGradient(
+                    colors: [
+                        Color("AppYellow"),
+                        Color("AppYellow").opacity(0.9),
+                        Color("AppYellow").opacity(0.75)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                layoutMetrics: layoutMetrics
+            )
+            HomeStatisticsGridCard(
+                titleKey: "statistics_reinforced_title",
+                count: statistics.reinforced,
+                descriptionKey: "statistics_reinforced_description",
+                gradient: LinearGradient(
+                    colors: [
+                        Color("AppBlue"),
+                        Color("AppBlue").opacity(0.9),
+                        Color("AppBlue").opacity(0.75)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                layoutMetrics: layoutMetrics
+            )
+            HomeStatisticsGridCard(
+                titleKey: "statistics_mastered_title",
+                count: statistics.mastered,
+                descriptionKey: "statistics_mastered_description",
+                gradient: LinearGradient(
+                    colors: [
+                        Color("AppGreen"),
+                        Color("AppGreen").opacity(0.9),
+                        Color("AppGreen").opacity(0.75)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                layoutMetrics: layoutMetrics
             )
         }
+    }
+}
+
+// MARK: - Statistics Grid Card (B2-style gradient card, flips to show description)
+private struct HomeStatisticsGridCard: View {
+    let titleKey: String
+    let count: Int
+    let descriptionKey: String
+    let gradient: LinearGradient
+    let layoutMetrics: LayoutMetrics
+
+    @State private var isFlipped = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var cardBackground: some View {
+        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
+            .fill(gradient)
+            .overlay(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [.white.opacity(0.2), .white.opacity(0.05)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 0.5
+                    )
+            )
+    }
+
+    var body: some View {
+        ZStack {
+            frontFace
+                .opacity(isFlipped ? 0 : 1)
+            backFace
+                .rotation3DEffect(reduceMotion ? .degrees(0) : .degrees(180), axis: (x: 0, y: 1, z: 0))
+                .opacity(isFlipped ? 1 : 0)
+        }
+        .rotation3DEffect(reduceMotion ? .degrees(0) : .degrees(isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
+        .frame(minHeight: layoutMetrics.adaptive(100))
+        .contentShape(Rectangle())
+        .onTapGesture {
+            HapticManager.shared.lightImpact()
+            withAnimation(reduceMotion ? .easeInOut(duration: 0.25) : .spring(response: 0.4, dampingFraction: 0.75)) {
+                isFlipped.toggle()
+            }
+        }
+        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel("\(titleKey.localized) – \(count)")
+        .accessibilityValue(descriptionKey.localized)
+        .accessibilityHint("statistics_card_flip_hint".localized)
+    }
+
+    /// Front: row 1 = number (data), row 2 = title (Wrong, Familiar, Reinforced, Mastered). Default side shown.
+    private var frontFace: some View {
+        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
+            Text("\(count)")
+                .font(.system(.title3, design: .rounded).weight(.bold))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text(titleKey.localized)
+                .font(.system(.subheadline, design: .rounded).weight(.semibold))
+                .foregroundColor(.white.opacity(0.95))
+                .lineLimit(nil)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(layoutMetrics.adaptive(16))
+        .frame(maxWidth: .infinity, minHeight: layoutMetrics.adaptive(100), alignment: .leading)
+        .background(cardBackground)
+    }
+
+    private var backFace: some View {
+        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
+            Text(descriptionKey.localized)
+                .font(.system(.footnote, design: .rounded).weight(.semibold))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(layoutMetrics.adaptive(16))
+        .frame(maxWidth: .infinity, minHeight: layoutMetrics.adaptive(100), alignment: .leading)
+        .background(cardBackground)
     }
 }
 
@@ -190,8 +308,7 @@ private extension HomeStatisticsBreakdownView {
             totalQuestions: LayoutMetrics.totalFederalQuestions
         )
     )
-        .padding()
-        .background(Color(.systemBackground))
-        .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
+    .padding()
+    .background(Color(.systemBackground))
+    .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
-

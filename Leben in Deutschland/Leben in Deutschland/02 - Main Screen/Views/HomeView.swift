@@ -13,8 +13,11 @@ struct HomeView: View {
     @State private var savedTestDate: Date? = OnboardingPreferences.shared.testDate
     @State private var showRatingPrompt = false
     
-    private var verticalSpacing: CGFloat { layoutMetrics.adaptive(24) }
-    private var footerPadding: CGFloat { layoutMetrics.adaptive(32) }
+    /// Generous spacing between sections for a friendly, relaxed layout.
+    private var verticalSpacing: CGFloat { layoutMetrics.adaptive(28) }
+    /// Tighter gap between header and learn section.
+    private var headerToLearnSpacing: CGFloat { layoutMetrics.adaptive(12) }
+    private var footerPadding: CGFloat { layoutMetrics.adaptive(36) }
     
     init(viewModel: HomeViewModel = HomeViewModel()) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -23,45 +26,37 @@ struct HomeView: View {
     var body: some View {
         NavigationStack(path: $router.navigationPath) {
         GeometryReader { geometry in
-            ZStack(alignment: .top) {
-                VStack(spacing: 0) {
-                    HeroHeaderBackground()
-                        .frame(height: geometry.size.height * 0.55 + geometry.safeAreaInsets.top)
-                        .ignoresSafeArea(edges: .top)
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: verticalSpacing) {
+                    MainHeaderContent(
+                        readinessPercentage: viewModel.statistics.readinessPercentage,
+                        showDialog: $showDialog,
+                        savedTestDate: $savedTestDate
+                    )
+                    .padding(.horizontal, layoutMetrics.adaptive(20))
+                    .padding(.top, geometry.safeAreaInsets.top + layoutMetrics.adaptive(24))
                     
-                    Color(.systemBackground)
-                }
-                .ignoresSafeArea()
-                
-                ScrollView(.vertical, showsIndicators: false) {
-            VStack(spacing: verticalSpacing) {
-                MainHeaderContent(
-                    readinessPercentage: viewModel.statistics.readinessPercentage,
-                    showDialog: $showDialog,
-                    savedTestDate: $savedTestDate
-                )
-                        .padding(.top, geometry.safeAreaInsets.top + layoutMetrics.adaptive(24))
-                
-                    HomeLearnSection()
-                        .padding(.horizontal, layoutMetrics.adaptive(20))
-                    
-                HomeStatisticsSection(
-                    statistics: viewModel.statistics
-                )
-                        .padding(.horizontal, layoutMetrics.adaptive(20))
-                
-                        HomeFooterSection()
+                    VStack(spacing: verticalSpacing) {
+                        HomeLearnSection()
                             .padding(.horizontal, layoutMetrics.adaptive(20))
-                    .transition(.opacity.combined(with: .move(edge: .bottom)))
-            }
-                    .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
+                        HomeStatisticsSection(
+                            statistics: viewModel.statistics
+                        )
+                        .padding(.horizontal, layoutMetrics.adaptive(20))
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    }
+                    .padding(.top, headerToLearnSpacing)
+                    .padding(.bottom, verticalSpacing)
                     .frame(maxWidth: .infinity, alignment: .top)
+                    .background(Color(.systemBackground))
                 }
-                .frame(width: geometry.size.width)
+                .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
+                .frame(maxWidth: .infinity, alignment: .top)
             }
+            .frame(width: geometry.size.width)
+            .background(Color(.systemBackground))
         }
         .background(Color(.systemBackground).ignoresSafeArea())
-        .ignoresSafeArea(edges: .top)
             .navigationDestination(for: AppRouter.Destination.self) { destination in
                 destinationView(for: destination)
             }
@@ -133,6 +128,8 @@ struct HomeView: View {
     )
         .environmentObject(LanguageManager())
         .environmentObject(StateManager.shared)
+        .environmentObject(PremiumManager.shared)
+        .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
 
 // MARK: - Private Helpers

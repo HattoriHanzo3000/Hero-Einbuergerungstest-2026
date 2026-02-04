@@ -295,10 +295,15 @@
 // =============================================================================
 
 "statistics_title" = "Dein Fortschritt";
-"statistics_wrong_title" = "Nochmal - falsch beantwortet";
-"statistics_familiar_title" = "Vertraut - 1x richtig";
-"statistics_reinforced_title" = "Gefestigt - 2x richtig";
-"statistics_mastered_title" = "Beherrscht - 3x richtig";
+"statistics_wrong_title" = "Falsch";
+"statistics_familiar_title" = "Bekannt";
+"statistics_reinforced_title" = "Gefestigt";
+"statistics_mastered_title" = "Beherrscht";
+"statistics_wrong_description" = "Falsch beantwortet";
+"statistics_familiar_description" = "1x richtig beantwortet";
+"statistics_reinforced_description" = "2x richtig beantwortet";
+"statistics_mastered_description" = "3x oder öfter richtig beantwortet";
+"statistics_card_flip_hint" = "Doppelt tippen, um die Karte umzudrehen";
 
 // =============================================================================
 //   GAMIFICATION
@@ -356,6 +361,7 @@
 "tab_home_title" = "Startseite";
 "tab_learn_title" = "Lernen";
 "tab_test_title" = "Test";
+"tab_progress_title" = "Fortschritt";
 "tab_premium_title" = "Premium";
 "tab_settings_title" = "Einstellungen";
 "learn_header_title" = "Lernen";

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import UIKit
 
 @main
 struct Leben_in_DeutschlandApp: App {
@@ -15,6 +16,10 @@ struct Leben_in_DeutschlandApp: App {
     @StateObject private var appFlow = AppFlow()
     @StateObject private var stateManager = StateManager.shared
     @AppStorage("app_appearance") private var appAppearance: String = "system"
+    
+    init() {
+        configureTabBarAppearance()
+    }
     
     var body: some Scene {
         WindowGroup {
@@ -78,6 +83,17 @@ struct Leben_in_DeutschlandApp: App {
                 .dynamicTypeSize(.xSmall ... .xxxLarge)
             }
         }
+    }
+    
+    /// Uses a solid, opaque tab bar; selected (filled) tab uses AppOrange.
+    private func configureTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor.systemBackground
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+        UITabBar.appearance().tintColor = UIColor(named: "AppOrange") ?? .systemOrange
+        UITabBar.appearance().layoutMargins = UIEdgeInsets(top: 14, left: 0, bottom: 0, right: 0)
     }
     
     // Convert saved appearance to ColorScheme

@@ -298,10 +298,15 @@
 // =============================================================================
 
 "statistics_title" = "Your Progress";
-"statistics_wrong_title" = "Retry - answered wrong";
-"statistics_familiar_title" = "Familiar - 1x correct";
-"statistics_reinforced_title" = "Reinforced - 2x correct";
-"statistics_mastered_title" = "Mastered - 3x correct";
+"statistics_wrong_title" = "Wrong";
+"statistics_familiar_title" = "Familiar";
+"statistics_reinforced_title" = "Reinforced";
+"statistics_mastered_title" = "Mastered";
+"statistics_wrong_description" = "Answered incorrectly";
+"statistics_familiar_description" = "Answered correctly 1 time";
+"statistics_reinforced_description" = "Answered correctly 2 times";
+"statistics_mastered_description" = "Answered correctly 3+ times";
+"statistics_card_flip_hint" = "Double tap to flip card";
 
 // =============================================================================
 //   GAMIFICATION
@@ -359,6 +364,7 @@
 "tab_home_title" = "Home";
 "tab_learn_title" = "Learn";
 "tab_test_title" = "Test";
+"tab_progress_title" = "Progress";
 "tab_premium_title" = "Premium";
 "tab_settings_title" = "Settings";
 "learn_header_title" = "Learn";

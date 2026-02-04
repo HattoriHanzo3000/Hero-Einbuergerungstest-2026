@@ -297,10 +297,15 @@
 // =============================================================================
 
 "statistics_title" = "Ваш прогрес";
-"statistics_wrong_title" = "Повтори - відповів неправильно";
-"statistics_familiar_title" = "Ознайомився - 1 раз правильно";
-"statistics_reinforced_title" = "Закріпив - 2 рази правильно";
-"statistics_mastered_title" = "Освоїв - 3 рази правильно";
+"statistics_wrong_title" = "Неправильно";
+"statistics_familiar_title" = "Ознайомився";
+"statistics_reinforced_title" = "Закріпив";
+"statistics_mastered_title" = "Освоїв";
+"statistics_wrong_description" = "Відповідь неправильна";
+"statistics_familiar_description" = "1 раз правильно";
+"statistics_reinforced_description" = "2 рази правильно";
+"statistics_mastered_description" = "3 рази та більше правильно";
+"statistics_card_flip_hint" = "Двічі натисніть, щоб перевернути картку";
 
 // =============================================================================
 //   GAMIFICATION
@@ -358,6 +363,7 @@
 "tab_home_title" = "Головна";
 "tab_learn_title" = "Навчання";
 "tab_test_title" = "Тест";
+"tab_progress_title" = "Прогрес";
 "tab_premium_title" = "Преміум";
 "tab_settings_title" = "Налаштування";
 "learn_header_title" = "Навчання";

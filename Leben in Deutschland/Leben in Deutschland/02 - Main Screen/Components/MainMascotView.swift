@@ -19,7 +19,11 @@ struct MainMascotView: View {
     // External playback trigger and completion callback
     let playSignal: UUID?
     let onPlayCompleted: (() -> Void)?
-    
+    /// When true, shows only mascot + plain text (no speech bubble).
+    let hideBubble: Bool
+    /// When hideBubble is true, use this color for the text (default: systemGray6). Use .white for dark headers.
+    let plainTextColor: Color?
+
     init(
         messageKey: String,
         messageParameters: [String]? = nil,
@@ -27,7 +31,9 @@ struct MainMascotView: View {
         showDialog: Binding<Bool>,
         autoPlayInterval: TimeInterval? = nil,
         playSignal: UUID? = nil,
-        onPlayCompleted: (() -> Void)? = nil
+        onPlayCompleted: (() -> Void)? = nil,
+        hideBubble: Bool = false,
+        plainTextColor: Color? = nil
     ) {
         self.messageKey = messageKey
         self.messageParameters = messageParameters
@@ -36,6 +42,8 @@ struct MainMascotView: View {
         self.autoPlayInterval = autoPlayInterval
         self.playSignal = playSignal
         self.onPlayCompleted = onPlayCompleted
+        self.hideBubble = hideBubble
+        self.plainTextColor = plainTextColor
     }
     
     private var formattedMessage: String {
@@ -73,14 +81,29 @@ struct MainMascotView: View {
                 Spacer()
             }
             
-            VStack(spacing: 0) {
-                Spacer()
-                dialogBubble
-                Spacer()
+            if hideBubble {
+                VStack(alignment: .leading, spacing: 0) {
+                    Spacer()
+                    Text(combinedMessage)
+                        .font(.system(.body, design: .rounded).weight(.medium))
+                        .lineSpacing(4)
+                        .foregroundColor(plainTextColor ?? Color(.systemGray6))
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .id(languageManager.currentAppLanguage)
+                    Spacer()
+                }
+            } else {
+                VStack(spacing: 0) {
+                    Spacer()
+                    dialogBubble
+                    Spacer()
+                }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.trailing, trailingInset)
+        .padding(.trailing, hideBubble ? 0 : trailingInset)
         .onChange(of: playSignal) { _, _ in
             if reduceMotion {
                 onPlayCompleted?()
@@ -210,8 +233,7 @@ private extension MainMascotView {
     
     var bubbleBackground: some View {
         RoundedRectangle(cornerRadius: bubbleCornerRadius)
-            .fill(Color.white.opacity(0.38))
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: bubbleCornerRadius))
+            .fill(Color(.secondarySystemGroupedBackground))
     }
     
     var bubbleHighlight: some View {

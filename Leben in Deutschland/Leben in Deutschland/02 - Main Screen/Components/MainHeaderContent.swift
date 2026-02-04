@@ -14,11 +14,11 @@ struct MainHeaderContent: View {
         stateManager.selectedState
     }
     
-    // Adaptive layout metrics
+    // Adaptive layout metrics — generous spacing for a friendly, relaxed header
     private var topPadding: CGFloat { layoutMetrics.adaptive(56) }
-    private var bottomPadding: CGFloat { layoutMetrics.adaptive(18) }
+    private var bottomPadding: CGFloat { layoutMetrics.adaptive(22) }
     private var horizontalPadding: CGFloat { layoutMetrics.adaptive(24) }
-    private var headerSpacing: CGFloat { layoutMetrics.adaptive(12) }
+    private var headerSpacing: CGFloat { layoutMetrics.adaptive(14) }
     
     var body: some View {
         VStack(alignment: .leading, spacing: headerSpacing) {
@@ -39,9 +39,7 @@ struct MainHeaderContent: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             HeroHeaderBackground()
-                .ignoresSafeArea(edges: .top)
         }
-        .shadow(color: Color.black.opacity(0.08), radius: 12, y: 10)
         .debugBorder(Color.red.opacity(0.85), cornerRadius: 0, isVisible: debugBordersEnabled)
         .accessibilityAddTraits(.isHeader)
     }
