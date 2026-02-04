@@ -55,6 +55,7 @@ struct QuizAnswerOptionButton: View {
     let isEnabled: Bool
     let accessibilityLabel: String?
     let accessibilityHint: String?
+    let suppressGlow: Bool
     let action: () -> Void
     
     init(
@@ -65,6 +66,7 @@ struct QuizAnswerOptionButton: View {
         isEnabled: Bool = true,
         accessibilityLabel: String? = nil,
         accessibilityHint: String? = nil,
+        suppressGlow: Bool = false,
         action: @escaping () -> Void
     ) {
         self.primaryText = primaryText
@@ -74,6 +76,7 @@ struct QuizAnswerOptionButton: View {
         self.isEnabled = isEnabled
         self.accessibilityLabel = accessibilityLabel
         self.accessibilityHint = accessibilityHint
+        self.suppressGlow = suppressGlow
         self.action = action
     }
     
@@ -114,15 +117,14 @@ private extension QuizAnswerOptionButton {
     var labelContent: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(6)) {
             Text(primaryText)
-                .font(.system(size: layoutMetrics.adaptive(16), weight: .regular))
+                .font(.system(.body, design: .rounded).weight(.regular))
                 .foregroundColor(style.primaryTextColor)
                 .multilineTextAlignment(.leading)
-                .minimumScaleFactor(0.9)
                 .lineLimit(nil)
             
             if let secondaryText, secondaryText.isEmpty == false {
                 Text(secondaryText)
-                    .font(.system(size: layoutMetrics.adaptive(14), weight: .regular))
+                    .font(.system(.footnote, design: .rounded).weight(.regular))
                     .foregroundColor(style.secondaryTextColor)
                     .multilineTextAlignment(.leading)
                     .lineLimit(nil)
@@ -154,6 +156,7 @@ private extension QuizAnswerOptionButton {
     }
     
     var glowColor: Color {
+        guard !suppressGlow else { return .clear }
         guard colorScheme == .dark else { return .clear }
         switch state {
         case .neutral:

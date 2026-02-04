@@ -13,8 +13,8 @@ extension View {
     }
 }
 
-// MARK: - Option 1: UIKit-based Instant Tab Bar Control
-/// Uses UIKit API for instant tab bar visibility updates (no delay)
+// MARK: - Option 1: UIKit-based Tab Bar Control with Slide Animation
+/// Hides tab bar instantly; shows it with a slide-up-from-bottom animation when returning to root.
 struct TabBarVisibilityModifier: ViewModifier {
     let isHidden: Bool
     
@@ -30,10 +30,70 @@ struct TabBarVisibilityModifier: ViewModifier {
     
     private func updateTabBarVisibility(hidden: Bool) {
         DispatchQueue.main.async {
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let window = windowScene.windows.first,
-               let tabBarController = findTabBarController(in: window.rootViewController) {
-                tabBarController.tabBar.isHidden = hidden
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first,
+                  let tabBarController = findTabBarController(in: window.rootViewController) else { return }
+            let tabBar = tabBarController.tabBar
+            
+            if hidden {
+                // Animate hiding: slide down smoothly
+                // Only animate if tab bar is currently visible
+                guard !tabBar.isHidden && tabBar.alpha > 0 else {
+                    tabBar.isHidden = true
+                    return
+                }
+                
+                let height = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
+                
+                UIView.animate(
+                    withDuration: 0.35,
+                    delay: 0,
+                    usingSpringWithDamping: 0.9,
+                    initialSpringVelocity: 0.3,
+                    options: [.allowUserInteraction, .beginFromCurrentState, .curveEaseIn],
+                    animations: {
+                        tabBar.transform = CGAffineTransform(translationX: 0, y: height)
+                        tabBar.alpha = 0
+                    },
+                    completion: { _ in
+                        tabBar.isHidden = true
+                        tabBar.transform = .identity
+                        tabBar.alpha = 1
+                    }
+                )
+            } else {
+                // Animate showing: slide up from bottom
+                // First ensure tab bar is visible but positioned off-screen
+                tabBar.isHidden = false
+                tabBar.alpha = 0
+                
+                // Get the actual height - use frame if bounds is 0
+                let height = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
+                
+                // Set initial position off-screen
+                tabBar.transform = CGAffineTransform(translationX: 0, y: height)
+                
+                // Wait for next run loop to ensure tab bar is laid out, then animate
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    // Double-check tab bar is still visible and get updated height
+                    let currentHeight = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
+                    
+                    // Ensure it starts from off-screen position
+                    tabBar.transform = CGAffineTransform(translationX: 0, y: currentHeight)
+                    tabBar.alpha = 0
+                    
+                    UIView.animate(
+                        withDuration: 0.45,
+                        delay: 0,
+                        usingSpringWithDamping: 0.82,
+                        initialSpringVelocity: 0.4,
+                        options: [.allowUserInteraction, .beginFromCurrentState, .curveEaseOut],
+                        animations: {
+                            tabBar.transform = .identity
+                            tabBar.alpha = 1
+                        }
+                    )
+                }
             }
         }
     }

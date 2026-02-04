@@ -62,23 +62,25 @@ struct SpacedRepetitionQuestionCard: View {
     }
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            VStack(spacing: layoutMetrics.adaptive(20)) {
-                headerView
-                
-                ScrollView {
-                    QuestionCard(
-                        question: question,
-                        selectedAnswer: selectedAnswer,
-                        showCorrectAnswer: showCorrectAnswer,
-                        showTranslation: showTranslation,
-                        onAnswerSelected: onAnswerSelected
-                    )
-                    .padding(.bottom, layoutMetrics.adaptive(80))
-                }
+        VStack(spacing: 0) {
+            headerView
+                .padding(.bottom, layoutMetrics.adaptive(12))
+            Divider()
+                .background(Color(.separator))
+            ScrollView {
+                QuestionCard(
+                    question: question,
+                    selectedAnswer: selectedAnswer,
+                    showCorrectAnswer: showCorrectAnswer,
+                    showTranslation: showTranslation,
+                    onAnswerSelected: onAnswerSelected,
+                    suppressAnswerGlow: true
+                )
+                .padding(.bottom, layoutMetrics.adaptive(16))
             }
             .background(Color(.systemBackground))
-            
+            Divider()
+                .background(Color(.separator))
             HStack(spacing: layoutMetrics.adaptive(12)) {
                 // Hint button (appears when answer is shown)
                 if showCorrectAnswer {
@@ -92,7 +94,7 @@ struct SpacedRepetitionQuestionCard: View {
                         buttonTitle,
                         style: checkButtonStyle,
                         isEnabled: isCheckEnabled,
-                        accessibilityLabel: "check_answer_button_accessibility_label".localized
+                        accessibilityLabel: checkButtonAccessibilityLabel
                     ) {
                         onCheckTapped()
                     }
@@ -100,7 +102,9 @@ struct SpacedRepetitionQuestionCard: View {
                 }
             }
             .padding(.horizontal, layoutMetrics.adaptive(24))
+            .padding(.top, layoutMetrics.adaptive(12))
             .padding(.bottom, layoutMetrics.adaptive(24))
+            .background(Color(.systemBackground))
             .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showCorrectAnswer)
         }
         .background(Color(.systemBackground))
@@ -127,13 +131,23 @@ private extension SpacedRepetitionQuestionCard {
         showCorrectAnswer ? "next_button".localized : "check_answer_button".localized
     }
     
+    private var checkButtonAccessibilityLabel: String {
+        if showCorrectAnswer {
+            // Use the button title itself as accessibility label for "Next" button
+            return "next_button".localized
+        } else {
+            return "check_answer_button_accessibility_label".localized
+        }
+    }
+    
     private var checkButtonStyle: QuizActionButton.Style {
         QuizActionButton.Style(
             backgroundColor: Color("AppBlueLagoon"),
             disabledBackgroundColor: Color(.systemGray2),
             haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
             haloSecondaryColor: Color.white.opacity(0.18),
-            showsHaloWhenDisabled: showCorrectAnswer
+            showsHaloWhenDisabled: showCorrectAnswer,
+            suppressGlow: true
         )
     }
     
@@ -199,16 +213,6 @@ private struct HintIconButton: View {
                     radius: layoutMetrics.adaptive(22),
                     y: layoutMetrics.adaptive(10)
                 )
-                .shadow(
-                    color: colorScheme == .dark ? Color("AppOrange").opacity(0.42) : .clear,
-                    radius: layoutMetrics.adaptive(26),
-                    y: layoutMetrics.adaptive(10)
-                )
-                .shadow(
-                    color: colorScheme == .dark ? Color.white.opacity(0.18) : .clear,
-                    radius: layoutMetrics.adaptive(12),
-                    y: layoutMetrics.adaptive(2)
-                )
         }
         .buttonStyle(.plain)
         .accessibilityLabel("hint_button_title".localized)
@@ -219,108 +223,140 @@ private struct HintIconButton: View {
 // MARK: - Header
 private extension SpacedRepetitionQuestionCard {
     var headerView: some View {
+        headerContent
+            .padding(.vertical, layoutMetrics.adaptive(18))
+            .padding(.horizontal, layoutMetrics.adaptive(20))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(liquidGlassBackground)
+            .clipShape(headerRoundedRectangle)
+            .overlay(headerBorderOverlay)
+            .padding(.horizontal)
+            .padding(.top, layoutMetrics.adaptive(8))
+    }
+    
+    var headerContent: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(16)) {
-            if let onBackTapped {
-                HStack {
-                    Button(action: onBackTapped) {
-                        Image(systemName: "chevron.backward")
-                            .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
-                            .foregroundColor(Color(.systemGray6))
-                            .padding(layoutMetrics.adaptive(10))
-                            .background(
-                                Circle()
-                                    .fill(Color.white.opacity(0.18))
-                            )
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("back_button_accessibility_label".localized)
-                    
-                    Spacer()
-                }
-            }
-            
-            if let progress {
-                ProgressView(
-                    value: Double(progress.answeredCount),
-                    total: max(Double(progress.totalCount), 1)
-                )
-                .progressViewStyle(
-                    LinearProgressViewStyle(tint: Color(.systemGray6))
-                )
-                .frame(height: layoutMetrics.adaptive(8))
-                .clipShape(Capsule())
-            }
-            
+            backButtonView
+            progressView
+            questionHeaderRow
+        }
+    }
+    
+    @ViewBuilder
+    var backButtonView: some View {
+        if let onBackTapped {
             HStack {
-                HStack(spacing: 8) {
-                Text("question_label".localized + " \(question.id)")
-                    .font(.system(.headline).weight(.semibold))
-                    .foregroundColor(Color(.systemGray6))
-                    
-                    Button(action: {
-                        HapticManager.shared.lightImpact()
-                        showingFeedbackReport = true
-                    }) {
-                        Image(systemName: "flag.fill")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(Color.accentColor)
-                    }
+                Button(action: onBackTapped) {
+                    Image(systemName: "chevron.backward")
+                        .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
+                        .foregroundColor(Color(.systemGray6))
+                        .padding(layoutMetrics.adaptive(10))
+                        .background(
+                            Circle()
+                                .fill(Color.white.opacity(0.18))
+                        )
                 }
+                .buttonStyle(.plain)
+                .accessibilityLabel("back_button_accessibility_label".localized)
                 
                 Spacer()
-                
-                if let onToggleTranslation {
-                    QuizHeaderIconButton(
-                        systemName: "globe",
-                        isActive: isTranslationActive,
-                        activeTint: .orange,
-                        accessibilityLabel: "spaced_translation_button_accessibility_label".localized,
-                        accessibilityHint: nil,
-                        action: onToggleTranslation
-                    )
-                }
-                
-                if let onToggleFavorite {
-                    QuizHeaderIconButton(
-                        systemName: "heart",
-                        isActive: isFavorite,
-                        activeTint: .pink,
-                        accessibilityLabel: "spaced_favorite_button_accessibility_label".localized,
-                        accessibilityHint: nil,
-                        action: onToggleFavorite
-                    )
-                }
             }
         }
-        .padding(.vertical, layoutMetrics.adaptive(18))
-        .padding(.horizontal, layoutMetrics.adaptive(20))
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(liquidGlassBackground)
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: layoutMetrics.adaptive(32),
-                style: .continuous
+    }
+    
+    @ViewBuilder
+    var progressView: some View {
+        if let progress {
+            let progressValue = Double(progress.answeredCount)
+            let progressTotal = max(Double(progress.totalCount), 1)
+            let progressLabel = "\(progress.answeredCount) " + "of".localized + " \(progress.totalCount)"
+            
+            ProgressView(value: progressValue, total: progressTotal)
+                .progressViewStyle(LinearProgressViewStyle(tint: Color(.systemGray6)))
+                .frame(height: layoutMetrics.adaptive(8))
+                .clipShape(Capsule())
+                .accessibilityLabel(progressLabel)
+                .accessibilityValue(progressLabel)
+        }
+    }
+    
+    var questionHeaderRow: some View {
+        HStack {
+            questionLabelView
+            Spacer()
+            headerActionButtons
+        }
+    }
+    
+    var questionLabelView: some View {
+        HStack(spacing: 8) {
+            Text("question_label".localized + " \(question.id)")
+                .font(.system(.headline, design: .rounded).weight(.semibold))
+                .foregroundColor(.white)
+                .accessibilityLabel("question_label".localized + " " + question.id)
+            
+            Button(action: {
+                HapticManager.shared.lightImpact()
+                showingFeedbackReport = true
+            }) {
+                Image(systemName: "flag.fill")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(Color.accentColor)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var headerActionButtons: some View {
+        if let onToggleTranslation {
+            QuizHeaderIconButton(
+                systemName: "globe",
+                isActive: isTranslationActive,
+                activeTint: Color("AppOrange"),
+                showGlow: false,
+                accessibilityLabel: "spaced_translation_button_accessibility_label".localized,
+                accessibilityHint: nil,
+                action: onToggleTranslation
             )
+        }
+        
+        if let onToggleFavorite {
+            QuizHeaderIconButton(
+                systemName: "heart",
+                isActive: isFavorite,
+                activeTint: Color("AppPink"),
+                showGlow: false,
+                useFilledWhenActive: true,
+                accessibilityLabel: "spaced_favorite_button_accessibility_label".localized,
+                accessibilityHint: nil,
+                action: onToggleFavorite
+            )
+        }
+    }
+    
+    var headerRoundedRectangle: RoundedRectangle {
+        RoundedRectangle(
+            cornerRadius: layoutMetrics.adaptive(32),
+            style: .continuous
         )
-        .overlay(
-            RoundedRectangle(
-                cornerRadius: layoutMetrics.adaptive(32),
-                style: .continuous
-            )
-            .stroke(
-                LinearGradient(
-                    colors: [
-                        .white.opacity(0.4),
-                        .white.opacity(0.08)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.8
-            )
+    }
+    
+    var headerBorderOverlay: some View {
+        RoundedRectangle(
+            cornerRadius: layoutMetrics.adaptive(32),
+            style: .continuous
         )
-        .padding(.horizontal)
-        .padding(.top, layoutMetrics.adaptive(8))
+        .stroke(
+            LinearGradient(
+                colors: [
+                    .white.opacity(0.4),
+                    .white.opacity(0.08)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ),
+            lineWidth: 0.8
+        )
     }
 
     var liquidGlassBackground: some View {

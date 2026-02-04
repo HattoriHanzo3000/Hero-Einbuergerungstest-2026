@@ -11,19 +11,22 @@ struct QuizActionButton: View {
         let haloPrimaryColor: Color
         let haloSecondaryColor: Color
         let showsHaloWhenDisabled: Bool
+        let suppressGlow: Bool
         
         init(
             backgroundColor: Color,
             disabledBackgroundColor: Color,
             haloPrimaryColor: Color,
             haloSecondaryColor: Color,
-            showsHaloWhenDisabled: Bool = false
+            showsHaloWhenDisabled: Bool = false,
+            suppressGlow: Bool = false
         ) {
             self.backgroundColor = backgroundColor
             self.disabledBackgroundColor = disabledBackgroundColor
             self.haloPrimaryColor = haloPrimaryColor
             self.haloSecondaryColor = haloSecondaryColor
             self.showsHaloWhenDisabled = showsHaloWhenDisabled
+            self.suppressGlow = suppressGlow
         }
     }
     
@@ -77,7 +80,7 @@ private extension QuizActionButton {
     var buttonContent: some View {
         let baseButton = Button(action: action) {
             labelContent
-                .foregroundColor(isEnabled ? Color(.label) : Color(.secondaryLabel))
+                .foregroundColor(.white)
                 .padding(.vertical, layoutMetrics.adaptive(18))
                 .frame(maxWidth: .infinity)
                 .background(backgroundLayer)
@@ -120,7 +123,7 @@ private extension QuizActionButton {
                 Text(verbatim: titleText)
             }
         }
-        .font(.system(size: layoutMetrics.adaptive(20), weight: .bold))
+        .font(.system(.headline, design: .rounded).weight(.bold))
         .multilineTextAlignment(.center)
         .minimumScaleFactor(0.85)
         .allowsTightening(true)
@@ -155,6 +158,7 @@ private extension QuizActionButton {
     }
     
     var shouldShowGlow: Bool {
+        guard !style.suppressGlow else { return false }
         guard colorScheme == .dark else { return false }
         if isEnabled {
             return true

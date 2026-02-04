@@ -48,7 +48,14 @@ struct HomeView: View {
             .navigationDestination(for: AppRouter.Destination.self) { destination in
                 destinationView(for: destination)
             }
-        .onAppear(perform: handleOnAppear)
+        .onAppear {
+            handleOnAppear()
+            // Animate tab bar slide-up when returning to home view
+            // Delay to ensure navigation transition completes first
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                animateTabBarSlideUp()
+            }
+        }
         .id(stateManager.selectedState ?? "no_state")
         }
         .environment(router)
@@ -127,6 +134,83 @@ struct HomeView: View {
 
 // MARK: - Private Helpers
 private extension HomeView {
+    func animateTabBarSlideUp() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first,
+              let tabBarController = findTabBarController(in: window.rootViewController) else { return }
+        let tabBar = tabBarController.tabBar
+        
+        // Only animate if tab bar is currently hidden or off-screen
+        guard tabBar.isHidden || tabBar.alpha < 1 || tabBar.transform != .identity else { return }
+        
+        let height = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
+        
+        tabBar.isHidden = false
+        tabBar.transform = CGAffineTransform(translationX: 0, y: height)
+        tabBar.alpha = 0
+        
+        UIView.animate(
+            withDuration: 0.45,
+            delay: 0,
+            usingSpringWithDamping: 0.82,
+            initialSpringVelocity: 0.4,
+            options: [.allowUserInteraction, .beginFromCurrentState, .curveEaseOut],
+            animations: {
+                tabBar.transform = .identity
+                tabBar.alpha = 1
+            }
+        )
+    }
+    
+    func animateTabBarSlideDown() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first,
+              let tabBarController = findTabBarController(in: window.rootViewController) else { return }
+        let tabBar = tabBarController.tabBar
+        
+        // Only animate if tab bar is currently visible
+        guard !tabBar.isHidden && tabBar.alpha > 0 else { return }
+        
+        let height = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
+        
+        UIView.animate(
+            withDuration: 0.35,
+            delay: 0,
+            usingSpringWithDamping: 0.9,
+            initialSpringVelocity: 0.3,
+            options: [.allowUserInteraction, .beginFromCurrentState, .curveEaseIn],
+            animations: {
+                tabBar.transform = CGAffineTransform(translationX: 0, y: height)
+                tabBar.alpha = 0
+            },
+            completion: { _ in
+                tabBar.isHidden = true
+                tabBar.transform = .identity
+                tabBar.alpha = 1
+            }
+        )
+    }
+    
+    func findTabBarController(in viewController: UIViewController?) -> UITabBarController? {
+        guard let viewController = viewController else { return nil }
+        
+        if let tabBarController = viewController as? UITabBarController {
+            return tabBarController
+        }
+        
+        for child in viewController.children {
+            if let tabBarController = findTabBarController(in: child) {
+                return tabBarController
+            }
+        }
+        
+        if let presented = viewController.presentedViewController {
+            return findTabBarController(in: presented)
+        }
+        
+        return nil
+    }
+    
     func handleOnAppear() {
         savedTestDate = OnboardingPreferences.shared.testDate
         viewModel.refreshStatistics()

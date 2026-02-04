@@ -16,13 +16,6 @@ struct HintSheetView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Handle bar
-            RoundedRectangle(cornerRadius: 2.5)
-                .fill(Color(.systemGray6).opacity(0.5))
-                .frame(width: 36, height: 5)
-                .padding(.top, 12)
-                .padding(.bottom, 20)
-            
             // Content
             ScrollView {
                 VStack(alignment: .leading, spacing: layoutMetrics.adaptive(20)) {
@@ -30,11 +23,12 @@ struct HintSheetView: View {
                     HStack {
                         Image(systemName: "lightbulb.fill")
                             .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
-                            .foregroundColor(Color(.systemGray6))
+                            .foregroundColor(.white)
+                            .accessibilityHidden(true)
                         
                         Text("hint_title".localized)
                             .font(.system(.title2, design: .rounded).weight(.bold))
-                            .foregroundColor(Color(.systemGray6))
+                            .foregroundColor(.white)
                     }
                     .padding(.vertical, layoutMetrics.adaptive(18))
                     .padding(.horizontal, layoutMetrics.adaptive(20))
@@ -47,27 +41,34 @@ struct HintSheetView: View {
                         )
                     )
                     .padding(.horizontal, layoutMetrics.adaptive(20))
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("hint_title".localized)
                     
                     // Hint text
                     Text(hint)
                         .font(.system(.body, design: .rounded))
                         .foregroundColor(.primary)
                         .lineSpacing(4)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, layoutMetrics.adaptive(24))
                         .padding(.bottom, layoutMetrics.adaptive(24))
+                        .accessibilityLabel(hint)
                 }
+                .padding(.top, layoutMetrics.adaptive(24))
             }
+            .scrollIndicators(.hidden)
             
             // Close button with liquid glass style
             Button(action: {
                 HapticManager.shared.lightImpact()
                 dismiss()
             }) {
-                Text("close".localized)
-                    .font(.system(.headline, design: .rounded).weight(.semibold))
+                Text("close".localized.uppercased())
+                    .font(.system(.headline, design: .rounded).weight(.bold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: layoutMetrics.adaptive(50))
+                    .padding(.vertical, layoutMetrics.adaptive(18))
                     .background(
                         LinearGradient(
                             colors: [
@@ -94,15 +95,16 @@ struct HintSheetView: View {
                             )
                     )
             }
+            .accessibilityLabel("close".localized)
+            .accessibilityHint("Closes the hint sheet")
+            .accessibilityAddTraits(.isButton)
             .padding(.horizontal, layoutMetrics.adaptive(24))
+            .padding(.top, layoutMetrics.adaptive(16))
             .padding(.bottom, layoutMetrics.adaptive(24))
+            .background(Color(.systemBackground))
         }
         .frame(maxHeight: .infinity, alignment: .top)
-        .background(
-            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(24), style: .continuous)
-                .fill(Color(.systemBackground))
-                .shadow(color: .black.opacity(0.1), radius: 20, y: -5)
-        )
+        .background(Color(.systemBackground))
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
@@ -133,7 +135,7 @@ struct HintSheetView: View {
                 )
             )
             .overlay(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(24), style: .continuous)
                     .stroke(
                         LinearGradient(
                             colors: [

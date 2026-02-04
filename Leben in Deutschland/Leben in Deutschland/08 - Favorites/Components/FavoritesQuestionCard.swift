@@ -79,7 +79,8 @@ struct FavoritesQuestionCard: View {
                         selectedAnswer: selectedAnswer,
                         showCorrectAnswer: showCorrectAnswer,
                         showTranslation: showTranslation,
-                        onAnswerSelected: onAnswerSelected
+                        onAnswerSelected: onAnswerSelected,
+                        suppressAnswerGlow: true
                     )
                     .padding(.bottom, layoutMetrics.adaptive(80))
                 }
@@ -99,7 +100,7 @@ struct FavoritesQuestionCard: View {
                         buttonTitle,
                         style: checkButtonStyle,
                         isEnabled: isCheckEnabled,
-                        accessibilityLabel: "check_answer_button_accessibility_label".localized
+                        accessibilityLabel: checkButtonAccessibilityLabel
                     ) {
                         onCheckTapped()
                     }
@@ -134,13 +135,23 @@ private extension FavoritesQuestionCard {
         showCorrectAnswer ? "next_button".localized : "check_answer_button".localized
     }
     
+    private var checkButtonAccessibilityLabel: String {
+        if showCorrectAnswer {
+            // Use the button title itself as accessibility label for "Next" button
+            return "next_button".localized
+        } else {
+            return "check_answer_button_accessibility_label".localized
+        }
+    }
+    
     private var checkButtonStyle: QuizActionButton.Style {
         QuizActionButton.Style(
-            backgroundColor: Color("AppPink"),
+            backgroundColor: Color("AppBlueLagoon"),
             disabledBackgroundColor: Color(.systemGray2),
-            haloPrimaryColor: Color("AppPink").opacity(0.36),
+            haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
             haloSecondaryColor: Color.white.opacity(0.18),
-            showsHaloWhenDisabled: showCorrectAnswer
+            showsHaloWhenDisabled: showCorrectAnswer,
+            suppressGlow: true
         )
     }
     
@@ -204,16 +215,6 @@ private struct HintIconButton: View {
                     radius: layoutMetrics.adaptive(22),
                     y: layoutMetrics.adaptive(10)
                 )
-                .shadow(
-                    color: colorScheme == .dark ? Color("AppOrange").opacity(0.42) : .clear,
-                    radius: layoutMetrics.adaptive(26),
-                    y: layoutMetrics.adaptive(10)
-                )
-                .shadow(
-                    color: colorScheme == .dark ? Color.white.opacity(0.18) : .clear,
-                    radius: layoutMetrics.adaptive(12),
-                    y: layoutMetrics.adaptive(2)
-                )
         }
         .buttonStyle(.plain)
         .accessibilityLabel("hint_button_title".localized)
@@ -257,8 +258,8 @@ private extension FavoritesQuestionCard {
             HStack {
                 HStack(spacing: 8) {
                 Text("question_label".localized + " \(question.id)")
-                    .font(.system(.headline).weight(.semibold))
-                    .foregroundColor(Color(.systemGray6))
+                    .font(.system(.headline, design: .rounded).weight(.semibold))
+                    .foregroundColor(.white)
                     
                     Button(action: {
                         HapticManager.shared.lightImpact()
@@ -276,7 +277,8 @@ private extension FavoritesQuestionCard {
                     QuizHeaderIconButton(
                         systemName: "globe",
                         isActive: isTranslationActive,
-                        activeTint: .orange,
+                        activeTint: Color("AppOrange"),
+                        showGlow: false,
                         accessibilityLabel: "spaced_translation_button_accessibility_label".localized,
                         accessibilityHint: nil,
                         action: onToggleTranslation
@@ -287,7 +289,9 @@ private extension FavoritesQuestionCard {
                     QuizHeaderIconButton(
                         systemName: "heart",
                         isActive: isFavorite,
-                        activeTint: .pink,
+                        activeTint: Color("AppPink"),
+                        showGlow: false,
+                        useFilledWhenActive: true,
                         accessibilityLabel: "spaced_favorite_button_accessibility_label".localized,
                         accessibilityHint: nil,
                         action: onToggleFavorite
@@ -331,9 +335,9 @@ private extension FavoritesQuestionCard {
             .fill(
                 LinearGradient(
                     colors: [
-                        Color("AppPink").opacity(0.9),
-                        Color("AppPink").opacity(0.65),
-                        Color(red: 0.53, green: 0.08, blue: 0.30).opacity(0.45)
+                        Color("AppBlueLagoon").opacity(0.9),
+                        Color("AppBlueLagoon").opacity(0.65),
+                        Color("AppCaribean").opacity(0.45)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing

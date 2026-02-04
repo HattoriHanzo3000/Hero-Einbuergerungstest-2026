@@ -15,6 +15,7 @@ struct QuestionCard: View {
     let onAnswerSelected: (Int) -> Void
     let illustrationAssetName: String?
     let onImageTapped: (() -> Void)?
+    let suppressAnswerGlow: Bool
     
     @EnvironmentObject var languageManager: LanguageManager
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -27,7 +28,8 @@ struct QuestionCard: View {
         showTranslation: Bool,
         onAnswerSelected: @escaping (Int) -> Void,
         illustrationAssetName: String? = nil,
-        onImageTapped: (() -> Void)? = nil
+        onImageTapped: (() -> Void)? = nil,
+        suppressAnswerGlow: Bool = false
     ) {
         self.question = question
         self.selectedAnswer = selectedAnswer
@@ -36,6 +38,7 @@ struct QuestionCard: View {
         self.onAnswerSelected = onAnswerSelected
         self.illustrationAssetName = illustrationAssetName
         self.onImageTapped = onImageTapped
+        self.suppressAnswerGlow = suppressAnswerGlow
     }
     
     var body: some View {
@@ -57,8 +60,7 @@ struct QuestionCard: View {
                     
                     // Question text
                     Text(question.text)
-                        .font(.headline)
-                        .fontWeight(.semibold)
+                        .font(.system(.headline, design: .rounded).weight(.semibold))
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
@@ -66,7 +68,7 @@ struct QuestionCard: View {
                     if showTranslation, let translated = translatedQuestion {
                         if translated.text != question.text {
                             Text(translated.text)
-                                .font(.footnote)
+                                .font(.system(.footnote, design: .rounded))
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.leading)
                                 .padding(.top, 8)
@@ -80,7 +82,8 @@ struct QuestionCard: View {
                                 primaryText: option,
                                 secondaryText: secondaryOptionText(for: index, original: option),
                                 state: answerState(for: index),
-                                accessibilityLabel: accessibilityLabel(for: index, option: option)
+                                accessibilityLabel: accessibilityLabel(for: index, option: option),
+                                suppressGlow: suppressAnswerGlow
                             ) {
                                 if showCorrectAnswer == false {
                                     onAnswerSelected(index)

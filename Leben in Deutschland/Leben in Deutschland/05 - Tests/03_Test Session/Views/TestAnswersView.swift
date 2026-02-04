@@ -48,6 +48,7 @@ struct TestAnswersView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .hidesTabBar()
+        .tabBarHidden(true)
         .sheet(isPresented: $showingFeedbackReport) {
             if let q = currentQuestion {
                 FeedbackReportView(

@@ -119,6 +119,7 @@ struct TestResultsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .hidesTabBar()
+        .tabBarHidden(true)
         .sheet(isPresented: $showingAnswers) {
             TestAnswersView(viewModel: viewModel)
                 .environmentObject(languageManager)

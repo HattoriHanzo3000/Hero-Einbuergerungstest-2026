@@ -21,8 +21,13 @@ struct ProgressTabView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
+        .toolbar(.visible, for: .tabBar)
         .onAppear {
             viewModel.refreshStatistics()
+            // Ensure tab bar is visible
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                showTabBar()
+            }
         }
     }
 }
@@ -118,6 +123,53 @@ private extension ProgressTabView {
                 RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
                     .fill(Color.white.opacity(0.05))
             )
+    }
+    
+    private func showTabBar() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first,
+              let tabBarController = findTabBarController(in: window.rootViewController) else { return }
+        let tabBar = tabBarController.tabBar
+        
+        guard tabBar.isHidden else { return }
+        
+        let height = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
+        
+        tabBar.isHidden = false
+        tabBar.transform = CGAffineTransform(translationX: 0, y: height)
+        tabBar.alpha = 0
+        
+        UIView.animate(
+            withDuration: 0.45,
+            delay: 0,
+            usingSpringWithDamping: 0.82,
+            initialSpringVelocity: 0.4,
+            options: [.allowUserInteraction, .beginFromCurrentState, .curveEaseOut],
+            animations: {
+                tabBar.transform = .identity
+                tabBar.alpha = 1
+            }
+        )
+    }
+    
+    private func findTabBarController(in viewController: UIViewController?) -> UITabBarController? {
+        guard let viewController = viewController else { return nil }
+        
+        if let tabBarController = viewController as? UITabBarController {
+            return tabBarController
+        }
+        
+        for child in viewController.children {
+            if let tabBarController = findTabBarController(in: child) {
+                return tabBarController
+            }
+        }
+        
+        if let presented = viewController.presentedViewController {
+            return findTabBarController(in: presented)
+        }
+        
+        return nil
     }
 }
 
