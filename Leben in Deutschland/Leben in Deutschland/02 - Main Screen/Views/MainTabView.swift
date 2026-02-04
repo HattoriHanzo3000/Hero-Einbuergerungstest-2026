@@ -7,15 +7,14 @@ struct MainTabView: View {
     
     // MARK: - Tab Identifier
     enum Tab: Hashable {
-        case home
+        case learn
         case test
         case progress
-        case premium
         case settings
     }
     
     // MARK: - State
-    @State private var selectedTab: Tab = .home
+    @State private var selectedTab: Tab = .learn
     
     // MARK: - Body
     var body: some View {
@@ -23,12 +22,12 @@ struct MainTabView: View {
             HomeView()
                 .tabItem {
                     Label {
-                        Text("tab_home_title".localized)
+                        Text("tab_learn_title".localized)
                     } icon: {
-                        Image(systemName: "house.fill")
+                        Image(systemName: "book.fill")
                     }
                 }
-                .tag(Tab.home)
+                .tag(Tab.learn)
             
             TestTabView()
                 .tabItem {
@@ -49,16 +48,6 @@ struct MainTabView: View {
                     }
                 }
                 .tag(Tab.progress)
-            
-            PremiumHubView()
-                .tabItem {
-                    Label {
-                        Text("tab_premium_title".localized)
-                    } icon: {
-                        Image(systemName: "crown.fill")
-                    }
-                }
-                .tag(Tab.premium)
             
             SettingsDashboardView()
                 .tabItem {

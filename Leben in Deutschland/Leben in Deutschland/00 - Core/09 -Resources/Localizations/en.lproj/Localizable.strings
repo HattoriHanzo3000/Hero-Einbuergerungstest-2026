@@ -75,8 +75,8 @@
 "main_category_favorites" = "Favorites";
 "main_category_test_simulation" = "Take a Test";
 
-"home_learn_section_title" = "Learn";
-"home_learn_spaced_repetition" = "Spaced Repetition";
+"home_learn_section_title" = "Learn Options";
+"home_learn_spaced_repetition" = "Smart Learning";
 "home_learn_by_topics" = "Learn by Topics";
 "home_learn_favorites" = "Favorites";
 "spaced_repetition_title" = "Start Learning";
@@ -114,7 +114,7 @@
 "ok_button" = "OK";
 
 // Carousel
-"learn_option_spaced_repetition_title" = "Spaced Repetition";
+"learn_option_spaced_repetition_title" = "Smart Learning";
 "learn_option_topics_title" = "Learn by Topics";
 "learn_option_test_title" = "Take a Test";
 "learn_option_favorites_title" = "Favorites";

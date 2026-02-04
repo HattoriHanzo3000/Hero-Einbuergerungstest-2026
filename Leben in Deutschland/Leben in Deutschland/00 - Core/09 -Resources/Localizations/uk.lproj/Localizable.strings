@@ -74,8 +74,8 @@
 "main_category_favorites" = "Вибране";
 "main_category_test_simulation" = "Пройти тест";
 
-"home_learn_section_title" = "Навчання";
-"home_learn_spaced_repetition" = "Інтервальне повторення";
+"home_learn_section_title" = "Варіанти навчання";
+"home_learn_spaced_repetition" = "Розумне повторення";
 "home_learn_by_topics" = "Вчити за темами";
 "home_learn_favorites" = "Обране";
 "spaced_repetition_title" = "Почати навчання";
@@ -113,7 +113,7 @@
 "ok_button" = "Гаразд";
 
 // Carousel
-"learn_option_spaced_repetition_title" = "Повторення з інтервалами";
+"learn_option_spaced_repetition_title" = "Розумне повторення";
 "learn_option_topics_title" = "Вчитися за темами";
 "learn_option_test_title" = "Скласти тест";
 "learn_option_favorites_title" = "Вибране";

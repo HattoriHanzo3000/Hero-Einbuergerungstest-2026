@@ -14,34 +14,95 @@ struct MainHeaderContent: View {
         stateManager.selectedState
     }
     
-    // Adaptive layout metrics — generous spacing for a friendly, relaxed header
-    private var topPadding: CGFloat { layoutMetrics.adaptive(56) }
-    private var bottomPadding: CGFloat { layoutMetrics.adaptive(22) }
-    private var horizontalPadding: CGFloat { layoutMetrics.adaptive(24) }
-    private var headerSpacing: CGFloat { layoutMetrics.adaptive(14) }
+    // Adaptive layout metrics — match Progress tab header (liquid glass, rounded)
+    private var verticalPadding: CGFloat { layoutMetrics.adaptive(18) }
+    private var horizontalPadding: CGFloat { layoutMetrics.adaptive(20) }
+    /// Space between mascot and right column (title + slogan) — same as mascot-to-text in Progress (16).
+    private var mascotToContentSpacing: CGFloat { layoutMetrics.adaptive(16) }
+    /// Space between land title and slogan in the right column.
+    private var titleToSloganSpacing: CGFloat { layoutMetrics.adaptive(6) }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: headerSpacing) {
-            stateInformationSection
-            
+        HStack(alignment: .center, spacing: mascotToContentSpacing) {
             MainMascotView(
                 messageKey: "eagle_desc_chick",
                 messageParameters: [String(readinessPercentage)],
                 leadingMessage: testDateMessage,
                 showDialog: $showDialog,
-                autoPlayInterval: 60
+                autoPlayInterval: 60,
+                hideBubble: true,
+                showMessageWhenBubbleHidden: false
             )
+            .fixedSize(horizontal: true, vertical: false)
             .debugBorder(Color.green.opacity(0.8), cornerRadius: 20, isVisible: debugBordersEnabled)
+            
+            VStack(alignment: .leading, spacing: titleToSloganSpacing) {
+                stateTitleSection
+                sloganSection
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(.top, topPadding)
-        .padding(.bottom, bottomPadding)
+        .padding(.vertical, verticalPadding)
         .padding(.horizontal, horizontalPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background {
-            HeroHeaderBackground()
-        }
+        .fixedSize(horizontal: false, vertical: true)
+        .background(learnHeaderLiquidGlassBackground)
+        .clipShape(RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
+                .stroke(
+                    LinearGradient(
+                        colors: [.white.opacity(0.4), .white.opacity(0.08)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 0.8
+                )
+        )
+        .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
         .debugBorder(Color.red.opacity(0.85), cornerRadius: 0, isVisible: debugBordersEnabled)
         .accessibilityAddTraits(.isHeader)
+    }
+    
+    private var learnHeaderLiquidGlassBackground: some View {
+        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
+            .fill(
+                LinearGradient(
+                    colors: [
+                        Color("AppBlueLagoon").opacity(0.9),
+                        Color("AppBlueLagoon").opacity(0.65),
+                        Color("AppCaribean").opacity(0.45)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(0.20),
+                        Color.white.opacity(0.05),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Color.white.opacity(0.45), Color.white.opacity(0.12)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 0.6
+                    )
+            )
+            .background(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
+                    .fill(Color.white.opacity(0.05))
+            )
     }
     
     private func getLocalizedStateName(_ stateName: String) -> String {
@@ -102,52 +163,49 @@ struct MainHeaderContent: View {
 
 private extension MainHeaderContent {
     @ViewBuilder
-    var stateInformationSection: some View {
-        Group {
-            if let selectedState = selectedState {
-                VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
-                    Text(getLocalizedStateName(selectedState))
-                        .font(.system(.largeTitle, design: .rounded).bold())
-                        .foregroundColor(Color(.label))
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .id("state_title_\(selectedState)")
-                        .accessibilityLabel("main_header_state_accessibility_label".localized)
-                        .accessibilityValue(getLocalizedStateName(selectedState))
-                        .accessibilityHint("main_header_state_accessibility_hint".localized)
-                        .accessibilityAddTraits(.isStaticText)
-                        .debugBorder(Color.blue.opacity(0.8), cornerRadius: 20, isVisible: debugBordersEnabled)
-                    
-                    FederalStateSloganBlock(stateName: selectedState)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .debugBorder(Color.cyan.opacity(0.8), cornerRadius: 16, isVisible: debugBordersEnabled)
-                        .transition(.opacity.combined(with: .move(edge: .top)))
-                        .padding(.bottom, layoutMetrics.adaptive(8))
-                        .id(selectedState)
-                }
-            }
+    var stateTitleSection: some View {
+        if let selectedState = selectedState {
+            Text(getLocalizedStateName(selectedState))
+                .font(.system(.title, design: .rounded).bold())
+                .foregroundColor(.white)
+                .multilineTextAlignment(.leading)
+                .lineLimit(nil)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .id("state_title_\(selectedState)")
+                .accessibilityLabel("main_header_state_accessibility_label".localized)
+                .accessibilityValue(getLocalizedStateName(selectedState))
+                .accessibilityHint("main_header_state_accessibility_hint".localized)
+                .accessibilityAddTraits(.isStaticText)
+                .debugBorder(Color.blue.opacity(0.8), cornerRadius: 20, isVisible: debugBordersEnabled)
         }
-        .id(selectedState ?? "no_state")
+    }
+    
+    @ViewBuilder
+    var sloganSection: some View {
+        if let selectedState = selectedState {
+            FederalStateSloganBlock(stateName: selectedState, textColor: .white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 }
 
 // MARK: - Federal State Slogan Block
+/// Styled to match the Progress header text (mascot message): .body, .rounded, .medium, lineSpacing(4).
 private struct FederalStateSloganBlock: View {
     @EnvironmentObject private var languageManager: LanguageManager
-    @Environment(\.layoutMetrics) private var layoutMetrics
-    
+
     let stateName: String
-    
+    var textColor: Color = Color(.label)
+
     var body: some View {
         Text(localizedSlogan(for: stateName))
-            .font(.system(.body, design: .rounded).weight(.semibold))
-            .foregroundColor(Color(.label))
+            .font(.system(.body, design: .rounded).weight(.medium))
+            .lineSpacing(4)
+            .foregroundColor(textColor)
             .multilineTextAlignment(.leading)
-            .lineLimit(3)
-            .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.vertical, layoutMetrics.adaptive(2))
+            .fixedSize(horizontal: false, vertical: true)
             .accessibilityLabel("main_header_state_slogan_accessibility_label".localized)
             .accessibilityValue(localizedSlogan(for: stateName))
             .id(languageManager.currentAppLanguage)

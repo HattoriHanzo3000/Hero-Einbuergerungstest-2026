@@ -10,9 +10,6 @@ import SwiftUI
 struct HomeLearnSection: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @Environment(AppRouter.self) private var router
-    @EnvironmentObject private var premiumManager: PremiumManager
-    
-    @State private var showPremiumAlert = false
     
     var body: some View {
         SectionContainer(title: "home_learn_section_title", spacing: 18) {
@@ -43,28 +40,15 @@ struct HomeLearnSection: View {
                 
                 Button {
                     HapticManager.shared.lightImpact()
-                    if premiumManager.isPremium {
-                        router.push(.favorites)
-                    } else {
-                        showPremiumAlert = true
-                    }
+                    router.push(.favorites)
                 } label: {
                     LearnButtonContent(
                         icon: "heart.fill",
                         title: "home_learn_favorites",
-                        color: Color("AppPink"),
-                        isLocked: !premiumManager.isPremium
+                        color: Color("AppPink")
                     )
                 }
                 .buttonStyle(BouncyScaleButtonStyle())
-                .alert("premium_favorites_alert_title".localized, isPresented: $showPremiumAlert) {
-                    Button("premium_favorites_alert_cancel".localized, role: .cancel) { }
-                    Button("premium_favorites_alert_upgrade".localized) {
-                        router.push(.premium)
-                    }
-                } message: {
-                    Text("premium_favorites_alert_message".localized)
-                }
             }
         }
         .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
@@ -134,7 +118,6 @@ private struct BouncyScaleButtonStyle: ButtonStyle {
 #Preview {
     HomeLearnSection()
         .environment(AppRouter())
-        .environmentObject(PremiumManager.shared)
         .padding()
         .background(Color(.systemBackground))
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))

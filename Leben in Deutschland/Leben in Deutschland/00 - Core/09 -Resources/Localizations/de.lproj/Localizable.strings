@@ -74,8 +74,8 @@
 "main_category_favorites" = "Favoriten";
 "main_category_test_simulation" = "Test ablegen";
 
-"home_learn_section_title" = "Lernen";
-"home_learn_spaced_repetition" = "Wiederholung mit Abstand";
+"home_learn_section_title" = "Lernoptionen";
+"home_learn_spaced_repetition" = "Intelligentes Lernen";
 "home_learn_by_topics" = "Nach Themen lernen";
 "home_learn_favorites" = "Favoriten";
 "spaced_repetition_title" = "Lernen starten";
@@ -113,7 +113,7 @@
 "ok_button" = "OK";
 
 // Carousel
-"learn_option_spaced_repetition_title" = "Spaced Repetition";
+"learn_option_spaced_repetition_title" = "Intelligentes Lernen";
 "learn_option_topics_title" = "Themenweise lernen";
 "learn_option_test_title" = "Test absolvieren";
 "learn_option_favorites_title" = "Favoriten";

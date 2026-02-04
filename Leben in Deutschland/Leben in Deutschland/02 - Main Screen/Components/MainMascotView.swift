@@ -23,6 +23,8 @@ struct MainMascotView: View {
     let hideBubble: Bool
     /// When hideBubble is true, use this color for the text (default: systemGray6). Use .white for dark headers.
     let plainTextColor: Color?
+    /// When hideBubble is true, if false only the mascot is shown (no message); use when custom content is placed beside the mascot.
+    let showMessageWhenBubbleHidden: Bool
 
     init(
         messageKey: String,
@@ -33,7 +35,8 @@ struct MainMascotView: View {
         playSignal: UUID? = nil,
         onPlayCompleted: (() -> Void)? = nil,
         hideBubble: Bool = false,
-        plainTextColor: Color? = nil
+        plainTextColor: Color? = nil,
+        showMessageWhenBubbleHidden: Bool = true
     ) {
         self.messageKey = messageKey
         self.messageParameters = messageParameters
@@ -44,6 +47,7 @@ struct MainMascotView: View {
         self.onPlayCompleted = onPlayCompleted
         self.hideBubble = hideBubble
         self.plainTextColor = plainTextColor
+        self.showMessageWhenBubbleHidden = showMessageWhenBubbleHidden
     }
     
     private var formattedMessage: String {
@@ -81,7 +85,7 @@ struct MainMascotView: View {
                 Spacer()
             }
             
-            if hideBubble {
+            if hideBubble, showMessageWhenBubbleHidden {
                 VStack(alignment: .leading, spacing: 0) {
                     Spacer()
                     Text(combinedMessage)
@@ -94,7 +98,7 @@ struct MainMascotView: View {
                         .id(languageManager.currentAppLanguage)
                     Spacer()
                 }
-            } else {
+            } else if !hideBubble {
                 VStack(spacing: 0) {
                     Spacer()
                     dialogBubble

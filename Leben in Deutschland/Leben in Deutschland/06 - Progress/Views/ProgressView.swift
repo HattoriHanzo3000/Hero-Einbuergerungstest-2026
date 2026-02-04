@@ -16,7 +16,6 @@ struct ProgressTabView: View {
                 HomeStatisticsSection(statistics: viewModel.statistics)
                     .padding(.horizontal, layoutMetrics.adaptive(20))
             }
-            .padding(.top, layoutMetrics.adaptive(12))
             .padding(.bottom, layoutMetrics.adaptive(36))
             .frame(maxWidth: .infinity, alignment: .top)
         }
@@ -73,7 +72,7 @@ private extension ProgressTabView {
         )
         .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
         .padding(.horizontal, layoutMetrics.adaptive(20))
-        .padding(.top, layoutMetrics.adaptive(20))
+        .padding(.top, layoutMetrics.adaptive(8))
         .padding(.bottom, layoutMetrics.adaptive(4))
     }
 

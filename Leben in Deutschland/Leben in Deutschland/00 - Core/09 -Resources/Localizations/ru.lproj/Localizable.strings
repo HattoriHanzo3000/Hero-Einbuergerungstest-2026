@@ -74,8 +74,8 @@
 "main_category_favorites" = "Избранные";
 "main_category_test_simulation" = "Пройти тест";
 
-"home_learn_section_title" = "Обучение";
-"home_learn_spaced_repetition" = "Интервальное повторение";
+"home_learn_section_title" = "Варианты обучения";
+"home_learn_spaced_repetition" = "Умное повторение";
 "home_learn_by_topics" = "Учить по темам";
 "home_learn_favorites" = "Избранное";
 "spaced_repetition_title" = "Начать обучение";
@@ -113,7 +113,7 @@
 "ok_button" = "ОК";
 
 // Carousel
-"learn_option_spaced_repetition_title" = "Повторение по интервалам";
+"learn_option_spaced_repetition_title" = "Умное повторение";
 "learn_option_topics_title" = "Учить по темам";
 "learn_option_test_title" = "Пройти тест";
 "learn_option_favorites_title" = "Избранное";

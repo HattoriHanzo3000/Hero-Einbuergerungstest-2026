@@ -34,22 +34,15 @@ struct HomeView: View {
                         savedTestDate: $savedTestDate
                     )
                     .padding(.horizontal, layoutMetrics.adaptive(20))
-                    .padding(.top, geometry.safeAreaInsets.top + layoutMetrics.adaptive(24))
+                    .padding(.top, layoutMetrics.adaptive(8))
+                    .padding(.bottom, layoutMetrics.adaptive(4))
                     
-                    VStack(spacing: verticalSpacing) {
-                        HomeLearnSection()
-                            .padding(.horizontal, layoutMetrics.adaptive(20))
-                        HomeStatisticsSection(
-                            statistics: viewModel.statistics
-                        )
+                    HomeLearnSection()
                         .padding(.horizontal, layoutMetrics.adaptive(20))
-                        .transition(.opacity.combined(with: .move(edge: .bottom)))
-                    }
-                    .padding(.top, headerToLearnSpacing)
-                    .padding(.bottom, verticalSpacing)
-                    .frame(maxWidth: .infinity, alignment: .top)
-                    .background(Color(.systemBackground))
+                        .padding(.top, headerToLearnSpacing)
                 }
+                .frame(maxWidth: .infinity, alignment: .top)
+                .background(Color(.systemBackground))
                 .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
                 .frame(maxWidth: .infinity, alignment: .top)
             }
@@ -101,7 +94,6 @@ struct HomeView: View {
         case .favorites:
             FavoritesView()
                 .environmentObject(languageManager)
-                .environmentObject(PremiumManager.shared)
         case .spacedRepetition:
             SpacedRepetitionView()
                 .environmentObject(languageManager)

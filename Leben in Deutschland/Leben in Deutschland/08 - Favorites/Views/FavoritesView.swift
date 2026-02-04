@@ -11,11 +11,9 @@ import SwiftUI
 struct FavoritesView: View {
     @Environment(AppRouter.self) private var router
     @EnvironmentObject private var languageManager: LanguageManager
-    @EnvironmentObject private var premiumManager: PremiumManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     
     @StateObject private var viewModel = FavoritesViewModel()
-    @State private var showPremiumAlert = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -28,30 +26,9 @@ struct FavoritesView: View {
         .background(Color(.systemBackground))
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .onAppear {
-            if !premiumManager.isPremium {
-                showPremiumAlert = true
-            }
-        }
-        .alert("premium_favorites_alert_title".localized, isPresented: $showPremiumAlert) {
-            Button("premium_favorites_alert_cancel".localized, role: .cancel) {
-                router.pop()
-            }
-            Button("premium_favorites_alert_upgrade".localized) {
-                router.pop()
-                // Navigate to premium after a short delay to allow pop animation
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    router.push(.premium)
-                }
-            }
-        } message: {
-            Text("premium_favorites_alert_message".localized)
-        }
         .task {
-            if premiumManager.isPremium {
-                viewModel.setLanguageManager(languageManager)
-                await viewModel.loadFavorites(language: languageManager.currentAppLanguage)
-            }
+            viewModel.setLanguageManager(languageManager)
+            await viewModel.loadFavorites(language: languageManager.currentAppLanguage)
         }
     }
     
@@ -144,7 +121,6 @@ struct FavoritesView: View {
 #Preview("Favorites View") {
     FavoritesView()
         .environmentObject(LanguageManager())
-        .environmentObject(PremiumManager.shared)
         .environment(AppRouter())
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
@@ -152,7 +128,6 @@ struct FavoritesView: View {
 #Preview("Favorites Empty State") {
     FavoritesView()
         .environmentObject(LanguageManager())
-        .environmentObject(PremiumManager.shared)
         .environment(AppRouter())
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
