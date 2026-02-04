@@ -10,13 +10,14 @@ import SwiftUI
 struct TestTabView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
+    @StateObject private var headerViewModel = HomeViewModel()
     @State private var showDialog = false
+    @State private var savedTestDate: Date? = OnboardingPreferences.shared.testDate
     @State private var router = AppRouter()
     
     private var verticalSpacing: CGFloat { layoutMetrics.adaptive(28) }
     private var tabBarHeight: CGFloat { 49 }
     
-    // Get the "Take a Test" option
     private var testOption: LearnOptionModel {
         LearnOptionModel(
             titleKey: "learn_option_test_title",
@@ -34,51 +35,51 @@ struct TestTabView: View {
     
     var body: some View {
         NavigationStack(path: $router.navigationPath) {
-            GeometryReader { geometry in
+            ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: verticalSpacing) {
-                    LearnHeaderContent(showDialog: $showDialog)
-                        .padding(.top, geometry.safeAreaInsets.top + layoutMetrics.adaptive(24))
-                        .padding(.bottom, layoutMetrics.adaptive(20))
-                    
-                    VStack(spacing: layoutMetrics.adaptive(20)) {
-                        // Title
-                        Text(testOption.titleKey.localized)
-                            .font(.system(.title, design: .rounded).weight(.bold))
-                            .foregroundColor(testOption.palette.accentColor)
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(.horizontal, layoutMetrics.adaptive(24))
-                            .accessibilityAddTraits(.isHeader)
-                        
-                        // Moving icon
-                        Button {
-                            HapticManager.shared.lightImpact()
-                            router.push(.testSimulation)
-                        } label: {
-                            TestOptionIconView(
-                                option: testOption,
-                                size: layoutMetrics.adaptive(68) * 1.5
-                            )
+                    TestHeaderContent(
+                        readinessPercentage: headerViewModel.statistics.readinessPercentage,
+                        showDialog: $showDialog,
+                        savedTestDate: $savedTestDate
+                    )
+                    .padding(.horizontal, layoutMetrics.adaptive(20))
+                    .padding(.top, layoutMetrics.adaptive(8))
+                    .padding(.bottom, layoutMetrics.adaptive(4))
+
+                    SectionContainer(title: "learn_option_test_title", spacing: layoutMetrics.adaptive(40)) {
+                        VStack(spacing: layoutMetrics.adaptive(40)) {
+                            Button {
+                                HapticManager.shared.lightImpact()
+                                router.push(.testCountdown)
+                            } label: {
+                                TestOptionIconView(
+                                    icon: "checkmark.seal",
+                                    color: Color("AppBlueLagoon"),
+                                    layoutMetrics: layoutMetrics
+                                )
+                            }
+                            .buttonStyle(BouncyScaleButtonStyle())
+                            .accessibilityLabel("learn_option_test_title".localized)
+                            .accessibilityHint("learn_option_test_description".localized)
+
+                            Text(testOption.descriptionKey.localized)
+                                .font(.system(.body, design: .rounded).weight(.semibold))
+                                .foregroundColor(Color(.secondaryLabel))
+                                .lineSpacing(4)
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .accessibilityLabel(testOption.descriptionKey.localized)
                         }
-                        .buttonStyle(.plain)
-                        .frame(width: geometry.size.width, height: layoutMetrics.adaptive(240), alignment: .center)
-                        
-                        // Description card (explanation shield)
-                        TestOptionDescriptionCardView(
-                            option: testOption,
-                            cornerRadius: layoutMetrics.adaptive(28),
-                            horizontalInset: layoutMetrics.adaptive(20),
-                            contentPadding: layoutMetrics.adaptive(22)
-                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    
-                    Spacer()
+                    .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
+                    .padding(.horizontal, layoutMetrics.adaptive(20))
                 }
-                .padding(.bottom, layoutMetrics.adaptive(32) + tabBarHeight + geometry.safeAreaInsets.bottom)
-                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
-                .background(Color(.systemBackground))
+                .padding(.bottom, layoutMetrics.adaptive(36))
+                .frame(maxWidth: .infinity, alignment: .top)
             }
-            .ignoresSafeArea(edges: .top)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.systemBackground))
             .navigationDestination(for: AppRouter.Destination.self) { destination in
                 destinationView(for: destination)
             }
@@ -86,6 +87,8 @@ struct TestTabView: View {
         .toolbar(.visible, for: .tabBar)
         .environment(router)
         .onAppear {
+            savedTestDate = OnboardingPreferences.shared.testDate
+            headerViewModel.refreshStatistics()
             triggerDialog()
         }
     }
@@ -93,6 +96,12 @@ struct TestTabView: View {
     @ViewBuilder
     private func destinationView(for destination: AppRouter.Destination) -> some View {
         switch destination {
+        case .testCountdown:
+            TestCountdownView {
+                router.push(.testSimulation)
+            }
+            .environmentObject(languageManager)
+            .environmentObject(StateManager.shared)
         case .testSimulation:
             TestSessionView()
                 .environmentObject(languageManager)
@@ -113,90 +122,51 @@ struct TestTabView: View {
     }
 }
 
-// MARK: - Test Option Icon View (Moving Icon)
+// MARK: - Test Option Icon View (colored square, matches Home learn section style)
 private struct TestOptionIconView: View {
-    let option: LearnOptionModel
-    let size: CGFloat
-    
-    @State private var pulse = false
-    
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(option.palette.gradient)
-                .opacity(0.35)
-                .frame(width: size * 1.35, height: size * 1.35)
-                .blur(radius: 24)
-            
-            Circle()
-                .stroke(option.palette.accentColor.opacity(0.22), lineWidth: 2)
-                .frame(width: size * 1.25, height: size * 1.25)
-                .shadow(color: option.palette.accentColor.opacity(0.25), radius: 16, x: 0, y: 10)
-            
-            Image(systemName: option.iconSystemName)
-                .font(.system(size: size, weight: .semibold))
-                .symbolRenderingMode(.palette)
-                .foregroundStyle(option.palette.accentColor)
-                .accessibilityHidden(true)
-                .scaleEffect(pulse ? 1.04 : 0.96)
-                .animation(
-                    .easeInOut(duration: 1.8)
-                        .repeatForever(autoreverses: true),
-                    value: pulse
-                )
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        .onAppear {
-            pulse = true
-        }
-    }
-}
+    let icon: String
+    let color: Color
+    let layoutMetrics: LayoutMetrics
 
-// MARK: - Test Option Description Card (Explanation Shield)
-private struct TestOptionDescriptionCardView: View {
-    let option: LearnOptionModel
-    let cornerRadius: CGFloat
-    let horizontalInset: CGFloat
-    let contentPadding: CGFloat
-    
-    @Environment(\.layoutMetrics) private var layoutMetrics
-    
+    @State private var pulse = false
+
+    private var boxSize: CGFloat { layoutMetrics.adaptive(68) * 1.5 }
+    private var cornerRadius: CGFloat { layoutMetrics.adaptive(28) }
+    private var iconSize: CGFloat { layoutMetrics.adaptive(56) }
+
     var body: some View {
-        VStack(spacing: layoutMetrics.adaptive(12)) {
-            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .fill(Color.clear)
-                .frame(height: contentPadding)
-            
-            VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
-                Text(option.descriptionKey.localized)
-                    .font(.system(.body, design: .rounded).weight(.semibold))
-                    .foregroundColor(option.palette.accentColor.opacity(0.95))
-                    .lineSpacing(4)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityLabel(option.descriptionKey.localized)
-            }
-            .padding(contentPadding)
-            .frame(maxWidth: .infinity, alignment: .leading)
+        Image(systemName: icon)
+            .font(.system(size: iconSize, weight: .semibold))
+            .foregroundColor(.white)
+            .frame(width: boxSize, height: boxSize)
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(Color(.secondarySystemBackground))
-                    .overlay(
-                        option.palette.gradient
-                            .opacity(0.28)
-                            .clipShape(
-                                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                            )
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                            .stroke(option.palette.accentColor.opacity(0.24), lineWidth: 1)
-                    )
-                    .shadow(color: option.palette.accentColor.opacity(0.14), radius: 20, x: 0, y: 14)
+                    .fill(color)
             )
-        }
-        .padding(.horizontal, horizontalInset)
+            .scaleEffect(pulse ? 1.04 : 0.96)
+            .animation(
+                .easeInOut(duration: 1.8).repeatForever(autoreverses: true),
+                value: pulse
+            )
+            .onAppear {
+                pulse = true
+            }
     }
 }
 
+// MARK: - Bouncy Scale Button Style (matches Home learn section)
+private struct BouncyScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .animation(.spring(response: 0.35, dampingFraction: 0.7), value: configuration.isPressed)
+    }
+}
+
+// MARK: - Preview
+#Preview("Test Tab View") {
+    TestTabView()
+        .environmentObject(LanguageManager())
+        .environmentObject(StateManager.shared)
+        .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
+}

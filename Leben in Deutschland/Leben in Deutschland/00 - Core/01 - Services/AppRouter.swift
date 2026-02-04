@@ -19,6 +19,7 @@ final class AppRouter {
         case settings
         case favorites
         case spacedRepetition
+        case testCountdown
         case testSimulation
         case premium
     }

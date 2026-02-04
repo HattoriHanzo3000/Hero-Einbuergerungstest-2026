@@ -142,6 +142,12 @@ private extension LearnView {
         case .favorites:
             FavoritesView()
                 .environmentObject(languageManager)
+        case .testCountdown:
+            TestCountdownView {
+                router.push(.testSimulation)
+            }
+            .environmentObject(languageManager)
+            .environmentObject(StateManager.shared)
         case .testSimulation:
             TestSessionView()
                 .environmentObject(languageManager)

@@ -96,9 +96,11 @@
 
 "main_header_test_today" = "Тест уже сегодня.";
 "main_header_test_in_days" = "Тест через %d %@.";
+"test_header_set_date_prompt" = "Когда твой экзамен? Укажи дату в Настройках — и мы будем вести обратный отсчёт вместе.";
 "main_header_state_accessibility_label" = "Федеральная земля";
 "main_header_state_accessibility_hint" = "Текущая земля. Ты можешь изменить её в настройках.";
 "main_header_state_slogan_accessibility_label" = "Слоган земли";
+"main_header_test_date_accessibility_label" = "Дней до экзамена";
 "home_statistics_title" = "Твой прогресс";
 "home_statistics_description" = "Ты готов на %d%% к тесту. Продолжай — каждый маленький шаг работает.";
 "home_statistics_caption" = "Готов к тесту";
@@ -120,7 +122,7 @@
 
 "learn_option_spaced_repetition_description" = "Учись с умом — сложные вопросы возвращаются, пока не запомнишь их";
 "learn_option_topics_description" = "Разбирай темы спокойно, шаг за шагом";
-"learn_option_test_description" = "Как на настоящем экзамене — 33 вопроса, 60 минут, без подсказок";
+"learn_option_test_description" = "Соответствует официальному экзамену: 33 вопроса (30 общих, 3 по твоей земле), 60 минут, одна попытка. Без подсказок и исправлений. Отличный способ проверить готовность.";
 "learn_option_favorites_description" = "Сохраняй вопросы, которые тебе нравятся или с которыми хочешь потренироваться";
 
 // Language
@@ -370,6 +372,10 @@
 "tab_settings_beta_title" = "Settings BETA";
 "tab_settings_beta2_title" = "Settings BETA 2";
 "main_tab_bar_accessibility_label" = "Основная навигация";
+"tab_learn_hint" = "Открывает экран обучения";
+"tab_test_hint" = "Открывает экран теста";
+"tab_progress_hint" = "Открывает прогресс и статистику";
+"tab_settings_hint" = "Открывает настройки";
 "settings_beta_title" = "Settings BETA";
 "settings_beta_detail_placeholder" = "Мы ещё создаём этот раздел. Твоё мнение поможет понять, что здесь нужно оставить.";
 "settings_test_alerts_button" = "Тестовые уведомления";

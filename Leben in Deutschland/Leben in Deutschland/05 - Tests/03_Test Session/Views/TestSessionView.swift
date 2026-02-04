@@ -40,7 +40,9 @@ struct TestSessionView: View {
                         showingResults = true
                     },
                     onDismiss: {
-                        dismiss()
+                        // Pop twice to skip countdown and return to TestTabView
+                        router.pop()
+                        router.pop()
                     }
                 )
                 .environmentObject(languageManager)
@@ -51,11 +53,11 @@ struct TestSessionView: View {
                     Spacer()
                     ProgressView()
                         .scaleEffect(1.5)
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .progressViewStyle(CircularProgressViewStyle(tint: Color("AppBlueLagoon")))
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(liquidGlassBackground)
+                .background(Color(.systemBackground))
             }
         }
         .background(Color(.systemBackground))
@@ -92,7 +94,9 @@ struct TestSessionView: View {
                 }
                 Button("quit_test".localized, role: .destructive) {
                                 HapticManager.shared.heavyImpact()
-                                dismiss()
+                                // Pop twice to skip countdown and return to TestTabView
+                                router.pop()
+                                router.pop()
                 }
             },
             message: {

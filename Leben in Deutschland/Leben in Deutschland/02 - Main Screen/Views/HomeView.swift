@@ -13,10 +13,8 @@ struct HomeView: View {
     @State private var savedTestDate: Date? = OnboardingPreferences.shared.testDate
     @State private var showRatingPrompt = false
     
-    /// Generous spacing between sections for a friendly, relaxed layout.
-    private var verticalSpacing: CGFloat { layoutMetrics.adaptive(28) }
-    /// Tighter gap between header and learn section.
-    private var headerToLearnSpacing: CGFloat { layoutMetrics.adaptive(12) }
+    /// Spacing between header and section (matches Progress tab).
+    private var sectionSpacing: CGFloat { layoutMetrics.adaptive(28) }
     private var footerPadding: CGFloat { layoutMetrics.adaptive(36) }
     
     init(viewModel: HomeViewModel = HomeViewModel()) {
@@ -27,7 +25,7 @@ struct HomeView: View {
         NavigationStack(path: $router.navigationPath) {
         GeometryReader { geometry in
             ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: verticalSpacing) {
+                VStack(spacing: sectionSpacing) {
                     MainHeaderContent(
                         readinessPercentage: viewModel.statistics.readinessPercentage,
                         showDialog: $showDialog,
@@ -36,13 +34,10 @@ struct HomeView: View {
                     .padding(.horizontal, layoutMetrics.adaptive(20))
                     .padding(.top, layoutMetrics.adaptive(8))
                     .padding(.bottom, layoutMetrics.adaptive(4))
-                    
+
                     HomeLearnSection()
                         .padding(.horizontal, layoutMetrics.adaptive(20))
-                        .padding(.top, headerToLearnSpacing)
                 }
-                .frame(maxWidth: .infinity, alignment: .top)
-                .background(Color(.systemBackground))
                 .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
                 .frame(maxWidth: .infinity, alignment: .top)
             }
@@ -97,6 +92,12 @@ struct HomeView: View {
         case .spacedRepetition:
             SpacedRepetitionView()
                 .environmentObject(languageManager)
+        case .testCountdown:
+            TestCountdownView {
+                router.push(.testSimulation)
+            }
+            .environmentObject(languageManager)
+            .environmentObject(stateManager)
         case .testSimulation:
             TestSessionView()
                 .environmentObject(languageManager)

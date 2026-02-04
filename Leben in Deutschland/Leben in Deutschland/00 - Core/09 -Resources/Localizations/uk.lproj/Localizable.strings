@@ -96,9 +96,11 @@
 
 "main_header_test_today" = "Тест уже сьогодні.";
 "main_header_test_in_days" = "Тест через %d %@.";
+"test_header_set_date_prompt" = "Коли твій іспит? Вкажи дату в Налаштуваннях — і ми рахуватимемо дні разом.";
 "main_header_state_accessibility_label" = "Федеральна земля";
 "main_header_state_accessibility_hint" = "Поточна земля. Ти можеш змінити її в налаштуваннях.";
 "main_header_state_slogan_accessibility_label" = "Слоган землі";
+"main_header_test_date_accessibility_label" = "Днів до іспиту";
 "home_statistics_title" = "Твій прогрес";
 "home_statistics_description" = "Ти готовий на %d%% до тесту. Продовжуй — кожен маленький крок має значення.";
 "home_statistics_caption" = "Готовий до тесту";
@@ -120,7 +122,7 @@
 
 "learn_option_spaced_repetition_description" = "Вчися розумно — складні питання повертаються, поки ти їх не запам’ятаєш";
 "learn_option_topics_description" = "Розбирай теми поступово — так легше й спокійніше";
-"learn_option_test_description" = "Як на справжньому іспиті — 33 питання, 60 хвилин, без підказок";
+"learn_option_test_description" = "Відповідає офіційному іспиту: 33 питання (30 загальних, 3 з твого регіону), 60 хвилин, одна спроба. Без підказок і виправлень. Чудовий спосіб перевірити готовність.";
 "learn_option_favorites_description" = "Зберігай улюблені або складні питання, щоб повернутися до них пізніше";
 
 // Language
@@ -369,6 +371,10 @@
 "learn_header_title" = "Навчання";
 "learn_header_dialog_message" = "Я готую для тебе нову навчальну подорож. Дуже скоро почнемо разом!";
 "main_tab_bar_accessibility_label" = "Основна навігація";
+"tab_learn_hint" = "Відкриває екран навчання";
+"tab_test_hint" = "Відкриває екран тесту";
+"tab_progress_hint" = "Відкриває прогрес і статистику";
+"tab_settings_hint" = "Відкриває налаштування";
 "settings_beta_title" = "Settings Beta";
 "settings_beta_detail_placeholder" = "Ми ще наповнюємо цей розділ. Твій відгук допоможе вирішити, що тут залишити.";
 "settings_test_alerts_button" = "Тестові сповіщення";
