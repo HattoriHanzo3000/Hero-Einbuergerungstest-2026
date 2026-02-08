@@ -18,6 +18,8 @@ class ContentService: ObservableObject {
     
     private var allQuestions: [QuestionModel] = []
     private var questionImages: [String: String] = [:] // question-id -> asset name
+    private var translatedQuestionsMap: [String: QuestionModel] = [:] // question-id -> translated question
+    private var currentTranslationLanguage: String? = nil
     
     // MARK: - Singleton
     static let shared = ContentService()
@@ -179,8 +181,51 @@ class ContentService: ObservableObject {
     
     // MARK: - Translation Support
     
-    /// Get a question in a specific language by ID
+    /// Load translation content for a specific language and cache all questions
+    /// This enables fast dual-language search without loading individual questions
+    func loadTranslationContent(for language: String) async {
+        // Skip if already loaded for this language
+        guard currentTranslationLanguage != language else { return }
+        
+        do {
+            let content = try await loadContentFile(for: language)
+            
+            // Build translation map: question-id -> translated question
+            var translationMap: [String: QuestionModel] = [:]
+            for categoryData in content.content {
+                for question in categoryData.questions {
+                    translationMap[question.id] = question
+                }
+            }
+            
+            translatedQuestionsMap = translationMap
+            currentTranslationLanguage = language
+        } catch {
+            print("Error loading translation content: \(error)")
+            // Clear cache on error
+            translatedQuestionsMap = [:]
+            currentTranslationLanguage = nil
+        }
+    }
+    
+    /// Get a translated question by ID (from cache if available)
+    func getTranslatedQuestion(id: String) -> QuestionModel? {
+        return translatedQuestionsMap[id]
+    }
+    
+    /// Clear translation cache (e.g., when languages change)
+    func clearTranslationCache() {
+        translatedQuestionsMap = [:]
+        currentTranslationLanguage = nil
+    }
+    
+    /// Get a question in a specific language by ID (loads on-demand if not cached)
     func getQuestion(id: String, in language: String) async -> QuestionModel? {
+        // Check cache first if it's the translation language
+        if language == currentTranslationLanguage, let cached = translatedQuestionsMap[id] {
+            return cached
+        }
+        
         do {
             let content = try await loadContentFile(for: language)
             

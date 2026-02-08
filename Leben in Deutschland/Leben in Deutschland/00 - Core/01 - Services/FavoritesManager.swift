@@ -34,6 +34,11 @@ final class FavoritesManager: ObservableObject, FavoritesManaging {
         }
         saveFavorites()
     }
+
+    /// Reloads favorites from persistence (e.g. after app reset). Replaces in-memory state with stored state.
+    func reloadFromStorage() {
+        loadFavorites()
+    }
 }
 
 // MARK: - Persistence

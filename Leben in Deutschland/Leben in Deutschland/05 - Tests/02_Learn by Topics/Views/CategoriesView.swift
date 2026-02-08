@@ -24,6 +24,7 @@ struct CategoriesView: View {
     @State private var isSearchVisible = false
     @FocusState private var isSearchFocused: Bool
     @State private var isAtBottom = false
+    @State private var showMascotDialog = false
     private let stateService = CategoriesStateService.shared
     
     private var controlSize: CGFloat {
@@ -41,34 +42,109 @@ struct CategoriesView: View {
         }
     }
     
-    // Flat list of matching questions for search
-    var searchResults: [(question: QuestionModel, subcategory: String)] {
+    private var headerVerticalPadding: CGFloat { layoutMetrics.adaptive(18) }
+    private var headerHorizontalPadding: CGFloat { layoutMetrics.adaptive(20) }
+    private var mascotToContentSpacing: CGFloat { layoutMetrics.adaptive(16) }
+    private var titleToMessageSpacing: CGFloat { layoutMetrics.adaptive(6) }
+    
+    private var learnHeaderLiquidGlassBackground: some View {
+        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
+            .fill(
+                LinearGradient(
+                    colors: [
+                        Color("AppBlueLagoon").opacity(0.9),
+                        Color("AppBlueLagoon").opacity(0.65),
+                        Color("AppCaribean").opacity(0.45)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(0.20),
+                        Color.white.opacity(0.05),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Color.white.opacity(0.45), Color.white.opacity(0.12)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 0.6
+                    )
+            )
+            .background(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
+                    .fill(Color.white.opacity(0.05))
+            )
+    }
+    
+    // Flat list of matching questions for search (searches in both app language and translation language)
+    var searchResults: [(question: QuestionModel, subcategory: String, matchedByTranslation: Bool)] {
         guard !searchText.isEmpty else { return [] }
         
         let query = searchText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         guard !query.isEmpty else { return [] }
         
-        var results: [(question: QuestionModel, subcategory: String)] = []
+        var results: [(question: QuestionModel, subcategory: String, matchedByTranslation: Bool)] = []
+        var seenQuestionIds = Set<String>() // Track unique questions by ID
+        
+        let contentService = ContentService.shared
         
         // Search through all questions in all categories and subcategories
         for category in viewModel.categories {
             for subcategory in category.subcategories {
                 for question in subcategory.questions {
-                    // Search by question ID (exact match or contains)
+                    // Skip if already added
+                    guard !seenQuestionIds.contains(question.id) else { continue }
+                    
+                    var matches = false
+                    var matchedByTranslation = false
+                    
+                    // Search by question ID (exact match or contains) - ID matches don't count as translation match
                     if question.id.lowercased().contains(query) {
-                        results.append((question, subcategory.name))
-                        continue
+                        matches = true
                     }
                     
-                    // Search in question text
-                    if question.text.lowercased().contains(query) {
-                        results.append((question, subcategory.name))
-                        continue
+                    // Search in question text (app language)
+                    let matchedInAppLanguage = question.text.lowercased().contains(query) ||
+                        question.options.contains(where: { $0.lowercased().contains(query) })
+                    
+                    if matchedInAppLanguage {
+                        matches = true
                     }
                     
-                    // Search in question options
-                    if question.options.contains(where: { $0.lowercased().contains(query) }) {
-                        results.append((question, subcategory.name))
+                    // Search in translated question text (translation language)
+                    if let translatedQuestion = contentService.getTranslatedQuestion(id: question.id) {
+                        let matchedInTranslation = translatedQuestion.text.lowercased().contains(query) ||
+                            translatedQuestion.options.contains(where: { $0.lowercased().contains(query) })
+                        
+                        if matchedInTranslation {
+                            matches = true
+                            // Only mark as matchedByTranslation if match was in translation AND not in app language
+                            // (if both match, prefer showing translation since user searched in translation language)
+                            if !matchedInAppLanguage {
+                                matchedByTranslation = true
+                            } else {
+                                // If both match, check if query matches translation better
+                                // For simplicity, if translation matches, show it
+                                matchedByTranslation = true
+                            }
+                        }
+                    }
+                    
+                    if matches {
+                        results.append((question, subcategory.name, matchedByTranslation))
+                        seenQuestionIds.insert(question.id)
                     }
                 }
             }
@@ -88,50 +164,74 @@ struct CategoriesView: View {
                 // Header - Apple Design Awards quality: clarity, elegance, accessibility
                 VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
                     HStack {
-                        AdaptiveIconButton.backButton {
-                        dismiss()
-                        }
+                        AdaptiveIconButton.backButton(action: {
+                            dismiss()
+                        }, tintColor: .white)
                         
                         Spacer()
                         
                         AdaptiveIconButton(
                             systemName: isSearchVisible ? "xmark" : "magnifyingglass",
                             action: {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                            isSearchVisible.toggle()
-                            if !isSearchVisible {
-                                searchText = ""
-                                isSearchFocused = false
-                            }
-                        }
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                    isSearchVisible.toggle()
+                                    if !isSearchVisible {
+                                        searchText = ""
+                                        isSearchFocused = false
+                                    }
+                                }
                             },
                             accessibilityLabel: isSearchVisible ? "Close search" : "Search categories",
-                            accessibilityHint: "Toggle search mode"
+                            accessibilityHint: "Toggle search mode",
+                            tintColor: .white
                         )
-                                .animation(.none, value: isSearchVisible)
-                        }
+                        .animation(.none, value: isSearchVisible)
+                    }
                     
-                    Text("learn_by_topics_title".localized)
-                        .font(.system(.title, design: .rounded).weight(.bold))
-                        .foregroundColor(Color(.systemGray6))
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.8) // Adapts to Dynamic Type
-                        .accessibilityAddTraits(.isHeader)
+                    HStack(alignment: .center, spacing: mascotToContentSpacing) {
+                        MainMascotView(
+                            messageKey: "eagle_desc_chick",
+                            showDialog: $showMascotDialog,
+                            autoPlayInterval: 60,
+                            hideBubble: true,
+                            showMessageWhenBubbleHidden: false
+                        )
+                        .fixedSize(horizontal: true, vertical: false)
+                        
+                        VStack(alignment: .leading, spacing: titleToMessageSpacing) {
+                            Text("learn_by_topics_header_message".localized)
+                                .font(.system(.body, design: .rounded).weight(.medium))
+                                .lineSpacing(4)
+                                .foregroundColor(.white.opacity(0.92))
+                                .multilineTextAlignment(.leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                 }
-                .padding(.vertical, layoutMetrics.adaptive(18))
-                .padding(.horizontal, layoutMetrics.adaptive(20))
-                .frame(minHeight: 68) // Consistent minimum height across devices
-                .background(
-                    RoundedRectangle(cornerRadius: 28)
-                        .fill(Color.accentColor)
+                .padding(.vertical, headerVerticalPadding)
+                .padding(.horizontal, headerHorizontalPadding)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .background(learnHeaderLiquidGlassBackground)
+                .clipShape(RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [.white.opacity(0.4), .white.opacity(0.08)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 0.8
+                        )
                 )
-                .padding(.horizontal) // System padding for island effect
-                .padding(.top, 8) // Visual spacing from safe area
+                .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
+                .padding(.horizontal, layoutMetrics.adaptive(20))
+                .padding(.top, layoutMetrics.adaptive(8))
                 
-                // Spacing between header and content
-                Spacer()
-                    .frame(height: 8)
+                Divider()
+                    .padding(.top, layoutMetrics.adaptive(12))
                 
                 // Content area with system white background
                 ZStack {
@@ -208,7 +308,8 @@ struct CategoriesView: View {
                                             ForEach(searchResults, id: \.question.id) { result in
                                                 SearchQuestionCard(
                                                     question: result.question,
-                                                    subcategoryName: result.subcategory
+                                                    subcategoryName: result.subcategory,
+                                                    matchedByTranslation: result.matchedByTranslation
                                                 )
                                                 .environmentObject(languageManager)
                                             }
@@ -292,6 +393,26 @@ struct CategoriesView: View {
         .task {
             await viewModel.loadCategories(for: languageManager.currentAppLanguage)
         }
+        .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
+            // Load translation content when languages change
+            let translationLanguage = languageManager.currentTranslationLanguage
+            if translationLanguage != languageManager.currentAppLanguage {
+                await ContentService.shared.loadTranslationContent(for: translationLanguage)
+            } else {
+                ContentService.shared.clearTranslationCache()
+            }
+        }
+        .onChange(of: isSearchVisible) { oldValue, newValue in
+            if newValue {
+                // Load translation content when search is activated (if not already loaded)
+                Task {
+                    let translationLanguage = languageManager.currentTranslationLanguage
+                    if translationLanguage != languageManager.currentAppLanguage {
+                        await ContentService.shared.loadTranslationContent(for: translationLanguage)
+                    }
+                }
+            }
+        }
         .onAppear {
             // Load saved state
             expandedCategoryNames = stateService.loadExpandedCategories()
@@ -302,66 +423,14 @@ struct CategoriesView: View {
             stateService.saveExpandedCategories(expandedCategoryNames)
             stateService.saveScrollPosition(isAtBottom: isAtBottom)
         }
-        .toolbar(.visible, for: .tabBar)
-        .onAppear {
-            // Ensure tab bar is visible
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                showTabBar()
-            }
-        }
+        .hidesTabBar()
+        .tabBarHidden(true)
         .sheet(isPresented: $showSubcategories) {
             if let category = selectedCategory {
                 SubcategoriesView(category: category)
                     .environmentObject(languageManager)
             }
         }
-    }
-    
-    private func showTabBar() {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first,
-              let tabBarController = findTabBarController(in: window.rootViewController) else { return }
-        let tabBar = tabBarController.tabBar
-        
-        guard tabBar.isHidden else { return }
-        
-        let height = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
-        
-        tabBar.isHidden = false
-        tabBar.transform = CGAffineTransform(translationX: 0, y: height)
-        tabBar.alpha = 0
-        
-        UIView.animate(
-            withDuration: 0.45,
-            delay: 0,
-            usingSpringWithDamping: 0.82,
-            initialSpringVelocity: 0.4,
-            options: [.allowUserInteraction, .beginFromCurrentState, .curveEaseOut],
-            animations: {
-                tabBar.transform = .identity
-                tabBar.alpha = 1
-            }
-        )
-    }
-    
-    private func findTabBarController(in viewController: UIViewController?) -> UITabBarController? {
-        guard let viewController = viewController else { return nil }
-        
-        if let tabBarController = viewController as? UITabBarController {
-            return tabBarController
-        }
-        
-        for child in viewController.children {
-            if let tabBarController = findTabBarController(in: child) {
-                return tabBarController
-            }
-        }
-        
-        if let presented = viewController.presentedViewController {
-            return findTabBarController(in: presented)
-        }
-        
-        return nil
     }
 }
 
@@ -441,6 +510,28 @@ private struct ExpandableCategoryView: View {
         }
     }
     
+    private var categoryGradient: LinearGradient {
+        LinearGradient(
+            colors: [
+                Color("AppCaribean").opacity(0.72),
+                Color("AppCaribean").opacity(0.52)
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+    
+    private var categoryBackgroundGradient: LinearGradient {
+        LinearGradient(
+            colors: [
+                Color("AppCaribean").opacity(0.14),
+                Color("AppCaribean").opacity(0.06)
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             Button(action: {
@@ -475,8 +566,30 @@ private struct ExpandableCategoryView: View {
                 .padding(.vertical, containerPadding)
                 .padding(.horizontal, containerPadding)
                 .background(
-                    RoundedRectangle(cornerRadius: 28)
-                        .fill(Color.accentColor)
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .fill(categoryGradient)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 33, style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [Color.white.opacity(0.45), Color.white.opacity(0.12)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            ),
+                            lineWidth: 0.6
+                        )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [.white.opacity(0.4), .white.opacity(0.08)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 0.8
+                        )
                 )
             }
             .contentShape(Rectangle())
@@ -500,8 +613,30 @@ private struct ExpandableCategoryView: View {
             }
         }
         .background(
-            RoundedRectangle(cornerRadius: 28)
-                .fill(Color(.systemGray6))
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .fill(categoryBackgroundGradient)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 33, style: .continuous)
+                .stroke(
+                    LinearGradient(
+                        colors: [Color.white.opacity(0.45), Color.white.opacity(0.12)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ),
+                    lineWidth: 0.6
+                )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .stroke(
+                    LinearGradient(
+                        colors: [.white.opacity(0.4), .white.opacity(0.08)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 0.8
+                )
         )
         }
     }
@@ -547,13 +682,13 @@ private struct SubcategoryButton: View {
             .background(
                 ZStack {
                     // Base background
-                    RoundedRectangle(cornerRadius: 28)
-                        .fill(Color(.systemGray5))
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .fill(Color(.systemGray6))
                     
                     // Progress bar filling from left to right
                     GeometryReader { geometry in
-                        RoundedRectangle(cornerRadius: 28)
-                            .fill(Color("AppOrange"))
+                        RoundedRectangle(cornerRadius: 28, style: .continuous)
+                            .fill(Color(.systemGray4))
                             .frame(width: geometry.size.width * completionPercentage)
                     }
                 }
@@ -610,9 +745,14 @@ private struct SubcategoryButton: View {
 private struct SearchQuestionCard: View {
     let question: QuestionModel
     let subcategoryName: String
+    let matchedByTranslation: Bool
     @EnvironmentObject var languageManager: LanguageManager
     @State private var isPressed = false
-    @State private var showingFeedbackReport = false
+    
+    private var translatedQuestion: QuestionModel? {
+        guard matchedByTranslation else { return nil }
+        return ContentService.shared.getTranslatedQuestion(id: question.id)
+    }
     
     var body: some View {
         NavigationLink(destination: LearningView(subcategory: SubcategoryModel(
@@ -621,7 +761,7 @@ private struct SearchQuestionCard: View {
             questions: [question]
         ), usesRouterNavigation: false).environmentObject(languageManager)) {
             VStack(alignment: .leading, spacing: 8) {
-                // Question text
+                // Question text (app language)
                 Text(question.text)
                     .font(.callout.weight(.semibold))
                     .fontDesign(.rounded)
@@ -629,24 +769,23 @@ private struct SearchQuestionCard: View {
                     .multilineTextAlignment(.leading)
                     .lineLimit(3)
                 
+                // Translation text (only if matched by translation)
+                if matchedByTranslation, let translated = translatedQuestion, translated.text != question.text {
+                    Text(translated.text)
+                        .font(.system(.footnote, design: .rounded))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(3)
+                        .padding(.top, 4)
+                }
+                
                 // Question ID and subcategory
                 HStack(spacing: 8) {
-                    HStack(spacing: 6) {
                     Text("question_label".localized + " \(question.id)")
                         .font(.caption.weight(.semibold))
                         .fontDesign(.rounded)
                         .foregroundColor(.secondary)
                         .lineLimit(1)
-                        
-                        Button(action: {
-                            HapticManager.shared.lightImpact()
-                            showingFeedbackReport = true
-                        }) {
-                            Image(systemName: "flag.fill")
-                                .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(.accentColor)
-                        }
-                    }
                     
                     Text(subcategoryName)
                         .font(.caption)
@@ -670,14 +809,6 @@ private struct SearchQuestionCard: View {
         }, perform: {
             HapticManager.shared.lightImpact()
         })
-        .sheet(isPresented: $showingFeedbackReport) {
-            FeedbackReportView(
-                questionId: question.id,
-                questionText: question.text,
-                category: question.category
-            )
-            .environmentObject(languageManager)
-        }
     }
 }
 

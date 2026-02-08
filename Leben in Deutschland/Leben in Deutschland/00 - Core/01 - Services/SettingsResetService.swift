@@ -44,14 +44,26 @@ final class SettingsResetService: SettingsResetServicing {
             onboardingPreferences: onboardingPreferences
         )
         clearPersistedProgress()
+        FavoritesManager.shared.reloadFromStorage()
     }
 
     @MainActor
     private func clearUserDefaults() {
-        let criticalKeys: Set<String> = ["settings_initialized", "hasCompletedOnboarding"]
+        // Preserve premium/trial and app rating so user doesn't get trial again or get re-prompted for rating.
+        let preservedKeys: Set<String> = [
+            "premium_trial_start_date",
+            "premium_trial_used",
+            "premium_subscription_type",
+            "premium_subscription_expiry_date",
+            "AppRating_FirstLaunchDate",
+            "AppRating_LaunchCount",
+            "AppRating_LastPromptDate",
+            "AppRating_UserDeclined",
+            "AppRating_UserRated",
+        ]
         let dictionary = defaults.dictionaryRepresentation()
         dictionary.keys.forEach { key in
-            guard criticalKeys.contains(key) == false else { return }
+            guard preservedKeys.contains(key) == false else { return }
             defaults.removeObject(forKey: key)
         }
 
