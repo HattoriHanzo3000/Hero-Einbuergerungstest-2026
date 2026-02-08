@@ -5,6 +5,7 @@ struct MainHeaderContent: View {
     let readinessPercentage: Int
     @Binding var showDialog: Bool
     @Binding var savedTestDate: Date?
+    var onPremiumTap: (() -> Void)?
     private let debugBordersEnabled = false
     
     @EnvironmentObject private var stateManager: StateManager
@@ -62,6 +63,11 @@ struct MainHeaderContent: View {
         .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
         .debugBorder(Color.red.opacity(0.85), cornerRadius: 0, isVisible: debugBordersEnabled)
         .accessibilityAddTraits(.isHeader)
+        .overlay(alignment: .topTrailing) {
+            PremiumCrownButton(action: { onPremiumTap?() }, color: .white)
+                .padding(.top, layoutMetrics.adaptive(12))
+                .padding(.trailing, layoutMetrics.adaptive(12))
+        }
     }
     
     private var learnHeaderLiquidGlassBackground: some View {
@@ -252,8 +258,12 @@ private extension View {
     MainHeaderContent(
         readinessPercentage: 72,
         showDialog: .constant(true),
-        savedTestDate: .constant(nil)
+        savedTestDate: .constant(nil),
+        onPremiumTap: {
+            print("Premium tapped")
+        }
     )
     .environmentObject(LanguageManager())
     .environmentObject(StateManager.shared)
+    .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }

@@ -2,8 +2,9 @@ import SwiftUI
 
 // MARK: - Main Tab View
 /// Root tab navigation that hosts the primary app sections.
-/// Currently provides two tabs (Home, Settings) with matching SF Symbols.
+/// Four tabs: Learn, Test, Progress, Settings.
 struct MainTabView: View {
+    @EnvironmentObject private var premiumManager: PremiumManager
     
     // MARK: - Tab Identifier
     enum Tab: Hashable {
@@ -28,6 +29,7 @@ struct MainTabView: View {
                     }
                 }
                 .tag(Tab.learn)
+                .accessibilityHint("tab_learn_hint".localized)
             
             TestTabView()
                 .tabItem {
@@ -38,6 +40,7 @@ struct MainTabView: View {
                     }
                 }
                 .tag(Tab.test)
+                .accessibilityHint("tab_test_hint".localized)
             
             ProgressTabView()
                 .tabItem {
@@ -48,6 +51,7 @@ struct MainTabView: View {
                     }
                 }
                 .tag(Tab.progress)
+                .accessibilityHint("tab_progress_hint".localized)
             
             SettingsDashboardView()
                 .tabItem {
@@ -58,12 +62,21 @@ struct MainTabView: View {
                     }
                 }
                 .tag(Tab.settings)
+                .accessibilityHint("tab_settings_hint".localized)
         }
-        .tint(Color("AppOrange"))
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            Color.clear.frame(height: 24)
+            Color.clear.frame(height: 12)
         }
         .accessibilityLabel("main_tab_bar_accessibility_label".localized)
+        .sheet(isPresented: Binding(
+            get: { premiumManager.showPaywall },
+            set: { premiumManager.showPaywall = $0 }
+        ), onDismiss: {
+            premiumManager.showPaywall = false
+        }) {
+            PaywallView()
+                .environmentObject(premiumManager)
+        }
     }
 }
 
@@ -74,5 +87,7 @@ struct MainTabView: View {
         .environmentObject(StateManager.shared)
         .environmentObject(SoundManager.shared)
         .environmentObject(AppFlow())
+        .environmentObject(PremiumManager.shared)
+        .environmentObject(FavoritesManager.shared)
 }
 

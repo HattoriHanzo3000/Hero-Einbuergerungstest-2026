@@ -21,10 +21,15 @@ class OnboardingTranslationViewModel: ObservableObject {
     }
     
     func setupInitialState() {
-        // Restore saved translation language if available
-        if let savedTranslationCode = preferences.translationLanguageCode,
-           let languageOption = LanguageOption.availableLanguages.first(where: { $0.languageCode == savedTranslationCode }) {
-            selectedLanguage = languageOption.name
+        // Restore saved translation language if available (Ukrainian excluded when disabled)
+        if let savedTranslationCode = preferences.translationLanguageCode {
+            if savedTranslationCode == "uk" {
+                preferences.translationLanguageCode = "de"
+                preferences.translationSelected = true
+                selectedLanguage = "Deutsch"
+            } else if let languageOption = LanguageOption.availableLanguages.first(where: { $0.languageCode == savedTranslationCode }) {
+                selectedLanguage = languageOption.name
+            }
         }
         // Show dialog with delay
         DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.dialogDelay) {

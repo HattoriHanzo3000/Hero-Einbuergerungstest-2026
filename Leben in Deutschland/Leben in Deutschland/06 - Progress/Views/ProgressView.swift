@@ -4,6 +4,7 @@ import SwiftUI
 /// Progress tab: rounded header with mascot, then progress section (ring chart and stat cards) from main page.
 struct ProgressTabView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
+    @EnvironmentObject private var premiumManager: PremiumManager
     @StateObject private var viewModel: HomeViewModel = HomeViewModel()
     @State private var showDialog = false
 
@@ -38,7 +39,7 @@ private extension ProgressTabView {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(16)) {
             MainMascotView(
                 messageKey: "eagle_desc_chick",
-                messageParameters: ["0"],
+                messageParameters: [String(viewModel.statistics.readinessPercentage)],
                 leadingMessage: nil,
                 showDialog: $showDialog,
                 autoPlayInterval: nil,
@@ -46,6 +47,8 @@ private extension ProgressTabView {
                 plainTextColor: .white
             )
             .frame(maxWidth: .infinity, alignment: .leading)
+            // Force update when readiness changes
+            .id("progress_mascot_\(viewModel.statistics.readinessPercentage)")
         }
         .padding(.vertical, layoutMetrics.adaptive(18))
         .padding(.horizontal, layoutMetrics.adaptive(20))
@@ -76,6 +79,11 @@ private extension ProgressTabView {
             )
         )
         .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
+        .overlay(alignment: .topTrailing) {
+            PremiumCrownButton(action: { premiumManager.presentPaywall() }, color: .white)
+                .padding(.top, layoutMetrics.adaptive(12))
+                .padding(.trailing, layoutMetrics.adaptive(12))
+        }
         .padding(.horizontal, layoutMetrics.adaptive(20))
         .padding(.top, layoutMetrics.adaptive(8))
         .padding(.bottom, layoutMetrics.adaptive(4))

@@ -88,7 +88,12 @@ struct QuizAnswerOptionButton: View {
 private extension QuizAnswerOptionButton {
     @ViewBuilder
     var buttonContent: some View {
-        let baseButton = Button(action: action) {
+        let baseButton = Button(action: {
+            if isEnabled {
+                HapticManager.shared.lightImpact()
+            }
+            action()
+        }) {
             labelContent
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, layoutMetrics.adaptive(style.horizontalPadding))

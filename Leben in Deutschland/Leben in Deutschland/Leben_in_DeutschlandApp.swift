@@ -79,8 +79,6 @@ struct Leben_in_DeutschlandApp: App {
                 .environmentObject(PremiumManager.shared)
                 // Apply appearance mode - updates immediately when @AppStorage changes
                 .preferredColorScheme(getColorScheme())
-                // Limit Dynamic Type scale up to XXXLarge to preserve layout integrity
-                .dynamicTypeSize(.xSmall ... .xxxLarge)
             }
         }
     }
@@ -93,7 +91,8 @@ struct Leben_in_DeutschlandApp: App {
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
         UITabBar.appearance().tintColor = UIColor(named: "AppOrange") ?? .systemOrange
-        UITabBar.appearance().layoutMargins = UIEdgeInsets(top: 14, left: 0, bottom: 0, right: 0)
+        UITabBar.appearance().unselectedItemTintColor = .tertiaryLabel
+        UITabBar.appearance().layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
     }
     
     // Convert saved appearance to ColorScheme

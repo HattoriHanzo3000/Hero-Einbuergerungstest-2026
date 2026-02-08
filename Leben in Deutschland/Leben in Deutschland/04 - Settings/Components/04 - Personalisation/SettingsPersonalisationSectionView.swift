@@ -3,16 +3,21 @@ import SwiftUI
 struct SettingsPersonalisationSectionView: View {
     @ObservedObject var viewModel: SettingsPersonalisationViewModel
 
+    /// Set to true to show the sound toggle (currently not used in app)
+    private let isSoundRowEnabled = false
+
     var body: some View {
         Section {
-            Toggle(isOn: soundBinding.animation(.easeInOut(duration: 0.15))) {
-                SettingsToggleRowLabel(
-                    title: "settings_sound_toggle".localized,
-                    iconSystemName: "speaker.wave.2.fill",
-                    tint: SettingsDesignTokens.Palette.personalisation
-                )
+            if isSoundRowEnabled {
+                Toggle(isOn: soundBinding.animation(.easeInOut(duration: 0.15))) {
+                    SettingsToggleRowLabel(
+                        title: "settings_sound_toggle".localized,
+                        iconSystemName: "speaker.wave.2.fill",
+                        tint: SettingsDesignTokens.Palette.personalisation
+                    )
+                }
+                .toggleStyle(.switch)
             }
-            .toggleStyle(.switch)
 
             Toggle(isOn: hapticsBinding.animation(.easeInOut(duration: 0.15))) {
                 SettingsToggleRowLabel(

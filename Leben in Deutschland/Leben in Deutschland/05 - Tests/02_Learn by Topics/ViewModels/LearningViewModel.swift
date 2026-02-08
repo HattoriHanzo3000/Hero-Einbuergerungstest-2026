@@ -106,10 +106,14 @@ class LearningViewModel: ObservableObject {
         // Mark as answered
         answeredQuestions.insert(question.id)
         
-        // Check if answer is correct
+        // Check if answer is correct and record to spaced repetition statistics
         let correctAnswers = ContentService.shared.correctAnswers
         if let correctIndex = correctAnswers[question.id] {
-            if answer == correctIndex {
+            let isCorrect = answer == correctIndex
+            // Record answer to spaced repetition for readiness score
+            SpacedRepetitionManager.shared.recordAnswer(for: question.id, isCorrect: isCorrect)
+            
+            if isCorrect {
                 correctlyAnswered.insert(question.id)
                 incorrectlyAnswered.remove(question.id)
                 // TODO: Play correct sound
@@ -128,6 +132,9 @@ class LearningViewModel: ObservableObject {
         
         // Clear answer from persistent storage
         answersService.clearAnswer(for: question.id)
+        
+        // Record reset as negative for readiness score
+        SpacedRepetitionManager.shared.recordReset(for: question.id)
         
         selectedAnswer = nil
         showCorrectAnswer = false

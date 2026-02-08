@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - Categories View
 struct CategoriesView: View {
     @EnvironmentObject var languageManager: LanguageManager
+    @EnvironmentObject private var premiumManager: PremiumManager
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -169,6 +170,8 @@ struct CategoriesView: View {
                         }, tintColor: .white)
                         
                         Spacer()
+                        
+                        PremiumCrownButton(action: { premiumManager.presentPaywall() }, color: .white)
                         
                         AdaptiveIconButton(
                             systemName: isSearchVisible ? "xmark" : "magnifyingglass",
@@ -391,7 +394,10 @@ struct CategoriesView: View {
         }
         .navigationBarHidden(true)
         .task {
-            await viewModel.loadCategories(for: languageManager.currentAppLanguage)
+            await viewModel.loadCategories(
+                for: languageManager.currentAppLanguage,
+                translationLanguage: languageManager.currentTranslationLanguage
+            )
         }
         .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
             // Load translation content when languages change

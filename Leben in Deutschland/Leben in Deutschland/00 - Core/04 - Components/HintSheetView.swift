@@ -13,6 +13,7 @@ struct HintSheetView: View {
     @Environment(\.colorScheme) private var colorScheme
     
     let hint: String
+    var translatedHint: String? = nil
     
     var body: some View {
         VStack(spacing: 0) {
@@ -45,15 +46,28 @@ struct HintSheetView: View {
                     .accessibilityLabel("hint_title".localized)
                     
                     // Hint text
-                    Text(hint)
-                        .font(.system(.body, design: .rounded))
-                        .foregroundColor(.primary)
-                        .lineSpacing(4)
-                        .multilineTextAlignment(.leading)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, layoutMetrics.adaptive(24))
-                        .padding(.bottom, layoutMetrics.adaptive(24))
-                        .accessibilityLabel(hint)
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(hint)
+                            .font(.system(.body, design: .rounded))
+                            .foregroundColor(.primary)
+                            .lineSpacing(4)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityLabel(hint)
+                        
+                        // Translation of hint (when translation is active)
+                        if let translatedHint = translatedHint, translatedHint != hint {
+                            Text(translatedHint)
+                                .font(.system(.footnote, design: .rounded))
+                                .foregroundColor(.secondary)
+                                .lineSpacing(4)
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.top, 8)
+                        }
+                    }
+                    .padding(.horizontal, layoutMetrics.adaptive(24))
+                    .padding(.bottom, layoutMetrics.adaptive(24))
                 }
                 .padding(.top, layoutMetrics.adaptive(24))
             }

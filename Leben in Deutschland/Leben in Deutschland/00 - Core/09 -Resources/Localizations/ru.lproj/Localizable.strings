@@ -82,6 +82,7 @@
 
 // Learn by Topics
 "learn_by_topics_title" = "Изучать по темам";
+"learn_by_topics_header_message" = "Я сгруппировал все 310 вопросов по темам — выбирай маршрут и взлетай.";
 "no_categories_found" = "Категории не найдены";
 "no_search_results" = "Ничего не найдено";
 "question_label" = "Вопрос";
@@ -298,15 +299,16 @@
 // =============================================================================
 
 "statistics_title" = "Твой прогресс";
-"statistics_wrong_title" = "Неправильно";
 "statistics_familiar_title" = "Знакомо";
 "statistics_reinforced_title" = "Закреплено";
 "statistics_mastered_title" = "Усвоено";
-"statistics_wrong_description" = "Отвечено неправильно";
+"statistics_expert_title" = "Эксперт";
 "statistics_familiar_description" = "1 раз правильно";
 "statistics_reinforced_description" = "2 раза правильно";
-"statistics_mastered_description" = "3 раза и более правильно";
+"statistics_mastered_description" = "3 раза правильно";
+"statistics_expert_description" = "4 раза и более правильно";
 "statistics_card_flip_hint" = "Двойное нажатие переворачивает карточку";
+"ready" = "готов";
 
 // =============================================================================
 //   GAMIFICATION
@@ -432,6 +434,26 @@
 "premium_favorites_alert_message" = "Обнови до Premium, чтобы видеть свои избранные";
 "premium_favorites_alert_cancel" = "Отмена";
 "premium_favorites_alert_upgrade" = "Обновить";
+"premium_accessibility_label" = "Премиум";
+"premium_accessibility_hint" = "Открывает премиум-функции и варианты подписки";
+"premium_plan_yearly" = "Ежегодно";
+"premium_per_year" = "в год";
+
+"paywall_title" = "Разблокировать Premium";
+"paywall_subtitle" = "Полный доступ ко всем материалам, прогресс и многое другое.";
+"paywall_close" = "Закрыть";
+"paywall_close_hint" = "Закрывает экран подписки";
+"paywall_restore" = "Восстановить покупки";
+"paywall_restore_hint" = "Восстановить предыдущую подписку";
+"paywall_restore_success" = "Подписка восстановлена.";
+"paywall_restore_no_subscription" = "Активная подписка не найдена.";
+"paywall_terms" = "Условия использования";
+"paywall_terms_hint" = "Открыть условия использования";
+"paywall_privacy" = "Политика конфиденциальности";
+"paywall_privacy_hint" = "Открыть политику конфиденциальности";
+"paywall_terms_boilerplate" = "Оплата будет списана с вашего Apple ID. Подписка продлевается автоматически, если не отменить не менее чем за 24 часа до конца периода. Управление и отмена — в настройках App Store.";
+"paywall_best_value" = "Выгодно";
+"paywall_year_savings" = "Экономия 37 % по сравнению с помесячной";
 
 // =============================================================================
 //   ОБРАТНАЯ СВЯЗЬ / СООБЩИТЬ О ВОПРОСЕ

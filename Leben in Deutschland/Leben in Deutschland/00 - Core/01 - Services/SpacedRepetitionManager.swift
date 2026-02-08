@@ -5,8 +5,10 @@ import Combine
 protocol SpacedRepetitionManaging: AnyObject {
     func questionsForSession(from questions: [QuestionModel], limit: Int) -> [QuestionModel]
     func recordAnswer(for questionId: String, isCorrect: Bool)
+    /// Records that the user reset/cleared their answer for this question (counts as negative for readiness).
+    func recordReset(for questionId: String)
     func readinessPercentage(totalQuestions: Int) -> Int
-    func progressBuckets(totalQuestions: Int) -> (wrong: Int, familiar: Int, reinforced: Int, mastered: Int, total: Int)
+    func progressBuckets(totalQuestions: Int) -> (familiar: Int, reinforced: Int, mastered: Int, expert: Int, total: Int)
 }
 
 // MARK: - Spaced Repetition Manager
@@ -74,23 +76,41 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
         statistics[questionId] = stats
         saveStatistics()
     }
-    
-    // MARK: - Progress
+
+    /// Records a reset (user cleared answer); counts as negative for readiness.
+    func recordReset(for questionId: String) {
+        guard var stats = statistics[questionId] else { return }
+        stats.applyReset()
+        statistics[questionId] = stats
+        saveStatistics()
+    }
+
+    // MARK: - Progress (readiness based on correct count only: 1→0.25, 2→0.5, 3→0.75, 4+→1.0)
     func readinessPercentage(totalQuestions: Int) -> Int {
         guard totalQuestions > 0 else { return 0 }
-        let totalCorrect = statistics.values.reduce(0) { $0 + min($1.correctCount, 3) }
-        let maxPossible = totalQuestions * 3
-        guard maxPossible > 0 else { return 0 }
-        let percentage = Double(totalCorrect) / Double(maxPossible) * 100
-        return min(Int(percentage.rounded()), 100)
+        let totalContribution = statistics.values.reduce(0.0) { sum, stats in
+            sum + Self.readinessContribution(correctCount: stats.correctCount)
+        }
+        let percentage = totalContribution / Double(totalQuestions) * 100
+        return min(max(Int(percentage.rounded()), 0), 100)
+    }
+
+    private static func readinessContribution(correctCount: Int) -> Double {
+        switch correctCount {
+        case 0: return 0.0
+        case 1: return 0.25
+        case 2: return 0.5
+        case 3: return 0.75
+        default: return 1.0  // 4+ correct = full credit
+        }
     }
     
-    func progressBuckets(totalQuestions: Int) -> (wrong: Int, familiar: Int, reinforced: Int, mastered: Int, total: Int) {
-        let wrong = statistics.values.filter { $0.correctCount == 0 && $0.showCount > 0 }.count
-        let familiar = statistics.values.filter { $0.correctCount == 1 && $0.showCount > 0 }.count
-        let reinforced = statistics.values.filter { $0.correctCount == 2 && $0.showCount > 0 }.count
-        let mastered = statistics.values.filter { $0.correctCount >= 3 }.count
-        return (wrong, familiar, reinforced, mastered, totalQuestions)
+    func progressBuckets(totalQuestions: Int) -> (familiar: Int, reinforced: Int, mastered: Int, expert: Int, total: Int) {
+        let familiar = statistics.values.filter { $0.correctCount == 1 }.count
+        let reinforced = statistics.values.filter { $0.correctCount == 2 }.count
+        let mastered = statistics.values.filter { $0.correctCount == 3 }.count
+        let expert = statistics.values.filter { $0.correctCount >= 4 }.count
+        return (familiar, reinforced, mastered, expert, totalQuestions)
     }
 }
 

@@ -31,7 +31,7 @@ private struct SettingsAppLanguageRow: View {
                     "settings_app_language".localized,
                     selection: appLanguageBinding.animation(.easeInOut(duration: 0.2))
                 ) {
-                    ForEach(SettingsAppLanguageOption.allCases) { option in
+                    ForEach(SettingsAppLanguageOption.displayCases) { option in
                         Text(option.displayName).tag(option)
                     }
                 }

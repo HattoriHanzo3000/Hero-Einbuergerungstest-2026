@@ -16,6 +16,7 @@ struct QuestionCard: View {
     let illustrationAssetName: String?
     let onImageTapped: (() -> Void)?
     let suppressAnswerGlow: Bool
+    let suppressIncorrectHighlight: Bool
     
     @EnvironmentObject var languageManager: LanguageManager
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -29,7 +30,8 @@ struct QuestionCard: View {
         onAnswerSelected: @escaping (Int) -> Void,
         illustrationAssetName: String? = nil,
         onImageTapped: (() -> Void)? = nil,
-        suppressAnswerGlow: Bool = false
+        suppressAnswerGlow: Bool = false,
+        suppressIncorrectHighlight: Bool = false
     ) {
         self.question = question
         self.selectedAnswer = selectedAnswer
@@ -39,6 +41,7 @@ struct QuestionCard: View {
         self.illustrationAssetName = illustrationAssetName
         self.onImageTapped = onImageTapped
         self.suppressAnswerGlow = suppressAnswerGlow
+        self.suppressIncorrectHighlight = suppressIncorrectHighlight
     }
     
     var body: some View {
@@ -85,10 +88,11 @@ struct QuestionCard: View {
                                 accessibilityLabel: accessibilityLabel(for: index, option: option),
                                 suppressGlow: suppressAnswerGlow
                             ) {
+                                // Only allow selection if correct answer is not shown (read-only mode)
                                 if showCorrectAnswer == false {
                                     onAnswerSelected(index)
                                 }
-                                }
+                            }
                         }
                     }
                 }
@@ -140,7 +144,8 @@ private extension QuestionCard {
             if isCorrectAnswer(index) {
                 return .correct
             }
-            if index == selectedAnswer {
+            // Only show incorrect highlight if suppressIncorrectHighlight is false
+            if !suppressIncorrectHighlight && index == selectedAnswer {
                 return .incorrect
             }
             return .neutral

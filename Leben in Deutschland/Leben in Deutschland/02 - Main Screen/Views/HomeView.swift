@@ -5,6 +5,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject private var stateManager: StateManager
     @EnvironmentObject private var languageManager: LanguageManager
+    @EnvironmentObject private var premiumManager: PremiumManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     @StateObject private var viewModel: HomeViewModel
     @StateObject private var ratingManager = AppRatingManager.shared
@@ -29,7 +30,8 @@ struct HomeView: View {
                     MainHeaderContent(
                         readinessPercentage: viewModel.statistics.readinessPercentage,
                         showDialog: $showDialog,
-                        savedTestDate: $savedTestDate
+                        savedTestDate: $savedTestDate,
+                        onPremiumTap: { premiumManager.presentPaywall() }
                     )
                     .padding(.horizontal, layoutMetrics.adaptive(20))
                     .padding(.top, layoutMetrics.adaptive(8))
@@ -85,12 +87,9 @@ struct HomeView: View {
             CategoriesView()
                 .environmentObject(languageManager)
         case .learning(let subcategoryName, let categoryName):
-            LearningView(
-                subcategory: SubcategoryModel(
-                    name: subcategoryName,
-                    categoryName: categoryName,
-                    questions: []
-                )
+            LearningDestinationView(
+                subcategoryName: subcategoryName,
+                categoryName: categoryName
             )
             .environmentObject(languageManager)
         case .favorites:
@@ -246,10 +245,10 @@ private struct PreviewHomeStatisticsProvider: HomeStatisticsProviding {
     func loadStatistics() -> HomeStatisticsModel {
         HomeStatisticsModel(
             readinessPercentage: 72,
-            wrong: 12,
             familiar: 86,
             reinforced: 54,
             mastered: 158,
+            expert: 12,
             totalQuestions: LayoutMetrics.totalFederalQuestions
         )
     }

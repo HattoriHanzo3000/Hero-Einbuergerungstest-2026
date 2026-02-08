@@ -24,53 +24,90 @@ struct TestSessionQuestionCard: View {
     
     @EnvironmentObject var languageManager: LanguageManager
     @EnvironmentObject var favoritesManager: FavoritesManager
+    @EnvironmentObject private var premiumManager: PremiumManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     
     private let contentService = ContentService.shared
     
     var body: some View {
         VStack(spacing: 0) {
-            VStack(spacing: layoutMetrics.adaptive(20)) {
-                headerView
-                
-                ScrollView {
-                    if let currentQuestion = viewModel.currentQuestion {
-                        let questionModel = QuestionModel(
-                            id: currentQuestion.originalId,
-                            text: currentQuestion.text,
-                            options: currentQuestion.options,
-                            category: currentQuestion.category,
-                            subcategory: nil
-                        )
-                        
-                        // Get illustration asset - ensure ContentService.shared is used directly
-                        let assetName = ContentService.shared.getIllustrationAsset(for: currentQuestion.originalId)
-                        
-                        QuestionCard(
-                            question: questionModel,
-                            selectedAnswer: viewModel.getAnswerForCurrentQuestion()?.selectedIndex,
-                            showCorrectAnswer: false,
-                            showTranslation: false,
-                            onAnswerSelected: { index in
-                                HapticManager.shared.lightImpact()
-                                viewModel.answerQuestion(selectedIndex: index)
-                            },
-                            illustrationAssetName: assetName,
-                            onImageTapped: {
-                                guard let assetName = assetName else { return }
-                                HapticManager.shared.lightImpact()
-                                zoomedAsset = ZoomedAsset(name: assetName)
-                            }
-                        )
-                        .padding(.bottom, layoutMetrics.adaptive(80))
-                    }
-                }
+            headerView
+                .padding(.bottom, layoutMetrics.adaptive(12))
+            
+            Divider()
+                .background(Color(.separator))
+            
+            // Question and answers content
+            if viewModel.currentQuestion != nil {
+                questionContentView
             }
             
-            Spacer()
+            Divider()
+                .background(Color(.separator))
             
             // Bottom buttons
-            VStack(spacing: layoutMetrics.adaptive(12)) {
+            footerView
+        }
+        .background(Color(.systemBackground))
+        .ignoresSafeArea(edges: .bottom)
+        .fullScreenCover(item: $zoomedAsset) { item in
+            FullScreenImageView(assetName: item.name, onDismiss: {
+                zoomedAsset = nil
+            })
+        }
+        .sheet(isPresented: $showingFeedbackReport) {
+            if let currentQuestion = viewModel.currentQuestion {
+                FeedbackReportView(
+                    questionId: currentQuestion.originalId,
+                    questionText: currentQuestion.text,
+                    category: currentQuestion.category
+                )
+                .environmentObject(languageManager)
+            }
+        }
+    }
+    
+    // MARK: - Question Content
+    private var questionContentView: some View {
+        ScrollView {
+            if let currentQuestion = viewModel.currentQuestion {
+                let questionModel = QuestionModel(
+                    id: currentQuestion.originalId,
+                    text: currentQuestion.text,
+                    options: currentQuestion.options,
+                    category: currentQuestion.category,
+                    subcategory: nil
+                )
+                
+                // Get illustration asset - ensure ContentService.shared is used directly
+                let assetName = ContentService.shared.getIllustrationAsset(for: currentQuestion.originalId)
+                
+                QuestionCard(
+                    question: questionModel,
+                    selectedAnswer: viewModel.getAnswerForCurrentQuestion()?.selectedIndex,
+                    showCorrectAnswer: false,
+                    showTranslation: false,
+                    onAnswerSelected: { index in
+                        HapticManager.shared.lightImpact()
+                        viewModel.answerQuestion(selectedIndex: index)
+                    },
+                    illustrationAssetName: assetName,
+                    onImageTapped: {
+                        guard let assetName = assetName else { return }
+                        HapticManager.shared.lightImpact()
+                        zoomedAsset = ZoomedAsset(name: assetName)
+                    },
+                    suppressAnswerGlow: true
+                )
+                .padding(.bottom, layoutMetrics.adaptive(16))
+            }
+        }
+        .background(Color(.systemBackground))
+    }
+    
+    // MARK: - Footer View
+    private var footerView: some View {
+        VStack(spacing: layoutMetrics.adaptive(12)) {
                 // Back and Next buttons
                 HStack(spacing: 16) {
                     Button(action: {
@@ -79,11 +116,9 @@ struct TestSessionQuestionCard: View {
                     }) {
                         HStack(spacing: 4) {
                             Image(systemName: "chevron.left")
-                                .font(.headline)
-                                .fontWeight(.semibold)
+                                .font(.system(.headline, design: .rounded).weight(.semibold))
                             Text("back".localized)
-                                .font(.headline)
-                                .fontWeight(.semibold)
+                                .font(.system(.headline, design: .rounded).weight(.semibold))
                         }
                         .foregroundColor(viewModel.canGoPrevious() ? Color.accentColor : .gray)
                         .padding(.horizontal, 16)
@@ -103,11 +138,9 @@ struct TestSessionQuestionCard: View {
                     }) {
                         HStack(spacing: 4) {
                             Text("next".localized)
-                                .font(.headline)
-                                .fontWeight(.semibold)
+                                .font(.system(.headline, design: .rounded).weight(.semibold))
                             Image(systemName: "chevron.right")
-                                .font(.headline)
-                                .fontWeight(.semibold)
+                                .font(.system(.headline, design: .rounded).weight(.semibold))
                         }
                         .foregroundColor(viewModel.currentQuestionIndex < viewModel.questions.count - 1 ? Color.accentColor : .gray)
                         .padding(.horizontal, 16)
@@ -136,27 +169,9 @@ struct TestSessionQuestionCard: View {
                 }
             }
             .padding(.top, layoutMetrics.adaptive(12))
-            .padding(.bottom, layoutMetrics.adaptive(24))
+            .padding(.bottom, layoutMetrics.adaptive(32))
             .background(Color(.systemBackground))
         }
-        .background(Color(.systemBackground))
-        .ignoresSafeArea(edges: .bottom)
-        .fullScreenCover(item: $zoomedAsset) { item in
-            FullScreenImageView(assetName: item.name, onDismiss: {
-                zoomedAsset = nil
-            })
-        }
-        .sheet(isPresented: $showingFeedbackReport) {
-            if let currentQuestion = viewModel.currentQuestion {
-                FeedbackReportView(
-                    questionId: currentQuestion.originalId,
-                    questionText: currentQuestion.text,
-                    category: currentQuestion.category
-                )
-                .environmentObject(languageManager)
-            }
-        }
-    }
     
     // MARK: - Full Screen Image View
     private struct FullScreenImageView: View {
@@ -204,144 +219,178 @@ struct TestSessionQuestionCard: View {
     
     // MARK: - Header View
     private var headerView: some View {
+        headerContent
+            .padding(.vertical, layoutMetrics.adaptive(18))
+            .padding(.horizontal, layoutMetrics.adaptive(20))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(liquidGlassBackground)
+            .clipShape(headerRoundedRectangle)
+            .overlay(headerBorderOverlay)
+            .padding(.horizontal)
+            .padding(.top, layoutMetrics.adaptive(8))
+    }
+    
+    private var headerContent: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(16)) {
-            // Back button
-            HStack {
-                Button(action: {
-                    HapticManager.shared.lightImpact()
-                    showingConfirmation = true
-                }) {
-                    Image(systemName: "chevron.backward")
-                        .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
-                        .foregroundColor(Color(.systemGray6))
-                        .padding(layoutMetrics.adaptive(10))
-                        .background(
-                            Circle()
-                                .fill(Color.white.opacity(0.18))
-                        )
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("back_button_accessibility_label".localized)
-                
-                Spacer()
-            }
+            backButtonView
             
             // Progress bar
             ProgressView(
                 value: Double(viewModel.answers.count),
                 total: max(Double(viewModel.questions.count), 1)
             )
-            .progressViewStyle(
-                LinearProgressViewStyle(tint: Color(.systemGray6))
-            )
+            .progressViewStyle(LinearProgressViewStyle(tint: Color(.systemGray6)))
             .frame(height: layoutMetrics.adaptive(8))
             .clipShape(Capsule())
             
             // Question ID + Actions
-            HStack {
-                if let currentQuestion = viewModel.currentQuestion {
-                    HStack(spacing: 8) {
-                        Text("question_label".localized + " \(currentQuestion.originalId)")
-                            .font(.system(.headline).weight(.semibold))
-                            .foregroundColor(Color(.systemGray6))
+            questionHeaderRow
+        }
+    }
+    
+    private var backButtonView: some View {
+        HStack {
+            Button(action: {
+                HapticManager.shared.lightImpact()
+                showingConfirmation = true
+            }) {
+                Image(systemName: "chevron.backward")
+                    .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
+                    .foregroundColor(.white)
+                    .padding(layoutMetrics.adaptive(10))
+                    .background(
+                        Circle()
+                            .fill(Color.white.opacity(0.18))
+                    )
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("back_button_accessibility_label".localized)
+            
+            Spacer()
+            
+            PremiumCrownButton(action: { premiumManager.presentPaywall() }, color: .white)
+        }
+    }
+    
+    private var questionHeaderRow: some View {
+        HStack {
+            questionLabelView
+            Spacer()
+            headerActionButtons
+        }
+    }
+    
+    private var questionLabelView: some View {
+        HStack(spacing: 8) {
+            if let currentQuestion = viewModel.currentQuestion {
+                Text("question_label".localized + " \(currentQuestion.originalId)")
+                    .font(.system(.headline, design: .rounded).weight(.semibold))
+                    .foregroundColor(.white)
+                    .accessibilityLabel("question_label".localized + " " + currentQuestion.originalId)
+                
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    showingFeedbackReport = true
+                }) {
+                    Image(systemName: "flag.fill")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(Color.accentColor)
+                }
+            }
+        }
+    }
+    
+    private var headerActionButtons: some View {
+        HStack(spacing: layoutMetrics.adaptive(8)) {
+            // Timer button
+            if showingTimerPopup {
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showingTimerPopup.toggle()
+                    }
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(19), style: .continuous)
+                            .fill(.thinMaterial)
+                            .frame(width: layoutMetrics.adaptive(80), height: layoutMetrics.adaptive(38))
                         
-                        Button(action: {
-                            HapticManager.shared.lightImpact()
-                            showingFeedbackReport = true
-                        }) {
-                            Image(systemName: "flag.fill")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(Color.accentColor)
+                        HStack(spacing: 4) {
+                            Image(systemName: "gauge.with.needle.fill")
+                                .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold))
+                                .foregroundColor(viewModel.remainingTime < 300 ? .red : .white)
+                                .rotationEffect(.degrees(Double(viewModel.timerTick * 6)))
+                            Text(timeString(from: viewModel.remainingTime))
+                                .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold, design: .monospaced))
+                                .foregroundColor(viewModel.remainingTime < 300 ? .red : .white)
                         }
                     }
+                    .frame(height: layoutMetrics.adaptive(38))
                 }
-                
-                Spacer()
-                
-                // Timer button
-                if showingTimerPopup {
-                    Button(action: {
+                .buttonStyle(.plain)
+            } else {
+                QuizHeaderIconButton(
+                    systemName: "gauge.with.needle.fill",
+                    isActive: viewModel.remainingTime < 300,
+                    activeTint: viewModel.remainingTime < 300 ? .red : .orange,
+                    inactiveTint: .white,
+                    showGlow: false,
+                    showStroke: false,
+                    accessibilityLabel: "Timer",
+                    accessibilityHint: nil,
+                    action: {
                         HapticManager.shared.lightImpact()
                         withAnimation(.easeInOut(duration: 0.2)) {
                             showingTimerPopup.toggle()
                         }
-                    }) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "gauge.with.needle.fill")
-                                .font(.system(size: layoutMetrics.adaptive(14), weight: .bold))
-                                .foregroundColor(viewModel.remainingTime < 300 ? .red : Color(.systemGray6))
-                                .rotationEffect(.degrees(Double(viewModel.timerTick * 6)))
-                            Text(timeString(from: viewModel.remainingTime))
-                                .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold, design: .monospaced))
-                                .foregroundColor(viewModel.remainingTime < 300 ? .red : Color(.systemGray6))
-                        }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 6)
-                        .background(Color.white.opacity(0.18))
-                        .cornerRadius(16)
                     }
-                    .buttonStyle(.plain)
-                } else {
-                    QuizHeaderIconButton(
-                        systemName: "gauge.with.needle.fill",
-                        isActive: viewModel.remainingTime < 300,
-                        activeTint: viewModel.remainingTime < 300 ? .red : .orange,
-                        accessibilityLabel: "Timer",
-                        accessibilityHint: nil,
-                        action: {
-                            HapticManager.shared.lightImpact()
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                showingTimerPopup.toggle()
-                            }
-                        }
-                    )
-                }
-                
-                // Favorite button
-                if let currentQuestion = viewModel.currentQuestion {
-                    QuizHeaderIconButton(
-                        systemName: "heart",
-                        isActive: favoritesManager.isFavorite(currentQuestion.originalId),
-                        activeTint: .pink,
-                        accessibilityLabel: "spaced_favorite_button_accessibility_label".localized,
-                        accessibilityHint: nil,
-                        action: {
-                            HapticManager.shared.lightImpact()
-                            favoritesManager.toggleFavorite(for: currentQuestion.originalId)
-                        }
-                    )
-                }
+                )
+            }
+            
+            // Favorite button
+            if let currentQuestion = viewModel.currentQuestion {
+                QuizHeaderIconButton(
+                    systemName: "heart",
+                    isActive: favoritesManager.isFavorite(currentQuestion.originalId),
+                    activeTint: Color("AppPink"),
+                    inactiveTint: .white,
+                    showGlow: false,
+                    showStroke: false,
+                    useFilledWhenActive: true,
+                    accessibilityLabel: "spaced_favorite_button_accessibility_label".localized,
+                    accessibilityHint: nil,
+                    action: {
+                        HapticManager.shared.lightImpact()
+                        favoritesManager.toggleFavorite(for: currentQuestion.originalId)
+                    }
+                )
             }
         }
-        .padding(.vertical, layoutMetrics.adaptive(18))
-        .padding(.horizontal, layoutMetrics.adaptive(20))
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(liquidGlassBackground)
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: layoutMetrics.adaptive(32),
-                style: .continuous
-            )
+    }
+    
+    private var headerRoundedRectangle: RoundedRectangle {
+        RoundedRectangle(
+            cornerRadius: layoutMetrics.adaptive(32),
+            style: .continuous
         )
-        .overlay(
-            RoundedRectangle(
-                cornerRadius: layoutMetrics.adaptive(32),
-                style: .continuous
-            )
-            .stroke(
-                LinearGradient(
-                    colors: [
-                        .white.opacity(0.4),
-                        .white.opacity(0.08)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.8
-            )
+    }
+    
+    private var headerBorderOverlay: some View {
+        RoundedRectangle(
+            cornerRadius: layoutMetrics.adaptive(32),
+            style: .continuous
         )
-        .padding(.horizontal)
-        .padding(.top, layoutMetrics.adaptive(8))
+        .stroke(
+            LinearGradient(
+                colors: [
+                    .white.opacity(0.4),
+                    .white.opacity(0.08)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ),
+            lineWidth: 0.8
+        )
     }
     
     var liquidGlassBackground: some View {
@@ -419,17 +468,17 @@ struct TestSessionQuestionCard: View {
                                 .frame(width: 32, height: 32)
                                 .overlay(
                                     Text("\(index + 1)")
-                                        .font(.footnote)
-                                        .fontWeight(.semibold)
+                                        .font(.system(.footnote, design: .rounded).weight(.semibold))
                                         .foregroundColor(circleTextColor(for: index))
                                 )
                         }
                         .id(index)
                     }
                 }
-                .padding(.horizontal, layoutMetrics.adaptive(20))
+                .padding(.horizontal, layoutMetrics.adaptive(24))
             }
             .frame(height: 44)
+            .padding(.bottom, layoutMetrics.adaptive(16))
             .onChange(of: viewModel.currentQuestionIndex) { _, newIndex in
                 withAnimation {
                     proxy.scrollTo(newIndex, anchor: .center)

@@ -24,11 +24,11 @@ class OnboardingLanguageViewModel: ObservableObject {
         // Only Language has a default preselection on first launch: English
         let code = languageManager.currentAppLanguage
         if preferences.hasLaunchedBefore {
-            // Reflect saved app language
+            // Reflect saved app language (Ukrainian hidden when disabled)
             switch code {
             case "de": selectedLanguage = "Deutsch"
             case "ru": selectedLanguage = "Русский"
-            case "uk": selectedLanguage = "Українська"
+            case "uk": selectedLanguage = "English"; languageManager.setAppLanguage("en")
             default: selectedLanguage = "English"
             }
         } else {

@@ -162,17 +162,15 @@ struct SubscriptionOptionsView: View {
     
     private func handlePurchase(plan: SubscriptionPlanType) {
         // TODO: Replace with actual StoreKit purchase flow
-        // This is a placeholder for when StoreKit is integrated
-        
         let expiryDate: Date?
-        if plan == .monthly {
-            // Monthly subscription expires in 1 month
+        switch plan {
+        case .monthly:
             expiryDate = Calendar.current.date(byAdding: .month, value: 1, to: Date())
-        } else {
-            // Lifetime never expires
+        case .yearly:
+            expiryDate = Calendar.current.date(byAdding: .year, value: 1, to: Date())
+        case .lifetime:
             expiryDate = nil
         }
-        
         premiumManager.activateSubscription(type: plan, expiryDate: expiryDate)
         dismiss()
         
@@ -190,13 +188,21 @@ private struct SubscriptionPlanCard: View {
     
     @Environment(\.layoutMetrics) private var layoutMetrics
     
+    private var planTitleKey: String {
+        switch plan.type {
+        case .monthly: return "premium_plan_monthly"
+        case .yearly: return "premium_plan_yearly"
+        case .lifetime: return "premium_plan_lifetime"
+        }
+    }
+    
     var body: some View {
         Button(action: onSelect) {
             HStack(spacing: layoutMetrics.adaptive(16)) {
                 VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
                     // Plan title and badge
                     HStack(spacing: layoutMetrics.adaptive(8)) {
-                        Text(plan.type == .monthly ? "premium_plan_monthly".localized : "premium_plan_lifetime".localized)
+                        Text(planTitleKey.localized)
                             .font(.system(.headline, design: .rounded).weight(.bold))
                             .foregroundColor(.primary)
                         
@@ -283,8 +289,9 @@ private struct SubscriptionTermsView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
-            if planType == .monthly {
-                Text("premium_terms_monthly_part1".localized.replacingOccurrences(of: "{price}", with: "2,99"))
+            if planType == .monthly || planType == .yearly {
+                let price = planType == .monthly ? "1,99" : "14,99"
+                Text("premium_terms_monthly_part1".localized.replacingOccurrences(of: "{price}", with: price))
                     .font(.system(.caption, design: .rounded))
                     .foregroundColor(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

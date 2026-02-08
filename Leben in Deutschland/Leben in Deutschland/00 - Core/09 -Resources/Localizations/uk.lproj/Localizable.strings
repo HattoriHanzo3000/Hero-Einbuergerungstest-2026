@@ -82,6 +82,7 @@
 
 // Learn by Topics
 "learn_by_topics_title" = "Вчитися за темами";
+"learn_by_topics_header_message" = "Я згрупував усі 310 питань за темами — обирай свій маршрут і злітай.";
 "no_categories_found" = "Категорії не знайдено";
 "no_search_results" = "Нічого не знайдено";
 "question_label" = "Питання";
@@ -299,15 +300,16 @@
 // =============================================================================
 
 "statistics_title" = "Ваш прогрес";
-"statistics_wrong_title" = "Неправильно";
 "statistics_familiar_title" = "Ознайомився";
 "statistics_reinforced_title" = "Закріпив";
 "statistics_mastered_title" = "Освоїв";
-"statistics_wrong_description" = "Відповідь неправильна";
+"statistics_expert_title" = "Експерт";
 "statistics_familiar_description" = "1 раз правильно";
 "statistics_reinforced_description" = "2 рази правильно";
-"statistics_mastered_description" = "3 рази та більше правильно";
+"statistics_mastered_description" = "3 рази правильно";
+"statistics_expert_description" = "4 рази та більше правильно";
 "statistics_card_flip_hint" = "Двічі натисніть, щоб перевернути картку";
+"ready" = "готовий";
 
 // =============================================================================
 //   GAMIFICATION
@@ -431,6 +433,26 @@
 "premium_favorites_alert_message" = "Онови до Premium, щоб бачити свої обрані";
 "premium_favorites_alert_cancel" = "Скасувати";
 "premium_favorites_alert_upgrade" = "Оновити";
+"premium_accessibility_label" = "Преміум";
+"premium_accessibility_hint" = "Відкриває преміум-функції та варіанти підписки";
+"premium_plan_yearly" = "Щорічно";
+"premium_per_year" = "на рік";
+
+"paywall_title" = "Розблокувати Premium";
+"paywall_subtitle" = "Повний доступ до всіх матеріалів, прогрес та інше.";
+"paywall_close" = "Закрити";
+"paywall_close_hint" = "Закриває екран підписки";
+"paywall_restore" = "Відновити покупки";
+"paywall_restore_hint" = "Відновити попередню підписку";
+"paywall_restore_success" = "Підписку відновлено.";
+"paywall_restore_no_subscription" = "Активну підписку не знайдено.";
+"paywall_terms" = "Умови використання";
+"paywall_terms_hint" = "Відкрити умови використання";
+"paywall_privacy" = "Політика конфіденційності";
+"paywall_privacy_hint" = "Відкрити політику конфіденційності";
+"paywall_terms_boilerplate" = "Оплата буде списана з вашого Apple ID. Підписка продовжується автоматично, якщо не скасувати не менше ніж за 24 години до кінця періоду. Керування та скасування — у налаштуваннях App Store.";
+"paywall_best_value" = "Вигідно";
+"paywall_year_savings" = "Економія 37 % порівняно з щомісячною";
 
 // =============================================================================
 //   ЗВОРОТНИЙ ЗВ'ЯЗОК / ПОВІДОМИТИ ПРО ПИТАННЯ

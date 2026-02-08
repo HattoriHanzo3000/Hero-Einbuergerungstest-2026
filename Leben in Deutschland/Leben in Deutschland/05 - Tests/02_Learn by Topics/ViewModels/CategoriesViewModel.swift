@@ -38,9 +38,12 @@ class CategoriesViewModel: ObservableObject {
     // MARK: - Public Methods
     
     /// Load categories for current language
-    func loadCategories(for language: String) async {
+    func loadCategories(for language: String, translationLanguage: String? = nil) async {
         await contentService.loadContent(for: language)
         await HintService.shared.loadHints(for: language)
+        if let translation = translationLanguage, translation != language {
+            await HintService.shared.loadTranslationHints(for: translation)
+        }
     }
     
     /// Get category by name

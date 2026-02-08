@@ -22,9 +22,12 @@ struct HintsData: Codable {
 // MARK: - Hint Service
 @MainActor
 class HintService: ObservableObject {
-    @Published var hints: [String: String] = [:] // question-id -> hint text
+    @Published var hints: [String: String] = [:] // question-id -> hint text (app language)
+    @Published var translationHints: [String: String] = [:] // question-id -> hint text (translation language)
     @Published var isLoading = false
     @Published var errorMessage: String?
+    
+    private var currentTranslationLanguage: String?
     
     // MARK: - Singleton
     static let shared = HintService()
@@ -59,8 +62,53 @@ class HintService: ObservableObject {
     }
     
     /// Get hint for a specific question ID
+    /// Supports both formats: "001" and "q001"
     func getHint(for questionId: String) -> String? {
-        return hints[questionId]
+        // Try direct lookup first
+        if let hint = hints[questionId] {
+            return hint
+        }
+        // Try with "q" prefix (hints JSON uses "q001" format)
+        if let hint = hints["q\(questionId)"] {
+            return hint
+        }
+        // Try removing "q" prefix if questionId has it
+        if questionId.hasPrefix("q"), let hint = hints[String(questionId.dropFirst())] {
+            return hint
+        }
+        return nil
+    }
+    
+    /// Load translation hints for a specific language (cached separately from app hints)
+    func loadTranslationHints(for language: String) async {
+        guard currentTranslationLanguage != language else { return }
+        
+        do {
+            let hintsData = try await loadHintsFile(for: language)
+            var hintsDict: [String: String] = [:]
+            for hint in hintsData.hints {
+                hintsDict[hint.questionId] = hint.hint
+            }
+            translationHints = hintsDict
+            currentTranslationLanguage = language
+        } catch {
+            translationHints = [:]
+            currentTranslationLanguage = nil
+        }
+    }
+    
+    /// Get hint in translation language for a specific question ID
+    func getTranslationHint(for questionId: String) -> String? {
+        if let hint = translationHints[questionId] { return hint }
+        if let hint = translationHints["q\(questionId)"] { return hint }
+        if questionId.hasPrefix("q"), let hint = translationHints[String(questionId.dropFirst())] { return hint }
+        return nil
+    }
+    
+    /// Clear translation cache (e.g. when languages change)
+    func clearTranslationCache() {
+        translationHints = [:]
+        currentTranslationLanguage = nil
     }
     
     // MARK: - Private Methods

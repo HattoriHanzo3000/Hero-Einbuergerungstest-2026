@@ -41,10 +41,13 @@ class FavoritesViewModel: ObservableObject {
         languageManager = manager
     }
     
-    func loadFavorites(language: String) async {
+    func loadFavorites(language: String, translationLanguage: String? = nil) async {
         // Ensure content is loaded
         await contentService.loadContent(for: language)
         await HintService.shared.loadHints(for: language)
+        if let translation = translationLanguage, translation != language {
+            await HintService.shared.loadTranslationHints(for: translation)
+        }
         
         // Get all favorite question IDs
         let favoriteIds = favoritesManager.favoriteQuestionIds
@@ -64,19 +67,11 @@ class FavoritesViewModel: ObservableObject {
         // Sort by question ID to maintain consistent order
         favoriteQuestions = questions.sorted { $0.id < $1.id }
         
-        // Load saved answers for favorited questions
-        for question in favoriteQuestions {
-            if let savedAnswer = answersService.getAnswer(for: question.id) {
-                selectedAnswers[question.id] = savedAnswer
-                showCorrectAnswers[question.id] = true
-            }
-        }
+        // Favorites is read-only - don't load saved answers, always show correct answer
     }
     
     func selectAnswer(_ index: Int, for questionId: String) {
-        guard !(showCorrectAnswers[questionId] ?? false) else { return }
-        HapticManager.shared.lightImpact()
-        selectedAnswers[questionId] = index
+        // Read-only mode: answer selection disabled
     }
     
     func checkAnswer(for questionId: String) {
@@ -85,6 +80,12 @@ class FavoritesViewModel: ObservableObject {
         // Save answer
         answersService.saveAnswer(answer, for: questionId)
         showCorrectAnswers[questionId] = true
+    }
+    
+    func resetCurrentQuestion(for questionId: String) {
+        answersService.clearAnswer(for: questionId)
+        selectedAnswers[questionId] = nil
+        showCorrectAnswers[questionId] = false
     }
     
     func toggleTranslation() {
@@ -98,6 +99,28 @@ class FavoritesViewModel: ObservableObject {
     func toggleFavorite(for questionId: String) {
         favoritesManager.toggleFavorite(for: questionId)
         // Questions will reload automatically via Combine subscription
+    }
+    
+    func isCorrect(at index: Int) -> Bool {
+        guard index < favoriteQuestions.count else { return false }
+        let questionId = favoriteQuestions[index].id
+        guard showCorrectAnswers[questionId] == true,
+              let selected = selectedAnswers[questionId],
+              let correctIndex = contentService.correctAnswers[questionId] else {
+            return false
+        }
+        return selected == correctIndex
+    }
+    
+    func isIncorrect(at index: Int) -> Bool {
+        guard index < favoriteQuestions.count else { return false }
+        let questionId = favoriteQuestions[index].id
+        guard showCorrectAnswers[questionId] == true,
+              let selected = selectedAnswers[questionId],
+              let correctIndex = contentService.correctAnswers[questionId] else {
+            return false
+        }
+        return selected != correctIndex
     }
 }
 

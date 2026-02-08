@@ -2,7 +2,7 @@
 //  FavoritesQuestionCard.swift
 //  Leben in Deutschland
 //
-//  Question card component for favorites carousel - matches SpacedRepetitionQuestionCard design
+//  Question card component for favorites - matches LearningView design
 //
 
 import SwiftUI
@@ -14,12 +14,13 @@ struct FavoritesQuestionCard: View {
         let totalCount: Int
     }
     
-    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
+    @EnvironmentObject private var premiumManager: PremiumManager
     
     @State private var showingFeedbackReport = false
     @State private var showingHintSheet = false
+    @State private var zoomedAsset: ZoomedAsset?
     
     private let hintService = HintService.shared
     
@@ -34,8 +35,14 @@ struct FavoritesQuestionCard: View {
     let isTranslationActive: Bool
     let onToggleFavorite: (() -> Void)?
     let isFavorite: Bool
-    let onCheckTapped: (() -> Void)?
-    let isCheckEnabled: Bool
+    let onGoToQuestion: ((Int) -> Void)?
+    let isCorrectAt: (Int) -> Bool
+    let isIncorrectAt: (Int) -> Bool
+    
+    struct ZoomedAsset: Identifiable {
+        let id = UUID()
+        let name: String
+    }
     
     init(
         question: QuestionModel,
@@ -50,8 +57,9 @@ struct FavoritesQuestionCard: View {
         isTranslationActive: Bool = false,
         onToggleFavorite: (() -> Void)? = nil,
         isFavorite: Bool = false,
-        onCheckTapped: (() -> Void)? = nil,
-        isCheckEnabled: Bool = true
+        onGoToQuestion: ((Int) -> Void)? = nil,
+        isCorrectAt: @escaping (Int) -> Bool = { _ in false },
+        isIncorrectAt: @escaping (Int) -> Bool = { _ in false }
     ) {
         self.question = question
         self.selectedAnswer = selectedAnswer
@@ -64,54 +72,33 @@ struct FavoritesQuestionCard: View {
         self.isTranslationActive = isTranslationActive
         self.onToggleFavorite = onToggleFavorite
         self.isFavorite = isFavorite
-        self.onCheckTapped = onCheckTapped
-        self.isCheckEnabled = isCheckEnabled
+        self.onGoToQuestion = onGoToQuestion
+        self.isCorrectAt = isCorrectAt
+        self.isIncorrectAt = isIncorrectAt
     }
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            VStack(spacing: layoutMetrics.adaptive(20)) {
-                headerView
-                
-                ScrollView {
-                    QuestionCard(
-                        question: question,
-                        selectedAnswer: selectedAnswer,
-                        showCorrectAnswer: showCorrectAnswer,
-                        showTranslation: showTranslation,
-                        onAnswerSelected: onAnswerSelected,
-                        suppressAnswerGlow: true
-                    )
-                    .padding(.bottom, layoutMetrics.adaptive(80))
-                }
-            }
-            .background(Color(.systemBackground))
+        VStack(spacing: 0) {
+            headerView
+                .padding(.bottom, layoutMetrics.adaptive(12))
             
-            HStack(spacing: layoutMetrics.adaptive(12)) {
-                // Hint button (appears when answer is shown)
-                if showCorrectAnswer {
-                    HintIconButton(action: hintAction)
-                        .transition(.scale.combined(with: .opacity))
-                }
-                
-                // Check/Next button (shrinks when hint appears)
-                if let onCheckTapped {
-                    QuizActionButton(
-                        buttonTitle,
-                        style: checkButtonStyle,
-                        isEnabled: isCheckEnabled,
-                        accessibilityLabel: checkButtonAccessibilityLabel
-                    ) {
-                        onCheckTapped()
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-            }
-            .padding(.horizontal, layoutMetrics.adaptive(24))
-            .padding(.bottom, layoutMetrics.adaptive(24))
-            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showCorrectAnswer)
+            Divider()
+                .background(Color(.separator))
+            
+            questionContentView
+            
+            Divider()
+                .background(Color(.separator))
+            
+            footerView
         }
         .background(Color(.systemBackground))
+        .ignoresSafeArea(edges: .bottom)
+        .fullScreenCover(item: $zoomedAsset) { item in
+            FavoritesFullScreenImageView(assetName: item.name, onDismiss: {
+                zoomedAsset = nil
+            })
+        }
         .sheet(isPresented: $showingFeedbackReport) {
             FeedbackReportView(
                 questionId: question.id,
@@ -122,7 +109,12 @@ struct FavoritesQuestionCard: View {
         }
         .sheet(isPresented: $showingHintSheet) {
             if let hint = hintService.getHint(for: question.id) {
-                HintSheetView(hint: hint)
+                HintSheetView(
+                    hint: hint,
+                    translatedHint: showTranslation && languageManager.currentTranslationLanguage != languageManager.currentAppLanguage
+                        ? hintService.getTranslationHint(for: question.id)
+                        : nil
+                )
             } else {
                 HintSheetView(hint: "no_hint_available".localized)
             }
@@ -130,108 +122,72 @@ struct FavoritesQuestionCard: View {
     }
 }
 
-private extension FavoritesQuestionCard {
-    private var buttonTitle: String {
-        showCorrectAnswer ? "next_button".localized : "check_answer_button".localized
-    }
-    
-    private var checkButtonAccessibilityLabel: String {
-        if showCorrectAnswer {
-            // Use the button title itself as accessibility label for "Next" button
-            return "next_button".localized
-        } else {
-            return "check_answer_button_accessibility_label".localized
-        }
-    }
-    
-    private var checkButtonStyle: QuizActionButton.Style {
-        QuizActionButton.Style(
-            backgroundColor: Color("AppBlueLagoon"),
-            disabledBackgroundColor: Color(.systemGray2),
-            haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
-            haloSecondaryColor: Color.white.opacity(0.18),
-            showsHaloWhenDisabled: showCorrectAnswer,
-            suppressGlow: true
-        )
-    }
-    
-    func hintAction() {
-        HapticManager.shared.lightImpact()
-        print("🔍 Looking for hint for question ID: \(question.id)")
-        print("🔍 Available hints count: \(hintService.hints.count)")
-        
-        if hintService.getHint(for: question.id) != nil {
-            print("✅ Found hint for question \(question.id)")
-        } else {
-            print("⚠️ No hint available for question \(question.id)")
-        }
-        
-        // Always show the sheet (with hint or fallback message)
-        showingHintSheet = true
-    }
-    
-    private var hintButtonStyle: QuizActionButton.Style {
-        QuizActionButton.Style(
-            backgroundColor: Color(uiColor: .systemOrange),
-            disabledBackgroundColor: Color(uiColor: .systemOrange),
-            haloPrimaryColor: Color(uiColor: .systemOrange).opacity(0.42),
-            haloSecondaryColor: Color.white.opacity(0.18),
-            showsHaloWhenDisabled: true
-        )
-    }
-}
-
-// MARK: - Hint Icon Button
-private struct HintIconButton: View {
-    let action: () -> Void
-    @Environment(\.layoutMetrics) private var layoutMetrics
-    @Environment(\.colorScheme) private var colorScheme
+// MARK: - Full Screen Image View (matches LearningView)
+private struct FavoritesFullScreenImageView: View {
+    let assetName: String
+    let onDismiss: () -> Void
     
     var body: some View {
-        Button(action: {
-            HapticManager.shared.lightImpact()
-            action()
-        }) {
-            Image(systemName: "lightbulb.fill")
-                .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
-                .foregroundColor(.white)
-                .padding(.vertical, layoutMetrics.adaptive(18))
-                .frame(width: layoutMetrics.adaptive(80))
-                .background(
-                    ZStack {
-                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
-                            .fill(.ultraThinMaterial)
-                        
-                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
-                            .fill(Color("AppOrange"))
+        ZStack {
+            Color.black
+                .ignoresSafeArea()
+                .onTapGesture {
+                    HapticManager.shared.lightImpact()
+                    onDismiss()
+                }
+            
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        HapticManager.shared.lightImpact()
+                        onDismiss()
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 32))
+                            .foregroundColor(.white.opacity(0.9))
+                            .background(Color.black.opacity(0.3))
+                            .clipShape(Circle())
                     }
-                    .overlay(
-                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
-                            .stroke(Color.white.opacity(0.18), lineWidth: 1)
-                    )
-                )
-                .shadow(
-                    color: Color.black.opacity(0.16),
-                    radius: layoutMetrics.adaptive(22),
-                    y: layoutMetrics.adaptive(10)
-                )
+                    .padding(.top, 16)
+                    .padding(.trailing, 16)
+                }
+                Spacer()
+            }
+            
+            ZoomableImage(imageName: assetName)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 60)
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel("hint_button_title".localized)
-        .accessibilityAddTraits(.isButton)
+        .transition(.opacity)
     }
 }
 
-// MARK: - Header
+// MARK: - Header View (matches LearningView)
 private extension FavoritesQuestionCard {
     var headerView: some View {
+        headerContent
+            .padding(.vertical, layoutMetrics.adaptive(18))
+            .padding(.horizontal, layoutMetrics.adaptive(20))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(liquidGlassBackground)
+            .clipShape(headerRoundedRectangle)
+            .overlay(headerBorderOverlay)
+            .padding(.horizontal)
+            .padding(.top, layoutMetrics.adaptive(8))
+    }
+    
+    private var headerContent: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(16)) {
             if let onBackTapped {
                 HStack {
-                    Button(action: onBackTapped) {
+                    Button(action: {
+                        HapticManager.shared.lightImpact()
+                        onBackTapped()
+                    }) {
                         Image(systemName: "chevron.backward")
                             .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
-                            .foregroundColor(Color(.systemGray6))
+                            .foregroundColor(.white)
                             .padding(layoutMetrics.adaptive(10))
                             .background(
                                 Circle()
@@ -242,94 +198,109 @@ private extension FavoritesQuestionCard {
                     .accessibilityLabel("back_button_accessibility_label".localized)
                     
                     Spacer()
+                    
+                    PremiumCrownButton(action: { premiumManager.presentPaywall() }, color: .white)
                 }
             }
             
+            // Topic title (subcategory or category)
+            Text((question.subcategory ?? "").isEmpty ? (question.category ?? "Favorites") : (question.subcategory ?? ""))
+                .font(.system(.title2, design: .rounded).weight(.bold))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.leading)
+                .lineLimit(2)
+                .minimumScaleFactor(0.85)
+            
+            // Progress bar
             ProgressView(
                 value: Double(progress.currentIndex),
                 total: max(Double(progress.totalCount), 1)
             )
-            .progressViewStyle(
-                LinearProgressViewStyle(tint: Color(.systemGray6))
-            )
+            .progressViewStyle(LinearProgressViewStyle(tint: Color(.systemGray6)))
             .frame(height: layoutMetrics.adaptive(8))
             .clipShape(Capsule())
             
-            HStack {
-                HStack(spacing: 8) {
+            // Question ID + Actions
+            questionHeaderRow
+        }
+    }
+    
+    private var questionHeaderRow: some View {
+        HStack {
+            HStack(spacing: 8) {
                 Text("question_label".localized + " \(question.id)")
                     .font(.system(.headline, design: .rounded).weight(.semibold))
                     .foregroundColor(.white)
-                    
-                    Button(action: {
-                        HapticManager.shared.lightImpact()
-                        showingFeedbackReport = true
-                    }) {
-                        Image(systemName: "flag.fill")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(Color.accentColor)
-                    }
-                }
+                    .accessibilityLabel("question_label".localized + " " + question.id)
                 
-                Spacer()
-                
-                if let onToggleTranslation {
-                    QuizHeaderIconButton(
-                        systemName: "globe",
-                        isActive: isTranslationActive,
-                        activeTint: Color("AppOrange"),
-                        showGlow: false,
-                        accessibilityLabel: "spaced_translation_button_accessibility_label".localized,
-                        accessibilityHint: nil,
-                        action: onToggleTranslation
-                    )
-                }
-                
-                if let onToggleFavorite {
-                    QuizHeaderIconButton(
-                        systemName: "heart",
-                        isActive: isFavorite,
-                        activeTint: Color("AppPink"),
-                        showGlow: false,
-                        useFilledWhenActive: true,
-                        accessibilityLabel: "spaced_favorite_button_accessibility_label".localized,
-                        accessibilityHint: nil,
-                        action: onToggleFavorite
-                    )
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    showingFeedbackReport = true
+                }) {
+                    Image(systemName: "flag.fill")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(Color.accentColor)
                 }
             }
+            
+            Spacer()
+            
+            if let onToggleTranslation {
+                QuizHeaderIconButton(
+                    systemName: "globe",
+                    isActive: isTranslationActive,
+                    activeTint: Color("AppOrange"),
+                    inactiveTint: .white,
+                    showGlow: false,
+                    showStroke: false,
+                    accessibilityLabel: "spaced_translation_button_accessibility_label".localized,
+                    accessibilityHint: nil,
+                    action: onToggleTranslation
+                )
+            }
+            
+            if let onToggleFavorite {
+                QuizHeaderIconButton(
+                    systemName: "heart",
+                    isActive: isFavorite,
+                    activeTint: Color("AppPink"),
+                    inactiveTint: .white,
+                    showGlow: false,
+                    showStroke: false,
+                    useFilledWhenActive: true,
+                    accessibilityLabel: "spaced_favorite_button_accessibility_label".localized,
+                    accessibilityHint: nil,
+                    action: onToggleFavorite
+                )
+            }
         }
-        .padding(.vertical, layoutMetrics.adaptive(18))
-        .padding(.horizontal, layoutMetrics.adaptive(20))
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(liquidGlassBackground)
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: layoutMetrics.adaptive(32),
-                style: .continuous
-            )
-        )
-        .overlay(
-            RoundedRectangle(
-                cornerRadius: layoutMetrics.adaptive(32),
-                style: .continuous
-            )
-            .stroke(
-                LinearGradient(
-                    colors: [
-                        .white.opacity(0.4),
-                        .white.opacity(0.08)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.8
-            )
-        )
-        .padding(.horizontal)
-        .padding(.top, layoutMetrics.adaptive(8))
     }
-
+    
+    private var headerRoundedRectangle: RoundedRectangle {
+        RoundedRectangle(
+            cornerRadius: layoutMetrics.adaptive(32),
+            style: .continuous
+        )
+    }
+    
+    private var headerBorderOverlay: some View {
+        RoundedRectangle(
+            cornerRadius: layoutMetrics.adaptive(32),
+            style: .continuous
+        )
+        .stroke(
+            LinearGradient(
+                colors: [
+                    .white.opacity(0.4),
+                    .white.opacity(0.08)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ),
+            lineWidth: 0.8
+        )
+    }
+    
     var liquidGlassBackground: some View {
         RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
             .fill(
@@ -375,6 +346,153 @@ private extension FavoritesQuestionCard {
     }
 }
 
+// MARK: - Question Content (matches LearningView)
+private extension FavoritesQuestionCard {
+    var questionContentView: some View {
+        ScrollView {
+            let assetName = ContentService.shared.getIllustrationAsset(for: question.id)
+            QuestionCard(
+                question: question,
+                selectedAnswer: selectedAnswer,
+                showCorrectAnswer: showCorrectAnswer,
+                showTranslation: showTranslation,
+                onAnswerSelected: onAnswerSelected,
+                illustrationAssetName: assetName,
+                onImageTapped: {
+                    guard let assetName = assetName else { return }
+                    HapticManager.shared.lightImpact()
+                    zoomedAsset = ZoomedAsset(name: assetName)
+                },
+                suppressAnswerGlow: true,
+                suppressIncorrectHighlight: true
+            )
+            .padding(.bottom, layoutMetrics.adaptive(16))
+        }
+        .background(Color(.systemBackground))
+    }
+}
+
+// MARK: - Footer View (matches LearningView)
+private extension FavoritesQuestionCard {
+    var footerView: some View {
+        VStack(spacing: layoutMetrics.adaptive(8)) {
+            // Hint button (appears when answer is shown and hint exists)
+            if showCorrectAnswer, hintService.getHint(for: question.id) != nil {
+                HStack {
+                    HintIconButton(action: hintAction)
+                        .transition(.scale.combined(with: .opacity))
+                }
+                .padding(.horizontal, layoutMetrics.adaptive(24))
+            }
+            
+            if progress.totalCount > 1, let onGoToQuestion {
+                questionNavigationBar(onGoToQuestion: onGoToQuestion)
+            }
+        }
+        .padding(.top, layoutMetrics.adaptive(12))
+        .padding(.bottom, layoutMetrics.adaptive(24))
+        .background(Color(.systemBackground))
+        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showCorrectAnswer)
+    }
+    
+    func hintAction() {
+        HapticManager.shared.lightImpact()
+        showingHintSheet = true
+    }
+    
+    private func questionNavigationBar(onGoToQuestion: @escaping (Int) -> Void) -> some View {
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(0..<progress.totalCount, id: \.self) { index in
+                        Button(action: {
+                            HapticManager.shared.lightImpact()
+                            onGoToQuestion(index)
+                        }) {
+                            Circle()
+                                .fill(circleColor(for: index))
+                                .frame(width: 32, height: 32)
+                                .overlay(
+                                    Text("\(index + 1)")
+                                        .font(.footnote)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(circleTextColor(for: index))
+                                )
+                        }
+                        .id(index)
+                    }
+                }
+                .padding(.horizontal, layoutMetrics.adaptive(24))
+            }
+            .frame(height: 44)
+            .padding(.bottom, layoutMetrics.adaptive(16))
+            .onChange(of: progress.currentIndex) { _, newIndex in
+                withAnimation {
+                    proxy.scrollTo(newIndex, anchor: .center)
+                }
+            }
+        }
+    }
+    
+    private func circleColor(for index: Int) -> Color {
+        // In favorites, only show selected/not selected (no correct/wrong highlighting)
+        if index == progress.currentIndex - 1 {
+            return Color("SelectedCircle")
+        } else {
+            return Color(.systemGray5)
+        }
+    }
+    
+    private func circleTextColor(for index: Int) -> Color {
+        // In favorites, only show selected/not selected (no correct/wrong highlighting)
+        if index == progress.currentIndex - 1 {
+            return Color(.systemGray6)
+        } else {
+            return .primary
+        }
+    }
+}
+
+// MARK: - Hint Icon Button (matches LearningView)
+private struct HintIconButton: View {
+    let action: () -> Void
+    @Environment(\.layoutMetrics) private var layoutMetrics
+    
+    var body: some View {
+        Button(action: {
+            HapticManager.shared.lightImpact()
+            action()
+        }) {
+            Image(systemName: "lightbulb.fill")
+                .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
+                .foregroundColor(.white)
+                .padding(.vertical, layoutMetrics.adaptive(18))
+                .frame(width: layoutMetrics.adaptive(80))
+                .background(
+                    ZStack {
+                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
+                            .fill(.ultraThinMaterial)
+                        
+                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
+                            .fill(Color("AppOrange"))
+                    }
+                    .overlay(
+                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
+                            .stroke(Color.white.opacity(0.18), lineWidth: 1)
+                    )
+                )
+                .shadow(
+                    color: Color.black.opacity(0.16),
+                    radius: layoutMetrics.adaptive(22),
+                    y: layoutMetrics.adaptive(10)
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("hint_button_title".localized)
+        .accessibilityAddTraits(.isButton)
+    }
+}
+
 // MARK: - Preview
 #Preview("Favorites Question Card") {
     let sampleQuestion = QuestionModel(
@@ -398,8 +516,6 @@ private extension FavoritesQuestionCard {
         isTranslationActive: true,
         onToggleFavorite: {},
         isFavorite: true,
-        onCheckTapped: {},
-        isCheckEnabled: true
     )
     .environmentObject(LanguageManager())
     .background(Color(.systemGroupedBackground))

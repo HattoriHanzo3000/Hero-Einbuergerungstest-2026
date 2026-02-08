@@ -83,6 +83,7 @@
 
 // Learn by Topics
 "learn_by_topics_title" = "Learn by Topics";
+"learn_by_topics_header_message" = "I grouped all 310 questions by themes for you — choose a path and soar.";
 "no_categories_found" = "No categories found";
 "no_search_results" = "No results found";
 "question_label" = "Question";
@@ -300,15 +301,16 @@
 // =============================================================================
 
 "statistics_title" = "Your Progress";
-"statistics_wrong_title" = "Wrong";
 "statistics_familiar_title" = "Familiar";
 "statistics_reinforced_title" = "Reinforced";
 "statistics_mastered_title" = "Mastered";
-"statistics_wrong_description" = "Answered incorrectly";
+"statistics_expert_title" = "Expert";
 "statistics_familiar_description" = "Answered correctly 1 time";
 "statistics_reinforced_description" = "Answered correctly 2 times";
-"statistics_mastered_description" = "Answered correctly 3+ times";
+"statistics_mastered_description" = "Answered correctly 3 times";
+"statistics_expert_description" = "Answered correctly 4+ times";
 "statistics_card_flip_hint" = "Double tap to flip card";
+"ready" = "ready";
 
 // =============================================================================
 //   GAMIFICATION
@@ -434,6 +436,27 @@
 "premium_favorites_alert_message" = "Upgrade to premium to see your favorites";
 "premium_favorites_alert_cancel" = "Cancel";
 "premium_favorites_alert_upgrade" = "Upgrade";
+"premium_accessibility_label" = "Premium";
+"premium_accessibility_hint" = "Opens premium features and subscription options";
+"premium_plan_yearly" = "Yearly";
+"premium_per_year" = "per year";
+
+// Paywall (first-run / crown)
+"paywall_title" = "Unlock Premium";
+"paywall_subtitle" = "Full access to all materials, progress tracking, and more.";
+"paywall_close" = "Close";
+"paywall_close_hint" = "Dismisses the paywall";
+"paywall_restore" = "Restore Purchases";
+"paywall_restore_hint" = "Restore previous subscription";
+"paywall_restore_success" = "Subscription restored.";
+"paywall_restore_no_subscription" = "No active subscription found.";
+"paywall_terms" = "Terms & Conditions";
+"paywall_terms_hint" = "Opens Terms and Conditions";
+"paywall_privacy" = "Privacy Policy";
+"paywall_privacy_hint" = "Opens Privacy Policy";
+"paywall_terms_boilerplate" = "Payment will be charged to your Apple ID. Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period. You can manage and cancel in App Store settings.";
+"paywall_best_value" = "Best value";
+"paywall_year_savings" = "Save 37% vs monthly";
 
 // =============================================================================
 //   FEEDBACK / REPORT QUESTION

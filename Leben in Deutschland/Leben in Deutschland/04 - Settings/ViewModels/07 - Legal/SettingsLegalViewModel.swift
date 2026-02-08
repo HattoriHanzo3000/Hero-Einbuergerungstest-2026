@@ -10,9 +10,9 @@ final class SettingsLegalViewModel: ObservableObject {
     let privacyURL: URL
 
     init(
-        impressumURL: URL = URL(string: "https://www.gizatech.de/hero/impressum")!,
-        termsURL: URL = URL(string: "https://www.gizatech.de/hero/terms-of-use")!,
-        privacyURL: URL = URL(string: "https://www.gizatech.de/hero/privacy-policy")!
+        impressumURL: URL = URL(string: "https://www.gizatech.de/hero-leben-in-deutschland/impressum")!,
+        termsURL: URL = URL(string: "https://www.gizatech.de/hero-leben-in-deutschland/terms-of-use")!,
+        privacyURL: URL = URL(string: "https://www.gizatech.de/hero-leben-in-deutschland/privacy-policy")!
     ) {
         self.impressumURL = impressumURL
         self.termsURL = termsURL

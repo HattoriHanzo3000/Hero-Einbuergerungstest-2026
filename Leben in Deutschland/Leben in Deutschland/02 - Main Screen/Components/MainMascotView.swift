@@ -58,11 +58,13 @@ struct MainMascotView: View {
         
         let locale = Locale(identifier: languageManager.currentAppLanguage)
         let formatArguments: [CVarArg] = parameters.map { parameter in
+            // Convert string to Int for %d format specifiers
             if let intValue = Int(parameter) {
                 return intValue
             }
+            // Fallback to Double if Int conversion fails
             if let doubleValue = Double(parameter) {
-                return doubleValue
+                return Int(doubleValue.rounded())
             }
             return parameter as NSString
         }
@@ -95,7 +97,7 @@ struct MainMascotView: View {
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fixedSize(horizontal: false, vertical: true)
-                        .id(languageManager.currentAppLanguage)
+                        .id("message_\(messageParameters?.joined(separator: "_") ?? "")_\(languageManager.currentAppLanguage)")
                     Spacer()
                 }
             } else if !hideBubble {
@@ -220,7 +222,7 @@ private extension MainMascotView {
                 .font(.system(.body, design: .rounded).weight(.medium))
                 .lineSpacing(4)
                 .foregroundColor(Color.primary.opacity(0.88))
-                .id(languageManager.currentAppLanguage)
+                .id("message_\(messageParameters?.joined(separator: "_") ?? "")_\(languageManager.currentAppLanguage)")
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)

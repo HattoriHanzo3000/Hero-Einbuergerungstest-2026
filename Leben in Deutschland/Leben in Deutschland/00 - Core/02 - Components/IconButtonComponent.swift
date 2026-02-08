@@ -91,25 +91,25 @@ struct AdaptiveIconButton: View {
 
 // MARK: - Factory Helpers
 extension AdaptiveIconButton {
-    static func backButton(action: @escaping () -> Void) -> AdaptiveIconButton {
+    static func backButton(action: @escaping () -> Void, tintColor: Color? = nil) -> AdaptiveIconButton {
         AdaptiveIconButton(
             systemName: "chevron.left",
             action: action,
             accessibilityLabel: "Back",
             accessibilityHint: "Go back",
-            tintColor: Color(.systemGray6),
+            tintColor: tintColor ?? Color(.systemGray6),
             backgroundColor: Color.white.opacity(0.18),
             sizePreset: .standard
         )
     }
     
-    static func dismissButton(action: @escaping () -> Void) -> AdaptiveIconButton {
+    static func dismissButton(action: @escaping () -> Void, tintColor: Color? = nil) -> AdaptiveIconButton {
         AdaptiveIconButton(
             systemName: "chevron.down",
             action: action,
             accessibilityLabel: "Close",
             accessibilityHint: "Dismiss",
-            tintColor: Color(.systemGray6),
+            tintColor: tintColor ?? Color(.systemGray6),
             backgroundColor: Color.white.opacity(0.18),
             sizePreset: .standard
         )

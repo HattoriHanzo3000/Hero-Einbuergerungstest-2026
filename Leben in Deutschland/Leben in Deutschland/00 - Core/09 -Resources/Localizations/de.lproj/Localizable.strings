@@ -82,6 +82,7 @@
 
 // Learn by Topics
 "learn_by_topics_title" = "Lernen nach Themen";
+"learn_by_topics_header_message" = "Ich habe alle 310 Fragen für dich nach Themen gruppiert — wähle deinen Weg und leg los.";
 "no_categories_found" = "Keine Kategorien gefunden";
 "no_search_results" = "Keine Ergebnisse gefunden";
 "question_label" = "Aufgabe";
@@ -297,15 +298,16 @@
 // =============================================================================
 
 "statistics_title" = "Dein Fortschritt";
-"statistics_wrong_title" = "Falsch";
 "statistics_familiar_title" = "Bekannt";
 "statistics_reinforced_title" = "Gefestigt";
 "statistics_mastered_title" = "Beherrscht";
-"statistics_wrong_description" = "Falsch beantwortet";
+"statistics_expert_title" = "Experte";
 "statistics_familiar_description" = "1x richtig beantwortet";
 "statistics_reinforced_description" = "2x richtig beantwortet";
-"statistics_mastered_description" = "3x oder öfter richtig beantwortet";
+"statistics_mastered_description" = "3x richtig beantwortet";
+"statistics_expert_description" = "4x oder öfter richtig beantwortet";
 "statistics_card_flip_hint" = "Doppelt tippen, um die Karte umzudrehen";
+"ready" = "bereit";
 
 // =============================================================================
 //   GAMIFICATION
@@ -431,6 +433,26 @@
 "premium_favorites_alert_message" = "Upgrade auf Premium, um deine Favoriten zu sehen";
 "premium_favorites_alert_cancel" = "Abbrechen";
 "premium_favorites_alert_upgrade" = "Upgraden";
+"premium_accessibility_label" = "Premium";
+"premium_accessibility_hint" = "Öffnet Premium-Funktionen und Abonnementoptionen";
+"premium_plan_yearly" = "Jährlich";
+"premium_per_year" = "pro Jahr";
+
+"paywall_title" = "Premium freischalten";
+"paywall_subtitle" = "Voller Zugang zu allen Materialien, Fortschrittsverfolgung und mehr.";
+"paywall_close" = "Schließen";
+"paywall_close_hint" = "Schließt die Bezahlseite";
+"paywall_restore" = "Käufe wiederherstellen";
+"paywall_restore_hint" = "Bereits gekaufte Abos wiederherstellen";
+"paywall_restore_success" = "Abonnement wiederhergestellt.";
+"paywall_restore_no_subscription" = "Kein aktives Abonnement gefunden.";
+"paywall_terms" = "AGB";
+"paywall_terms_hint" = "Öffnet die AGB";
+"paywall_privacy" = "Datenschutz";
+"paywall_privacy_hint" = "Öffnet die Datenschutzerklärung";
+"paywall_terms_boilerplate" = "Die Zahlung wird deinem Apple-Konto belastet. Abos verlängern sich automatisch, sofern sie nicht mindestens 24 Stunden vor Ende des aktuellen Zeitraums gekündigt werden. Verwalten und kündigen kannst du in den Einstellungen des App Stores.";
+"paywall_best_value" = "Bester Preis";
+"paywall_year_savings" = "37 % Ersparnis gegenüber Monat";
 
 // =============================================================================
 //   FEEDBACK / FRAGE MELDEN

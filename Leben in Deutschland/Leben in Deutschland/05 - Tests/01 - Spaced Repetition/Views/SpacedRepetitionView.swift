@@ -37,8 +37,13 @@ struct SpacedRepetitionView: View {
         .background(Color(.systemBackground))
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
+        .hidesTabBar()
+        .tabBarHidden(true)
         .task {
             viewModel.refreshSessionIfNeeded()
+            if languageManager.currentTranslationLanguage != languageManager.currentAppLanguage {
+                await HintService.shared.loadTranslationHints(for: languageManager.currentTranslationLanguage)
+            }
         }
     }
 }

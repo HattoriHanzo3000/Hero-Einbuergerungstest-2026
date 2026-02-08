@@ -26,26 +26,30 @@ struct FavoritesView: View {
         .background(Color(.systemBackground))
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
+        .hidesTabBar()
+        .tabBarHidden(true)
         .task {
             viewModel.setLanguageManager(languageManager)
-            await viewModel.loadFavorites(language: languageManager.currentAppLanguage)
+            await viewModel.loadFavorites(
+                language: languageManager.currentAppLanguage,
+                translationLanguage: languageManager.currentTranslationLanguage
+            )
         }
     }
     
     // MARK: - Carousel View
     private var carouselView: some View {
-        TabView(selection: $viewModel.currentIndex) {
-            ForEach(Array(viewModel.favoriteQuestions.enumerated()), id: \.element.id) { index, question in
+        Group {
+            if viewModel.currentIndex < viewModel.favoriteQuestions.count {
+                let question = viewModel.favoriteQuestions[viewModel.currentIndex]
                 FavoritesQuestionCard(
                     question: question,
-                    selectedAnswer: viewModel.selectedAnswers[question.id],
-                    showCorrectAnswer: viewModel.showCorrectAnswers[question.id] ?? false,
+                    selectedAnswer: nil, // Read-only: don't show selected answer
+                    showCorrectAnswer: true, // Always show correct answer in green
                     showTranslation: viewModel.showTranslation,
-                    currentIndex: index + 1,
+                    currentIndex: viewModel.currentIndex + 1,
                     totalCount: viewModel.favoriteQuestions.count,
-                    onAnswerSelected: { answerIndex in
-                        viewModel.selectAnswer(answerIndex, for: question.id)
-                    },
+                    onAnswerSelected: { _ in }, // Read-only: disable answer selection
                     onBackTapped: {
                         router.pop()
                     },
@@ -57,23 +61,15 @@ struct FavoritesView: View {
                         viewModel.toggleFavorite(for: question.id)
                     },
                     isFavorite: viewModel.isFavorite(questionId: question.id),
-                    onCheckTapped: {
-                        if viewModel.showCorrectAnswers[question.id] ?? false {
-                            // Move to next question if answer is already shown
-                            if viewModel.currentIndex < viewModel.favoriteQuestions.count - 1 {
-                                viewModel.currentIndex += 1
-                            }
-                        } else {
-                            viewModel.checkAnswer(for: question.id)
-                        }
+                    onGoToQuestion: { newIndex in
+                        viewModel.currentIndex = newIndex
                     },
-                    isCheckEnabled: (viewModel.selectedAnswers[question.id] != nil && !(viewModel.showCorrectAnswers[question.id] ?? false)) || (viewModel.showCorrectAnswers[question.id] ?? false)
+                    isCorrectAt: { viewModel.isCorrect(at: $0) },
+                    isIncorrectAt: { viewModel.isIncorrect(at: $0) }
                 )
                 .environmentObject(languageManager)
-                .tag(index)
             }
         }
-        .tabViewStyle(.page(indexDisplayMode: .never))
     }
     
     // MARK: - Empty State View

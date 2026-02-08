@@ -94,6 +94,8 @@ struct TestSessionView: View {
                 }
                 Button("quit_test".localized, role: .destructive) {
                                 HapticManager.shared.heavyImpact()
+                                // Save partial test answers before quitting
+                                viewModel.finishTest()
                                 // Pop twice to skip countdown and return to TestTabView
                                 router.pop()
                                 router.pop()
@@ -147,19 +149,20 @@ struct TestSessionView: View {
     
     func initializeTest() {
         Task {
-            // Ensure content is loaded (including question images)
-            if contentService.categories.isEmpty || contentService.isLoading {
-                await contentService.loadContent(for: languageManager.currentAppLanguage)
-                await HintService.shared.loadHints(for: languageManager.currentAppLanguage)
-            }
+            // Test simulation always loads German content
+            let testLanguage = "de"
+            
+            // Always reload content in German for test simulation
+            await contentService.loadContent(for: testLanguage)
+            await HintService.shared.loadHints(for: testLanguage)
             
             // Wait for loading to complete
             while contentService.isLoading {
                 try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
             }
             
-            let federalQuestions = contentService.getTestFederalQuestions(language: languageManager.currentAppLanguage)
-            var stateQuestions = contentService.getTestStateQuestions(for: stateManager.selectedState, language: languageManager.currentAppLanguage)
+            let federalQuestions = contentService.getTestFederalQuestions(language: testLanguage)
+            var stateQuestions = contentService.getTestStateQuestions(for: stateManager.selectedState, language: testLanguage)
             
             // Limit regional questions to 10
             if stateQuestions.count > 10 {

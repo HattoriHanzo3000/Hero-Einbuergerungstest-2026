@@ -18,11 +18,13 @@ final class PremiumManager: ObservableObject {
     @Published var isPremium: Bool = false
     @Published var isTrialActive: Bool = false
     @Published var trialDaysRemaining: Int = 0
+    /// When true, the app presents the paywall sheet (e.g. when user taps crown).
+    @Published var showPaywall: Bool = false
     
     private enum Keys {
         static let trialStartDate = "premium_trial_start_date"
         static let trialUsed = "premium_trial_used"
-        static let subscriptionType = "premium_subscription_type" // "monthly", "lifetime", nil
+        static let subscriptionType = "premium_subscription_type" // "monthly", "yearly", "lifetime", nil
         static let subscriptionExpiryDate = "premium_subscription_expiry_date"
     }
     
@@ -49,6 +51,11 @@ final class PremiumManager: ObservableObject {
         checkPremiumStatus()
     }
     
+    /// Presents the paywall sheet. Call from crown button or any premium entry point.
+    func presentPaywall() {
+        showPaywall = true
+    }
+    
     /// Checks if user has active premium access (trial or paid subscription)
     func checkPremiumStatus() {
         // Check if user has active paid subscription
@@ -59,8 +66,8 @@ final class PremiumManager: ObservableObject {
                 isTrialActive = false
                 trialDaysRemaining = 0
                 return
-            } else if subscriptionType == "monthly" {
-                // Check if monthly subscription is still valid
+            } else if subscriptionType == "monthly" || subscriptionType == "yearly" {
+                // Check if subscription is still valid
                 if let expiryDate = getSubscriptionExpiryDate(),
                    expiryDate > Date() {
                     isPremium = true
@@ -68,7 +75,6 @@ final class PremiumManager: ObservableObject {
                     trialDaysRemaining = 0
                     return
                 } else {
-                    // Subscription expired, clear it
                     clearSubscription()
                 }
             }
@@ -102,13 +108,17 @@ final class PremiumManager: ObservableObject {
     
     /// Activates premium subscription (called after successful purchase)
     func activateSubscription(type: SubscriptionPlanType, expiryDate: Date? = nil) {
-        let typeString = type == .monthly ? "monthly" : "lifetime"
+        let typeString: String
+        switch type {
+        case .monthly: typeString = "monthly"
+        case .yearly: typeString = "yearly"
+        case .lifetime: typeString = "lifetime"
+        }
         defaults.set(typeString, forKey: Keys.subscriptionType)
         
         if let expiryDate = expiryDate {
             defaults.set(expiryDate.timeIntervalSince1970, forKey: Keys.subscriptionExpiryDate)
         } else if type == .lifetime {
-            // Lifetime never expires, but we can set a far future date for consistency
             let farFuture = Calendar.current.date(byAdding: .year, value: 100, to: Date()) ?? Date()
             defaults.set(farFuture.timeIntervalSince1970, forKey: Keys.subscriptionExpiryDate)
         }

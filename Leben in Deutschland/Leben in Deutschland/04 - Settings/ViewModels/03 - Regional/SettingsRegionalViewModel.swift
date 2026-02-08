@@ -35,10 +35,20 @@ final class SettingsRegionalViewModel: ObservableObject {
         self.onboardingPreferences = onboardingPreferences ?? OnboardingPreferences.shared
         self.defaults = defaults
 
-        let initialAppLanguage = SettingsAppLanguageOption(rawValue: languageManager.currentAppLanguage) ?? .english
-        let initialTranslationLanguage = Self.resolveTranslationLanguage(
+        var initialAppLanguage = SettingsAppLanguageOption(rawValue: languageManager.currentAppLanguage) ?? .english
+        // Migrate away from Ukrainian if it's disabled
+        if initialAppLanguage == .ukrainian {
+            initialAppLanguage = .english
+            languageManager.setAppLanguage("en")
+        }
+        var initialTranslationLanguage = SettingsTranslationLanguageOption(rawValue: languageManager.currentTranslationLanguage) ?? .german
+        if initialTranslationLanguage == .ukrainian {
+            initialTranslationLanguage = .german
+            languageManager.setTranslationLanguage("de")
+        }
+        initialTranslationLanguage = Self.resolveTranslationLanguage(
             languageManager: languageManager,
-            currentOption: SettingsTranslationLanguageOption(rawValue: languageManager.currentTranslationLanguage) ?? .german
+            currentOption: initialTranslationLanguage
         )
 
         self.appLanguage = initialAppLanguage
@@ -169,7 +179,7 @@ final class SettingsRegionalViewModel: ObservableObject {
     }
 
     private static func availableTranslationOptions(excluding appLanguage: SettingsAppLanguageOption) -> [SettingsTranslationLanguageOption] {
-        SettingsTranslationLanguageOption.allCases.filter { $0.rawValue != appLanguage.rawValue }
+        SettingsTranslationLanguageOption.displayCases.filter { $0.rawValue != appLanguage.rawValue }
     }
 
     private static func resolveTranslationLanguage(

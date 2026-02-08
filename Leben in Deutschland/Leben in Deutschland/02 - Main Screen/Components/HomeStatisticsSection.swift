@@ -11,7 +11,7 @@ struct HomeStatisticsSection: View {
         SectionContainer(title: "home_statistics_title", spacing: 18) {
             VStack(spacing: layoutMetrics.adaptive(20)) {
                 HomeRingChartView(
-                    progress: (wrong: statistics.wrong, familiar: statistics.familiar, reinforced: statistics.reinforced, mastered: statistics.mastered, total: statistics.totalTrackedQuestions),
+                    progress: (familiar: statistics.familiar, reinforced: statistics.reinforced, mastered: statistics.mastered, expert: statistics.expert, total: statistics.totalQuestions),
                     readinessPercentage: statistics.readinessPercentage,
                     colorScheme: colorScheme
                 )
@@ -29,7 +29,7 @@ struct HomeStatisticsSection: View {
 
 // MARK: - Ring Chart View (B2-style multi-ring)
 private struct HomeRingChartView: View {
-    let progress: (wrong: Int, familiar: Int, reinforced: Int, mastered: Int, total: Int)
+    let progress: (familiar: Int, reinforced: Int, mastered: Int, expert: Int, total: Int)
     let readinessPercentage: Int
     let colorScheme: ColorScheme
 
@@ -46,10 +46,10 @@ private struct HomeRingChartView: View {
         let backgroundRingColor = colorScheme == .dark ? Color.black : Color(.systemGray4)
         let backgroundRing = (1.0, backgroundRingColor, "", 0)
         let dataRings = [
-            (Double(progress.mastered) / total, Color("AppGreen"), "statistics_mastered_title".localized, progress.mastered),
+            (Double(progress.expert) / total, Color("AppGreen"), "statistics_expert_title".localized, progress.expert),
+            (Double(progress.mastered) / total, Color("AppPurple"), "statistics_mastered_title".localized, progress.mastered),
             (Double(progress.reinforced) / total, Color("AppBlue"), "statistics_reinforced_title".localized, progress.reinforced),
-            (Double(progress.familiar) / total, Color("AppYellow"), "statistics_familiar_title".localized, progress.familiar),
-            (Double(progress.wrong) / total, Color("AppRed"), "statistics_wrong_title".localized, progress.wrong)
+            (Double(progress.familiar) / total, Color("AppYellow"), "statistics_familiar_title".localized, progress.familiar)
         ]
         let sortedDataRings = dataRings.sorted { $0.3 > $1.3 }
         return [backgroundRing] + sortedDataRings
@@ -146,21 +146,6 @@ private struct HomeStatisticsGridView: View {
     var body: some View {
         LazyVGrid(columns: columns, spacing: layoutMetrics.adaptive(12)) {
             HomeStatisticsGridCard(
-                titleKey: "statistics_wrong_title",
-                count: statistics.wrong,
-                descriptionKey: "statistics_wrong_description",
-                gradient: LinearGradient(
-                    colors: [
-                        Color("AppRed"),
-                        Color("AppRed").opacity(0.85),
-                        Color("AppRed").opacity(0.7)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                layoutMetrics: layoutMetrics
-            )
-            HomeStatisticsGridCard(
                 titleKey: "statistics_familiar_title",
                 count: statistics.familiar,
                 descriptionKey: "statistics_familiar_description",
@@ -194,6 +179,21 @@ private struct HomeStatisticsGridView: View {
                 titleKey: "statistics_mastered_title",
                 count: statistics.mastered,
                 descriptionKey: "statistics_mastered_description",
+                gradient: LinearGradient(
+                    colors: [
+                        Color("AppPurple"),
+                        Color("AppPurple").opacity(0.9),
+                        Color("AppPurple").opacity(0.75)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                layoutMetrics: layoutMetrics
+            )
+            HomeStatisticsGridCard(
+                titleKey: "statistics_expert_title",
+                count: statistics.expert,
+                descriptionKey: "statistics_expert_description",
                 gradient: LinearGradient(
                     colors: [
                         Color("AppGreen"),
@@ -301,10 +301,10 @@ private struct HomeStatisticsGridCard: View {
     HomeStatisticsSection(
         statistics: HomeStatisticsModel(
             readinessPercentage: 72,
-            wrong: 12,
             familiar: 86,
             reinforced: 54,
             mastered: 158,
+            expert: 12,
             totalQuestions: LayoutMetrics.totalFederalQuestions
         )
     )

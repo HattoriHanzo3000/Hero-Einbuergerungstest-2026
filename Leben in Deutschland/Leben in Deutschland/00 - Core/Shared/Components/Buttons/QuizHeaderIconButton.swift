@@ -7,6 +7,10 @@ struct QuizHeaderIconButton: View {
     let systemName: String
     let isActive: Bool
     let activeTint: Color
+    let inactiveTint: Color?
+    let showGlow: Bool
+    let showStroke: Bool
+    let useFilledWhenActive: Bool
     let accessibilityLabel: String
     let accessibilityHint: String?
     let action: () -> Void
@@ -15,6 +19,30 @@ struct QuizHeaderIconButton: View {
     
     private var iconSize: CGFloat { layoutMetrics.adaptive(18) }
     private var containerSize: CGFloat { layoutMetrics.adaptive(38) }
+    
+    init(
+        systemName: String,
+        isActive: Bool,
+        activeTint: Color,
+        inactiveTint: Color? = nil,
+        showGlow: Bool = true,
+        showStroke: Bool = true,
+        useFilledWhenActive: Bool = false,
+        accessibilityLabel: String,
+        accessibilityHint: String? = nil,
+        action: @escaping () -> Void
+    ) {
+        self.systemName = systemName
+        self.isActive = isActive
+        self.activeTint = activeTint
+        self.inactiveTint = inactiveTint
+        self.showGlow = showGlow
+        self.showStroke = showStroke
+        self.useFilledWhenActive = useFilledWhenActive
+        self.accessibilityLabel = accessibilityLabel
+        self.accessibilityHint = accessibilityHint
+        self.action = action
+    }
     
     var body: some View {
         buttonContent
@@ -28,21 +56,26 @@ private extension QuizHeaderIconButton {
             ZStack {
                 Circle()
                     .fill(.thinMaterial)
-                    .overlay(glowMask.opacity(isActive ? 1 : 0))
+                    .overlay(glowMask.opacity(showGlow && isActive ? 1 : 0))
                     .overlay(
-                        Circle()
-                            .stroke(Color.white.opacity(0.22), lineWidth: 1)
+                        Group {
+                            if showStroke {
+                                Circle()
+                                    .stroke(Color.white.opacity(0.22), lineWidth: 1)
+                            }
+                        }
                     )
                     .shadow(
-                        color: activeTint.opacity(isActive ? 0.55 : 0),
-                        radius: isActive ? layoutMetrics.adaptive(22) : 0,
-                        y: isActive ? layoutMetrics.adaptive(4) : 0
+                        color: showGlow ? activeTint.opacity(isActive ? 0.55 : 0) : .clear,
+                        radius: showGlow && isActive ? layoutMetrics.adaptive(22) : 0,
+                        y: showGlow && isActive ? layoutMetrics.adaptive(4) : 0
                     )
                     .frame(width: containerSize, height: containerSize)
                 
                 Image(systemName: systemName)
                     .font(.system(size: iconSize, weight: .semibold))
-                    .foregroundStyle(Color(.systemGray6))
+                    .symbolVariant(useFilledWhenActive && isActive ? .fill : .none)
+                    .foregroundStyle(isActive ? activeTint : (inactiveTint ?? Color(.systemGray6)))
             }
             .frame(width: containerSize, height: containerSize)
             .animation(.easeInOut(duration: 0.25), value: isActive)
@@ -80,7 +113,7 @@ struct QuizHeaderIconButton_Previews: PreviewProvider {
             QuizHeaderIconButton(
                 systemName: "globe",
                 isActive: true,
-                activeTint: .orange,
+                activeTint: Color("AppOrange"),
                 accessibilityLabel: "Sprachoption ändern",
                 accessibilityHint: "Wechsle zwischen Originaltext und Übersetzung."
             ) {}
@@ -91,7 +124,8 @@ struct QuizHeaderIconButton_Previews: PreviewProvider {
             QuizHeaderIconButton(
                 systemName: "heart",
                 isActive: false,
-                activeTint: .pink,
+                activeTint: Color("AppPink"),
+                useFilledWhenActive: true,
                 accessibilityLabel: "Zu Favoriten hinzufügen",
                 accessibilityHint: nil
             ) {}

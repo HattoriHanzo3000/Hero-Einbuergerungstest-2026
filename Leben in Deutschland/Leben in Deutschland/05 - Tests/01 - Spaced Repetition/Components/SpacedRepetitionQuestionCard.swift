@@ -11,6 +11,7 @@ struct SpacedRepetitionQuestionCard: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
+    @EnvironmentObject private var premiumManager: PremiumManager
     
     @State private var showingFeedbackReport = false
     @State private var showingHintSheet = false
@@ -82,8 +83,8 @@ struct SpacedRepetitionQuestionCard: View {
             Divider()
                 .background(Color(.separator))
             HStack(spacing: layoutMetrics.adaptive(12)) {
-                // Hint button (appears when answer is shown)
-                if showCorrectAnswer {
+                // Hint button (appears when answer is shown and hint exists)
+                if showCorrectAnswer, hintService.getHint(for: question.id) != nil {
                     HintIconButton(action: hintAction)
                         .transition(.scale.combined(with: .opacity))
                 }
@@ -118,7 +119,12 @@ struct SpacedRepetitionQuestionCard: View {
         }
         .sheet(isPresented: $showingHintSheet) {
             if let hint = hintService.getHint(for: question.id) {
-                HintSheetView(hint: hint)
+                HintSheetView(
+                    hint: hint,
+                    translatedHint: showTranslation && languageManager.currentTranslationLanguage != languageManager.currentAppLanguage
+                        ? hintService.getTranslationHint(for: question.id)
+                        : nil
+                )
             } else {
                 HintSheetView(hint: "no_hint_available".localized)
             }
@@ -249,7 +255,7 @@ private extension SpacedRepetitionQuestionCard {
                 Button(action: onBackTapped) {
                     Image(systemName: "chevron.backward")
                         .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
-                        .foregroundColor(Color(.systemGray6))
+                        .foregroundColor(.white)
                         .padding(layoutMetrics.adaptive(10))
                         .background(
                             Circle()
@@ -260,6 +266,8 @@ private extension SpacedRepetitionQuestionCard {
                 .accessibilityLabel("back_button_accessibility_label".localized)
                 
                 Spacer()
+                
+                PremiumCrownButton(action: { premiumManager.presentPaywall() }, color: .white)
             }
         }
     }
@@ -269,7 +277,8 @@ private extension SpacedRepetitionQuestionCard {
         if let progress {
             let progressValue = Double(progress.answeredCount)
             let progressTotal = max(Double(progress.totalCount), 1)
-            let progressLabel = "\(progress.answeredCount) " + "of".localized + " \(progress.totalCount)"
+            // Progress bar shows readiness percentage (0-100%), full bar = 100% ready
+            let progressLabel = "\(progress.answeredCount)% " + "ready".localized
             
             ProgressView(value: progressValue, total: progressTotal)
                 .progressViewStyle(LinearProgressViewStyle(tint: Color(.systemGray6)))
@@ -313,6 +322,7 @@ private extension SpacedRepetitionQuestionCard {
                 systemName: "globe",
                 isActive: isTranslationActive,
                 activeTint: Color("AppOrange"),
+                inactiveTint: .white,
                 showGlow: false,
                 accessibilityLabel: "spaced_translation_button_accessibility_label".localized,
                 accessibilityHint: nil,
@@ -325,6 +335,7 @@ private extension SpacedRepetitionQuestionCard {
                 systemName: "heart",
                 isActive: isFavorite,
                 activeTint: Color("AppPink"),
+                inactiveTint: .white,
                 showGlow: false,
                 useFilledWhenActive: true,
                 accessibilityLabel: "spaced_favorite_button_accessibility_label".localized,
