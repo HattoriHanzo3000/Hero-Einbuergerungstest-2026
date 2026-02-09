@@ -268,6 +268,9 @@
 "quit_test" = "Test beenden";
 
 "finish_test" = "TEST BEENDEN";
+"answer_all_questions_title" = "Erst alle Fragen beantworten";
+"answer_all_questions_message" = "Du musst alle Fragen beantworten, bevor du den Test beenden kannst.";
+"ok_button" = "OK";
 
 "test_passed" = "Test bestanden!";
 "test_failed" = "Test nicht bestanden";
@@ -279,6 +282,8 @@
 "accuracy" = "Genauigkeit:";
 
 "view_answers" = "ANTWORTEN ANZEIGEN";
+"try_again" = "ERNEUT VERSUCHEN";
+"quit_the_test" = "TEST BEENDEN";
 "back_to_main_menu" = "HAUPTMENÜ";
 
 "your_answers" = "Deine Antworten";

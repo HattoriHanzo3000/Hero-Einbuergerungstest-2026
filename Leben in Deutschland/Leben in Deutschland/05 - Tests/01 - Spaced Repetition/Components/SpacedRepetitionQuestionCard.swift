@@ -310,7 +310,7 @@ private extension SpacedRepetitionQuestionCard {
             }) {
                 Image(systemName: "flag.fill")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(Color.accentColor)
+                    .foregroundColor(.red)
             }
         }
     }

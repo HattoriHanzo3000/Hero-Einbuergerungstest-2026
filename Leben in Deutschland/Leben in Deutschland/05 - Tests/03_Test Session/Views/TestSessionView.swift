@@ -79,10 +79,25 @@ struct TestSessionView: View {
                     showingResults = false
                     // Pop to root to return to HomeView
                     router.popToRoot()
+                },
+                onTryAgain: {
+                    // Dismiss results and restart test (countdown was already shown from TestResultsView)
+                    showingResults = false
+                    // Test should already be loading from onStartTestLoading callback
+                    // Just ensure loading state is set
+                    if !isLoading {
+                        isLoading = true
+                    }
+                },
+                onStartTestLoading: {
+                    // Start loading test immediately when Try Again is pressed (during countdown)
+                    isLoading = true
+                    initializeTest()
                 }
             )
                 .environmentObject(languageManager)
                 .environmentObject(favoritesManager)
+                .environment(router)
                 .interactiveDismissDisabled(true)
         }
         .alert(

@@ -17,6 +17,8 @@ struct QuestionCard: View {
     let onImageTapped: (() -> Void)?
     let suppressAnswerGlow: Bool
     let suppressIncorrectHighlight: Bool
+    /// When set (e.g. from TestAnswersView), used for translation instead of loading internally.
+    let externalTranslatedQuestion: QuestionModel?
     
     @EnvironmentObject var languageManager: LanguageManager
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -31,7 +33,8 @@ struct QuestionCard: View {
         illustrationAssetName: String? = nil,
         onImageTapped: (() -> Void)? = nil,
         suppressAnswerGlow: Bool = false,
-        suppressIncorrectHighlight: Bool = false
+        suppressIncorrectHighlight: Bool = false,
+        externalTranslatedQuestion: QuestionModel? = nil
     ) {
         self.question = question
         self.selectedAnswer = selectedAnswer
@@ -42,6 +45,12 @@ struct QuestionCard: View {
         self.onImageTapped = onImageTapped
         self.suppressAnswerGlow = suppressAnswerGlow
         self.suppressIncorrectHighlight = suppressIncorrectHighlight
+        self.externalTranslatedQuestion = externalTranslatedQuestion
+    }
+    
+    /// Translation to show: from parent when provided, otherwise from internal load.
+    private var effectiveTranslatedQuestion: QuestionModel? {
+        externalTranslatedQuestion ?? translatedQuestion
     }
     
     var body: some View {
@@ -68,7 +77,7 @@ struct QuestionCard: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     // Translation (if enabled)
-                    if showTranslation, let translated = translatedQuestion {
+                    if showTranslation, let translated = effectiveTranslatedQuestion {
                         if translated.text != question.text {
                             Text(translated.text)
                                 .font(.system(.footnote, design: .rounded))
@@ -103,11 +112,11 @@ struct QuestionCard: View {
         }
         .background(Color(.systemBackground))
         .task(id: "\(question.id)-\(showTranslation)") {
-            if showTranslation {
+            // Only load if showTranslation is true and we don't have external translation
+            if showTranslation, externalTranslatedQuestion == nil {
                 await loadTranslation()
-            } else {
-                translatedQuestion = nil
             }
+            // Don't clear translatedQuestion when showTranslation is false - keep it cached
         }
     }
     
@@ -115,12 +124,13 @@ struct QuestionCard: View {
     
     private func loadTranslation() async {
         let translationLanguage = languageManager.currentTranslationLanguage
-        guard translationLanguage != languageManager.currentAppLanguage else {
+        let result = await ContentService.shared.getQuestion(id: question.id, in: translationLanguage)
+        // Only use if we got something and it's actually different (avoid showing duplicate when same language)
+        if let result = result, result.text != question.text {
+            translatedQuestion = result
+        } else {
             translatedQuestion = nil
-            return
         }
-        
-        translatedQuestion = await ContentService.shared.getQuestion(id: question.id, in: translationLanguage)
     }
     
     private func isCorrectAnswer(_ index: Int) -> Bool {
@@ -133,7 +143,7 @@ struct QuestionCard: View {
 
 private extension QuestionCard {
     func secondaryOptionText(for index: Int, original: String) -> String? {
-        guard showTranslation, let translated = translatedQuestion else { return nil }
+        guard showTranslation, let translated = effectiveTranslatedQuestion else { return nil }
         guard index < translated.options.count else { return nil }
         let translatedOption = translated.options[index]
         return translatedOption == original ? nil : translatedOption

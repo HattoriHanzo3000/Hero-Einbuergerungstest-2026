@@ -8,10 +8,12 @@ protocol FavoritesManaging: AnyObject {
 }
 
 // MARK: - Favorites Manager
+/// Stores favorite question IDs in add order (oldest first in array). Use reversed order for UI (newest first).
 final class FavoritesManager: ObservableObject, FavoritesManaging {
     static let shared = FavoritesManager()
     
-    @Published private(set) var favoriteQuestionIds: Set<String> = []
+    /// Ordered list: oldest first, newest last. For “newest first” display, use reversed.
+    @Published private(set) var favoriteQuestionIds: [String] = []
     
     private let favoritesKey = "favoriteQuestionIds"
     private let defaults: UserDefaults
@@ -27,10 +29,10 @@ final class FavoritesManager: ObservableObject, FavoritesManaging {
     }
     
     func toggleFavorite(for questionId: String) {
-        if favoriteQuestionIds.contains(questionId) {
-            favoriteQuestionIds.remove(questionId)
+        if let index = favoriteQuestionIds.firstIndex(of: questionId) {
+            favoriteQuestionIds.remove(at: index)
         } else {
-            favoriteQuestionIds.insert(questionId)
+            favoriteQuestionIds.append(questionId)
         }
         saveFavorites()
     }
@@ -48,11 +50,11 @@ private extension FavoritesManager {
             favoriteQuestionIds = []
             return
         }
-        favoriteQuestionIds = Set(data)
+        favoriteQuestionIds = data
     }
     
     func saveFavorites() {
-        defaults.set(Array(favoriteQuestionIds), forKey: favoritesKey)
+        defaults.set(favoriteQuestionIds, forKey: favoritesKey)
     }
 }
 

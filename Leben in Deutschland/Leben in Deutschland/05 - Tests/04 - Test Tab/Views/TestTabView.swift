@@ -54,7 +54,7 @@ struct TestTabView: View {
                             } label: {
                                 TestOptionIconView(
                                     icon: "checkmark.seal",
-                                    color: Color("AppBlueLagoon"),
+                                    color: Color("AppOrange"),
                                     layoutMetrics: layoutMetrics
                                 )
                             }

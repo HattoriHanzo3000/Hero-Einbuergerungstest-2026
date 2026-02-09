@@ -18,13 +18,14 @@ struct TestSessionQuestionCard: View {
     @Binding var showingTimerPopup: Bool
     @Binding var zoomedAsset: ZoomedAsset?
     @State private var showingFeedbackReport = false
+    @State private var lastHorizontalScrollHapticTs: Double = 0
+    @State private var showingIncompleteWarning = false
     
     let onFinish: () -> Void
     let onDismiss: () -> Void
     
     @EnvironmentObject var languageManager: LanguageManager
     @EnvironmentObject var favoritesManager: FavoritesManager
-    @EnvironmentObject private var premiumManager: PremiumManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     
     private let contentService = ContentService.shared
@@ -108,70 +109,94 @@ struct TestSessionQuestionCard: View {
     // MARK: - Footer View
     private var footerView: some View {
         VStack(spacing: layoutMetrics.adaptive(12)) {
-                // Back and Next buttons
-                HStack(spacing: 16) {
-                    Button(action: {
-                        HapticManager.shared.lightImpact()
-                        viewModel.previousQuestion()
-                    }) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "chevron.left")
-                                .font(.system(.headline, design: .rounded).weight(.semibold))
-                            Text("back".localized)
-                                .font(.system(.headline, design: .rounded).weight(.semibold))
-                        }
-                        .foregroundColor(viewModel.canGoPrevious() ? Color.accentColor : .gray)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 10)
-                        .background(Color(.systemBackground))
-                        .cornerRadius(8)
-                    }
-                    .disabled(!viewModel.canGoPrevious())
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        HapticManager.shared.lightImpact()
-                        if viewModel.currentQuestionIndex < viewModel.questions.count - 1 {
-                            viewModel.nextQuestion()
-                        }
-                    }) {
-                        HStack(spacing: 4) {
-                            Text("next".localized)
-                                .font(.system(.headline, design: .rounded).weight(.semibold))
-                            Image(systemName: "chevron.right")
-                                .font(.system(.headline, design: .rounded).weight(.semibold))
-                        }
-                        .foregroundColor(viewModel.currentQuestionIndex < viewModel.questions.count - 1 ? Color.accentColor : .gray)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 10)
-                        .background(Color(.systemBackground))
-                        .cornerRadius(8)
-                    }
-                    .disabled(viewModel.currentQuestionIndex == viewModel.questions.count - 1)
+            // Next/Finish button above navigation circles
+            nextOrFinishButton
+            
+            // Same nav row as TestAnswersView/LearningView: back + circles (under separators) + forward. Answered = AppBlueLagoon.
+            if viewModel.questions.count > 1 {
+                questionNavigationBar
+            }
+        }
+        .padding(.top, layoutMetrics.adaptive(12))
+        .padding(.bottom, layoutMetrics.adaptive(32))
+        .background(Color(.systemBackground))
+        .alert(
+            "answer_all_questions_title".localized,
+            isPresented: $showingIncompleteWarning,
+            actions: {
+                Button("ok_button".localized, role: .cancel) {
+                    HapticManager.shared.lightImpact()
                 }
-                .padding(.horizontal, layoutMetrics.adaptive(24))
-                
-                if viewModel.allQuestionsAnswered {
-                    QuizActionButton(
-                        "finish_test".localizedUppercased(),
-                        style: finishButtonStyle
-                    ) {
-                        HapticManager.shared.mediumImpact()
-                        onFinish()
-                    }
-                    .padding(.horizontal, layoutMetrics.adaptive(24))
+            },
+            message: {
+                Text("answer_all_questions_message".localized)
+            }
+        )
+    }
+    
+    // MARK: - Next/Finish Button
+    private var nextOrFinishButton: some View {
+        let isLastQuestion = viewModel.currentQuestionIndex >= viewModel.questions.count - 1
+        let allAnswered = viewModel.allQuestionsAnswered
+        let isCurrentQuestionAnswered = viewModel.getAnswerForCurrentQuestion() != nil
+        
+        // Label: "Finish Test" when on last question OR all answered; else "Next"
+        let showFinishButton = isLastQuestion || allAnswered
+        let nextEnabled = isCurrentQuestionAnswered
+        // Finish Test is active only when all answered; Next is active when current answered
+        let isButtonActive = showFinishButton ? allAnswered : nextEnabled
+        let buttonText = showFinishButton ? "finish_test".localizedUppercased() : "next_button".localizedUppercased()
+        let activeColor: Color = showFinishButton ? Color("AppOrange") : Color("AppBlueLagoon")
+        
+        return Button(action: {
+            if showFinishButton {
+                if allAnswered {
+                    HapticManager.shared.mediumImpact()
+                    onFinish()
+                } else {
+                    // Gray Finish Test on last question: show warning
+                    HapticManager.shared.lightImpact()
+                    showingIncompleteWarning = true
                 }
-                
-                // Question navigation bar
-                if viewModel.questions.count > 1 {
-                    questionNavigationBar
+            } else {
+                // Next: only act when active; gray tap does nothing
+                if nextEnabled {
+                    HapticManager.shared.mediumImpact()
+                    viewModel.nextQuestion()
                 }
             }
-            .padding(.top, layoutMetrics.adaptive(12))
-            .padding(.bottom, layoutMetrics.adaptive(32))
-            .background(Color(.systemBackground))
+        }) {
+            Text(buttonText)
+                .font(.system(.headline, design: .rounded).weight(.bold))
+                .foregroundColor(.white)
+                .padding(.vertical, layoutMetrics.adaptive(18))
+                .frame(maxWidth: .infinity)
+                .background(
+                    ZStack {
+                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
+                            .fill(.ultraThinMaterial)
+                        
+                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
+                            .fill(isButtonActive ? activeColor : Color(.systemGray2))
+                    }
+                    .overlay(
+                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
+                            .stroke(Color.white.opacity(0.18), lineWidth: 1)
+                    )
+                    .shadow(
+                        color: Color.black.opacity(isButtonActive ? 0.16 : 0.08),
+                        radius: layoutMetrics.adaptive(22),
+                        y: layoutMetrics.adaptive(10)
+                    )
+                )
+                .opacity(isButtonActive ? 1 : 0.75)
+                .scaleEffect(isButtonActive ? 1 : 0.98)
         }
+        .buttonStyle(.plain)
+        .accessibilityLabel(showFinishButton ? "finish_test".localized : "next_button".localized)
+        .accessibilityAddTraits(.isButton)
+        .padding(.horizontal, layoutMetrics.adaptive(24))
+    }
     
     // MARK: - Full Screen Image View
     private struct FullScreenImageView: View {
@@ -267,8 +292,6 @@ struct TestSessionQuestionCard: View {
             .accessibilityLabel("back_button_accessibility_label".localized)
             
             Spacer()
-            
-            PremiumCrownButton(action: { premiumManager.presentPaywall() }, color: .white)
         }
     }
     
@@ -294,7 +317,7 @@ struct TestSessionQuestionCard: View {
                 }) {
                     Image(systemName: "flag.fill")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color.accentColor)
+                        .foregroundColor(.red)
                 }
             }
         }
@@ -393,14 +416,15 @@ struct TestSessionQuestionCard: View {
         )
     }
     
+    /// Test simulation: header gradient from App Orange to App Red.
     var liquidGlassBackground: some View {
         RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
             .fill(
                 LinearGradient(
                     colors: [
-                        Color("AppBlueLagoon").opacity(0.9),
-                        Color("AppBlueLagoon").opacity(0.65),
-                        Color("AppCaribean").opacity(0.45)
+                        Color("AppOrange").opacity(0.95),
+                        Color("AppOrange").opacity(0.75),
+                        Color(red: 0.77, green: 0.21, blue: 0.12).opacity(0.85) // App red (matches premium/paywall)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -439,11 +463,12 @@ struct TestSessionQuestionCard: View {
     
     private var finishButtonStyle: QuizActionButton.Style {
         QuizActionButton.Style(
-            backgroundColor: Color("AppBlueLagoon"),
+            backgroundColor: Color("AppOrange"),
             disabledBackgroundColor: Color(.systemGray2),
-            haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
+            haloPrimaryColor: Color("AppOrange").opacity(0.36),
             haloSecondaryColor: Color.white.opacity(0.18),
-            showsHaloWhenDisabled: false
+            showsHaloWhenDisabled: false,
+            suppressGlow: true
         )
     }
     
@@ -453,60 +478,124 @@ struct TestSessionQuestionCard: View {
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
-    // MARK: - Question Navigation Bar
+    // MARK: - Question Navigation Bar (same design as TestAnswersView/LearningView)
     private var questionNavigationBar: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(0..<viewModel.questions.count, id: \.self) { index in
-                        Button(action: {
-                            HapticManager.shared.lightImpact()
-                            viewModel.goToQuestion(index)
-                        }) {
-                            Circle()
-                                .fill(circleColor(for: index))
-                                .frame(width: 32, height: 32)
-                                .overlay(
-                                    Text("\(index + 1)")
-                                        .font(.system(.footnote, design: .rounded).weight(.semibold))
-                                        .foregroundColor(circleTextColor(for: index))
-                                )
+        let navigationCircleSize = layoutMetrics.adaptive(34)
+        return ScrollViewReader { proxy in
+            HStack(spacing: layoutMetrics.adaptive(12)) {
+                // Back arrow
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    viewModel.previousQuestion()
+                }) {
+                    Image(systemName: "chevron.backward")
+                        .font(.system(size: layoutMetrics.adaptive(16), weight: .semibold))
+                        .foregroundColor(viewModel.currentQuestionIndex > 0 ? .white : Color.white.opacity(0.5))
+                        .frame(width: navigationCircleSize, height: navigationCircleSize)
+                        .background(Circle().fill(Color("AppBlueLagoon")))
+                }
+                .disabled(viewModel.currentQuestionIndex <= 0)
+                .buttonStyle(.plain)
+                .accessibilityLabel("Previous question")
+                .accessibilityHint("Go to previous question")
+                
+                // Scrollable circles under vertical separators
+                ZStack(alignment: .center) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            ForEach(0..<viewModel.questions.count, id: \.self) { index in
+                                Button(action: {
+                                    HapticManager.shared.lightImpact()
+                                    viewModel.goToQuestion(index)
+                                }) {
+                                    Circle()
+                                        .fill(circleColor(for: index))
+                                        .frame(width: navigationCircleSize, height: navigationCircleSize)
+                                        .overlay(
+                                            Text("\(index + 1)")
+                                                .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold))
+                                                .foregroundColor(circleTextColor(for: index))
+                                        )
+                                }
+                                .id(index)
+                            }
                         }
-                        .id(index)
+                        .padding(.horizontal, 0)
                     }
+                    .onChange(of: viewModel.currentQuestionIndex) { _, newIndex in
+                        withAnimation {
+                            proxy.scrollTo(newIndex, anchor: .center)
+                        }
+                        HapticManager.shared.lightImpact()
+                    }
+                    .simultaneousGesture(DragGesture().onChanged { _ in
+                        let now = Date().timeIntervalSince1970
+                        if now - lastHorizontalScrollHapticTs > 0.2 {
+                            lastHorizontalScrollHapticTs = now
+                            HapticManager.shared.lightImpact()
+                        }
+                    })
+                    
+                    HStack {
+                        navigationBarVerticalSeparator(size: navigationCircleSize)
+                        Spacer(minLength: 0)
+                        navigationBarVerticalSeparator(size: navigationCircleSize)
+                    }
+                    .frame(height: navigationCircleSize)
+                    .allowsHitTesting(false)
                 }
-                .padding(.horizontal, layoutMetrics.adaptive(24))
+                .frame(maxWidth: .infinity)
+                
+                // Forward arrow
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    if viewModel.currentQuestionIndex < viewModel.questions.count - 1 {
+                        viewModel.nextQuestion()
+                    }
+                }) {
+                    Image(systemName: "chevron.forward")
+                        .font(.system(size: layoutMetrics.adaptive(16), weight: .semibold))
+                        .foregroundColor(viewModel.currentQuestionIndex < viewModel.questions.count - 1 ? .white : Color.white.opacity(0.5))
+                        .frame(width: navigationCircleSize, height: navigationCircleSize)
+                        .background(Circle().fill(Color("AppBlueLagoon")))
+                }
+                .disabled(viewModel.currentQuestionIndex >= viewModel.questions.count - 1)
+                .buttonStyle(.plain)
+                .accessibilityLabel("Next question")
+                .accessibilityHint("Go to next question")
             }
-            .frame(height: 44)
+            .padding(.horizontal, layoutMetrics.adaptive(24))
+            .frame(height: navigationCircleSize + layoutMetrics.adaptive(8))
             .padding(.bottom, layoutMetrics.adaptive(16))
-            .onChange(of: viewModel.currentQuestionIndex) { _, newIndex in
-                withAnimation {
-                    proxy.scrollTo(newIndex, anchor: .center)
-                }
-            }
         }
+    }
+    
+    private func navigationBarVerticalSeparator(size: CGFloat) -> some View {
+        Rectangle()
+            .fill(Color(.separator))
+            .frame(width: 1)
+            .frame(height: size)
     }
     
     // MARK: - Helper Functions
+    /// Test simulation: current = App Blue, answered (not current) = App Orange, unanswered = gray.
     private func circleColor(for index: Int) -> Color {
+        let isAnswered = viewModel.answers.contains(where: { $0.questionId == viewModel.questions[index].id })
         if index == viewModel.currentQuestionIndex {
-            return Color("SelectedCircle")
-        } else if viewModel.answers.contains(where: { $0.questionId == viewModel.questions[index].id }) {
-            // Answered question - show as answered but not correct/wrong
-            return Color("SelectedCircle").opacity(0.5)
-        } else {
-            return Color(.systemGray5)
+            return Color("AppBlueLagoon")
         }
+        if isAnswered {
+            return Color("AppOrange")
+        }
+        return Color(.systemGray5)
     }
     
     private func circleTextColor(for index: Int) -> Color {
-        if index == viewModel.currentQuestionIndex {
-            return Color(.systemGray6)
-        } else if viewModel.answers.contains(where: { $0.questionId == viewModel.questions[index].id }) {
-            return Color(.systemGray6)
-        } else {
-            return .primary
+        let isAnswered = viewModel.answers.contains(where: { $0.questionId == viewModel.questions[index].id })
+        if index == viewModel.currentQuestionIndex || isAnswered {
+            return .white
         }
+        return .primary
     }
 }
 

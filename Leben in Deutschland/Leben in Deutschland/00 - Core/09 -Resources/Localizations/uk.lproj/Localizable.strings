@@ -270,6 +270,9 @@
 "quit_test" = "Вийти з тесту";
 
 "finish_test" = "ЗАВЕРШИТИ ТЕСТ";
+"answer_all_questions_title" = "Спочатку відповідь на всі питання";
+"answer_all_questions_message" = "Потрібно відповісти на всі питання, щоб завершити тест.";
+"ok_button" = "ОК";
 
 "test_passed" = "Тест пройдено!";
 "test_failed" = "Тест не пройдено";
@@ -281,6 +284,8 @@
 "accuracy" = "Точність:";
 
 "view_answers" = "ПОДИВИТИСЯ ВІДПОВІДІ";
+"try_again" = "СПРОБУВАТИ ЗНОВУ";
+"quit_the_test" = "ВИЙТИ З ТЕСТУ";
 "back_to_main_menu" = "ГОЛОВНЕ МЕНЮ";
 
 "your_answers" = "Ваші відповіді";

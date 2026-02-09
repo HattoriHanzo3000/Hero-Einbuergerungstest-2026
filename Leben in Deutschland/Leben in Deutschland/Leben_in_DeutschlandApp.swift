@@ -83,14 +83,22 @@ struct Leben_in_DeutschlandApp: App {
         }
     }
     
-    /// Uses a solid, opaque tab bar; selected (filled) tab uses AppOrange.
+    /// Uses a solid, opaque tab bar; selected tab uses AppBlueLagoon; icons scaled up.
     private func configureTabBarAppearance() {
+        let blueLagoon = UIColor(named: "AppBlueLagoon") ?? .systemBlue
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = UIColor.systemBackground
+        // Set selected state on the appearance so it isn’t overridden by SwiftUI/accent.
+        appearance.stackedLayoutAppearance.selected.iconColor = blueLagoon
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: blueLagoon]
+        appearance.inlineLayoutAppearance.selected.iconColor = blueLagoon
+        appearance.inlineLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: blueLagoon]
+        appearance.compactInlineLayoutAppearance.selected.iconColor = blueLagoon
+        appearance.compactInlineLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: blueLagoon]
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
-        UITabBar.appearance().tintColor = UIColor(named: "AppOrange") ?? .systemOrange
+        UITabBar.appearance().tintColor = blueLagoon
         UITabBar.appearance().unselectedItemTintColor = .tertiaryLabel
         UITabBar.appearance().layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
     }

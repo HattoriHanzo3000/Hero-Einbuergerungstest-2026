@@ -163,7 +163,7 @@ struct CategoriesView: View {
             
             VStack(spacing: 0) {
                 // Header - Apple Design Awards quality: clarity, elegance, accessibility
-                VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
+                VStack(alignment: .leading, spacing: layoutMetrics.adaptive(6)) {
                     HStack {
                         AdaptiveIconButton.backButton(action: {
                             dismiss()
@@ -551,20 +551,20 @@ private struct ExpandableCategoryView: View {
                 VStack(alignment: .leading, spacing: 12) {
                         Image(systemName: categoryIcon)
                         .font(.system(.title, design: .rounded).weight(.semibold))
-                            .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color(.systemBackground))
+                            .foregroundColor(.white)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
                     HStack(spacing: 12) {
                             Text(category.name)
                             .font(.title3.weight(.semibold))
                                 .fontDesign(.rounded)
-                                .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color(.systemBackground))
+                                .foregroundColor(.white)
                                 .multilineTextAlignment(.leading)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(isCategoryCompleted ? Color("AppOrange") : Color(.systemBackground))
+                                .foregroundColor(.white)
                                 .rotationEffect(.degrees(isExpanded ? 90 : 0))
                         }
                     }
@@ -672,7 +672,7 @@ private struct SubcategoryButton: View {
                 Text(subcategory.name)
                     .font(.body.weight(.semibold))
                     .fontDesign(.rounded)
-                    .foregroundColor(.primary)
+                    .foregroundColor(.white)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
@@ -681,20 +681,20 @@ private struct SubcategoryButton: View {
                 // Question count
                 Text("\(subcategory.questionCount)")
                     .font(.system(.title2, design: .rounded).weight(.heavy))
-                    .foregroundColor(.primary)
+                    .foregroundColor(.white)
             }
             .frame(minHeight: rowHeight)
             .padding(.horizontal, horizontalPadding)
             .background(
                 ZStack {
-                    // Base background
+                    // Base background (unfilled) – system gray 3
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .fill(Color(.systemGray6))
+                        .fill(Color(.systemGray3))
                     
-                    // Progress bar filling from left to right
+                    // Progress bar filling from left to right – AppCaribean from assets
                     GeometryReader { geometry in
                         RoundedRectangle(cornerRadius: 28, style: .continuous)
-                            .fill(Color(.systemGray4))
+                            .fill(Color("AppCaribean"))
                             .frame(width: geometry.size.width * completionPercentage)
                     }
                 }

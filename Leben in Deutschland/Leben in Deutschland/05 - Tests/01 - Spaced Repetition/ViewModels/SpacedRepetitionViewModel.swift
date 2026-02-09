@@ -123,6 +123,12 @@ private extension SpacedRepetitionViewModel {
         let correctIndex = contentService.correctAnswers[currentQuestion.id]
         let isCorrect = selectedAnswer != nil && selectedAnswer == correctIndex
         manager.recordAnswer(for: currentQuestion.id, isCorrect: isCorrect)
+        // Intuitive haptics: success for correct, stronger error for wrong
+        if isCorrect {
+            HapticManager.shared.success()
+        } else {
+            HapticManager.shared.errorStrong()
+        }
         answeredCount = min(answeredCount + 1, totalQuestions)
         showCorrectAnswer = true
         // Trigger view update to refresh progress bar with new readiness percentage

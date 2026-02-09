@@ -272,6 +272,9 @@
 "quit_test" = "Quit Test";
 
 "finish_test" = "FINISH TEST";
+"answer_all_questions_title" = "Answer all questions first";
+"answer_all_questions_message" = "You need to answer all questions before you can finish the test.";
+"ok_button" = "OK";
 
 "test_passed" = "Test Passed!";
 "test_failed" = "Test Failed";
@@ -283,6 +286,8 @@
 "accuracy" = "Accuracy:";
 
 "view_answers" = "VIEW ANSWERS";
+"try_again" = "TRY AGAIN";
+"quit_the_test" = "QUIT THE TEST";
 "back_to_main_menu" = "MAIN MENU";
 
 "your_answers" = "Your Answers";

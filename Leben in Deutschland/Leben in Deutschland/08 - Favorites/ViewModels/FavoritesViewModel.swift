@@ -49,23 +49,26 @@ class FavoritesViewModel: ObservableObject {
             await HintService.shared.loadTranslationHints(for: translation)
         }
         
-        // Get all favorite question IDs
-        let favoriteIds = favoritesManager.favoriteQuestionIds
+        // Favorite IDs in add order (oldest first). Reverse so newest-first for display.
+        let favoriteIdsOrdered = favoritesManager.favoriteQuestionIds.reversed()
         
-        // Load questions from ContentService
-        var questions: [QuestionModel] = []
+        // Build a lookup by id, then preserve order (newest first)
+        var questionsById: [String: QuestionModel] = [:]
         for category in contentService.categories {
             for subcategory in category.subcategories {
                 for question in subcategory.questions {
-                    if favoriteIds.contains(question.id) {
-                        questions.append(question)
-                    }
+                    questionsById[question.id] = question
                 }
             }
         }
         
-        // Sort by question ID to maintain consistent order
-        favoriteQuestions = questions.sorted { $0.id < $1.id }
+        var questions: [QuestionModel] = []
+        for id in favoriteIdsOrdered {
+            if let question = questionsById[id] {
+                questions.append(question)
+            }
+        }
+        favoriteQuestions = questions
         
         // Favorites is read-only - don't load saved answers, always show correct answer
     }

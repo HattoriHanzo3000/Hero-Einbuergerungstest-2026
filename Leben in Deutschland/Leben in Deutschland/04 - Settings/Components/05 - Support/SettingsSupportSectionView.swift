@@ -37,7 +37,7 @@ struct SettingsSupportSectionView: View {
                 SettingsRowButtonLabel(
                     title: "settings_report_bug_button".localized,
                     iconSystemName: "flag.fill",
-                    tint: SettingsDesignTokens.Palette.support,
+                    tint: .red,
                     showsChevron: false
                 )
             }

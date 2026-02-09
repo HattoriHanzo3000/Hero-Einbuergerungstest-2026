@@ -112,15 +112,15 @@ class LearningViewModel: ObservableObject {
             let isCorrect = answer == correctIndex
             // Record answer to spaced repetition for readiness score
             SpacedRepetitionManager.shared.recordAnswer(for: question.id, isCorrect: isCorrect)
-            
+            // Intuitive haptics: success for correct, stronger error for wrong
             if isCorrect {
                 correctlyAnswered.insert(question.id)
                 incorrectlyAnswered.remove(question.id)
-                // TODO: Play correct sound
+                HapticManager.shared.success()
             } else {
                 incorrectlyAnswered.insert(question.id)
                 correctlyAnswered.remove(question.id)
-                // TODO: Play incorrect sound
+                HapticManager.shared.errorStrong()
             }
         }
         

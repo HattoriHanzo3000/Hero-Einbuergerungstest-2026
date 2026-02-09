@@ -233,7 +233,7 @@ struct LearningView: View {
                 }) {
                     Image(systemName: "flag.fill")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color.accentColor)
+                        .foregroundColor(.red)
                 }
             }
         }
@@ -490,9 +490,9 @@ struct LearningView: View {
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.showCorrectAnswer)
     }
     
-    /// Matches the circular header icons (reset / globe / heart).
+    /// Same as TestAnswersView: circles one step smaller for consistent nav row.
     private var navigationCircleSize: CGFloat {
-        layoutMetrics.adaptive(38)
+        layoutMetrics.adaptive(34)
     }
     
     private var buttonTitle: String {
@@ -541,7 +541,7 @@ struct LearningView: View {
                     viewModel.goToQuestion(at: viewModel.currentIndex - 1)
                 }) {
                     Image(systemName: "chevron.backward")
-                        .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold))
+                        .font(.system(size: layoutMetrics.adaptive(16), weight: .semibold))
                         .foregroundColor(viewModel.currentIndex > 0 ? .white : Color.white.opacity(0.5))
                         .frame(width: navigationCircleSize, height: navigationCircleSize)
                         .background(Circle().fill(Color("AppBlueLagoon")))
@@ -565,7 +565,7 @@ struct LearningView: View {
                                         .frame(width: navigationCircleSize, height: navigationCircleSize)
                                         .overlay(
                                             Text("\(index + 1)")
-                                                .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold))
+                                                .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold))
                                                 .foregroundColor(.white)
                                         )
                                 }
@@ -596,7 +596,7 @@ struct LearningView: View {
                     viewModel.goToQuestion(at: viewModel.currentIndex + 1)
                 }) {
                     Image(systemName: "chevron.forward")
-                        .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold))
+                        .font(.system(size: layoutMetrics.adaptive(16), weight: .semibold))
                         .foregroundColor(viewModel.currentIndex < viewModel.questions.count - 1 ? .white : Color.white.opacity(0.5))
                         .frame(width: navigationCircleSize, height: navigationCircleSize)
                         .background(Circle().fill(Color("AppBlueLagoon")))

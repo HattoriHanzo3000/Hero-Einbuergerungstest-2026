@@ -50,6 +50,15 @@ class HapticManager {
         notificationFeedback.notificationOccurred(.error)
     }
     
+    /// Strong error haptic for wrong answers (error + heavy impact)
+    func errorStrong() {
+        guard isVibrationEnabled else { return }
+        let notificationFeedback = UINotificationFeedbackGenerator()
+        notificationFeedback.notificationOccurred(.error)
+        let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+        impactFeedback.impactOccurred()
+    }
+    
     /// Warning haptic for important warnings
     func warning() {
         guard isVibrationEnabled else { return }

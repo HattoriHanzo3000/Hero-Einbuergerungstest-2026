@@ -47,9 +47,9 @@ private struct HomeRingChartView: View {
         let backgroundRing = (1.0, backgroundRingColor, "", 0)
         let dataRings = [
             (Double(progress.expert) / total, Color("AppGreen"), "statistics_expert_title".localized, progress.expert),
-            (Double(progress.mastered) / total, Color("AppPurple"), "statistics_mastered_title".localized, progress.mastered),
-            (Double(progress.reinforced) / total, Color("AppBlue"), "statistics_reinforced_title".localized, progress.reinforced),
-            (Double(progress.familiar) / total, Color("AppYellow"), "statistics_familiar_title".localized, progress.familiar)
+            (Double(progress.mastered) / total, Color("AppBlue"), "statistics_mastered_title".localized, progress.mastered),
+            (Double(progress.reinforced) / total, Color("AppOrange"), "statistics_reinforced_title".localized, progress.reinforced),
+            (Double(progress.familiar) / total, Color("AppPink"), "statistics_familiar_title".localized, progress.familiar)
         ]
         let sortedDataRings = dataRings.sorted { $0.3 > $1.3 }
         return [backgroundRing] + sortedDataRings
@@ -151,9 +151,9 @@ private struct HomeStatisticsGridView: View {
                 descriptionKey: "statistics_familiar_description",
                 gradient: LinearGradient(
                     colors: [
-                        Color("AppYellow"),
-                        Color("AppYellow").opacity(0.9),
-                        Color("AppYellow").opacity(0.75)
+                        Color("AppPink"),
+                        Color("AppPink").opacity(0.9),
+                        Color("AppPink").opacity(0.75)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -166,9 +166,9 @@ private struct HomeStatisticsGridView: View {
                 descriptionKey: "statistics_reinforced_description",
                 gradient: LinearGradient(
                     colors: [
-                        Color("AppBlue"),
-                        Color("AppBlue").opacity(0.9),
-                        Color("AppBlue").opacity(0.75)
+                        Color("AppOrange"),
+                        Color("AppOrange").opacity(0.9),
+                        Color("AppOrange").opacity(0.75)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -181,9 +181,9 @@ private struct HomeStatisticsGridView: View {
                 descriptionKey: "statistics_mastered_description",
                 gradient: LinearGradient(
                     colors: [
-                        Color("AppPurple"),
-                        Color("AppPurple").opacity(0.9),
-                        Color("AppPurple").opacity(0.75)
+                        Color("AppBlue"),
+                        Color("AppBlue").opacity(0.9),
+                        Color("AppBlue").opacity(0.75)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing

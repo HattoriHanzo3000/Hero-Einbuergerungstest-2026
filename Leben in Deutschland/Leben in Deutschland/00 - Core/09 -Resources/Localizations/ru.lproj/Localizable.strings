@@ -269,6 +269,9 @@
 "quit_test" = "Выйти из теста";
 
 "finish_test" = "ЗАВЕРШИТЬ ТЕСТ";
+"answer_all_questions_title" = "Сначала ответь на все вопросы";
+"answer_all_questions_message" = "Нужно ответить на все вопросы, чтобы завершить тест.";
+"ok_button" = "ОК";
 
 "test_passed" = "Тест пройден!";
 "test_failed" = "Тест не пройден";
@@ -280,6 +283,8 @@
 "accuracy" = "Точность:";
 
 "view_answers" = "ПОСМОТРЕТЬ ОТВЕТЫ";
+"try_again" = "ПОПРОБОВАТЬ СНОВА";
+"quit_the_test" = "ВЫЙТИ ИЗ ТЕСТА";
 "back_to_main_menu" = "ГЛАВНОЕ МЕНЮ";
 
 "your_answers" = "Твои ответы";

@@ -21,6 +21,7 @@ struct FavoritesQuestionCard: View {
     @State private var showingFeedbackReport = false
     @State private var showingHintSheet = false
     @State private var zoomedAsset: ZoomedAsset?
+    @State private var lastHorizontalScrollHapticTs: Double = 0
     
     private let hintService = HintService.shared
     
@@ -239,7 +240,7 @@ private extension FavoritesQuestionCard {
                 }) {
                     Image(systemName: "flag.fill")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color.accentColor)
+                        .foregroundColor(.red)
                 }
             }
             
@@ -400,56 +401,122 @@ private extension FavoritesQuestionCard {
         showingHintSheet = true
     }
     
+    /// Same nav row as TestAnswersView/LearningView: back + scrollable circles (under separators) + forward. Gray when not selected (no correct/wrong).
     private func questionNavigationBar(onGoToQuestion: @escaping (Int) -> Void) -> some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(0..<progress.totalCount, id: \.self) { index in
-                        Button(action: {
-                            HapticManager.shared.lightImpact()
-                            onGoToQuestion(index)
-                        }) {
-                            Circle()
-                                .fill(circleColor(for: index))
-                                .frame(width: 32, height: 32)
-                                .overlay(
-                                    Text("\(index + 1)")
-                                        .font(.footnote)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(circleTextColor(for: index))
-                                )
-                        }
-                        .id(index)
+        let navigationCircleSize = layoutMetrics.adaptive(34)
+        let currentZeroBased = progress.currentIndex - 1
+        return ScrollViewReader { proxy in
+            HStack(spacing: layoutMetrics.adaptive(12)) {
+                // Back arrow
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    if currentZeroBased > 0 {
+                        onGoToQuestion(currentZeroBased - 1)
                     }
+                }) {
+                    Image(systemName: "chevron.backward")
+                        .font(.system(size: layoutMetrics.adaptive(16), weight: .semibold))
+                        .foregroundColor(currentZeroBased > 0 ? .white : Color.white.opacity(0.5))
+                        .frame(width: navigationCircleSize, height: navigationCircleSize)
+                        .background(Circle().fill(Color("AppBlueLagoon")))
                 }
-                .padding(.horizontal, layoutMetrics.adaptive(24))
+                .disabled(currentZeroBased <= 0)
+                .buttonStyle(.plain)
+                .accessibilityLabel("Previous question")
+                .accessibilityHint("Go to previous question")
+                
+                // Scrollable circles under vertical separators
+                ZStack(alignment: .center) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            ForEach(0..<progress.totalCount, id: \.self) { index in
+                                Button(action: {
+                                    HapticManager.shared.lightImpact()
+                                    onGoToQuestion(index)
+                                }) {
+                                    Circle()
+                                        .fill(circleColor(for: index))
+                                        .frame(width: navigationCircleSize, height: navigationCircleSize)
+                                        .overlay(
+                                            Text("\(index + 1)")
+                                                .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold))
+                                                .foregroundColor(circleTextColor(for: index))
+                                        )
+                                }
+                                .id(index)
+                            }
+                        }
+                        .padding(.horizontal, 0)
+                    }
+                    .onChange(of: progress.currentIndex) { _, newIndex in
+                        withAnimation {
+                            proxy.scrollTo(newIndex - 1, anchor: .center)
+                        }
+                        HapticManager.shared.lightImpact()
+                    }
+                    .simultaneousGesture(DragGesture().onChanged { _ in
+                        let now = Date().timeIntervalSince1970
+                        if now - lastHorizontalScrollHapticTs > 0.2 {
+                            lastHorizontalScrollHapticTs = now
+                            HapticManager.shared.lightImpact()
+                        }
+                    })
+                    
+                    HStack {
+                        navigationBarVerticalSeparator(size: navigationCircleSize)
+                        Spacer(minLength: 0)
+                        navigationBarVerticalSeparator(size: navigationCircleSize)
+                    }
+                    .frame(height: navigationCircleSize)
+                    .allowsHitTesting(false)
+                }
+                .frame(maxWidth: .infinity)
+                
+                // Forward arrow
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    if currentZeroBased < progress.totalCount - 1 {
+                        onGoToQuestion(currentZeroBased + 1)
+                    }
+                }) {
+                    Image(systemName: "chevron.forward")
+                        .font(.system(size: layoutMetrics.adaptive(16), weight: .semibold))
+                        .foregroundColor(currentZeroBased < progress.totalCount - 1 ? .white : Color.white.opacity(0.5))
+                        .frame(width: navigationCircleSize, height: navigationCircleSize)
+                        .background(Circle().fill(Color("AppBlueLagoon")))
+                }
+                .disabled(currentZeroBased >= progress.totalCount - 1)
+                .buttonStyle(.plain)
+                .accessibilityLabel("Next question")
+                .accessibilityHint("Go to next question")
             }
-            .frame(height: 44)
+            .padding(.horizontal, layoutMetrics.adaptive(24))
+            .frame(height: navigationCircleSize + layoutMetrics.adaptive(8))
             .padding(.bottom, layoutMetrics.adaptive(16))
-            .onChange(of: progress.currentIndex) { _, newIndex in
-                withAnimation {
-                    proxy.scrollTo(newIndex, anchor: .center)
-                }
-            }
         }
     }
     
+    private func navigationBarVerticalSeparator(size: CGFloat) -> some View {
+        Rectangle()
+            .fill(Color(.separator))
+            .frame(width: 1)
+            .frame(height: size)
+    }
+    
+    /// Favorites: selected = blue, not selected = gray (no correct/wrong).
     private func circleColor(for index: Int) -> Color {
-        // In favorites, only show selected/not selected (no correct/wrong highlighting)
         if index == progress.currentIndex - 1 {
-            return Color("SelectedCircle")
-        } else {
-            return Color(.systemGray5)
+            return Color("AppBlueLagoon")
         }
+        return Color(.systemGray5)
     }
     
+    /// Favorites: white on selected (blue), primary on gray.
     private func circleTextColor(for index: Int) -> Color {
-        // In favorites, only show selected/not selected (no correct/wrong highlighting)
         if index == progress.currentIndex - 1 {
-            return Color(.systemGray6)
-        } else {
-            return .primary
+            return .white
         }
+        return .primary
     }
 }
 
