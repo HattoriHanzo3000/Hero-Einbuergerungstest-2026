@@ -105,6 +105,7 @@
 "home_statistics_title" = "Dein Fortschritt";
 "home_statistics_description" = "Du bist zu %d%% bereit für den Test. Bleib dran – kleine Schritte zählen jeden Tag.";
 "home_statistics_caption" = "Bereit für den Test";
+"progress_card_flip_hint" = "Doppeltippen zum Umklappen. Karte klappt nach 10 Sekunden zurück.";
 "home_statistics_accessibility_label" = "Bereitschaftsfortschritt";
 "home_statistics_accessibility_value" = "%d Prozent vorbereitet";
 "back_button_accessibility_label" = "Zurück";

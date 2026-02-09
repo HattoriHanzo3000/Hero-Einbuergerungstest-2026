@@ -106,6 +106,7 @@
 "home_statistics_title" = "Your progress";
 "home_statistics_description" = "You're %d%% ready for the test. Keep going—small steps count every day.";
 "home_statistics_caption" = "Ready for the test";
+"progress_card_flip_hint" = "Double tap to flip. Card flips back after 10 seconds.";
 "home_statistics_accessibility_label" = "Readiness progress";
 "home_statistics_accessibility_value" = "%d percent prepared";
 "back_button_accessibility_label" = "Back";

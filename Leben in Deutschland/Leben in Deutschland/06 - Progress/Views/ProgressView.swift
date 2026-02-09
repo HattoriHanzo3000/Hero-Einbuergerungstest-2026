@@ -25,7 +25,6 @@ struct ProgressTabView: View {
         .toolbar(.visible, for: .tabBar)
         .onAppear {
             viewModel.refreshStatistics()
-            // Ensure tab bar is visible
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 showTabBar()
             }

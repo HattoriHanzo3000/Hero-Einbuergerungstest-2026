@@ -105,6 +105,7 @@
 "home_statistics_title" = "Твой прогресс";
 "home_statistics_description" = "Ты готов на %d%% к тесту. Продолжай — каждый маленький шаг работает.";
 "home_statistics_caption" = "Готов к тесту";
+"progress_card_flip_hint" = "Двойное нажатие — перевернуть. Карточка вернётся через 10 секунд.";
 "home_statistics_accessibility_label" = "Прогресс готовности";
 "home_statistics_accessibility_value" = "%d процентов готовности";
 "back_button_accessibility_label" = "Назад";

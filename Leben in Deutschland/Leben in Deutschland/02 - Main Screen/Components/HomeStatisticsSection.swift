@@ -209,7 +209,7 @@ private struct HomeStatisticsGridView: View {
     }
 }
 
-// MARK: - Statistics Grid Card (B2-style gradient card, flips to show description)
+// MARK: - Statistics Grid Card (B2-style gradient card, flips to show description; flips back after 10 s)
 private struct HomeStatisticsGridCard: View {
     let titleKey: String
     let count: Int
@@ -218,7 +218,10 @@ private struct HomeStatisticsGridCard: View {
     let layoutMetrics: LayoutMetrics
 
     @State private var isFlipped = false
+    @State private var flipBackTask: Task<Void, Never>?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private let flipBackDelay: TimeInterval = 10
 
     private var cardBackground: some View {
         RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
@@ -249,9 +252,7 @@ private struct HomeStatisticsGridCard: View {
         .contentShape(Rectangle())
         .onTapGesture {
             HapticManager.shared.lightImpact()
-            withAnimation(reduceMotion ? .easeInOut(duration: 0.25) : .spring(response: 0.4, dampingFraction: 0.75)) {
-                isFlipped.toggle()
-            }
+            flipCard()
         }
         .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
         .accessibilityElement(children: .ignore)
@@ -259,6 +260,24 @@ private struct HomeStatisticsGridCard: View {
         .accessibilityLabel("\(titleKey.localized) – \(count)")
         .accessibilityValue(descriptionKey.localized)
         .accessibilityHint("statistics_card_flip_hint".localized)
+    }
+
+    private func flipCard() {
+        flipBackTask?.cancel()
+        withAnimation(reduceMotion ? .easeInOut(duration: 0.25) : .spring(response: 0.4, dampingFraction: 0.75)) {
+            isFlipped.toggle()
+        }
+        if isFlipped {
+            flipBackTask = Task {
+                try? await Task.sleep(nanoseconds: UInt64(flipBackDelay * 1_000_000_000))
+                guard !Task.isCancelled else { return }
+                await MainActor.run {
+                    withAnimation(reduceMotion ? .easeInOut(duration: 0.25) : .spring(response: 0.4, dampingFraction: 0.75)) {
+                        isFlipped = false
+                    }
+                }
+            }
+        }
     }
 
     /// Front: row 1 = number (data), row 2 = title (Wrong, Familiar, Reinforced, Mastered). Default side shown.
