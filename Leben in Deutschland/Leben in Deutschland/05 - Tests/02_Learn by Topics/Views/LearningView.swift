@@ -485,9 +485,14 @@ struct LearningView: View {
             }
         }
         .padding(.top, layoutMetrics.adaptive(12))
-        .padding(.bottom, layoutMetrics.adaptive(24))
+        .padding(.bottom, layoutMetrics.adaptive(24) + 20)
         .background(Color(.systemBackground))
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.showCorrectAnswer)
+    }
+    
+    /// Matches the circular header icons (reset / globe / heart).
+    private var navigationCircleSize: CGFloat {
+        layoutMetrics.adaptive(38)
     }
     
     private var buttonTitle: String {
@@ -519,44 +524,99 @@ struct LearningView: View {
     }
     
     // MARK: - Question Navigation Bar
+    /// Gray vertical divider, same height as circles; used so circles can scroll behind it.
+    private var navigationBarDivider: some View {
+        Rectangle()
+            .fill(Color(.separator))
+            .frame(width: 1)
+            .frame(height: navigationCircleSize)
+    }
+    
     private var questionNavigationBar: some View {
         ScrollViewReader { proxy in
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(0..<viewModel.questions.count, id: \.self) { index in
-                        Button(action: {
-                            HapticManager.shared.lightImpact()
-                            viewModel.goToQuestion(at: index)
-                        }) {
-                            Circle()
-                                .fill(circleColor(for: index))
-                                .frame(width: 32, height: 32)
-                                .overlay(
-                                    Text("\(index + 1)")
-                                        .font(.footnote)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(circleTextColor(for: index))
-                                )
+            HStack(spacing: layoutMetrics.adaptive(12)) {
+                // Back arrow
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    viewModel.goToQuestion(at: viewModel.currentIndex - 1)
+                }) {
+                    Image(systemName: "chevron.backward")
+                        .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold))
+                        .foregroundColor(viewModel.currentIndex > 0 ? .white : Color.white.opacity(0.5))
+                        .frame(width: navigationCircleSize, height: navigationCircleSize)
+                        .background(Circle().fill(Color("AppBlueLagoon")))
+                }
+                .disabled(viewModel.currentIndex <= 0)
+                .buttonStyle(.plain)
+                .accessibilityLabel("Previous question")
+                .accessibilityHint("Go to previous question")
+                
+                // Scrollable circles with dividers overlaid so circles hide behind them
+                ZStack(alignment: .center) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            ForEach(0..<viewModel.questions.count, id: \.self) { index in
+                                Button(action: {
+                                    HapticManager.shared.lightImpact()
+                                    viewModel.goToQuestion(at: index)
+                                }) {
+                                    Circle()
+                                        .fill(circleColor(for: index))
+                                        .frame(width: navigationCircleSize, height: navigationCircleSize)
+                                        .overlay(
+                                            Text("\(index + 1)")
+                                                .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold))
+                                                .foregroundColor(.white)
+                                        )
+                                }
+                                .id(index)
+                            }
                         }
-                        .id(index)
+                        .padding(.horizontal, 0)
                     }
+                    .onChange(of: viewModel.currentIndex) { _, newIndex in
+                        withAnimation {
+                            proxy.scrollTo(newIndex, anchor: .center)
+                        }
+                    }
+                    
+                    HStack {
+                        navigationBarDivider
+                        Spacer(minLength: 0)
+                        navigationBarDivider
+                    }
+                    .frame(height: navigationCircleSize)
+                    .allowsHitTesting(false)
                 }
-                .padding(.horizontal, layoutMetrics.adaptive(24))
+                .frame(maxWidth: .infinity)
+                
+                // Forward arrow
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    viewModel.goToQuestion(at: viewModel.currentIndex + 1)
+                }) {
+                    Image(systemName: "chevron.forward")
+                        .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold))
+                        .foregroundColor(viewModel.currentIndex < viewModel.questions.count - 1 ? .white : Color.white.opacity(0.5))
+                        .frame(width: navigationCircleSize, height: navigationCircleSize)
+                        .background(Circle().fill(Color("AppBlueLagoon")))
+                }
+                .disabled(viewModel.currentIndex >= viewModel.questions.count - 1)
+                .buttonStyle(.plain)
+                .accessibilityLabel("Next question")
+                .accessibilityHint("Go to next question")
             }
-            .frame(height: 44)
+            .padding(.horizontal, layoutMetrics.adaptive(24))
+            .frame(height: navigationCircleSize + layoutMetrics.adaptive(8))
             .padding(.bottom, layoutMetrics.adaptive(16))
-            .onChange(of: viewModel.currentIndex) { _, newIndex in
-                withAnimation {
-                    proxy.scrollTo(newIndex, anchor: .center)
-                }
-            }
         }
     }
     
     // MARK: - Helper Functions
     private func circleColor(for index: Int) -> Color {
         if index == viewModel.currentIndex {
-            return Color("SelectedCircle")
+            // Use the same blue as the primary Check/Next button.
+            return Color("AppBlueLagoon")
         } else if viewModel.isCorrect(at: index) {
             return Color("CorrectCircle")
         } else if viewModel.isIncorrect(at: index) {
@@ -566,15 +626,6 @@ struct LearningView: View {
         }
     }
     
-    private func circleTextColor(for index: Int) -> Color {
-        if index == viewModel.currentIndex {
-            return Color(.systemGray6)
-        } else if viewModel.isCorrect(at: index) || viewModel.isIncorrect(at: index) {
-            return Color(.systemGray6)
-        } else {
-            return .primary
-        }
-    }
 }
 
 // MARK: - Hint Icon Button
