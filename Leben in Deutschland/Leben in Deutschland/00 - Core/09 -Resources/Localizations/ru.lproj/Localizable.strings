@@ -219,6 +219,9 @@
 "test_simulation_tutorial_good_luck" = "Удачи — Херо с тобой!";
 "test_simulation_tutorial_got_it" = "Понятно!";
 
+"spaced_aim_per_day" = "Цель — ~%d вопросов в день";
+"spaced_test_soon_message" = "Тест скоро – сосредоточимся на самых важных вопросах.";
+
 "settings_statistics_title" = "Твой прогресс";
 "settings_delete_statistics" = "Cбросить приложение";
 "delete_statistics_warning_title" = "Удалить все данные и сбросить приложение?";

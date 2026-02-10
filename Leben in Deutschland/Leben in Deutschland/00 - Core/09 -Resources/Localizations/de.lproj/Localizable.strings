@@ -218,6 +218,9 @@
 "test_simulation_tutorial_good_luck" = " Viel Erfolg – Hero ist bei dir!";
 "test_simulation_tutorial_got_it" = "Verstanden!";
 
+"spaced_aim_per_day" = "Ziele auf ~%d Fragen pro Tag";
+"spaced_test_soon_message" = "Test bald – wir konzentrieren uns auf die wichtigsten Fragen.";
+
 "settings_statistics_title" = "Fortschritt";
 "settings_delete_statistics" = "App zurücksetzen";
 "delete_statistics_warning_title" = "Alle Daten löschen & App zurücksetzen?";

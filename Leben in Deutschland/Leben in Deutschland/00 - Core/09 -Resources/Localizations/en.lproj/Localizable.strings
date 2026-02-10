@@ -222,6 +222,9 @@
 "test_simulation_tutorial_good_luck" = " Good luck – Hero's got your back!";
 "test_simulation_tutorial_got_it" = "Got it!";
 
+"spaced_aim_per_day" = "Aim for ~%d questions per day";
+"spaced_test_soon_message" = "Test soon – we'll focus on the most important questions.";
+
 "settings_statistics_title" = "Progress";
 "settings_delete_statistics" = "Reset App";
 "delete_statistics_warning_title" = "Delete All Data & Reset App?";

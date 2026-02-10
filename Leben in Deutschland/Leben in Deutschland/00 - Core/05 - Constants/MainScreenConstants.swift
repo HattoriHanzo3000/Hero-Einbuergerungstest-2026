@@ -10,6 +10,11 @@ struct LayoutMetrics {
     static let gifAnimationDuration: Double = 1.1
     static let totalFederalQuestions: Int = 310
     
+    // MARK: - Spaced Repetition
+    static let maxHorizonDays: Int = 30
+    static let targetCorrectPerQuestion: Int = 4
+    static let totalSpacedRepetitionQuestions: Int = 320
+    
     let scale: CGFloat
     let screenSize: CGSize
     

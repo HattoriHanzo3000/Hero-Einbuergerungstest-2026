@@ -24,31 +24,38 @@ struct QuestionStatisticsModel: Codable, Hashable {
         masteryLevel >= 3
     }
     
-    mutating func registerAnswer(isCorrect: Bool) {
+    /// Registers an answer and schedules next review. Uses daysUntilTest to cap intervals
+    /// when test is soon (30-day horizon: anything beyond 30 days is treated as 30).
+    mutating func registerAnswer(isCorrect: Bool, daysUntilTest: Int = 30) {
         showCount += 1
         lastShownDate = Date()
-        // Store the last answer type for reset functionality
         lastAnswerWasCorrect = isCorrect
+        
+        let maxIntervalDays = max(1, daysUntilTest / 2)
+        let isUrgent = daysUntilTest <= 3
         
         if isCorrect {
             correctCount += 1
             consecutiveCorrect += 1
             incorrectCount = max(incorrectCount - 1, 0)
             if consecutiveCorrect >= 3 {
-                interval = min(interval * 2, 30)
+                interval = min(interval * 2, LayoutMetrics.maxHorizonDays, maxIntervalDays)
                 masteryLevel = min(masteryLevel + 1, 3)
                 consecutiveCorrect = 0
-                nextReviewDate = Calendar.current.date(byAdding: .day, value: interval, to: Date())
+                let effectiveInterval = min(interval, maxIntervalDays)
+                nextReviewDate = Calendar.current.date(byAdding: .day, value: effectiveInterval, to: Date())
             } else {
-                interval = min(interval + 1, 30)
-                nextReviewDate = Calendar.current.date(byAdding: .minute, value: 5, to: Date())
+                interval = min(interval + 1, LayoutMetrics.maxHorizonDays, maxIntervalDays)
+                let minutesUntilNext = isUrgent ? 2 : 5
+                nextReviewDate = Calendar.current.date(byAdding: .minute, value: minutesUntilNext, to: Date())
             }
         } else {
             incorrectCount += 1
             consecutiveCorrect = 0
             interval = max(interval / 2, 1)
             masteryLevel = max(masteryLevel - 1, 0)
-            nextReviewDate = Calendar.current.date(byAdding: .minute, value: 2, to: Date())
+            let minutesUntilNext = isUrgent ? 1 : 2
+            nextReviewDate = Calendar.current.date(byAdding: .minute, value: minutesUntilNext, to: Date())
         }
     }
 

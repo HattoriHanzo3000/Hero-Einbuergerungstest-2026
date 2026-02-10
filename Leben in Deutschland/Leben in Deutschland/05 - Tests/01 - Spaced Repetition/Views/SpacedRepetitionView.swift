@@ -31,7 +31,9 @@ struct SpacedRepetitionView: View {
             onCheckTapped: {
                 viewModel.handlePrimaryAction()
             },
-            isCheckEnabled: viewModel.isPrimaryButtonEnabled
+            isCheckEnabled: viewModel.isPrimaryButtonEnabled,
+            testDateMessage: viewModel.testDateMessage,
+            recommendedPerDay: viewModel.recommendedPerDay
         )
         .environmentObject(languageManager)
         .background(Color(.systemBackground))

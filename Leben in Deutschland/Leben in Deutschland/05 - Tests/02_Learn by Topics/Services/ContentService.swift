@@ -179,6 +179,26 @@ class ContentService: ObservableObject {
         }
     }
     
+    /// Get questions for spaced repetition: federal (310) + regional for selected state (10).
+    /// When selectedState is nil, returns only federal questions.
+    func getQuestionsForSpacedRepetition(selectedState: String?) -> [QuestionModel] {
+        let allQuestions = getAllQuestions()
+        let federalQuestions = allQuestions.filter { question in
+            let components = question.id.split(separator: " ")
+            if components.count == 2, let stateCode = components.last, stateCode.count == 2, stateCode.allSatisfy({ $0.isUppercase }) {
+                return false
+            }
+            return true
+        }
+        guard let state = selectedState else { return federalQuestions }
+        let stateCode = getStateCode(for: state)
+        guard !stateCode.isEmpty else { return federalQuestions }
+        let stateQuestions = allQuestions.filter { question in
+            question.id.contains(" \(stateCode)")
+        }
+        return federalQuestions + stateQuestions
+    }
+    
     // MARK: - Translation Support
     
     /// Load translation content for a specific language and cache all questions

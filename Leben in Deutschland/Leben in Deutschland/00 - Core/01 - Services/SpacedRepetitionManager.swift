@@ -37,32 +37,83 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
             return nextReview <= today
         }
         
-        let rankedReady = readyQuestions.sorted { lhs, rhs in
-            let leftStats = statistics[lhs.id]
-            let rightStats = statistics[rhs.id]
-            let leftDifficulty = 1.0 - (leftStats?.accuracy ?? 0)
-            let rightDifficulty = 1.0 - (rightStats?.accuracy ?? 0)
-            if leftDifficulty == rightDifficulty {
-                return (leftStats?.showCount ?? 0) < (rightStats?.showCount ?? 0)
-            }
-            return leftDifficulty > rightDifficulty
+        // Bucketed selection for diversity (avoid ID clustering)
+        enum Bucket { case new, hard, medium, easy }
+        
+        func bucket(for question: QuestionModel) -> Bucket {
+            guard let stats = statistics[question.id] else { return .new }
+            if stats.correctCount >= 4 { return .easy }
+            if stats.accuracy < 0.65 { return .hard }
+            return .medium
         }
+        
+        func comparePriority(_ l: QuestionModel, _ r: QuestionModel) -> Bool {
+            let lStats = statistics[l.id]
+            let rStats = statistics[r.id]
+            let lDate = lStats?.nextReviewDate ?? .distantPast
+            let rDate = rStats?.nextReviewDate ?? .distantPast
+            if lDate != rDate { return lDate < rDate }
+            return (lStats?.showCount ?? 0) < (rStats?.showCount ?? 0)
+        }
+        
+        let new = readyQuestions.filter { bucket(for: $0) == .new }.shuffled()
+        let hard = readyQuestions.filter { bucket(for: $0) == .hard }
+            .sorted(by: comparePriority).shuffled()
+        let medium = readyQuestions.filter { bucket(for: $0) == .medium }
+            .sorted(by: comparePriority).shuffled()
+        let easy = readyQuestions.filter { bucket(for: $0) == .easy }
+            .sorted(by: comparePriority).shuffled()
+        
+        // Target mix: 5 Hard, 3 Medium, 2 New, 1 Easy (for limit 12)
+        let targetHard = min(5, limit)
+        let targetMedium = min(3, max(0, limit - targetHard))
+        let targetNew = min(2, max(0, limit - targetHard - targetMedium))
+        let targetEasy = min(1, max(0, limit - targetHard - targetMedium - targetNew))
         
         var session: [QuestionModel] = []
-        session.append(contentsOf: rankedReady.prefix(limit))
+        var usedIds = Set<String>()
+        
+        func add(_ q: QuestionModel) {
+            guard !usedIds.contains(q.id) else { return }
+            usedIds.insert(q.id)
+            session.append(q)
+        }
+        
+        for q in hard.prefix(targetHard) { add(q) }
+        for q in medium.prefix(targetMedium) { add(q) }
+        for q in new.prefix(targetNew) { add(q) }
+        for q in easy.prefix(targetEasy) { add(q) }
+        
+        // Backfill from remaining buckets in round-robin
+        var h = targetHard, m = targetMedium, n = targetNew, e = targetEasy
+        var bucketIndex = 0
+        while session.count < limit {
+            var didAdd = false
+            switch bucketIndex {
+            case 0:
+                if h < hard.count, !usedIds.contains(hard[h].id) { add(hard[h]); h += 1; didAdd = true }
+            case 1:
+                if m < medium.count, !usedIds.contains(medium[m].id) { add(medium[m]); m += 1; didAdd = true }
+            case 2:
+                if n < new.count, !usedIds.contains(new[n].id) { add(new[n]); n += 1; didAdd = true }
+            case 3:
+                if e < easy.count, !usedIds.contains(easy[e].id) { add(easy[e]); e += 1; didAdd = true }
+            default: break
+            }
+            bucketIndex = (bucketIndex + 1) % 4
+            if !didAdd && h >= hard.count && m >= medium.count && n >= new.count && e >= easy.count { break }
+        }
         
         if session.count < limit {
-            let unseenQuestions = questions.filter { statistics[$0.id] == nil }
-            for question in unseenQuestions where !session.contains(where: { $0.id == question.id }) {
-                session.append(question)
-                if session.count == limit { break }
+            let unseen = questions.filter { statistics[$0.id] == nil }
+            for q in unseen where session.count < limit && !usedIds.contains(q.id) {
+                add(q)
             }
         }
         
         if session.count < limit {
-            for question in questions where !session.contains(where: { $0.id == question.id }) {
-                session.append(question)
-                if session.count == limit { break }
+            for q in questions where session.count < limit && !usedIds.contains(q.id) {
+                add(q)
             }
         }
         
@@ -71,10 +122,19 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
     
     // MARK: - Recording
     func recordAnswer(for questionId: String, isCorrect: Bool) {
+        let daysUntilTest = computeDaysUntilTest()
         var stats = statistics[questionId] ?? QuestionStatisticsModel(questionId: questionId)
-        stats.registerAnswer(isCorrect: isCorrect)
+        stats.registerAnswer(isCorrect: isCorrect, daysUntilTest: daysUntilTest)
         statistics[questionId] = stats
         saveStatistics()
+    }
+    
+    private func computeDaysUntilTest() -> Int {
+        let testDate = OnboardingPreferences.shared.testDate
+            ?? defaults.object(forKey: "selectedTestDate") as? Date
+        guard let date = testDate else { return LayoutMetrics.maxHorizonDays }
+        let days = calendar.dateComponents([.day], from: Date(), to: date).day ?? 0
+        return min(max(0, days), LayoutMetrics.maxHorizonDays)
     }
 
     /// Records a reset (user cleared answer); counts as negative for readiness.

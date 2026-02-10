@@ -77,9 +77,9 @@ struct FavoritesView: View {
         VStack(spacing: 0) {
             // Back button header
             HStack {
-                AdaptiveIconButton.backButton {
+                AdaptiveIconButton.backButton(action: {
                     router.pop()
-                }
+                }, tintColor: .primary)
                 Spacer()
             }
             .padding(.horizontal, layoutMetrics.adaptive(20))

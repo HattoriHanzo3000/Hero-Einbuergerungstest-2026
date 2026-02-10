@@ -16,21 +16,28 @@ final class SpacedRepetitionViewModel: ObservableObject {
     private let contentService: ContentService
     private let questionsPerSession: Int
     private let favoritesManager: FavoritesManaging
+    private let stateManager: StateManager
     
     init(
         manager: SpacedRepetitionManaging? = nil,
         contentService: ContentService? = nil,
         questionsPerSession: Int = 12,
-        favoritesManager: FavoritesManaging? = nil
+        favoritesManager: FavoritesManaging? = nil,
+        stateManager: StateManager? = nil
     ) {
         self.manager = manager ?? SpacedRepetitionManager.shared
         self.contentService = contentService ?? ContentService.shared
-        self.questionsPerSession = questionsPerSession
         self.favoritesManager = favoritesManager ?? FavoritesManager.shared
+        self.stateManager = stateManager ?? StateManager.shared
         
+        let daysUntilTest = Self.computeDaysUntilTest()
+        let sessionSize = daysUntilTest <= 3 ? 20 : (daysUntilTest <= 7 ? 16 : 12)
+        self.questionsPerSession = questionsPerSession == 12 ? sessionSize : questionsPerSession
+        
+        let pool = self.contentService.getQuestionsForSpacedRepetition(selectedState: self.stateManager.selectedState)
         let resolved = self.manager.questionsForSession(
-            from: self.contentService.getAllQuestions(),
-            limit: questionsPerSession
+            from: pool,
+            limit: self.questionsPerSession
         )
         
         let fallbacks = resolved.isEmpty ? SpacedRepetitionViewModel.placeholderQuestions : resolved
@@ -55,13 +62,37 @@ final class SpacedRepetitionViewModel: ObservableObject {
     var progressState: SpacedRepetitionQuestionCard.ProgressState {
         // Calculate overall readiness percentage (same as main screen)
         // This shows the user's overall progress from 0% to 100%
-        let totalFederalQuestions = LayoutMetrics.totalFederalQuestions
-        let readinessPercentage = manager.readinessPercentage(totalQuestions: totalFederalQuestions)
+        let totalForReadiness = stateManager.selectedState != nil
+            ? LayoutMetrics.totalSpacedRepetitionQuestions
+            : LayoutMetrics.totalFederalQuestions
+        let readinessPercentage = manager.readinessPercentage(totalQuestions: totalForReadiness)
         
         return .init(
             answeredCount: readinessPercentage,
             totalCount: 100
         )
+    }
+    
+    /// Message for header when test date is set, e.g. "Test in 5 days" or "Test soon" when days <= 2
+    var testDateMessage: String? {
+        let days = Self.computeDaysUntilTest()
+        guard days < LayoutMetrics.maxHorizonDays else { return nil }
+        let testDate = OnboardingPreferences.shared.testDate ?? UserDefaults.standard.object(forKey: "selectedTestDate") as? Date
+        guard testDate != nil else { return nil }
+        if days <= 2 { return "spaced_test_soon_message".localized }
+        let dayWord = Self.localizedDayWord(for: days)
+        return String(format: "main_header_test_in_days".localized, days, dayWord)
+    }
+    
+    /// Recommended questions per day to reach 4 correct per question (only when test date is set)
+    var recommendedPerDay: Int? {
+        let testDate = OnboardingPreferences.shared.testDate ?? UserDefaults.standard.object(forKey: "selectedTestDate") as? Date
+        guard testDate != nil else { return nil }
+        let days = Self.computeDaysUntilTest()
+        guard days > 0 else { return nil }
+        let pool = contentService.getQuestionsForSpacedRepetition(selectedState: stateManager.selectedState)
+        let totalNeeded = pool.count * LayoutMetrics.targetCorrectPerQuestion
+        return Int(ceil(Double(totalNeeded) / Double(days)))
     }
     
     var isPrimaryButtonEnabled: Bool {
@@ -95,7 +126,7 @@ final class SpacedRepetitionViewModel: ObservableObject {
     }
     
     func refreshSessionIfNeeded() {
-        let availableQuestions = contentService.getAllQuestions()
+        let availableQuestions = contentService.getQuestionsForSpacedRepetition(selectedState: stateManager.selectedState)
         guard availableQuestions.isEmpty == false else { return }
         let sessionQuestions = manager.questionsForSession(from: availableQuestions, limit: questionsPerSession)
         guard sessionQuestions.isEmpty == false else { return }
@@ -144,6 +175,38 @@ private extension SpacedRepetitionViewModel {
 }
 
 private extension SpacedRepetitionViewModel {
+    static func computeDaysUntilTest() -> Int {
+        let testDate = OnboardingPreferences.shared.testDate
+            ?? UserDefaults.standard.object(forKey: "selectedTestDate") as? Date
+        guard let date = testDate else { return LayoutMetrics.maxHorizonDays }
+        let days = Calendar.current.dateComponents([.day], from: Date(), to: date).day ?? 0
+        return min(max(0, days), LayoutMetrics.maxHorizonDays)
+    }
+    
+    private static func localizedDayWord(for days: Int) -> String {
+        let code = LanguageManager.currentAppLanguageCode
+        switch code {
+        case "de": return days == 1 ? "Tag" : "Tage"
+        case "ru":
+            let lastDigit = days % 10, lastTwo = days % 100
+            if (11...14).contains(lastTwo) { return "дней" }
+            switch lastDigit {
+            case 1: return "день"
+            case 2, 3, 4: return "дня"
+            default: return "дней"
+            }
+        case "uk":
+            let lastDigit = days % 10, lastTwo = days % 100
+            if (11...14).contains(lastTwo) { return "днів" }
+            switch lastDigit {
+            case 1: return "день"
+            case 2, 3, 4: return "дні"
+            default: return "днів"
+            }
+        default: return days == 1 ? "day" : "days"
+        }
+    }
+    
     static let placeholderQuestions: [QuestionModel] = [
         QuestionModel(
             id: "spaced_placeholder_001",

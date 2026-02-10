@@ -161,6 +161,7 @@ private struct SettingsTestDateRow: View {
     @ObservedObject var viewModel: SettingsRegionalViewModel
     @State private var dateValue: Date = Date()
     @State private var isUpdatingFromViewModel = false
+    @State private var showDateTooFarAlert = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -215,6 +216,16 @@ private struct SettingsTestDateRow: View {
             dateValue = newValue ?? Date()
             isUpdatingFromViewModel = false
         }
+        .alert("date_too_far_title".localized, isPresented: $showDateTooFarAlert) {
+            Button("ok_button".localized) {
+                HapticManager.shared.lightImpact()
+                isUpdatingFromViewModel = true
+                dateValue = viewModel.selectedTestDate ?? Date()
+                isUpdatingFromViewModel = false
+            }
+        } message: {
+            Text("date_too_far_message".localized)
+        }
     }
 
     private var toggleBinding: Binding<Bool> {
@@ -246,7 +257,15 @@ private struct SettingsTestDateRow: View {
         Binding(
             get: { dateValue },
             set: { newValue in
-                if isUpdatingFromViewModel {
+                if isUpdatingFromViewModel { return }
+                let calendar = Calendar.current
+                let today = calendar.startOfDay(for: Date())
+                let selectedDay = calendar.startOfDay(for: newValue)
+                let days = calendar.dateComponents([.day], from: today, to: selectedDay).day ?? 0
+                if days > 365 {
+                    // Temporarily show the selected date, but do not save it.
+                    dateValue = newValue
+                    showDateTooFarAlert = true
                     return
                 }
                 dateValue = newValue

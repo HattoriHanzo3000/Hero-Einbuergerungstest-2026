@@ -220,6 +220,9 @@
 "test_simulation_tutorial_good_luck" = " Успіхів — Hero з тобою!";
 "test_simulation_tutorial_got_it" = "Зрозуміло!";
 
+"spaced_aim_per_day" = "Мета — ~%d питань на день";
+"spaced_test_soon_message" = "Тест скоро – зосередимося на найважливіших питаннях.";
+
 "settings_statistics_title" = "Прогрес";
 "settings_delete_statistics" = "Скинути додаток";
 "delete_statistics_warning_title" = "Видалити всi дані та скинути додаток?";
