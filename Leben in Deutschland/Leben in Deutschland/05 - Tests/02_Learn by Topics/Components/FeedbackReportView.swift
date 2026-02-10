@@ -32,9 +32,6 @@ struct FeedbackReportView: View {
                     if let questionId = questionId {
                         LabeledContent("question_id".localized, value: questionId)
                     }
-                    if let category = category {
-                        LabeledContent("category".localized, value: category)
-                    }
                 } header: {
                     Text("question_info".localized)
                 }

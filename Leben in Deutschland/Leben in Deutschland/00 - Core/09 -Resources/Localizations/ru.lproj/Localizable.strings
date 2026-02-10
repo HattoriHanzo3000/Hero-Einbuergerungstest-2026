@@ -268,7 +268,7 @@
 "cancel" = "Отменить";
 "quit_test" = "Выйти из теста";
 
-"finish_test" = "ЗАВЕРШИТЬ ТЕСТ";
+"finish_test" = "УЗНАТЬ РЕЗУЛЬТАТ";
 "answer_all_questions_title" = "Сначала ответь на все вопросы";
 "answer_all_questions_message" = "Нужно ответить на все вопросы, чтобы завершить тест.";
 "ok_button" = "ОК";

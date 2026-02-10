@@ -271,7 +271,7 @@
 "cancel" = "Cancel";
 "quit_test" = "Quit Test";
 
-"finish_test" = "FINISH TEST";
+"finish_test" = "GET RESULTS";
 "answer_all_questions_title" = "Answer all questions first";
 "answer_all_questions_message" = "You need to answer all questions before you can finish the test.";
 "ok_button" = "OK";

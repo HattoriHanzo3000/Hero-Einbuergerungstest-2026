@@ -267,7 +267,7 @@
 "cancel" = "Abbrechen";
 "quit_test" = "Test beenden";
 
-"finish_test" = "TEST BEENDEN";
+"finish_test" = "ERGEBNIS ANSEHEN";
 "answer_all_questions_title" = "Erst alle Fragen beantworten";
 "answer_all_questions_message" = "Du musst alle Fragen beantworten, bevor du den Test beenden kannst.";
 "ok_button" = "OK";

@@ -269,7 +269,7 @@
 "cancel" = "Скасувати";
 "quit_test" = "Вийти з тесту";
 
-"finish_test" = "ЗАВЕРШИТИ ТЕСТ";
+"finish_test" = "ДІЗНАТИСЯ РЕЗУЛЬТАТ";
 "answer_all_questions_title" = "Спочатку відповідь на всі питання";
 "answer_all_questions_message" = "Потрібно відповісти на всі питання, щоб завершити тест.";
 "ok_button" = "ОК";
