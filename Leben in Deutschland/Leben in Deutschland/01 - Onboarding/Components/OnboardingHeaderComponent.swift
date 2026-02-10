@@ -1,17 +1,22 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Onboarding Header Component (Island Design)
+// MARK: - Onboarding Header Component (Liquid Glass, matches Home/Test Header)
 struct OnboardingHeaderComponent: View {
     let currentStep: Int
     let totalSteps: Int
     let messageKey: String
     let messageParameters: [String]?
+    let selectedState: String?
     @Binding var showDialog: Bool
     let playSignal: UUID?
     let onPlayCompleted: (() -> Void)?
     
-    private let standardPadding: CGFloat = 16
+    @EnvironmentObject private var languageManager: LanguageManager
+    @Environment(\.layoutMetrics) private var layoutMetrics
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
+    
     fileprivate static let mascotAssetName = "MainChick"
     
     init(
@@ -19,6 +24,7 @@ struct OnboardingHeaderComponent: View {
         totalSteps: Int,
         messageKey: String,
         messageParameters: [String]? = nil,
+        selectedState: String? = nil,
         showDialog: Binding<Bool>,
         playSignal: UUID? = nil,
         onPlayCompleted: (() -> Void)? = nil
@@ -27,94 +33,200 @@ struct OnboardingHeaderComponent: View {
         self.totalSteps = totalSteps
         self.messageKey = messageKey
         self.messageParameters = messageParameters
+        self.selectedState = selectedState
         self._showDialog = showDialog
         self.playSignal = playSignal
         self.onPlayCompleted = onPlayCompleted
     }
     
+    private var verticalPadding: CGFloat { layoutMetrics.adaptive(18) }
+    private var horizontalPadding: CGFloat { layoutMetrics.adaptive(20) }
+    private var mascotToContentSpacing: CGFloat { layoutMetrics.adaptive(16) }
+    private var titleToSloganSpacing: CGFloat { layoutMetrics.adaptive(6) }
+    private var mascotSize: CGFloat { layoutMetrics.adaptive(120) }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .center, spacing: 0) {
-                ZStack {
-                    ProgressView(value: Double(currentStep), total: Double(totalSteps))
-                        .progressViewStyle(LinearProgressViewStyle(tint: Color(.systemGray6)))
-                        .frame(height: 8)
-                        .clipShape(Capsule())
-                }
-                .frame(height: 44)
+            // Progress bar (matches SpacedRepetitionQuestionCard: horizontal 20, vertical padding)
+            ProgressView(value: Double(currentStep), total: Double(totalSteps))
+                .progressViewStyle(LinearProgressViewStyle(tint: Color(.systemGray6)))
+                .frame(height: layoutMetrics.adaptive(8))
+                .clipShape(Capsule())
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, OnboardingConstants.progressBarHorizontalPadding)
-            }
-            .frame(height: 44)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Progress")
-            .accessibilityValue("\(currentStep) of \(totalSteps)")
+                .padding(.horizontal, layoutMetrics.adaptive(20))
+                .padding(.top, layoutMetrics.adaptive(18))
+                .padding(.bottom, layoutMetrics.adaptive(12))
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Progress")
+                .accessibilityValue("\(currentStep) of \(totalSteps)")
             
-            OnboardingMascotRow(
-                messageKey: messageKey,
-                messageParameters: messageParameters,
-                horizontalPadding: standardPadding,
-                playSignal: playSignal,
-                onPlayCompleted: onPlayCompleted
-            )
-            .padding(.top, 12)
-            .padding(.horizontal, standardPadding)
+            // Mascot + content row (same layout as MainHeaderContent / TestHeaderContent)
+            HStack(alignment: .center, spacing: mascotToContentSpacing) {
+                OnboardingMascotView(
+                    playSignal: playSignal,
+                    onPlayCompleted: onPlayCompleted
+                )
+                .frame(width: mascotSize, height: mascotSize)
+                
+                if let selectedState = selectedState {
+                    // With title: state name + slogan (MainHeaderContent style)
+                    VStack(alignment: .leading, spacing: titleToSloganSpacing) {
+                        Text(getLocalizedStateName(selectedState))
+                            .font(.system(.title, design: .rounded).bold())
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(nil)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                        
+                        OnboardingSloganBlock(stateName: selectedState, textColor: .white)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    // Without title: message only (TestHeaderContent style)
+                    Text(formattedMessage)
+                        .font(.system(.body, design: .rounded).weight(.medium))
+                        .lineSpacing(4)
+                        .foregroundColor(.white)
+                        .id(languageManager.currentAppLanguage)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .padding(.vertical, verticalPadding)
+            .padding(.horizontal, horizontalPadding)
         }
-        .padding(.bottom, standardPadding * 2)
-        .background(
-            RoundedRectangle(cornerRadius: 28)
-                .fill(Color.accentColor)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(liquidGlassBackground)
+        .clipShape(RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
+                .stroke(
+                    LinearGradient(
+                        colors: [.white.opacity(0.4), .white.opacity(0.08)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 0.8
+                )
         )
+        .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
         .padding(.horizontal)
-        .padding(.top, 8)
-    }
-}
-
-// MARK: - Onboarding Mascot Dialog Row (Inside Header)
-struct OnboardingMascotRow: View {
-    let messageKey: String
-    let messageParameters: [String]?
-    let horizontalPadding: CGFloat
-    @State private var showMascotGif = false
-    @State private var gifPlayToken: UUID = UUID()
-    @EnvironmentObject var languageManager: LanguageManager
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.colorScheme) private var colorScheme
-    
-    let playSignal: UUID?
-    let onPlayCompleted: (() -> Void)?
-    
-    // MARK: - Constants
-    private static let spacing: CGFloat = 16
-    private static let mascotSize: CGFloat = 120
-    private static let mascotShadowRadius: CGFloat = 4
-    private static let mascotShadowOffset: CGSize = CGSize(width: 0, height: 2)
-    private static let mascotShadowOpacity: Double = 0.1
-    
-    init(
-        messageKey: String,
-        messageParameters: [String]? = nil,
-        horizontalPadding: CGFloat,
-        playSignal: UUID? = nil,
-        onPlayCompleted: (() -> Void)? = nil
-    ) {
-        self.messageKey = messageKey
-        self.messageParameters = messageParameters
-        self.horizontalPadding = horizontalPadding
-        self.playSignal = playSignal
-        self.onPlayCompleted = onPlayCompleted
+        .padding(.top, layoutMetrics.adaptive(8))
+        .onChange(of: playSignal) { _, _ in
+            if reduceMotion {
+                onPlayCompleted?()
+            } else {
+                // Signal is handled by OnboardingMascotView
+            }
+        }
     }
     
     private var formattedMessage: String {
         let localizedString = messageKey.localized
         guard let parameters = messageParameters, !parameters.isEmpty else { return localizedString }
-        var formattedString = localizedString
-        // Replace all occurrences of %d with parameters
-        for parameter in parameters {
-            formattedString = formattedString.replacingOccurrences(of: "%d", with: parameter)
+        let locale = Locale(identifier: languageManager.currentAppLanguage)
+        let formatArguments: [CVarArg] = parameters.map { parameter in
+            if let intValue = Int(parameter) { return intValue }
+            if let doubleValue = Double(parameter) { return Int(doubleValue.rounded()) }
+            return parameter as NSString
         }
-        return formattedString
+        return String(format: localizedString, locale: locale, arguments: formatArguments)
     }
+    
+    private func getLocalizedStateName(_ stateName: String) -> String {
+        stateName.localized
+    }
+    
+    private var liquidGlassBackground: some View {
+        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
+            .fill(
+                LinearGradient(
+                    colors: [
+                        Color("AppBlueLagoon").opacity(0.9),
+                        Color("AppBlueLagoon").opacity(0.65),
+                        Color("AppCaribean").opacity(0.45)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(0.20),
+                        Color.white.opacity(0.05),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Color.white.opacity(0.45), Color.white.opacity(0.12)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 0.6
+                    )
+            )
+            .background(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
+                    .fill(Color.white.opacity(0.05))
+            )
+    }
+}
+
+// MARK: - Onboarding Slogan Block (matches FederalStateSloganBlock logic)
+private struct OnboardingSloganBlock: View {
+    @EnvironmentObject private var languageManager: LanguageManager
+    let stateName: String
+    var textColor: Color = .white
+    
+    var body: some View {
+        Text(localizedSlogan(for: stateName))
+            .font(.system(.body, design: .rounded).weight(.medium))
+            .lineSpacing(4)
+            .foregroundColor(textColor)
+            .multilineTextAlignment(.leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityLabel("main_header_state_slogan_accessibility_label".localized)
+            .accessibilityValue(localizedSlogan(for: stateName))
+            .id(languageManager.currentAppLanguage)
+    }
+    
+    private func localizedSlogan(for state: String) -> String {
+        let normalized = state
+            .lowercased()
+            .replacingOccurrences(of: " ", with: "_")
+            .replacingOccurrences(of: "-", with: "_")
+        let key = "state_\(normalized)_slogan"
+        let localizedValue = key.localized
+        if localizedValue == key {
+            return "state_\(normalized)".localized
+        }
+        return localizedValue
+    }
+}
+
+// MARK: - Onboarding Mascot View (tap to play GIF, matches MainMascotView layout)
+private struct OnboardingMascotView: View {
+    let playSignal: UUID?
+    let onPlayCompleted: (() -> Void)?
+    
+    @State private var showMascotGif = false
+    @State private var gifPlayToken: UUID = UUID()
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.layoutMetrics) private var layoutMetrics
+    
+    private var mascotSize: CGFloat { layoutMetrics.adaptive(120) }
     
     private var staticMascotAssetName: String {
         if colorScheme == .dark, UIImage(named: "MainChickDark") != nil {
@@ -128,70 +240,47 @@ struct OnboardingMascotRow: View {
     }
     
     var body: some View {
-        HStack(alignment: .top, spacing: 0) {
-            ZStack {
-                if UIImage(named: staticMascotAssetName) != nil {
-                    Image(staticMascotAssetName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: Self.mascotSize, height: Self.mascotSize)
-                        .accessibilityLabel("Mascot")
-                        .opacity((showMascotGif && !reduceMotion) ? 0 : 1)
-                } else {
-                    Color.clear
-                        .frame(width: Self.mascotSize, height: Self.mascotSize)
-                        .accessibilityHidden(true)
-                }
-                
-                AnimatedGIFView(gifName: gifMascotAssetName, contentMode: .scaleAspectFit, shouldAnimate: showMascotGif && !reduceMotion)
-                    .id(gifPlayToken)
-                    .frame(width: Self.mascotSize, height: Self.mascotSize)
+        ZStack {
+            if UIImage(named: staticMascotAssetName) != nil {
+                Image(staticMascotAssetName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: mascotSize, height: mascotSize)
+                    .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
                     .accessibilityLabel("Mascot")
-                    .opacity((showMascotGif && !reduceMotion) ? 1 : 0)
-                    .allowsHitTesting(false)
-            }
-            .frame(width: Self.mascotSize, height: Self.mascotSize)
-            .shadow(
-                color: .black.opacity(Self.mascotShadowOpacity),
-                radius: Self.mascotShadowRadius,
-                x: Self.mascotShadowOffset.width,
-                y: Self.mascotShadowOffset.height
-            )
-            .contentShape(Rectangle())
-            .onTapGesture {
-                HapticManager.shared.lightImpact()
-                if !reduceMotion { playGifOnly() }
+                    .opacity((showMascotGif && !reduceMotion) ? 0 : 1)
+            } else {
+                Color.clear
+                    .frame(width: mascotSize, height: mascotSize)
+                    .accessibilityHidden(true)
             }
             
-            Spacer().frame(width: Self.spacing)
-
-            VStack(alignment: .leading, spacing: 0) {
-                Text(formattedMessage)
-                    .font(.system(.subheadline, design: .rounded).weight(.regular))
-                    .foregroundColor(.black)
-                    .id(languageManager.currentAppLanguage)
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, horizontalPadding)
-                    .padding(.vertical, horizontalPadding)
-            }
-            .frame(maxWidth: .infinity, alignment: .topLeading)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.white)
-                    .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.black, lineWidth: 1))
-                    .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+            AnimatedGIFView(
+                gifName: gifMascotAssetName,
+                contentMode: .scaleAspectFit,
+                shouldAnimate: showMascotGif && !reduceMotion
             )
-            .padding(.trailing, horizontalPadding)
+            .id(gifPlayToken)
+            .frame(width: mascotSize, height: mascotSize)
+            .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+            .accessibilityLabel("Mascot")
+            .opacity((showMascotGif && !reduceMotion) ? 1 : 0)
+            .allowsHitTesting(false)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .onChange(of: playSignal) { _, _ in
+        .frame(width: mascotSize, height: mascotSize)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            HapticManager.shared.lightImpact()
             if reduceMotion {
-                // Skip animation when reduce motion is enabled
                 onPlayCompleted?()
             } else {
-                // Play animation then complete
+                playGifOnly()
+            }
+        }
+        .onChange(of: playSignal) { _, _ in
+            if reduceMotion {
+                onPlayCompleted?()
+            } else {
                 playGifThenComplete()
             }
         }

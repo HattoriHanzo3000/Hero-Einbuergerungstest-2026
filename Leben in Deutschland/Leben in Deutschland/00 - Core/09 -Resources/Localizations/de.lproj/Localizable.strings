@@ -3,13 +3,15 @@
 // =============================================================================
 
 // Eagle greeting
-"eagle_greeting" = "Hallo! Ich bin Hero, das kleine Adlerküken, und ich helfe dir bei der Vorbereitung auf den Test. Lass uns anfangen!\nWähle zuerst die Sprache der App.";
+"eagle_greeting" = "Hallo! Ich bin Hero, der Adler, und ich helfe dir bei der Vorbereitung auf den Test. Lass uns anfangen!\nWähle zuerst die Sprache der App.";
+"language_selected" = "Super! Tippe auf Weiter";
 
 // Translation selection
-"translation_selection_title" = "Supi! Und jetzt wähle eine Sprache für die Übersetzung der Fragen und Antworten – falls du mal eine Hilfe brauchst.";
+"translation_selection_title" = "Jetzt wähle eine Sprache für die Übersetzung der Fragen und Antworten – falls du mal eine Hilfe brauchst.";
 
 // State selection
 "state_selection_title_general" = "Wo wirst du den Test ablegen? Ich füge 10 zusätzliche Fragen zu deinem Bundesland hinzu.";
+"choose_federal_state" = "Wo wirst du den Test ablegen? Ich füge 10 zusätzliche Fragen zu deinem Bundesland hinzu.";
 
 // Messages when selecting federal states
 "state_baden_württemberg" = "Hier wird alles erfunden – sogar die Kehrwoche!";
@@ -49,6 +51,8 @@
 
 // Test date selection
 "test_date_selection_title" = "Wann machst du den Test? Ich werde eine kleine Erinnerung für dich auf dem Bildschirm anzeigen.";
+"choose_test_date" = "Wähle dein Prüfungsdatum.";
+"onboarding_date_prompt" = "Wann ist dein Test? Wähle das Datum und wir zählen gemeinsam die Tage.";
 "SELECT_DATE" = "Datum auswählen";
 "SAVE_DATE" = "DATUM SPEICHERN";
 "CANCEL" = "ABBRECHEN";

@@ -25,6 +25,16 @@ final class OnboardingPreferences {
     func clearSelectedState() {
         defaults.removeObject(forKey: Keys.selectedState)
     }
+    
+    /// Clears onboarding selections when starting a fresh onboarding run.
+    /// Call when transitioning from start animation to onboarding language.
+    func clearOnboardingSelections() {
+        defaults.removeObject(forKey: Keys.selectedState)
+        defaults.removeObject(forKey: Keys.testDate)
+        defaults.set(false, forKey: Keys.testDateDontKnow)
+        defaults.set(false, forKey: Keys.translationSelected)
+        defaults.removeObject(forKey: Keys.translationLanguageCode)
+    }
 
     var selectedState: String? {
         get { defaults.string(forKey: Keys.selectedState) }

@@ -11,7 +11,7 @@ struct OnboardingLanguageView: View {
     var body: some View {
         OnboardingScreenContainer(
             headerStep: OnboardingConstants.languageStep,
-            headerMessageKey: "eagle_greeting",
+            headerMessageKey: viewModel.dialogMessageKey,
             headerId: viewModel.selectedLanguage,
             showDialog: $viewModel.showDialog,
             isNextEnabled: viewModel.selectedLanguage != nil,

@@ -1,6 +1,7 @@
 import SwiftUI
 
 // MARK: - Onboarding Next Button Component
+/// Matches SpacedRepetitionQuestionCard footer: QuizActionButton for Next, back arrow with same radius (28).
 struct OnboardingNextButtonComponent: View {
     let isEnabled: Bool
     let action: () -> Void
@@ -8,11 +9,7 @@ struct OnboardingNextButtonComponent: View {
     let backAction: (() -> Void)?
     let titleKey: String
     @EnvironmentObject var languageManager: LanguageManager
-    @State private var isBackPressed = false
-    @State private var isNextPressed = false
-    
-    private let cornerRadius: CGFloat = 12
-    private let buttonHeight: CGFloat = 56
+    @Environment(\.layoutMetrics) private var layoutMetrics
     
     init(
         isEnabled: Bool,
@@ -28,55 +25,69 @@ struct OnboardingNextButtonComponent: View {
         self.titleKey = titleKey
     }
     
+    private var nextButtonStyle: QuizActionButton.Style {
+        QuizActionButton.Style(
+            backgroundColor: Color("AppOrange"),
+            disabledBackgroundColor: Color(.systemGray2),
+            haloPrimaryColor: Color("AppOrange").opacity(0.36),
+            haloSecondaryColor: Color.white.opacity(0.18),
+            showsHaloWhenDisabled: false,
+            suppressGlow: true
+        )
+    }
+    
     var body: some View {
-        HStack(spacing: 12) {
-            if showBackButton {
+        HStack(spacing: layoutMetrics.adaptive(12)) {
+            if showBackButton, let backAction = backAction {
                 Button(action: {
                     HapticManager.shared.lightImpact()
-                    backAction?()
+                    backAction()
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(.title3.bold())
-                        .fontDesign(.rounded)
-                        .foregroundColor(Color(.systemGray6))
-                        .frame(width: buttonHeight, height: buttonHeight)
+                        .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding(.vertical, layoutMetrics.adaptive(18))
+                        .frame(width: layoutMetrics.adaptive(80))
                         .background(
-                            RoundedRectangle(cornerRadius: cornerRadius)
-                                .fill(Color("AppOrange"))
+                            ZStack {
+                                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
+                                    .fill(.ultraThinMaterial)
+                                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
+                                    .fill(Color("AppOrange"))
+                            }
+                            .overlay(
+                                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
+                                    .stroke(Color.white.opacity(0.18), lineWidth: 1)
+                            )
+                        )
+                        .shadow(
+                            color: Color.black.opacity(0.16),
+                            radius: layoutMetrics.adaptive(22),
+                            y: layoutMetrics.adaptive(10)
                         )
                 }
-                .accessibilityLabel("Back")
+                .buttonStyle(.plain)
+                .accessibilityLabel("back_button_accessibility_label".localized)
                 .accessibilityHint("Go back to previous step")
-                .scaleEffect(isBackPressed ? 0.98 : 1.0)
-                .buttonPressAnimation(isPressed: $isBackPressed)
+                .accessibilityAddTraits(.isButton)
             }
             
-            Button(action: {
+            QuizActionButton(
+                titleKey.localized,
+                style: nextButtonStyle,
+                isEnabled: isEnabled,
+                accessibilityLabel: titleKey.localized
+            ) {
                 if isEnabled {
                     HapticManager.shared.mediumImpact()
                     action()
                 }
-            }) {
-                Text(titleKey.localized)
-                    .font(.title3.bold())
-                    .fontDesign(.rounded)
-                    .foregroundColor(Color(.systemGray6))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: buttonHeight)
-                    .padding(.horizontal, 20)
-                    .background(
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .fill(isEnabled ? Color("AppOrange") : Color.gray)
-                    )
-                    .id(languageManager.currentAppLanguage)
             }
-            .disabled(!isEnabled)
             .frame(maxWidth: .infinity)
-            .scaleEffect(isNextPressed ? 0.98 : 1.0)
-            .buttonPressAnimation(isPressed: $isNextPressed)
         }
-        .padding(.horizontal, 20)
-        .padding(.bottom, 30)
+        .padding(.horizontal, layoutMetrics.adaptive(24))
+        .padding(.top, layoutMetrics.adaptive(12))
+        .padding(.bottom, layoutMetrics.adaptive(24))
         .background(Color(.systemBackground))
     }
 }

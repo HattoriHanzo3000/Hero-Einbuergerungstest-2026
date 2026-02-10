@@ -12,6 +12,7 @@ struct OnboardingStateView: View {
         OnboardingScreenContainer(
             headerStep: OnboardingConstants.stateStep,
             headerMessageKey: viewModel.dialogMessageKey,
+            headerSelectedState: viewModel.selectedState,
             headerId: viewModel.selectedState,
             showDialog: $viewModel.showDialog,
             isNextEnabled: viewModel.selectedState != nil,

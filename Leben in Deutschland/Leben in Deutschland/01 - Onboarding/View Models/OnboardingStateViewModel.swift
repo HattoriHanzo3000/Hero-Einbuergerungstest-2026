@@ -8,10 +8,10 @@ class OnboardingStateViewModel: ObservableObject {
     @Published var selectedState: String?
     @Published var showDialog: Bool = false
     
-    // Dialog message key for the header bubble
+    /// Header message: no-selection prompt vs slogan when selected
     var dialogMessageKey: String {
         guard let selectedState, let sloganKey = Self.stateSloganKeys[selectedState] else {
-            return "state_selection_title_general"
+            return "choose_federal_state"
         }
         return sloganKey
     }
@@ -57,12 +57,13 @@ class OnboardingStateViewModel: ObservableObject {
     }
     
     func setupInitialState() {
-        // Restore previously saved state if available
+        // Only restore when user had previously selected (returning from a later step)
         if let savedState = preferences.selectedState {
             selectedState = savedState
             stateManager?.setSelectedState(savedState)
+        } else {
+            selectedState = nil
         }
-        // Show dialog with delay to match other onboarding screens
         DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.dialogDelay) {
             self.showDialog = true
         }

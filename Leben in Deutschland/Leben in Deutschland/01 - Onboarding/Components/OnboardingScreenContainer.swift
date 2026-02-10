@@ -3,9 +3,11 @@ import SwiftUI
 // MARK: - Onboarding Screen Container
 /// Reusable container for onboarding screens that provides consistent layout structure
 struct OnboardingScreenContainer<Content: View>: View {
+    @Environment(\.layoutMetrics) private var layoutMetrics
     let headerStep: Int
     let headerMessageKey: String
     let headerMessageParameters: [String]?
+    let headerSelectedState: String?
     let headerId: AnyHashable?
     let showDialog: Binding<Bool>
     let isNextEnabled: Bool
@@ -25,6 +27,7 @@ struct OnboardingScreenContainer<Content: View>: View {
         headerStep: Int,
         headerMessageKey: String,
         headerMessageParameters: [String]? = nil,
+        headerSelectedState: String? = nil,
         headerId: AnyHashable? = nil,
         showDialog: Binding<Bool>,
         isNextEnabled: Bool,
@@ -41,6 +44,7 @@ struct OnboardingScreenContainer<Content: View>: View {
         self.headerStep = headerStep
         self.headerMessageKey = headerMessageKey
         self.headerMessageParameters = headerMessageParameters
+        self.headerSelectedState = headerSelectedState
         self.headerId = headerId
         self.showDialog = showDialog
         self.isNextEnabled = isNextEnabled
@@ -61,19 +65,24 @@ struct OnboardingScreenContainer<Content: View>: View {
             Color(.systemBackground)
                 .ignoresSafeArea()
             
-            VStack(spacing: OnboardingConstants.containerSectionSpacing) {
+            VStack(spacing: 0) {
                 // Header island with progress and mascot
                 OnboardingHeaderComponent(
                     currentStep: headerStep,
                     totalSteps: OnboardingConstants.totalSteps,
                     messageKey: headerMessageKey,
                     messageParameters: headerMessageParameters,
+                    selectedState: headerSelectedState,
                     showDialog: showDialog,
                     playSignal: nextPlayToken,
                     onPlayCompleted: onNext
                 )
                 .id(headerId)
                 .padding(.top, OnboardingConstants.headerTopPadding)
+                .padding(.bottom, layoutMetrics.adaptive(12))
+                
+                Divider()
+                    .background(Color(.separator))
                 
                 // Scrollable content block
                 ScrollView(showsIndicators: false) {
@@ -98,6 +107,9 @@ struct OnboardingScreenContainer<Content: View>: View {
                 .frame(maxHeight: .infinity, alignment: .top)
                 .scrollDismissesKeyboard(.interactively)
                 
+                Divider()
+                    .background(Color(.separator))
+                
                 // Next Button
                 OnboardingNextButtonComponent(
                     isEnabled: isNextEnabled,
@@ -106,7 +118,6 @@ struct OnboardingScreenContainer<Content: View>: View {
                     backAction: onBack,
                     titleKey: nextButtonTitleKey
                 )
-                .padding(.bottom, OnboardingConstants.containerSectionSpacing)
             }
         }
         .onAppear {

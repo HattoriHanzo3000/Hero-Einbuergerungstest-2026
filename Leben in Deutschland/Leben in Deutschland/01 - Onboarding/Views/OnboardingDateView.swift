@@ -4,7 +4,7 @@ import SwiftUI
 struct OnboardingDateView: View {
     @StateObject private var viewModel: OnboardingDateViewModel
     @State private var showDatePicker: Bool = false
-    @State private var showDateTooFarDialog: Bool = false
+    @State private var showDateTooFarAlert: Bool = false
     @State private var tempDate: Date = Date()
     
     init(viewModel: OnboardingDateViewModel) {
@@ -12,55 +12,43 @@ struct OnboardingDateView: View {
     }
 
     var body: some View {
-        ZStack {
-            OnboardingScreenContainer(
-                headerStep: OnboardingConstants.dateStep,
-                headerMessageKey: viewModel.dialogMessageKey,
-                headerMessageParameters: viewModel.dialogParameters,
-                headerId: viewModel.dialogMessageKey,
-                showDialog: $viewModel.showDialog,
-                isNextEnabled: viewModel.hasSelectedDate || viewModel.hasSelectedDontKnow,
-                showBackButton: true,
-                nextButtonTitleKey: "LET'S GO",
-                onNext: viewModel.proceedToNext,
-                onBack: {
+        OnboardingScreenContainer(
+            headerStep: OnboardingConstants.dateStep,
+            headerMessageKey: viewModel.dialogMessageKey,
+            headerMessageParameters: viewModel.dialogParameters,
+            headerId: viewModel.dialogMessageKey,
+            showDialog: $viewModel.showDialog,
+            isNextEnabled: viewModel.hasSelectedDate || viewModel.hasSelectedDontKnow,
+            showBackButton: true,
+            nextButtonTitleKey: "LET'S GO",
+            onNext: viewModel.proceedToNext,
+            onBack: {
+                HapticManager.shared.lightImpact()
+                viewModel.goBack()
+            },
+            onSetup: viewModel.setupInitialState,
+            languageManager: viewModel.languageManager
+        ) {
+            OnboardingDateSelectionContentComponent(
+                selectedDate: $viewModel.selectedDate,
+                onSelectDate: {
                     HapticManager.shared.lightImpact()
-                    viewModel.goBack()
+                    tempDate = viewModel.selectedDate ?? Date()
+                    showDatePicker = true
                 },
-                onSetup: viewModel.setupInitialState,
-                languageManager: viewModel.languageManager
-            ) {
-                OnboardingDateSelectionContentComponent(
-                    selectedDate: $viewModel.selectedDate,
-                    onSelectDate: {
-                        HapticManager.shared.lightImpact()
-                        tempDate = viewModel.selectedDate ?? Date()
-                        withAnimation {
-                            showDateTooFarDialog = false
-                        }
-                        showDatePicker = true
-                    },
-                    onDontKnow: {
-                        viewModel.chooseDontKnow()
-                        withAnimation {
-                            showDateTooFarDialog = false
-                        }
-                    },
-                    hasSelectedDate: viewModel.hasSelectedDate,
-                    hasSelectedDontKnow: viewModel.hasSelectedDontKnow
-                )
-            }
-            .zIndex(0)
-            
-            DateTooFarDialog(
-                isPresented: showDateTooFarDialog,
-                onDismiss: {
-                    withAnimation {
-                        showDateTooFarDialog = false
-                    }
-                }
+                onDontKnow: {
+                    viewModel.chooseDontKnow()
+                },
+                hasSelectedDate: viewModel.hasSelectedDate,
+                hasSelectedDontKnow: viewModel.hasSelectedDontKnow
             )
-            .zIndex(1)
+        }
+        .alert("date_too_far_title".localized, isPresented: $showDateTooFarAlert) {
+            Button("ok_button".localized) {
+                HapticManager.shared.lightImpact()
+            }
+        } message: {
+            Text("date_too_far_message".localized)
         }
         .sheet(isPresented: $showDatePicker) {
             NavigationView {
@@ -77,32 +65,7 @@ struct OnboardingDateView: View {
                     .environment(\.locale, viewModel.languageManager.currentLocale)
                     .accentColor(Color.accentColor)
                     
-                    Button("SAVE_DATE".localized) {
-                        HapticManager.shared.lightImpact()
-                        let tooFar = isDateTooFar(tempDate)
-                        if tooFar {
-                            showDatePicker = false
-                            withAnimation {
-                                showDateTooFarDialog = true
-                            }
-                        } else {
-                            viewModel.chooseDate(tempDate)
-                            showDatePicker = false
-                            withAnimation {
-                                showDateTooFarDialog = false
-                            }
-                        }
-                    }
-                    .font(.title3.bold())
-                    .fontDesign(.rounded)
-                    .foregroundColor(Color(.systemGray6))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 15)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.accentColor)
-                    )
-                    .padding(.horizontal)
+                    saveDateButton
                     
                     Spacer(minLength: 24)
                 }
@@ -122,6 +85,34 @@ struct OnboardingDateView: View {
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
         }
+    }
+    
+    private var saveDateButton: some View {
+        QuizActionButton(
+            "SAVE_DATE".localized,
+            style: saveButtonStyle
+        ) {
+            HapticManager.shared.lightImpact()
+            let tooFar = isDateTooFar(tempDate)
+            if tooFar {
+                showDatePicker = false
+                showDateTooFarAlert = true
+            } else {
+                viewModel.chooseDate(tempDate)
+                showDatePicker = false
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    private var saveButtonStyle: QuizActionButton.Style {
+        QuizActionButton.Style(
+            backgroundColor: Color("AppBlueLagoon"),
+            disabledBackgroundColor: Color(.systemGray2),
+            haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
+            haloSecondaryColor: Color.white.opacity(0.18),
+            suppressGlow: true
+        )
     }
     
     private func isDateTooFar(_ date: Date) -> Bool {

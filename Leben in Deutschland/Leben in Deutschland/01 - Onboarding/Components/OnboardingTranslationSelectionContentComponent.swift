@@ -36,41 +36,21 @@ struct OnboardingTranslationSelectionContentComponent: View {
     }
 }
 
-// MARK: - Translation Language Option Row
+// MARK: - Translation Language Option Row (QuizAnswerOptionButton style)
 private struct OnboardingTranslationLanguageOptionRowComponent: View {
     let language: LanguageOption
     let isSelected: Bool
     let isDisabled: Bool
     let onTap: () -> Void
     
-    private var selectedFill: Color { Color.accentColor }
-    private var unselectedFill: Color { Color("Unselected") }
-    @State private var isPressed = false
-    
     var body: some View {
-        Button(action: onTap) {
-            Text(language.name)
-                .font(.body)
-                .fontWeight(.semibold)
-                .fontDesign(.rounded)
-                .foregroundColor(
-                    isDisabled ? Color(.secondaryLabel) :
-                    (isSelected ? .white : .primary)
-                )
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .frame(height: 56)
-                .padding(.horizontal, 24)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(
-                            isSelected ? selectedFill :
-                            (isDisabled ? Color(.systemGray5) : unselectedFill)
-                        )
-                )
-        }
-        .buttonStyle(PlainButtonStyle())
-        .disabled(isDisabled)
-        .scaleEffect(isPressed ? 0.98 : 1.0)
-        .buttonPressAnimation(isPressed: $isPressed)
+        QuizAnswerOptionButton(
+            primaryText: language.name,
+            state: isSelected ? .selected : .neutral,
+            isEnabled: !isDisabled,
+            suppressGlow: true,
+            action: onTap
+        )
+        .opacity(isDisabled ? 0.6 : 1)
     }
 }

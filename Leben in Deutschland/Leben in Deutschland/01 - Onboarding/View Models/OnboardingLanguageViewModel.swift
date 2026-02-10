@@ -8,6 +8,11 @@ class OnboardingLanguageViewModel: ObservableObject {
     @Published var selectedLanguage: String?
     @Published var showDialog: Bool = false
     
+    /// Header message: no-selection prompt vs confirmation when selected
+    var dialogMessageKey: String {
+        selectedLanguage != nil ? "language_selected" : "eagle_greeting"
+    }
+    
     let languageManager: LanguageManager
     private let preferences: OnboardingPreferences
     private let onNext: () -> Void
@@ -21,26 +26,20 @@ class OnboardingLanguageViewModel: ObservableObject {
     // MARK: - Public Methods
     
     func setupInitialState() {
-        // Only Language has a default preselection on first launch: English
-        let code = languageManager.currentAppLanguage
+        // First time: no selection. When returning (hasLaunchedBefore): restore from app language
         if preferences.hasLaunchedBefore {
-            // Reflect saved app language (Ukrainian hidden when disabled)
+            let code = languageManager.currentAppLanguage
             switch code {
             case "de": selectedLanguage = "Deutsch"
             case "ru": selectedLanguage = "Русский"
             case "uk": selectedLanguage = "English"; languageManager.setAppLanguage("en")
             default: selectedLanguage = "English"
             }
+            ensureTranslationLanguageDifferent()
         } else {
-            // First launch: preselect English by design and set app language
-            selectedLanguage = "English"
-            languageManager.setAppLanguage("en")
+            selectedLanguage = nil
         }
         
-        // Ensure translation language is different from app language
-        ensureTranslationLanguageDifferent()
-        
-        // Show dialog with delay
         DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.dialogDelay) {
             self.showDialog = true
         }
@@ -50,8 +49,6 @@ class OnboardingLanguageViewModel: ObservableObject {
         selectedLanguage = language
         let languageCode = LanguageOption.getLanguageCode(for: language)
         languageManager.setAppLanguage(languageCode)
-        
-        // Ensure translation language stays different
         ensureTranslationLanguageDifferent()
     }
     

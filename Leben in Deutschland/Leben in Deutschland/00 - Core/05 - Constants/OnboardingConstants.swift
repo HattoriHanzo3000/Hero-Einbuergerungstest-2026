@@ -25,6 +25,5 @@ struct OnboardingConstants {
     static let headerTopPadding: CGFloat = 4
     static let contentVerticalPadding: CGFloat = 6
     static let containerSectionSpacing: CGFloat = 8
-    static let progressBarHorizontalPadding: CGFloat = 30
 }
 

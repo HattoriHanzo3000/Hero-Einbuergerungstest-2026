@@ -4,13 +4,15 @@
 // =============================================================================
 
 // Eagle greeting
-"eagle_greeting" = "Hello! I'm Hero the eaglet, and I'll help you get ready for the test. Let's begin!\nFirst, choose the app language.";
+"eagle_greeting" = "Hello! I'm Hero the eagle, and I'll help you get ready for the test. Let's begin!\nFirst, choose the app language.";
+"language_selected" = "Great! Tap Next to Continue";
 
 // Translation selection
-"translation_selection_title" = "Great! Now choose a language for translating the questions and answers – just in case you need a little help.";
+"translation_selection_title" = "Now choose a language for translating the questions and answers – just in case you need a little help.";
 
 // State selection
 "state_selection_title_general" = "Where will you take the test? I'll add 10 extra questions about your federal state.";
+"choose_federal_state" = "Where will you take the test? I'll add 10 extra questions about your state.";
 
 // Messages when selecting federal states
 "state_baden_württemberg" = "Everything's invented here – even stairwell cleaning!";
@@ -50,6 +52,8 @@
 
 // Test date selection
 "test_date_selection_title" = "When are you taking the test? I'll place a small reminder on the screen for you.";
+"choose_test_date" = "Choose your test date.";
+"onboarding_date_prompt" = "When's your test? Set the date and we'll count down together.";
 "SELECT_DATE" = "Select date";
 "SAVE_DATE" = "SAVE DATE";
 "CANCEL" = "CANCEL";

@@ -8,6 +8,11 @@ class OnboardingTranslationViewModel: ObservableObject {
     @Published var selectedLanguage: String?
     @Published var showDialog: Bool = false
     
+    /// Header message: same text whether selected or not (call to action)
+    var dialogMessageKey: String {
+        "translation_selection_title"
+    }
+    
     let languageManager: LanguageManager
     private let preferences: OnboardingPreferences
     private let onNext: (() -> Void)?
@@ -21,17 +26,17 @@ class OnboardingTranslationViewModel: ObservableObject {
     }
     
     func setupInitialState() {
-        // Restore saved translation language if available (Ukrainian excluded when disabled)
-        if let savedTranslationCode = preferences.translationLanguageCode {
+        // Only restore when user had previously selected (returning from a later step)
+        if preferences.translationSelected, let savedTranslationCode = preferences.translationLanguageCode {
             if savedTranslationCode == "uk" {
                 preferences.translationLanguageCode = "de"
-                preferences.translationSelected = true
                 selectedLanguage = "Deutsch"
             } else if let languageOption = LanguageOption.availableLanguages.first(where: { $0.languageCode == savedTranslationCode }) {
                 selectedLanguage = languageOption.name
             }
+        } else {
+            selectedLanguage = nil
         }
-        // Show dialog with delay
         DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.dialogDelay) {
             self.showDialog = true
         }

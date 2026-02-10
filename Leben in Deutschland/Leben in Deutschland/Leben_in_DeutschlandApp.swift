@@ -29,6 +29,7 @@ struct Leben_in_DeutschlandApp: App {
                     case .startAnimation:
                         OnboardingStartView {
                             // After the intro video, start onboarding
+                            OnboardingPreferences.shared.clearOnboardingSelections()
                             appFlow.stage = .onboardingLanguage
                         }
                     case .onboardingLanguage:

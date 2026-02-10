@@ -11,7 +11,7 @@ struct OnboardingTranslationView: View {
     var body: some View {
         OnboardingScreenContainer(
             headerStep: OnboardingConstants.translationStep,
-            headerMessageKey: "translation_selection_title",
+            headerMessageKey: viewModel.dialogMessageKey,
             headerId: viewModel.selectedLanguage,
             showDialog: $viewModel.showDialog,
             isNextEnabled: viewModel.selectedLanguage != nil,

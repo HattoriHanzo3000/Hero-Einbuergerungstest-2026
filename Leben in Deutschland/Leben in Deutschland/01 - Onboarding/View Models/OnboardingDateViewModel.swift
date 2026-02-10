@@ -22,12 +22,12 @@ class OnboardingDateViewModel: ObservableObject {
         self.onBack = onBack
     }
     
-    // MARK: - Dialog content for header
+    /// Header message: no-selection prompt vs days/dont-know when selected
     var dialogMessageKey: String {
         if hasSelectedDate, let date = selectedDate {
             let days = daysUntil(date)
             if days > 365 {
-                return "test_date_selection_title"
+                return "onboarding_date_prompt"
             }
             if days == 0 {
                 return "perfect_test_today"
@@ -41,7 +41,7 @@ class OnboardingDateViewModel: ObservableObject {
         } else if hasSelectedDontKnow {
             return "no_problem_later"
         }
-        return "test_date_selection_title"
+        return "onboarding_date_prompt"
     }
     
     var dialogParameters: [String]? {
@@ -52,6 +52,7 @@ class OnboardingDateViewModel: ObservableObject {
     }
     
     func setupInitialState() {
+        // Only restore when user had previously selected (returning from a later step)
         if let savedDate = preferences.testDate {
             selectedDate = savedDate
             hasSelectedDate = true
@@ -60,8 +61,11 @@ class OnboardingDateViewModel: ObservableObject {
             selectedDate = nil
             hasSelectedDate = false
             hasSelectedDontKnow = true
+        } else {
+            selectedDate = nil
+            hasSelectedDate = false
+            hasSelectedDontKnow = false
         }
-        // Show dialog with delay
         DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.dialogDelay) {
             self.showDialog = true
         }

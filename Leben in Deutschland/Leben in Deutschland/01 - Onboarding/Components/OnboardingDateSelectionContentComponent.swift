@@ -8,47 +8,23 @@ struct OnboardingDateSelectionContentComponent: View {
     let hasSelectedDate: Bool
     let hasSelectedDontKnow: Bool
     @EnvironmentObject var languageManager: LanguageManager
-    @State private var isSelectDatePressed = false
-    @State private var isDontKnowPressed = false
     @Environment(\.layoutMetrics) private var layoutMetrics
     
     var body: some View {
         VStack(spacing: OnboardingConstants.defaultSpacing) {
-            Button(action: onSelectDate) {
-                Text(selectedDate != nil ? formatDate(selectedDate!) : "SELECT_DATE".localized)
-                    .font(.body)
-                    .fontWeight(.semibold)
-                    .fontDesign(.rounded)
-                    .foregroundColor(hasSelectedDate ? .white : .primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .frame(height: 56)
-                    .padding(.horizontal, 24)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(hasSelectedDate ? Color.accentColor : Color("Unselected"))
-                    )
-            }
-            .buttonStyle(PlainButtonStyle())
-            .scaleEffect(isSelectDatePressed ? 0.98 : 1.0)
-            .buttonPressAnimation(isPressed: $isSelectDatePressed)
+            QuizAnswerOptionButton(
+                primaryText: selectedDate != nil ? formatDate(selectedDate!) : "SELECT_DATE".localized,
+                state: hasSelectedDate ? .selected : .neutral,
+                suppressGlow: true,
+                action: onSelectDate
+            )
             
-            Button(action: onDontKnow) {
-                Text("dont_know_date".localized)
-                    .font(.body)
-                    .fontWeight(.semibold)
-                    .fontDesign(.rounded)
-                    .foregroundColor(hasSelectedDontKnow ? .white : .primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .frame(height: 56)
-                    .padding(.horizontal, 24)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(hasSelectedDontKnow ? Color.accentColor : Color("Unselected"))
-                    )
-            }
-            .buttonStyle(PlainButtonStyle())
-            .scaleEffect(isDontKnowPressed ? 0.98 : 1.0)
-            .buttonPressAnimation(isPressed: $isDontKnowPressed)
+            QuizAnswerOptionButton(
+                primaryText: "dont_know_date".localized,
+                state: hasSelectedDontKnow ? .selected : .neutral,
+                suppressGlow: true,
+                action: onDontKnow
+            )
         }
         .transaction { t in t.animation = nil }
         .frame(width: layoutMetrics.screenWidth * OnboardingConstants.buttonWidthRatio)
