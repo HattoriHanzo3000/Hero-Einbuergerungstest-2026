@@ -16,9 +16,8 @@ struct OnboardingStartView: View {
             
             // Video player or loading state
             if let player = player {
-                AlphaVideoPlayerView(player: player, videoGravity: .resizeAspect)
+                AlphaVideoPlayerView(player: player, videoGravity: .resizeAspectFill)
                     .ignoresSafeArea(.all)
-                    .clipped()
                     .onAppear {
                         player.play()
                     }
@@ -158,6 +157,11 @@ struct OnboardingStartView: View {
 final class PlayerContainerView: UIView {
     override static var layerClass: AnyClass { AVPlayerLayer.self }
     var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        playerLayer.frame = bounds
+    }
 }
 
 struct AlphaVideoPlayerView: UIViewRepresentable {

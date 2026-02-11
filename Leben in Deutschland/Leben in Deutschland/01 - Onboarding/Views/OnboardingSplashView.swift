@@ -12,11 +12,11 @@ struct OnboardingSplashView: View {
         ZStack {
             // Background color matching the old project
             Color(red: 134/255, green: 197/255, blue: 255/255)
-                .ignoresSafeArea()
+                .ignoresSafeArea(.all)
             
             if let player = player {
-                AlphaVideoPlayerView(player: player, videoGravity: .resizeAspect)
-                    .ignoresSafeArea()
+                AlphaVideoPlayerView(player: player, videoGravity: .resizeAspectFill)
+                    .ignoresSafeArea(.all)
                     .onAppear {
                         player.play()
                     }
