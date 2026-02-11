@@ -11,7 +11,6 @@ struct HomeView: View {
     @StateObject private var ratingManager = AppRatingManager.shared
     @State private var router = AppRouter()
     @State private var showDialog = false
-    @State private var savedTestDate: Date? = OnboardingPreferences.shared.testDate
     @State private var showRatingPrompt = false
     
     /// Spacing between header and section (matches Progress tab).
@@ -30,7 +29,6 @@ struct HomeView: View {
                     MainHeaderContent(
                         readinessPercentage: viewModel.statistics.readinessPercentage,
                         showDialog: $showDialog,
-                        savedTestDate: $savedTestDate,
                         onPremiumTap: { premiumManager.presentPaywall() }
                     )
                     .padding(.horizontal, layoutMetrics.adaptive(20))
@@ -42,6 +40,7 @@ struct HomeView: View {
                 }
                 .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
                 .frame(maxWidth: .infinity, alignment: .top)
+                .id(languageManager.currentAppLanguage)
             }
             .frame(width: geometry.size.width)
             .background(Color(.systemBackground))
@@ -211,7 +210,6 @@ private extension HomeView {
     }
     
     func handleOnAppear() {
-        savedTestDate = OnboardingPreferences.shared.testDate
         viewModel.refreshStatistics()
         
         // Record app launch for rating manager

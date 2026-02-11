@@ -111,7 +111,7 @@ struct QuestionCard: View {
             }
         }
         .background(Color(.systemBackground))
-        .task(id: "\(question.id)-\(showTranslation)") {
+        .task(id: "\(question.id)-\(showTranslation)-\(languageManager.currentTranslationLanguage)") {
             // Only load if showTranslation is true and we don't have external translation
             if showTranslation, externalTranslatedQuestion == nil {
                 await loadTranslation()

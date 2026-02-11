@@ -5,8 +5,9 @@ import UIKit
 /// Root tab navigation that hosts the primary app sections.
 /// Four tabs: Learn, Test, Progress, Settings.
 struct MainTabView: View {
+    @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var premiumManager: PremiumManager
-    
+
     // MARK: - Tab Identifier
     enum Tab: Hashable {
         case learn

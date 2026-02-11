@@ -31,9 +31,7 @@ struct SpacedRepetitionQuestionCard: View {
     let isFavorite: Bool
     let onCheckTapped: (() -> Void)?
     let isCheckEnabled: Bool
-    let testDateMessage: String?
-    let recommendedPerDay: Int?
-    
+
     init(
         question: QuestionModel,
         selectedAnswer: Int?,
@@ -47,9 +45,7 @@ struct SpacedRepetitionQuestionCard: View {
         onToggleFavorite: (() -> Void)? = nil,
         isFavorite: Bool = false,
         onCheckTapped: (() -> Void)? = nil,
-        isCheckEnabled: Bool = true,
-        testDateMessage: String? = nil,
-        recommendedPerDay: Int? = nil
+        isCheckEnabled: Bool = true
     ) {
         self.question = question
         self.selectedAnswer = selectedAnswer
@@ -64,8 +60,6 @@ struct SpacedRepetitionQuestionCard: View {
         self.isFavorite = isFavorite
         self.onCheckTapped = onCheckTapped
         self.isCheckEnabled = isCheckEnabled
-        self.testDateMessage = testDateMessage
-        self.recommendedPerDay = recommendedPerDay
     }
     
     var body: some View {
@@ -249,17 +243,7 @@ private extension SpacedRepetitionQuestionCard {
     var headerContent: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(16)) {
             backButtonView
-            if let msg = testDateMessage {
-                Text(msg)
-                    .font(.system(.subheadline, design: .rounded).weight(.medium))
-                    .foregroundColor(.white.opacity(0.9))
-            }
             progressView
-            if let rec = recommendedPerDay {
-                Text(String(format: "spaced_aim_per_day".localized, rec))
-                    .font(.system(.caption, design: .rounded))
-                    .foregroundColor(.white.opacity(0.75))
-            }
             questionHeaderRow
         }
     }

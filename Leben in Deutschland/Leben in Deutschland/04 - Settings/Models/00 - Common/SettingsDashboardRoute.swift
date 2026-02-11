@@ -1,5 +1,6 @@
 enum SettingsDashboardRoute: Hashable {
-    case version
+    case about
+    case share
     case premium
 }
 

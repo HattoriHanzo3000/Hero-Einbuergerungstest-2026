@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct HomeLearnSection: View {
+    @EnvironmentObject private var languageManager: LanguageManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     @Environment(AppRouter.self) private var router
-    
+
     var body: some View {
         SectionContainer(title: "home_learn_section_title", spacing: 18) {
             VStack(spacing: layoutMetrics.adaptive(16)) {
@@ -52,6 +53,7 @@ struct HomeLearnSection: View {
             }
         }
         .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
+        .id(languageManager.currentAppLanguage)
     }
 }
 

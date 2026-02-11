@@ -5,21 +5,17 @@ import MessageUI
 @MainActor
 final class SettingsSupportViewModel: ObservableObject {
     @Published var presentedContactMail: SettingsSupportMailModel?
-    @Published var presentedBugMail: SettingsSupportMailModel?
     @Published var isPresentingFAQ: Bool = false
 
     let faqURL: URL?
     private let contactEmail: String
-    private let bugReportEmail: String
 
     init(
         faqURL: URL? = URL(string: "https://www.gizatech.de/hero/faq"),
-        contactEmail: String = "info@gizatech.de",
-        bugReportEmail: String = "support@gizatech.de"
+        contactEmail: String = "info@gizatech.de"
     ) {
         self.faqURL = faqURL
         self.contactEmail = contactEmail
-        self.bugReportEmail = bugReportEmail
     }
 
     func presentFAQ() {
@@ -38,20 +34,8 @@ final class SettingsSupportViewModel: ObservableObject {
         )
     }
 
-    func reportBug(deviceInfoProvider: () -> String) {
-        presentMail(
-            recipients: [bugReportEmail],
-            subject: "Bug Report - Leben in Deutschland",
-            body: deviceInfoProvider()
-        )
-    }
-
     func dismissContactMail() {
         presentedContactMail = nil
-    }
-
-    func dismissBugMail() {
-        presentedBugMail = nil
     }
 
     private func presentMail(recipients: [String], subject: String, body: String) {
@@ -62,12 +46,7 @@ final class SettingsSupportViewModel: ObservableObject {
             subject: subject,
             body: body
         )
-
-        if recipients == [contactEmail] {
-            presentedContactMail = mail
-        } else {
-            presentedBugMail = mail
-        }
+        presentedContactMail = mail
     }
 }
 

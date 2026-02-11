@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct SettingsLegalSectionView: View {
+    @EnvironmentObject private var languageManager: LanguageManager
     @ObservedObject var viewModel: SettingsLegalViewModel
+
     var body: some View {
         Section {
             Button {
@@ -40,6 +42,7 @@ struct SettingsLegalSectionView: View {
             }
             .buttonStyle(.plain)
         }
+        .id(languageManager.currentAppLanguage)
         .sheet(item: $viewModel.presentingWebURL, onDismiss: {
             viewModel.dismissWeb()
         }) { document in

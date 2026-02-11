@@ -173,6 +173,13 @@
 "settings_faq_button" = "FAQ";
 "settings_contact_button" = "Kontaktiere uns";
 "settings_report_bug_button" = "Fehler melden";
+"settings_about_button" = "Über";
+"settings_share_button" = "Teilen";
+"settings_about_heading" = "Über diese App";
+"settings_about_description" = "Hero – Leben in Deutschland hilft dir bei der Vorbereitung auf den Einbürgerungstest mit 310 offiziellen Fragen, Spaced-Repetition-Lernen und vollständiger Testsimulation. Wähle dein Bundesland, übe in deinem eigenen Tempo und fühle dich am Prüfungstag sicher.";
+"settings_share_scan_title" = "Zum Herunterladen scannen";
+"settings_share_scan_subtitle" = "Teile diesen QR-Code, damit Freunde die App im App Store finden.";
+"share_app_hint" = "App mit anderen teilen";
 
 "legal_title" = "Rechtliches";
 "settings_impressum_button" = "Impressum";
@@ -223,8 +230,6 @@
 "test_simulation_tutorial_got_it" = "Verstanden!";
 
 "spaced_aim_per_day" = "Ziele auf ~%d Fragen pro Tag";
-"spaced_test_soon_message" = "Test bald – wir konzentrieren uns auf die wichtigsten Fragen.";
-
 "settings_statistics_title" = "Fortschritt";
 "settings_delete_statistics" = "App zurücksetzen";
 "delete_statistics_warning_title" = "Alle Daten löschen & App zurücksetzen?";

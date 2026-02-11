@@ -5,7 +5,9 @@ struct SettingsPremiumSectionView: View {
 
     var body: some View {
         Section {
-            NavigationLink(value: SettingsDashboardRoute.premium) {
+            Button {
+                viewModel.handleTap()
+            } label: {
                 SettingsRowButtonLabel(
                     title: "settings_premium_title".localized,
                     iconSystemName: "crown.fill",
@@ -14,9 +16,6 @@ struct SettingsPremiumSectionView: View {
                 )
             }
             .buttonStyle(.plain)
-            .simultaneousGesture(TapGesture().onEnded {
-                viewModel.handleTap()
-            })
             .accessibilityLabel(Text("settings_premium_title".localized))
             .accessibilityHint(Text("settings_premium_accessibility_hint".localized))
         }

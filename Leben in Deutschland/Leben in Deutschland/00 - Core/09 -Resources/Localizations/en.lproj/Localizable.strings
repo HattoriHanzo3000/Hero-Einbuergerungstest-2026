@@ -176,6 +176,13 @@
 "settings_faq_button" = "FAQ";
 "settings_contact_button" = "Contact Us";
 "settings_report_bug_button" = "Report a Bug";
+"settings_about_button" = "About";
+"settings_share_button" = "Share";
+"settings_about_heading" = "About this app";
+"settings_about_description" = "Hero – Leben in Deutschland helps you prepare for the citizenship test with 310 official questions, spaced repetition learning, and a full test simulation. Choose your federal state, practice at your own pace, and feel confident on exam day.";
+"settings_share_scan_title" = "Scan to download";
+"settings_share_scan_subtitle" = "Share this QR code so friends can find the app in the App Store.";
+"share_app_hint" = "Share the app with others";
 
 "legal_title" = "Legal";
 "settings_impressum_button" = "Impressum";
@@ -227,8 +234,6 @@
 "test_simulation_tutorial_got_it" = "Got it!";
 
 "spaced_aim_per_day" = "Aim for ~%d questions per day";
-"spaced_test_soon_message" = "Test soon – we'll focus on the most important questions.";
-
 "settings_statistics_title" = "Progress";
 "settings_delete_statistics" = "Reset App";
 "delete_statistics_warning_title" = "Delete All Data & Reset App?";

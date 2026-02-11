@@ -4,10 +4,9 @@ import SwiftUI
 struct MainHeaderContent: View {
     let readinessPercentage: Int
     @Binding var showDialog: Bool
-    @Binding var savedTestDate: Date?
     var onPremiumTap: (() -> Void)?
-    private let debugBordersEnabled = false
-    
+
+    @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var stateManager: StateManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     
@@ -28,15 +27,14 @@ struct MainHeaderContent: View {
             MainMascotView(
                 messageKey: "eagle_desc_chick",
                 messageParameters: [String(readinessPercentage)],
-                leadingMessage: testDateMessage,
+                leadingMessage: nil,
                 showDialog: $showDialog,
                 autoPlayInterval: 60,
                 hideBubble: true,
                 showMessageWhenBubbleHidden: false
             )
             .fixedSize(horizontal: true, vertical: false)
-            .debugBorder(Color.green.opacity(0.8), cornerRadius: 20, isVisible: debugBordersEnabled)
-            
+
             VStack(alignment: .leading, spacing: titleToSloganSpacing) {
                 stateTitleSection
                 sloganSection
@@ -61,8 +59,8 @@ struct MainHeaderContent: View {
                 )
         )
         .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
-        .debugBorder(Color.red.opacity(0.85), cornerRadius: 0, isVisible: debugBordersEnabled)
         .accessibilityAddTraits(.isHeader)
+        .id(languageManager.currentAppLanguage)
         .overlay(alignment: .topTrailing) {
             PremiumCrownButton(action: { onPremiumTap?() }, color: .white)
                 .padding(.top, layoutMetrics.adaptive(12))
@@ -114,57 +112,6 @@ struct MainHeaderContent: View {
     private func getLocalizedStateName(_ stateName: String) -> String {
         return stateName.localized
     }
-
-    private var testDateMessage: String? {
-        guard let date = savedTestDate else { return nil }
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        let testDay = calendar.startOfDay(for: date)
-        let days = calendar.dateComponents([.day], from: today, to: testDay).day ?? 0
-        
-        guard days >= 0 else { return nil }
-        guard days <= 365 else { return nil }
-        
-        if days == 0 {
-            return "main_header_test_today".localized
-        }
-        
-        let languageCode = LanguageManager.currentAppLanguageCode
-        let dayWord = localizedDayWord(for: days, languageCode: languageCode)
-        
-        return String(
-            format: "main_header_test_in_days".localized,
-            days,
-            dayWord
-        )
-    }
-    
-    private func localizedDayWord(for days: Int, languageCode: String) -> String {
-        switch languageCode {
-        case "de":
-            return days == 1 ? "Tag" : "Tage"
-        case "ru":
-            let lastDigit = days % 10
-            let lastTwoDigits = days % 100
-            if lastTwoDigits >= 11 && lastTwoDigits <= 14 { return "дней" }
-            switch lastDigit {
-            case 1: return "день"
-            case 2, 3, 4: return "дня"
-            default: return "дней"
-            }
-        case "uk":
-            let lastDigit = days % 10
-            let lastTwoDigits = days % 100
-            if lastTwoDigits >= 11 && lastTwoDigits <= 14 { return "днів" }
-            switch lastDigit {
-            case 1: return "день"
-            case 2, 3, 4: return "дні"
-            default: return "днів"
-            }
-        default:
-            return days == 1 ? "day" : "days"
-        }
-    }
 }
 
 private extension MainHeaderContent {
@@ -183,7 +130,6 @@ private extension MainHeaderContent {
                 .accessibilityValue(getLocalizedStateName(selectedState))
                 .accessibilityHint("main_header_state_accessibility_hint".localized)
                 .accessibilityAddTraits(.isStaticText)
-                .debugBorder(Color.blue.opacity(0.8), cornerRadius: 20, isVisible: debugBordersEnabled)
         }
     }
     
@@ -234,31 +180,11 @@ private struct FederalStateSloganBlock: View {
     }
 }
 
-// MARK: - Debug Helpers
-private extension View {
-    func debugBorder(_ color: Color, cornerRadius: CGFloat = 0, isVisible: Bool) -> some View {
-        overlay(
-            Group {
-                if isVisible {
-                    if cornerRadius > 0 {
-                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                            .stroke(color, style: StrokeStyle(lineWidth: 2, dash: [6, 3]))
-                    } else {
-                        Rectangle()
-                            .stroke(color, style: StrokeStyle(lineWidth: 2, dash: [6, 3]))
-                    }
-                }
-            }
-        )
-    }
-}
-
 // MARK: - Preview
 #Preview {
     MainHeaderContent(
         readinessPercentage: 72,
         showDialog: .constant(true),
-        savedTestDate: .constant(nil),
         onPremiumTap: {
             print("Premium tapped")
         }

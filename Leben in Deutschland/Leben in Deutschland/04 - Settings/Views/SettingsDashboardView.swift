@@ -17,9 +17,10 @@ struct SettingsDashboardView: View {
     var body: some View {
         NavigationStack(path: $viewModel.navigationPath) {
             List {
-                SettingsVersionSectionView(viewModel: viewModel.versionViewModel) {
-                    viewModel.navigationPath.append(.version)
-                }
+                SettingsInfoSectionView(
+                    onAboutTapped: { viewModel.navigationPath.append(.about) },
+                    onShareTapped: { viewModel.navigationPath.append(.share) }
+                )
                 SettingsPremiumSectionView(viewModel: viewModel.premiumViewModel)
                 if let regionalViewModel = viewModel.regionalViewModel {
                     SettingsRegionalSectionView(viewModel: regionalViewModel)
@@ -33,16 +34,19 @@ struct SettingsDashboardView: View {
                     SettingsDangerSectionView(viewModel: dangerViewModel)
                 }
             }
+            .id(languageManager.currentAppLanguage)
             .navigationTitle("settings_title".localized)
             .navigationBarTitleDisplayMode(.large)
             .listStyle(.insetGrouped)
             .federalStateAlert(viewModel: viewModel.regionalViewModel)
             .navigationDestination(for: SettingsDashboardRoute.self) { route in
                 switch route {
-                case .version:
-                    SettingsVersionDetailView(viewModel: viewModel.versionViewModel)
+                case .about:
+                    SettingsAboutView()
+                case .share:
+                    SettingsShareView()
                 case .premium:
-                    SettingsPremiumDetailView()
+                    EmptyView()
                 }
             }
         }
@@ -69,13 +73,6 @@ struct SettingsDashboardView: View {
                 messageBody: mail.body
             )
         }
-        .sheet(item: bugMailBinding) { mail in
-            MailComposer(
-                toRecipients: mail.recipients,
-                subject: mail.subject,
-                messageBody: mail.body
-            )
-        }
     }
 
     private var contactMailBinding: Binding<SettingsSupportMailModel?> {
@@ -87,14 +84,6 @@ struct SettingsDashboardView: View {
         )
     }
 
-    private var bugMailBinding: Binding<SettingsSupportMailModel?> {
-        Binding(
-            get: { viewModel.supportViewModel.presentedBugMail },
-            set: { _ in
-                viewModel.supportViewModel.dismissBugMail()
-            }
-        )
-    }
 }
 
 #Preview("Settings Dashboard") {

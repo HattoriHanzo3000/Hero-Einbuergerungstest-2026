@@ -73,13 +73,13 @@ final class SpacedRepetitionViewModel: ObservableObject {
         )
     }
     
-    /// Message for header when test date is set, e.g. "Test in 5 days" or "Test soon" when days <= 2
+    /// Message for header when test date is set, e.g. "The test is today" or "The test is in 5 days"
     var testDateMessage: String? {
         let days = Self.computeDaysUntilTest()
         guard days < LayoutMetrics.maxHorizonDays else { return nil }
         let testDate = OnboardingPreferences.shared.testDate ?? UserDefaults.standard.object(forKey: "selectedTestDate") as? Date
         guard testDate != nil else { return nil }
-        if days <= 2 { return "spaced_test_soon_message".localized }
+        if days == 0 { return "main_header_test_today".localized }
         let dayWord = Self.localizedDayWord(for: days)
         return String(format: "main_header_test_in_days".localized, days, dayWord)
     }

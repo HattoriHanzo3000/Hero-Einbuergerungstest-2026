@@ -17,6 +17,7 @@ struct SettingsPersonalisationSectionView: View {
                     )
                 }
                 .toggleStyle(.switch)
+                .tint(.green)
             }
 
             Toggle(isOn: hapticsBinding.animation(.easeInOut(duration: 0.15))) {
@@ -27,6 +28,7 @@ struct SettingsPersonalisationSectionView: View {
                 )
             }
             .toggleStyle(.switch)
+            .tint(.green)
 
             SettingsAppearanceRow(
                 selection: Binding(

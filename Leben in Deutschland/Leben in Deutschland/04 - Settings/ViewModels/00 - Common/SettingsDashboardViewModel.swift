@@ -6,7 +6,6 @@ import SwiftUI
 final class SettingsDashboardViewModel: ObservableObject {
     // Temporary placeholder publishers for upcoming sections.
     @Published var isLoading: Bool = false
-    let versionViewModel: SettingsVersionViewModel
     let premiumViewModel: SettingsPremiumViewModel
     let supportViewModel: SettingsSupportViewModel
     let legalViewModel: SettingsLegalViewModel
@@ -18,14 +17,12 @@ final class SettingsDashboardViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
 
     init(
-        versionViewModel: SettingsVersionViewModel? = nil,
         premiumViewModel: SettingsPremiumViewModel? = nil,
         supportViewModel: SettingsSupportViewModel? = nil,
         legalViewModel: SettingsLegalViewModel? = nil,
         regionalViewModel: SettingsRegionalViewModel? = nil,
         personalisationViewModel: SettingsPersonalisationViewModel? = nil
     ) {
-        self.versionViewModel = versionViewModel ?? SettingsVersionViewModel()
         self.premiumViewModel = premiumViewModel ?? SettingsPremiumViewModel()
         self.supportViewModel = supportViewModel ?? SettingsSupportViewModel()
         self.legalViewModel = legalViewModel ?? SettingsLegalViewModel()

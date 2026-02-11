@@ -174,6 +174,7 @@ private struct SettingsTestDateRow: View {
                 }
             }
             .toggleStyle(.switch)
+            .tint(.green)
             .padding(.vertical, SettingsDesignTokens.Layout.rowVerticalPadding)
             .accessibilityLabel(Text("settings_test_date".localized))
             .accessibilityValue(Text(accessibilityValueDescription))

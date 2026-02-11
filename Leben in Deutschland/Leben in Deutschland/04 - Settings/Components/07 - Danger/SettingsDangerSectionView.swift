@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SettingsDangerSectionView: View {
+    @EnvironmentObject private var languageManager: LanguageManager
     @ObservedObject var viewModel: SettingsDangerViewModel
 
     var body: some View {
@@ -19,6 +20,7 @@ struct SettingsDangerSectionView: View {
             }
             .buttonStyle(.plain)
         }
+        .id(languageManager.currentAppLanguage)
         .alert(
             "delete_statistics_warning_title".localized,
             isPresented: $viewModel.isPresentingConfirmation,
