@@ -67,7 +67,7 @@ struct Leben_in_DeutschlandApp: App {
                     case .onboardingSplash:
                         OnboardingSplashView(onFinish: { appFlow.stage = .main })
                     case .main:
-                        MainTabView()
+                        TabBarView()
                     }
                 }
                 .layoutMetrics(LayoutMetrics.make(for: proxy.size))
@@ -84,24 +84,22 @@ struct Leben_in_DeutschlandApp: App {
         }
     }
     
-    /// Uses a solid, opaque tab bar; selected tab uses AppBlueLagoon; icons scaled up.
+    /// Uses native tab bar appearance (translucent blur on iOS 17). Selected tab uses AccentColor.
     private func configureTabBarAppearance() {
-        let blueLagoon = UIColor(named: "AppBlueLagoon") ?? .systemBlue
+        let accentColor = UIColor(named: "AccentColor") ?? .systemBlue
         let appearance = UITabBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.systemBackground
+        appearance.configureWithDefaultBackground()
         // Set selected state on the appearance so it isn’t overridden by SwiftUI/accent.
-        appearance.stackedLayoutAppearance.selected.iconColor = blueLagoon
-        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: blueLagoon]
-        appearance.inlineLayoutAppearance.selected.iconColor = blueLagoon
-        appearance.inlineLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: blueLagoon]
-        appearance.compactInlineLayoutAppearance.selected.iconColor = blueLagoon
-        appearance.compactInlineLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: blueLagoon]
+        appearance.stackedLayoutAppearance.selected.iconColor = accentColor
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: accentColor]
+        appearance.inlineLayoutAppearance.selected.iconColor = accentColor
+        appearance.inlineLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: accentColor]
+        appearance.compactInlineLayoutAppearance.selected.iconColor = accentColor
+        appearance.compactInlineLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: accentColor]
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
-        UITabBar.appearance().tintColor = blueLagoon
+        UITabBar.appearance().tintColor = accentColor
         UITabBar.appearance().unselectedItemTintColor = .tertiaryLabel
-        UITabBar.appearance().layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
     }
     
     // Convert saved appearance to ColorScheme

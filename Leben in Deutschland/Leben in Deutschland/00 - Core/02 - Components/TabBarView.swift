@@ -1,10 +1,9 @@
 import SwiftUI
-import UIKit
 
-// MARK: - Main Tab View
+// MARK: - Tab Bar View
 /// Root tab navigation that hosts the primary app sections.
 /// Four tabs: Learn, Test, Progress, Settings.
-struct MainTabView: View {
+struct TabBarView: View {
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var premiumManager: PremiumManager
 
@@ -18,9 +17,6 @@ struct MainTabView: View {
     
     // MARK: - State
     @State private var selectedTab: Tab = .learn
-    
-    /// Scale factor for tab bar icons (system default is ~1; we use 1.5 for clearer tap targets).
-    private static let tabBarIconScale: CGFloat = 1.5
     
     // MARK: - Body
     var body: some View {
@@ -69,13 +65,7 @@ struct MainTabView: View {
                 .tag(Tab.settings)
                 .accessibilityHint("tab_settings_hint".localized)
         }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            Color.clear.frame(height: 12)
-        }
-        .tint(Color("AppBlueLagoon"))
-        .onAppear {
-            Self.applyTabBarIconScale()
-        }
+        .tint(Color.accentColor)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized)
         .sheet(isPresented: Binding(
             get: { premiumManager.showPaywall },
@@ -87,44 +77,11 @@ struct MainTabView: View {
                 .environmentObject(premiumManager)
         }
     }
-    
-    /// Applies a larger scale to tab bar item icons by finding the tab bar in the window hierarchy.
-    private static func applyTabBarIconScale() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            guard let windowScene = UIApplication.shared.connectedScenes
-                .compactMap({ $0 as? UIWindowScene })
-                .first(where: { $0.activationState == .foregroundActive }),
-                  let window = windowScene.windows.first(where: { $0.isKeyWindow }),
-                  let tabBarController = findTabBarController(in: window.rootViewController) else { return }
-            let tabBar = tabBarController.tabBar
-            let scale = CGAffineTransform(scaleX: tabBarIconScale, y: tabBarIconScale)
-            for button in tabBar.subviews {
-                for child in button.subviews {
-                    if let imageView = child as? UIImageView {
-                        imageView.transform = scale
-                    }
-                }
-            }
-        }
-    }
-    
-    private static func findTabBarController(in viewController: UIViewController?) -> UITabBarController? {
-        guard let viewController = viewController else { return nil }
-        if let tbc = viewController as? UITabBarController { return tbc }
-        for child in viewController.children {
-            if let tbc = findTabBarController(in: child) { return tbc }
-        }
-        if let presented = viewController.presentedViewController {
-            return findTabBarController(in: presented)
-        }
-        return nil
-    }
 }
 
 // MARK: - Preview
-// MARK: - Preview
-#Preview("Main Tab View") {
-    MainTabView()
+#Preview("Tab Bar View") {
+    TabBarView()
         .environmentObject(LanguageManager())
         .environmentObject(StateManager.shared)
         .environmentObject(SoundManager.shared)
@@ -132,4 +89,3 @@ struct MainTabView: View {
         .environmentObject(PremiumManager.shared)
         .environmentObject(FavoritesManager.shared)
 }
-
