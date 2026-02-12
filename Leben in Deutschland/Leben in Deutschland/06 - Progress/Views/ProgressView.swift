@@ -32,104 +32,19 @@ struct ProgressTabView: View {
     }
 }
 
-// MARK: - Header Section (same rounded style as question card)
+// MARK: - Header Section
 private extension ProgressTabView {
     var progressHeaderSection: some View {
-        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(16)) {
-            MainMascotView(
-                messageKey: "eagle_desc_chick",
-                messageParameters: [String(viewModel.statistics.readinessPercentage)],
-                leadingMessage: nil,
-                showDialog: $showDialog,
-                autoPlayInterval: nil,
-                hideBubble: true,
-                plainTextColor: .white
-            )
-            .frame(maxWidth: .infinity, alignment: .leading)
-            // Force update when readiness changes
-            .id("progress_mascot_\(viewModel.statistics.readinessPercentage)")
-        }
-        .padding(.vertical, layoutMetrics.adaptive(18))
-        .padding(.horizontal, layoutMetrics.adaptive(20))
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .fixedSize(horizontal: false, vertical: true)
-        .background(liquidGlassBackground)
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: layoutMetrics.adaptive(32),
-                style: .continuous
-            )
+        ScreenHeader(
+            readinessPercentage: viewModel.statistics.readinessPercentage,
+            showDialog: $showDialog,
+            onPremiumTap: { premiumManager.presentPaywall() },
+            autoPlayInterval: nil,
+            content: .readiness
         )
-        .overlay(
-            RoundedRectangle(
-                cornerRadius: layoutMetrics.adaptive(32),
-                style: .continuous
-            )
-            .stroke(
-                LinearGradient(
-                    colors: [
-                        .white.opacity(0.4),
-                        .white.opacity(0.08)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 0.8
-            )
-        )
-        .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
-        .overlay(alignment: .topTrailing) {
-            PremiumCrownButton(action: { premiumManager.presentPaywall() }, color: .white)
-                .padding(.top, layoutMetrics.adaptive(12))
-                .padding(.trailing, layoutMetrics.adaptive(12))
-        }
         .padding(.horizontal, layoutMetrics.adaptive(20))
         .padding(.top, layoutMetrics.adaptive(8))
         .padding(.bottom, layoutMetrics.adaptive(4))
-    }
-
-    var liquidGlassBackground: some View {
-        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        Color("AppBlueLagoon").opacity(0.9),
-                        Color("AppBlueLagoon").opacity(0.65),
-                        Color("AppCaribean").opacity(0.45)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .overlay(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(0.20),
-                        Color.white.opacity(0.05),
-                        Color.clear
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(0.45),
-                                Color.white.opacity(0.12)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ),
-                        lineWidth: 0.6
-                    )
-            )
-            .background(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
-                    .fill(Color.white.opacity(0.05))
-            )
     }
     
     private func showTabBar() {
@@ -184,5 +99,7 @@ private extension ProgressTabView {
 #Preview {
     ProgressTabView()
         .environmentObject(LanguageManager())
+        .environmentObject(PremiumManager.shared)
+        .environmentObject(StateManager.shared)
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
