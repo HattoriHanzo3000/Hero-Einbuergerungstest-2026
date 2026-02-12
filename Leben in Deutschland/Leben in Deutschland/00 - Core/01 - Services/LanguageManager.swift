@@ -6,6 +6,8 @@ import Combine
 class LanguageManager: ObservableObject {
     @Published var currentAppLanguage: String = "en"
     @Published var currentTranslationLanguage: String = "de"
+    /// Shown when applying language change to hide the view rebuild flash
+    @Published var isApplyingLanguageChange: Bool = false
     
     static var currentAppLanguageCode: String {
         UserDefaults.standard.string(forKey: "appLanguage") ?? "en"
@@ -50,6 +52,15 @@ class LanguageManager: ObservableObject {
     
     private func loadSavedLanguages() {
         currentAppLanguage = UserDefaults.standard.string(forKey: "appLanguage") ?? "en"
-        currentTranslationLanguage = UserDefaults.standard.string(forKey: "translationLanguage") ?? "de"
+        if let saved = UserDefaults.standard.string(forKey: "translationLanguage") {
+            currentTranslationLanguage = saved
+        } else if let migrated = OnboardingPreferences.shared.translationLanguageCode,
+                  migrated != currentAppLanguage {
+            // Migrate from onboarding preference (first launch after completing onboarding)
+            currentTranslationLanguage = migrated
+            UserDefaults.standard.set(migrated, forKey: "translationLanguage")
+        } else {
+            currentTranslationLanguage = "de"
+        }
     }
 }

@@ -143,6 +143,12 @@
 "change_state_confirmation_cancel" = "Скасувати";
 "change_state_confirmation_confirm" = "Змінити";
 
+"settings_app_language_change_title" = "Змінити мову застосунку?";
+"settings_translation_language_change_title" = "Змінити мову перекладу?";
+"settings_language_change_message" = "Інтерфейс оновиться. Продовжити?";
+"settings_language_change_cancel" = "Скасувати";
+"settings_language_change_confirm" = "Продовжити";
+
 // Calendar
 "CLEAR_DATE" = "ОЧИСТИТИ ДАТУ";
 

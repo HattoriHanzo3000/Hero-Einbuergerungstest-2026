@@ -143,6 +143,12 @@
 "change_state_confirmation_cancel" = "Отмена";
 "change_state_confirmation_confirm" = "Изменить";
 
+"settings_app_language_change_title" = "Изменить язык приложения?";
+"settings_translation_language_change_title" = "Изменить язык перевода?";
+"settings_language_change_message" = "Интерфейс обновится. Продолжить?";
+"settings_language_change_cancel" = "Отмена";
+"settings_language_change_confirm" = "Продолжить";
+
 // Calendar
 "CLEAR_DATE" = "ОЧИСТИТЬ ДАТУ";
 

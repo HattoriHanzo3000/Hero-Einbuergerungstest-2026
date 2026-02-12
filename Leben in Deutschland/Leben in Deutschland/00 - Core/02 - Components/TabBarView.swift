@@ -66,6 +66,7 @@ struct TabBarView: View {
                 .accessibilityHint("tab_settings_hint".localized)
         }
         .tint(Color.accentColor)
+        .id(languageManager.currentAppLanguage)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized)
         .sheet(isPresented: Binding(
             get: { premiumManager.showPaywall },

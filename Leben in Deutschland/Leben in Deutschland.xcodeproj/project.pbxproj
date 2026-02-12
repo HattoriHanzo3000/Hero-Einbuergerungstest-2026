@@ -39,8 +39,8 @@
 			isa = PBXGroup;
 			children = (
 				E623807E2E82C0E2000C28AB /* Launch Screen.storyboard */,
-				E619899F2E8836B400A0B582 /* Leben in Deutschland.xcodeproj */,
 				E612E89E2E8299CD00513716 /* Leben in Deutschland */,
+				E619899F2E8836B400A0B582 /* Leben in Deutschland.xcodeproj */,
 				E612E89D2E8299CD00513716 /* Products */,
 			);
 			sourceTree = "<group>";

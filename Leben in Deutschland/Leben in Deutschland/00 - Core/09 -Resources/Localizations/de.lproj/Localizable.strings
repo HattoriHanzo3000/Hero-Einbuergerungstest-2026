@@ -143,6 +143,12 @@
 "change_state_confirmation_cancel" = "Abbrechen";
 "change_state_confirmation_confirm" = "Ändern";
 
+"settings_app_language_change_title" = "App-Sprache ändern?";
+"settings_translation_language_change_title" = "Übersetzungssprache ändern?";
+"settings_language_change_message" = "Die Oberfläche wird aktualisiert. Fortfahren?";
+"settings_language_change_cancel" = "Abbrechen";
+"settings_language_change_confirm" = "Fortfahren";
+
 // Calendar
 "CLEAR_DATE" = "DATUM LÖSCHEN";
 

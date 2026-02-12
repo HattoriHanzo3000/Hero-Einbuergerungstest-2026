@@ -4,6 +4,7 @@ import SwiftUI
 struct SettingsAboutView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
+    @EnvironmentObject private var languageManager: LanguageManager
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -19,6 +20,7 @@ struct SettingsAboutView: View {
             .padding(.horizontal, layoutMetrics.adaptive(20))
             .padding(.top, layoutMetrics.adaptive(8))
             .padding(.bottom, layoutMetrics.adaptive(40))
+            .id(languageManager.currentAppLanguage)
         }
         .navigationTitle("settings_about_button".localized)
         .navigationBarTitleDisplayMode(.inline)

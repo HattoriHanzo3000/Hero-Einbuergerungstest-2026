@@ -43,6 +43,7 @@ struct TestAnswersView: View {
                 .background(Color(.separator))
             navigationBar
         }
+        .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
         .fontDesign(.rounded)
         .navigationBarTitleDisplayMode(.inline)

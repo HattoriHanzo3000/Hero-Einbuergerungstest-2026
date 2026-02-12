@@ -23,12 +23,13 @@ struct FavoritesView: View {
                 carouselView
             }
         }
+        .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .hidesTabBar()
         .tabBarHidden(true)
-        .task {
+        .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
             viewModel.setLanguageManager(languageManager)
             await viewModel.loadFavorites(
                 language: languageManager.currentAppLanguage,

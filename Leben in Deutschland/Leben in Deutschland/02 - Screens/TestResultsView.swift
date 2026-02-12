@@ -179,7 +179,8 @@ struct TestResultsView: View {
                 )
             }
         }
-            }
+        }
+        .id(languageManager.currentAppLanguage)
         .fontDesign(.rounded)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)

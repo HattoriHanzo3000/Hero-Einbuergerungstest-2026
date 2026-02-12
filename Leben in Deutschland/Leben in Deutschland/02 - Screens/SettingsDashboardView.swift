@@ -39,6 +39,7 @@ struct SettingsDashboardView: View {
             .navigationBarTitleDisplayMode(.large)
             .listStyle(.insetGrouped)
             .federalStateAlert(viewModel: viewModel.regionalViewModel)
+            .languageChangeAlert(viewModel: viewModel.regionalViewModel)
             .navigationDestination(for: SettingsDashboardRoute.self) { route in
                 switch route {
                 case .about:
@@ -71,6 +72,23 @@ struct SettingsDashboardView: View {
                 messageBody: mail.body,
                 onDismiss: { viewModel.supportViewModel.dismissContactMail() }
             )
+        }
+        .overlay {
+            if languageManager.isApplyingLanguageChange {
+                Color(.systemBackground)
+                    .ignoresSafeArea()
+                VStack(spacing: 16) {
+                    ProgressView()
+                        .scaleEffect(1.2)
+                        .progressViewStyle(CircularProgressViewStyle(tint: Color("AppBlueLagoon")))
+                    Text("LOADING".localized)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .transition(.opacity)
+                .animation(.easeInOut(duration: 0.2), value: languageManager.isApplyingLanguageChange)
+            }
         }
     }
 

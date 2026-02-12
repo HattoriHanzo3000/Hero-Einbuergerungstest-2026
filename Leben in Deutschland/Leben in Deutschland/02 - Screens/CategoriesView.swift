@@ -339,6 +339,7 @@ struct CategoriesView: View {
                 }
             }
         }
+        .id(languageManager.currentAppLanguage)
         .navigationBarHidden(true)
         .task {
             await viewModel.loadCategories(

@@ -144,6 +144,12 @@
 "change_state_confirmation_cancel" = "Cancel";
 "change_state_confirmation_confirm" = "Change";
 
+"settings_app_language_change_title" = "Change app language?";
+"settings_translation_language_change_title" = "Change translation language?";
+"settings_language_change_message" = "The interface will update. Continue?";
+"settings_language_change_cancel" = "Cancel";
+"settings_language_change_confirm" = "Continue";
+
 // Calendar
 "CLEAR_DATE" = "CLEAR DATE";
 

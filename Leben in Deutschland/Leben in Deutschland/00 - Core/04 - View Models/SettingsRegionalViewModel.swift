@@ -10,6 +10,8 @@ final class SettingsRegionalViewModel: ObservableObject {
     @Published private(set) var selectedTestDate: Date?
     @Published private(set) var isTestDateTrackingEnabled: Bool
     @Published var showStateChangeWarning: Bool = false
+    @Published var showAppLanguageChangeWarning: Bool = false
+    @Published var showTranslationLanguageChangeWarning: Bool = false
 
     var currentLocale: Locale {
         languageManager.currentLocale
@@ -23,6 +25,8 @@ final class SettingsRegionalViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var originalState: String?
     private var pendingStateName: String?
+    private var pendingAppLanguage: SettingsAppLanguageOption?
+    private var pendingTranslationLanguage: SettingsTranslationLanguageOption?
 
     init(
         languageManager: LanguageManager,
@@ -68,12 +72,58 @@ final class SettingsRegionalViewModel: ObservableObject {
 
     func setAppLanguage(_ option: SettingsAppLanguageOption) {
         guard option != appLanguage else { return }
-        languageManager.setAppLanguage(option.rawValue)
+        pendingAppLanguage = option
+        showAppLanguageChangeWarning = true
     }
 
     func setTranslationLanguage(_ option: SettingsTranslationLanguageOption) {
         guard option != translationLanguage else { return }
+        pendingTranslationLanguage = option
+        showTranslationLanguageChangeWarning = true
+    }
+
+    func cancelPendingAppLanguageChange() {
+        HapticManager.shared.lightImpact()
+        pendingAppLanguage = nil
+        showAppLanguageChangeWarning = false
+    }
+
+    func confirmPendingAppLanguageChange() {
+        guard let option = pendingAppLanguage else {
+            showAppLanguageChangeWarning = false
+            return
+        }
+        HapticManager.shared.lightImpact()
+        pendingAppLanguage = nil
+        showAppLanguageChangeWarning = false
+        languageManager.isApplyingLanguageChange = true
+        languageManager.setAppLanguage(option.rawValue)
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            languageManager.isApplyingLanguageChange = false
+        }
+    }
+
+    func cancelPendingTranslationLanguageChange() {
+        HapticManager.shared.lightImpact()
+        pendingTranslationLanguage = nil
+        showTranslationLanguageChangeWarning = false
+    }
+
+    func confirmPendingTranslationLanguageChange() {
+        guard let option = pendingTranslationLanguage else {
+            showTranslationLanguageChangeWarning = false
+            return
+        }
+        HapticManager.shared.lightImpact()
+        pendingTranslationLanguage = nil
+        showTranslationLanguageChangeWarning = false
+        languageManager.isApplyingLanguageChange = true
         languageManager.setTranslationLanguage(option.rawValue)
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            languageManager.isApplyingLanguageChange = false
+        }
     }
 
     func setFederalState(name: String) {

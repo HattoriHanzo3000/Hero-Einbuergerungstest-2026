@@ -60,6 +60,7 @@ struct TestSessionView: View {
                 .background(Color(.systemBackground))
             }
         }
+        .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
         .navigationBarHidden(true)
         .hidesTabBar()
@@ -136,30 +137,10 @@ struct TestSessionView: View {
         DispatchQueue.main.async {
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let window = windowScene.windows.first,
-               let tabBarController = findTabBarController(in: window.rootViewController) {
+               let tabBarController = UITabBarController.find(in: window.rootViewController) {
                 tabBarController.tabBar.isHidden = false
             }
-                        }
-                    }
-    
-    private func findTabBarController(in viewController: UIViewController?) -> UITabBarController? {
-        guard let viewController = viewController else { return nil }
-        
-        if let tabBarController = viewController as? UITabBarController {
-            return tabBarController
         }
-        
-        for child in viewController.children {
-            if let tabBarController = findTabBarController(in: child) {
-                return tabBarController
-            }
-        }
-        
-        if let presented = viewController.presentedViewController {
-            return findTabBarController(in: presented)
-                }
-        
-        return nil
     }
     
     func initializeTest() {

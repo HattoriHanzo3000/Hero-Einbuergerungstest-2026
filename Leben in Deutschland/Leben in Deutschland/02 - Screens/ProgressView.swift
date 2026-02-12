@@ -4,6 +4,7 @@ import SwiftUI
 /// Progress tab: rounded header with mascot, then progress section (ring chart and stat cards) from main page.
 struct ProgressTabView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
+    @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var premiumManager: PremiumManager
     @StateObject private var viewModel: HomeViewModel = HomeViewModel()
 
@@ -18,6 +19,7 @@ struct ProgressTabView: View {
             }
             .padding(.bottom, layoutMetrics.adaptive(LayoutMetrics.footerPadding))
             .frame(maxWidth: .infinity, alignment: .top)
+            .id(languageManager.currentAppLanguage)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))

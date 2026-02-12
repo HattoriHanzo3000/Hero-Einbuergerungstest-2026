@@ -6,6 +6,7 @@ import CoreImage.CIFilterBuiltins
 struct SettingsShareView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
+    @EnvironmentObject private var languageManager: LanguageManager
     @State private var showShareSheet = false
 
     private let appStoreURL = "https://apps.apple.com/app/id6752272685"
@@ -23,6 +24,7 @@ struct SettingsShareView: View {
             .padding(.horizontal, layoutMetrics.adaptive(20))
             .padding(.top, layoutMetrics.adaptive(20))
             .padding(.bottom, layoutMetrics.adaptive(40))
+            .id(languageManager.currentAppLanguage)
         }
         .navigationTitle("settings_share_button".localized)
         .navigationBarTitleDisplayMode(.inline)

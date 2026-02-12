@@ -31,8 +31,14 @@ class OnboardingTranslationViewModel: ObservableObject {
             if savedTranslationCode == "uk" {
                 preferences.translationLanguageCode = "de"
                 selectedLanguage = "Deutsch"
+                if "de" != languageManager.currentAppLanguage {
+                    languageManager.setTranslationLanguage("de")
+                }
             } else if let languageOption = LanguageOption.availableLanguages.first(where: { $0.languageCode == savedTranslationCode }) {
                 selectedLanguage = languageOption.name
+                if savedTranslationCode != languageManager.currentAppLanguage {
+                    languageManager.setTranslationLanguage(savedTranslationCode)
+                }
             }
         } else {
             selectedLanguage = nil
@@ -45,6 +51,8 @@ class OnboardingTranslationViewModel: ObservableObject {
     func selectLanguage(_ language: String) {
         selectedLanguage = language
         let code = LanguageOption.getLanguageCode(for: language)
+        guard code != languageManager.currentAppLanguage else { return }
+        languageManager.setTranslationLanguage(code)
         preferences.translationLanguageCode = code
         preferences.translationSelected = true
     }

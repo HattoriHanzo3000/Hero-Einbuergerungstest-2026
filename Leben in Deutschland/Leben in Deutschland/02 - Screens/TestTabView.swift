@@ -76,6 +76,7 @@ struct TestTabView: View {
                 .padding(.bottom, layoutMetrics.adaptive(36))
                 .frame(maxWidth: .infinity, alignment: .top)
             }
+            .id(languageManager.currentAppLanguage)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(.systemBackground))
             .navigationDestination(for: AppRouter.Destination.self) { destination in

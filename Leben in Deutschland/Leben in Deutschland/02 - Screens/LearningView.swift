@@ -101,6 +101,7 @@ struct LearningView: View {
             // Footer with navigation and check button
             footerView
         }
+        .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
         .ignoresSafeArea(edges: .bottom)
         .navigationBarHidden(true)
@@ -135,8 +136,8 @@ struct LearningView: View {
                 }
             }
         }
-        .task {
-            // Ensure hints are loaded for current and translation language
+        .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
+            // Ensure hints are loaded when app or translation language changes
             await HintService.shared.loadHints(for: languageManager.currentAppLanguage)
             if languageManager.currentTranslationLanguage != languageManager.currentAppLanguage {
                 await HintService.shared.loadTranslationHints(for: languageManager.currentTranslationLanguage)

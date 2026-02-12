@@ -10,7 +10,6 @@ struct SettingsRegionalSectionView: View {
             SettingsFederalStateRow(viewModel: viewModel)
             SettingsTestDateRow(viewModel: viewModel)
         }
-        .federalStateAlert(viewModel: viewModel)
     }
 }
 

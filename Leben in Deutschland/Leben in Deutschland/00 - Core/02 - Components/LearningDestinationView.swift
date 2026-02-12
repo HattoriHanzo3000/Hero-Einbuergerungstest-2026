@@ -43,12 +43,13 @@ struct LearningDestinationView: View {
                 .background(Color(.systemBackground))
             }
         }
-        .task {
+        .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
             await loadSubcategory()
         }
     }
     
     private func loadSubcategory() async {
+        isLoading = true
         // First try to find from already-loaded categories
         subcategory = contentService.findSubcategory(
             named: subcategoryName,

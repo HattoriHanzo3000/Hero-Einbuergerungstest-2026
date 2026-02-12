@@ -34,13 +34,14 @@ struct SpacedRepetitionView: View {
             isCheckEnabled: viewModel.isPrimaryButtonEnabled
         )
         .environmentObject(languageManager)
+        .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .hidesTabBar()
         .tabBarHidden(true)
-        .task(id: languageManager.currentAppLanguage) {
-            // Ensure content and hints are loaded for current app language when view appears or language changes
+        .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
+            // Ensure content and hints are loaded when app or translation language changes
             await ContentService.shared.loadContent(for: languageManager.currentAppLanguage)
             await HintService.shared.loadHints(for: languageManager.currentAppLanguage)
             viewModel.refreshSessionIfNeeded()
