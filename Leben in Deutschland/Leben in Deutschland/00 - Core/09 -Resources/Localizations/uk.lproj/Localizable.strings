@@ -176,8 +176,10 @@
 "settings_about_button" = "Про додаток";
 "settings_share_button" = "Поділитися";
 "settings_about_heading" = "Про цей додаток";
+"settings_about_mascot_accessibility" = "Талісман Hero";
 "settings_about_description" = "Hero – Leben in Deutschland допомагає підготуватися до тесту на громадянство: 310 офіційних питань, інтервальне повторення та повна симуляція іспиту. Обери федеральну землю, практикуйся у своєму темпі та почувайся впевнено в день іспиту.";
 "settings_share_scan_title" = "Скануйте для завантаження";
+"settings_share_qr_accessibility" = "QR-код для завантаження додатку";
 "settings_share_scan_subtitle" = "Поділіться цим QR-кодом, щоб друзі могли знайти додаток у App Store.";
 "share_app_hint" = "Поділитися додатком з іншими";
 

@@ -45,8 +45,6 @@ struct SettingsDashboardView: View {
                     SettingsAboutView()
                 case .share:
                     SettingsShareView()
-                case .premium:
-                    EmptyView()
                 }
             }
         }
@@ -70,7 +68,8 @@ struct SettingsDashboardView: View {
             MailComposer(
                 toRecipients: mail.recipients,
                 subject: mail.subject,
-                messageBody: mail.body
+                messageBody: mail.body,
+                onDismiss: { viewModel.supportViewModel.dismissContactMail() }
             )
         }
     }

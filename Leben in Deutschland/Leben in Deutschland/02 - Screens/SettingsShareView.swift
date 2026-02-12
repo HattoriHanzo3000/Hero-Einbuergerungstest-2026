@@ -4,6 +4,8 @@ import CoreImage.CIFilterBuiltins
 
 /// Share screen with QR code and share sheet. Matches Hero B2 style.
 struct SettingsShareView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.layoutMetrics) private var layoutMetrics
     @State private var showShareSheet = false
 
     private let appStoreURL = "https://apps.apple.com/app/id6752272685"
@@ -15,27 +17,28 @@ struct SettingsShareView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.sectionSpacing)) {
                 qrSection
-                openInAppStoreButton
             }
-            .padding(.vertical, 20)
-            .padding(.bottom, 40)
+            .padding(.horizontal, layoutMetrics.adaptive(20))
+            .padding(.top, layoutMetrics.adaptive(20))
+            .padding(.bottom, layoutMetrics.adaptive(40))
         }
         .navigationTitle("settings_share_button".localized)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                AdaptiveIconButton.backButton(action: { dismiss() }, tintColor: .primary)
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    HapticManager.shared.lightImpact()
-                    showShareSheet = true
-                } label: {
-                    Image(systemName: "square.and.arrow.up")
-                        .font(.body)
-                        .foregroundStyle(.primary)
-                }
-                .accessibilityLabel("settings_share_button".localized)
-                .accessibilityHint("share_app_hint".localized)
+                AdaptiveIconButton(
+                    systemName: "square.and.arrow.up",
+                    action: { showShareSheet = true },
+                    accessibilityLabel: "settings_share_button",
+                    accessibilityHint: "share_app_hint",
+                    tintColor: .primary
+                )
             }
         }
         .sheet(isPresented: $showShareSheet) {
@@ -48,53 +51,37 @@ struct SettingsShareView: View {
     }
 
     private var qrSection: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.rowSpacing)) {
             Text("settings_share_scan_title".localized)
                 .font(.system(.headline, design: .rounded).weight(.semibold))
                 .foregroundStyle(.primary)
+                .accessibilityAddTraits(.isHeader)
 
             SettingsQRCodeView(url: appStoreURL)
-                .frame(width: 280, height: 280)
-                .padding()
+                .frame(width: layoutMetrics.adaptive(280), height: layoutMetrics.adaptive(280))
+                .padding(layoutMetrics.adaptive(16))
                 .background(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    RoundedRectangle(cornerRadius: layoutMetrics.adaptive(SettingsDesignTokens.Layout.cornerRadius), style: .continuous)
                         .fill(Color(.systemBackground))
                 )
-                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                .shadow(color: .black.opacity(0.1), radius: layoutMetrics.adaptive(8), x: 0, y: 4)
+                .accessibilityLabel("settings_share_qr_accessibility".localized)
 
             Text("settings_share_scan_subtitle".localized)
                 .font(.system(.subheadline, design: .rounded))
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
-        .padding(.top, 20)
+        .accessibilityElement(children: .combine)
     }
 
-    private var openInAppStoreButton: some View {
-        Button {
-            HapticManager.shared.lightImpact()
-            if let url = URL(string: appStoreURL) {
-                UIApplication.shared.open(url)
-            }
-        } label: {
-            Text("settings_open_app_store_button".localized)
-                .font(.system(.body, design: .rounded).weight(.semibold))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Color.accentColor)
-                )
-        }
-        .padding(.horizontal)
-    }
 }
 
 // MARK: - QR Code View
 
 private struct SettingsQRCodeView: View {
     let url: String
+    @Environment(\.layoutMetrics) private var layoutMetrics
 
     var body: some View {
         if let qrCodeImage = generateQRCode(from: url) {
@@ -104,7 +91,7 @@ private struct SettingsQRCodeView: View {
                 .scaledToFit()
         } else {
             Image(systemName: "qrcode")
-                .font(.system(size: 60))
+                .font(.system(size: layoutMetrics.adaptive(60)))
                 .foregroundStyle(.secondary)
         }
     }
@@ -141,5 +128,6 @@ struct ShareSheet: UIViewControllerRepresentable {
 #Preview("Share") {
     NavigationStack {
         SettingsShareView()
+            .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
     }
 }
