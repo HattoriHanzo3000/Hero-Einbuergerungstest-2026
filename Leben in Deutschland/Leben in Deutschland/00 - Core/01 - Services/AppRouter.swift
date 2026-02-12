@@ -16,12 +16,10 @@ final class AppRouter {
     enum Destination: Hashable {
         case categories
         case learning(subcategoryName: String, categoryName: String)
-        case settings
         case favorites
         case spacedRepetition
         case testCountdown
         case testSimulation
-        case premium
     }
     
     // MARK: - Navigation Methods

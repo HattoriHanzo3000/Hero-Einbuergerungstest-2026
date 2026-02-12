@@ -10,12 +10,10 @@ struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel
     @StateObject private var ratingManager = AppRatingManager.shared
     @State private var router = AppRouter()
-    @State private var showDialog = false
     @State private var showRatingPrompt = false
     
-    /// Spacing between header and section (matches Progress tab).
-    private var sectionSpacing: CGFloat { layoutMetrics.adaptive(28) }
-    private var footerPadding: CGFloat { layoutMetrics.adaptive(36) }
+    private var sectionSpacing: CGFloat { layoutMetrics.adaptive(LayoutMetrics.sectionSpacing) }
+    private var footerPadding: CGFloat { layoutMetrics.adaptive(LayoutMetrics.footerPadding) }
     
     init(viewModel: HomeViewModel = HomeViewModel()) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -26,17 +24,14 @@ struct HomeView: View {
         GeometryReader { geometry in
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: sectionSpacing) {
-                    MainHeaderContent(
+                    HomeHeader(
                         readinessPercentage: viewModel.statistics.readinessPercentage,
-                        showDialog: $showDialog,
                         onPremiumTap: { premiumManager.presentPaywall() }
                     )
-                    .padding(.horizontal, layoutMetrics.adaptive(20))
-                    .padding(.top, layoutMetrics.adaptive(8))
-                    .padding(.bottom, layoutMetrics.adaptive(4))
+                    .screenHeaderPadding(metrics: layoutMetrics)
 
-                    HomeLearnSection()
-                        .padding(.horizontal, layoutMetrics.adaptive(20))
+                    HomeLearnOptionsSection()
+                        .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
                 }
                 .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
                 .frame(maxWidth: .infinity, alignment: .top)
@@ -51,12 +46,8 @@ struct HomeView: View {
             }
         .onAppear {
             handleOnAppear()
-            // Animate tab bar slide-up when returning to home view
-            // Delay to ensure navigation transition completes first
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                animateTabBarSlideUp()
-            }
         }
+        .tabBarHidden(false)
         .id(stateManager.selectedState ?? "no_state")
         }
         .environment(router)
@@ -108,11 +99,6 @@ struct HomeView: View {
                 .environmentObject(languageManager)
                 .environmentObject(FavoritesManager.shared)
                 .environmentObject(stateManager)
-        case .settings:
-            SettingsDashboardView()
-        case .premium:
-            PremiumHubView()
-                .environmentObject(languageManager)
         }
     }
 }
@@ -132,106 +118,17 @@ struct HomeView: View {
 
 // MARK: - Private Helpers
 private extension HomeView {
-    func animateTabBarSlideUp() {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first,
-              let tabBarController = findTabBarController(in: window.rootViewController) else { return }
-        let tabBar = tabBarController.tabBar
-        
-        // Only animate if tab bar is currently hidden or off-screen
-        guard tabBar.isHidden || tabBar.alpha < 1 || tabBar.transform != .identity else { return }
-        
-        let height = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
-        
-        tabBar.isHidden = false
-        tabBar.transform = CGAffineTransform(translationX: 0, y: height)
-        tabBar.alpha = 0
-        
-        UIView.animate(
-            withDuration: 0.45,
-            delay: 0,
-            usingSpringWithDamping: 0.82,
-            initialSpringVelocity: 0.4,
-            options: [.allowUserInteraction, .beginFromCurrentState, .curveEaseOut],
-            animations: {
-                tabBar.transform = .identity
-                tabBar.alpha = 1
-            }
-        )
-    }
-    
-    func animateTabBarSlideDown() {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first,
-              let tabBarController = findTabBarController(in: window.rootViewController) else { return }
-        let tabBar = tabBarController.tabBar
-        
-        // Only animate if tab bar is currently visible
-        guard !tabBar.isHidden && tabBar.alpha > 0 else { return }
-        
-        let height = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
-        
-        UIView.animate(
-            withDuration: 0.35,
-            delay: 0,
-            usingSpringWithDamping: 0.9,
-            initialSpringVelocity: 0.3,
-            options: [.allowUserInteraction, .beginFromCurrentState, .curveEaseIn],
-            animations: {
-                tabBar.transform = CGAffineTransform(translationX: 0, y: height)
-                tabBar.alpha = 0
-            },
-            completion: { _ in
-                tabBar.isHidden = true
-                tabBar.transform = .identity
-                tabBar.alpha = 1
-            }
-        )
-    }
-    
-    func findTabBarController(in viewController: UIViewController?) -> UITabBarController? {
-        guard let viewController = viewController else { return nil }
-        
-        if let tabBarController = viewController as? UITabBarController {
-            return tabBarController
-        }
-        
-        for child in viewController.children {
-            if let tabBarController = findTabBarController(in: child) {
-                return tabBarController
-            }
-        }
-        
-        if let presented = viewController.presentedViewController {
-            return findTabBarController(in: presented)
-        }
-        
-        return nil
-    }
-    
     func handleOnAppear() {
         viewModel.refreshStatistics()
         
         // Record app launch for rating manager
         ratingManager.recordAppLaunch()
         
-        // Show eagle dialog if not already showing
-        guard showDialog == false else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-            withAnimation(.spring(response: 0.45, dampingFraction: 0.85)) {
-                showDialog = true
-            }
-        }
-        
-        // Check if we should show rating prompt (after a delay to not interrupt user)
-        // Wait longer to ensure eagle dialog has appeared first
+        // Show rating prompt after a delay to not interrupt user on first load
         if ratingManager.shouldPromptForRating() && !showRatingPrompt {
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                // Only show if eagle dialog is not currently showing
-                if !showDialog {
-                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                        showRatingPrompt = true
-                    }
+                withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                    showRatingPrompt = true
                 }
             }
         }

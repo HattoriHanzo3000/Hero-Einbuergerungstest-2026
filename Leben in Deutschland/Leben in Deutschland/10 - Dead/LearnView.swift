@@ -11,7 +11,6 @@ import SwiftUI
 struct LearnView: View {
     @EnvironmentObject private var languageManager: LanguageManager
     @StateObject private var optionsViewModel = LearnOptionsViewModel()
-    @State private var showDialog = false
     @State private var hasConfiguredSelectionHandler = false
     @State private var router = AppRouter()
     @State private var lastSelectedOptionID: UUID?
@@ -27,7 +26,7 @@ struct LearnView: View {
         NavigationStack(path: $router.navigationPath) {
             GeometryReader { geometry in
                 VStack(spacing: verticalSpacing) {
-                    LearnHeaderContent(showDialog: $showDialog)
+                    LearnHeaderContent()
                         .padding(.top, geometry.safeAreaInsets.top + layoutMetrics.adaptive(24))
                         .padding(.bottom, layoutMetrics.adaptive(20))
                     
@@ -56,7 +55,6 @@ struct LearnView: View {
         .environment(router)
         .onAppear {
             configureSelectionHandlerIfNeeded()
-            triggerDialog()
             // Check if we need to highlight a specific option (e.g., after returning from test)
             if optionsViewModel.highlightedOptionID == nil {
                 optionsViewModel.highlightedOptionID = optionsViewModel.options.first?.id
@@ -112,14 +110,6 @@ private extension LearnView {
         }
     }
     
-    func triggerDialog() {
-        guard !showDialog else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-            withAnimation(.spring(response: 0.45, dampingFraction: 0.85)) {
-                showDialog = true
-            }
-        }
-    }
 }
 
 // MARK: - Navigation Destination
@@ -153,8 +143,6 @@ private extension LearnView {
                 .environmentObject(languageManager)
                 .environmentObject(FavoritesManager.shared)
                 .environmentObject(StateManager.shared)
-        default:
-            EmptyView()
         }
     }
 }

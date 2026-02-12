@@ -32,7 +32,7 @@ struct TabBarVisibilityModifier: ViewModifier {
         DispatchQueue.main.async {
             guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let window = windowScene.windows.first,
-                  let tabBarController = findTabBarController(in: window.rootViewController) else { return }
+                  let tabBarController = UITabBarController.find(in: window.rootViewController) else { return }
             let tabBar = tabBarController.tabBar
             
             if hidden {
@@ -62,8 +62,10 @@ struct TabBarVisibilityModifier: ViewModifier {
                     }
                 )
             } else {
+                // Only animate if tab bar is currently hidden or off-screen (e.g. after returning from pushed view)
+                guard tabBar.isHidden || tabBar.alpha < 1 || tabBar.transform != .identity else { return }
+                
                 // Animate showing: slide up from bottom
-                // First ensure tab bar is visible but positioned off-screen
                 tabBar.isHidden = false
                 tabBar.alpha = 0
                 
@@ -96,26 +98,6 @@ struct TabBarVisibilityModifier: ViewModifier {
                 }
             }
         }
-    }
-    
-    private func findTabBarController(in viewController: UIViewController?) -> UITabBarController? {
-        guard let viewController = viewController else { return nil }
-        
-        if let tabBarController = viewController as? UITabBarController {
-            return tabBarController
-        }
-        
-        for child in viewController.children {
-            if let tabBarController = findTabBarController(in: child) {
-                return tabBarController
-            }
-        }
-        
-        if let presented = viewController.presentedViewController {
-            return findTabBarController(in: presented)
-        }
-        
-        return nil
     }
 }
 

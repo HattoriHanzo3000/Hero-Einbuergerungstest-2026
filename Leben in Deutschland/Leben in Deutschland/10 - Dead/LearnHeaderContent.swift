@@ -9,8 +9,6 @@ import SwiftUI
 
 // MARK: - Learn Header Content
 struct LearnHeaderContent: View {
-    @Binding var showDialog: Bool
-    
     @Environment(\.layoutMetrics) private var layoutMetrics
     
     private var topPadding: CGFloat { layoutMetrics.adaptive(56) }
@@ -20,9 +18,7 @@ struct LearnHeaderContent: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: interItemSpacing) {
-            MainMascotView(
-                messageKey: "learn_header_dialog_message",
-                showDialog: $showDialog,
+            MascotView(
                 autoPlayInterval: 45
             )
         }
@@ -41,9 +37,7 @@ struct LearnHeaderContent: View {
 
 // MARK: - Preview
 #Preview {
-    @Previewable @State var showDialog = true
-    
-    LearnHeaderContent(showDialog: $showDialog)
+    LearnHeaderContent()
         .environmentObject(LanguageManager())
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }

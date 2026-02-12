@@ -87,7 +87,7 @@ Main Screen/
 │   ├── MainHeaderContent.swift
 │   ├── MainListContent.swift
 │   ├── MainFooterContent.swift
-│   └── MainMascotView.swift
+│   └── MascotView.swift
 ├── Models/
 │   └── MainListModel.swift
 ├── ViewModels/

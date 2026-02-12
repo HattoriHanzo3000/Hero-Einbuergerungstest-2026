@@ -6,6 +6,13 @@ struct LayoutMetrics {
     static let referenceScreenWidth: CGFloat = 390
     static let minimumScale: CGFloat = 0.82
     
+    // MARK: - Screen Layout
+    static let headerHorizontalPadding: CGFloat = 20
+    static let headerTopPadding: CGFloat = 8
+    static let headerBottomPadding: CGFloat = 4
+    static let sectionSpacing: CGFloat = 28
+    static let footerPadding: CGFloat = 36
+    
     static let buttonTapAnimationDuration: Double = 0.22
     static let gifAnimationDuration: Double = 1.1
     static let totalFederalQuestions: Int = 310
@@ -51,5 +58,13 @@ extension View {
     
     func layoutMetrics(size: CGSize) -> some View {
         layoutMetrics(LayoutMetrics.make(for: size))
+    }
+    
+    /// Standard padding for screen headers (used by Home, Progress, etc.).
+    func screenHeaderPadding(metrics: LayoutMetrics) -> some View {
+        self
+            .padding(.horizontal, metrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+            .padding(.top, metrics.adaptive(LayoutMetrics.headerTopPadding))
+            .padding(.bottom, metrics.adaptive(LayoutMetrics.headerBottomPadding))
     }
 }

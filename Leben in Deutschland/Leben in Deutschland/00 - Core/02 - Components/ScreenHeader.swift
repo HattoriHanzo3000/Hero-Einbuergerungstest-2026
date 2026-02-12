@@ -3,7 +3,7 @@
 //  Leben in Deutschland
 //
 //  Shared header for mascot + message screens (Home, Test, Progress).
-//  Uses HeaderContainer with MainMascotView and optional trailing content.
+//  Uses HeaderContainer with MascotView and optional trailing content.
 //
 
 import SwiftUI
@@ -22,8 +22,6 @@ enum ScreenHeaderContent: Equatable {
 // MARK: - Screen Header
 struct ScreenHeader: View {
     let readinessPercentage: Int
-    @Binding var showDialog: Bool
-    var leadingMessage: String?
     var onPremiumTap: (() -> Void)?
     var autoPlayInterval: TimeInterval? = 60
     var content: ScreenHeaderContent
@@ -53,14 +51,8 @@ struct ScreenHeader: View {
 
     private var mascotWithContentLayout: some View {
         HStack(alignment: .center, spacing: mascotToContentSpacing) {
-            MainMascotView(
-                messageKey: "eagle_desc_chick",
-                messageParameters: content == .readiness ? [String(readinessPercentage)] : nil,
-                leadingMessage: content == .readiness ? nil : leadingMessage,
-                showDialog: $showDialog,
-                autoPlayInterval: content == .readiness ? nil : autoPlayInterval,
-                hideBubble: true,
-                showMessageWhenBubbleHidden: false
+            MascotView(
+                autoPlayInterval: content == .readiness ? nil : autoPlayInterval
             )
             .frame(width: mascotSize, height: mascotSize)
 
@@ -169,8 +161,6 @@ struct FederalStateSloganBlock: View {
 #Preview("State") {
     ScreenHeader(
         readinessPercentage: 72,
-        showDialog: .constant(true),
-        leadingMessage: nil,
         onPremiumTap: {},
         content: .state(stateName: "Bavaria")
     )
@@ -182,8 +172,6 @@ struct FederalStateSloganBlock: View {
 #Preview("Message") {
     ScreenHeader(
         readinessPercentage: 72,
-        showDialog: .constant(true),
-        leadingMessage: "14 days left",
         onPremiumTap: {},
         content: .message("14 days left")
     )
@@ -194,7 +182,6 @@ struct FederalStateSloganBlock: View {
 #Preview("Readiness") {
     ScreenHeader(
         readinessPercentage: 72,
-        showDialog: .constant(true),
         onPremiumTap: {},
         content: .readiness
     )

@@ -60,7 +60,7 @@ struct OnboardingHeaderComponent: View {
                 .accessibilityLabel("Progress")
                 .accessibilityValue("\(currentStep) of \(totalSteps)")
             
-            // Mascot + content row (same layout as MainHeaderContent / TestHeaderContent)
+            // Mascot + content row (same layout as HomeHeader / TestHeaderContent)
             HStack(alignment: .center, spacing: mascotToContentSpacing) {
                 OnboardingMascotView(
                     playSignal: playSignal,
@@ -69,7 +69,7 @@ struct OnboardingHeaderComponent: View {
                 .frame(width: mascotSize, height: mascotSize)
                 
                 if let selectedState = selectedState {
-                    // With title: state name + slogan (MainHeaderContent style)
+                    // With title: state name + slogan (HomeHeader style)
                     VStack(alignment: .leading, spacing: titleToSloganSpacing) {
                         Text(getLocalizedStateName(selectedState))
                             .font(.system(.title, design: .rounded).bold())
@@ -99,19 +99,9 @@ struct OnboardingHeaderComponent: View {
             .padding(.horizontal, horizontalPadding)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(liquidGlassBackground)
+        .background(LiquidGlassBackground(gradient: .blue))
         .clipShape(RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
-                .stroke(
-                    LinearGradient(
-                        colors: [.white.opacity(0.4), .white.opacity(0.08)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    lineWidth: 0.8
-                )
-        )
+        .overlay(HeaderBorderOverlay())
         .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
         .padding(.horizontal)
         .padding(.top, layoutMetrics.adaptive(8))
@@ -140,46 +130,6 @@ struct OnboardingHeaderComponent: View {
         stateName.localized
     }
     
-    private var liquidGlassBackground: some View {
-        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        Color("AppBlueLagoon").opacity(0.9),
-                        Color("AppBlueLagoon").opacity(0.65),
-                        Color("AppCaribean").opacity(0.45)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .overlay(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(0.20),
-                        Color.white.opacity(0.05),
-                        Color.clear
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [Color.white.opacity(0.45), Color.white.opacity(0.12)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ),
-                        lineWidth: 0.6
-                    )
-            )
-            .background(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
-                    .fill(Color.white.opacity(0.05))
-            )
-    }
 }
 
 // MARK: - Onboarding Slogan Block (matches FederalStateSloganBlock logic)
@@ -215,7 +165,7 @@ private struct OnboardingSloganBlock: View {
     }
 }
 
-// MARK: - Onboarding Mascot View (tap to play GIF, matches MainMascotView layout)
+// MARK: - Onboarding Mascot View (tap to play GIF, matches MascotView layout)
 private struct OnboardingMascotView: View {
     let playSignal: UUID?
     let onPlayCompleted: (() -> Void)?

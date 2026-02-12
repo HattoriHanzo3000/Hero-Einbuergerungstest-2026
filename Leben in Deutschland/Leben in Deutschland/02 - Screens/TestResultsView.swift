@@ -19,7 +19,6 @@ struct TestResultsView: View {
     @EnvironmentObject private var favoritesManager: FavoritesManager
     
     @State private var showingAnswers = false
-    @State private var showMascotDialog = false
     @State private var showingRetryCountdown = false
     
     private var results: TestResults {
@@ -83,12 +82,8 @@ struct TestResultsView: View {
                     VStack(spacing: layoutMetrics.adaptive(24)) {
                         // Header: Mascot + Title
                         HStack(alignment: .center, spacing: layoutMetrics.adaptive(16)) {
-                            MainMascotView(
-                                messageKey: results.isPassed ? "test_passed".localized : "test_failed".localized,
-                                showDialog: $showMascotDialog,
-                                autoPlayInterval: nil,
-                                hideBubble: true,
-                                showMessageWhenBubbleHidden: false
+                            MascotView(
+                                autoPlayInterval: nil
                             )
                             .fixedSize(horizontal: true, vertical: false)
                             

@@ -1,5 +1,5 @@
 //
-//  HomeLearnSection.swift
+//  HomeLearnOptionsSection.swift
 //  Leben in Deutschland
 //
 //  Learn section with 3 buttons: Spaced Repetition, Learn by Topics, Favorites
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HomeLearnSection: View {
+struct HomeLearnOptionsSection: View {
     @EnvironmentObject private var languageManager: LanguageManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     @Environment(AppRouter.self) private var router
@@ -62,30 +62,19 @@ private struct LearnButtonContent: View {
     let icon: String
     let title: String
     let color: Color
-    var isLocked: Bool = false
     
     @Environment(\.layoutMetrics) private var layoutMetrics
     
     var body: some View {
         HStack(spacing: layoutMetrics.adaptive(16)) {
-            ZStack {
-                Image(systemName: icon)
-                    .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
-                    .foregroundColor(.white)
-                    .opacity(isLocked ? 0.5 : 1.0)
-                
-                if isLocked {
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: layoutMetrics.adaptive(14), weight: .bold))
-                        .foregroundColor(.white)
-                        .offset(x: layoutMetrics.adaptive(12), y: -layoutMetrics.adaptive(12))
-                }
-            }
-            .frame(width: layoutMetrics.adaptive(52), height: layoutMetrics.adaptive(52))
-            .background(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
-                    .fill(color)
-            )
+            Image(systemName: icon)
+                .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
+                .foregroundColor(.white)
+                .frame(width: layoutMetrics.adaptive(52), height: layoutMetrics.adaptive(52))
+                .background(
+                    RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
+                        .fill(color)
+                )
             
             Text(title.localized)
                 .font(.system(.headline, design: .rounded).weight(.semibold))
@@ -106,22 +95,11 @@ private struct LearnButtonContent: View {
     }
 }
 
-// MARK: - Bouncy Scale Button Style
-/// Playful press scale for a friendly, cartoon-like feel.
-private struct BouncyScaleButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .animation(.spring(response: 0.35, dampingFraction: 0.7), value: configuration.isPressed)
-    }
-}
-
 // MARK: - Preview
 #Preview {
-    HomeLearnSection()
+    HomeLearnOptionsSection()
         .environment(AppRouter())
         .padding()
         .background(Color(.systemBackground))
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
-

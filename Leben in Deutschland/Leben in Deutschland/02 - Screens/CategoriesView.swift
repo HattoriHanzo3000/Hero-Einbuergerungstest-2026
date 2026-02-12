@@ -25,7 +25,6 @@ struct CategoriesView: View {
     @State private var isSearchVisible = false
     @FocusState private var isSearchFocused: Bool
     @State private var isAtBottom = false
-    @State private var showMascotDialog = false
     private let stateService = CategoriesStateService.shared
     
     private var controlSize: CGFloat {
@@ -154,12 +153,8 @@ struct CategoriesView: View {
                     }
                     
                     HStack(alignment: .center, spacing: mascotToContentSpacing) {
-                        MainMascotView(
-                            messageKey: "eagle_desc_chick",
-                            showDialog: $showMascotDialog,
-                            autoPlayInterval: 60,
-                            hideBubble: true,
-                            showMessageWhenBubbleHidden: false
+                        MascotView(
+                            autoPlayInterval: 60
                         )
                         .frame(width: mascotSize, height: mascotSize)
                         
