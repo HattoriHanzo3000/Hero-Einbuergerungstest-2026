@@ -13,7 +13,7 @@ final class SettingsPersonalisationViewModel: ObservableObject {
 
     private enum Keys {
         static let appearance = "app_appearance"
-        static let haptics = "vibration_enabled"
+        static let haptics = UserDefaultsKeys.vibrationEnabled
     }
 
     init(

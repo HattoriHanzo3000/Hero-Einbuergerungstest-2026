@@ -9,4 +9,5 @@ import Foundation
 
 enum UserDefaultsKeys {
     static let selectedState = "selectedState"
+    static let vibrationEnabled = "vibration_enabled"
 }

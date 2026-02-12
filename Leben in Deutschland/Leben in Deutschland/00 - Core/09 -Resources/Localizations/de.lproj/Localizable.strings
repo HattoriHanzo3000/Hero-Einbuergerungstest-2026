@@ -50,17 +50,15 @@
 "Thüringen" = "Thüringen";
 
 // Test date selection
-"test_date_selection_title" = "Wann machst du den Test? Ich werde eine kleine Erinnerung für dich auf dem Bildschirm anzeigen.";
-"choose_test_date" = "Wähle dein Prüfungsdatum.";
 "onboarding_date_prompt" = "Wann ist dein Test? Wähle das Datum und wir zählen gemeinsam die Tage.";
 "SELECT_DATE" = "Datum auswählen";
 "SAVE_DATE" = "DATUM SPEICHERN";
 "CANCEL" = "ABBRECHEN";
 
 // Eagle dialogues
-"perfect_days_left" = "Wir haben noch %d Tage. Ich bin bei dir!";
-"perfect_day_left" = "Wir haben noch %d Tag. Ich bin bei dir!";
-"perfect_days_left_2_4" = "Wir haben noch %d Tage. Ich bin bei dir!";
+"perfect_days_left" = "Wir haben noch %d %@. Ich bin bei dir!";
+"perfect_day_left" = "Wir haben noch %d %@. Ich bin bei dir!";
+"perfect_days_left_2_4" = "Wir haben noch %d %@. Ich bin bei dir!";
 "perfect_test_today" = "Perfekt! Der Test ist heute. Ich bin bei dir!";
 "dont_know_date" = "Ich weiß es noch nicht";
 "no_problem_later" = "Kein Problem! Du kannst das Datum später hinzufügen oder ändern.";
@@ -284,13 +282,11 @@
 
 "quit_test_title" = "Test beenden?";
 "quit_test_message" = "Möchtest du den Test wirklich beenden? Alle Fortschritte gehen verloren.";
-"cancel" = "Abbrechen";
 "quit_test" = "Test beenden";
 
 "finish_test" = "ERGEBNIS ANSEHEN";
 "answer_all_questions_title" = "Erst alle Fragen beantworten";
 "answer_all_questions_message" = "Du musst alle Fragen beantworten, bevor du den Test beenden kannst.";
-"ok_button" = "OK";
 
 "test_passed" = "Test bestanden!";
 "test_failed" = "Test nicht bestanden";

@@ -66,6 +66,9 @@ struct TabBarView: View {
                 .accessibilityHint("tab_settings_hint".localized)
         }
         .tint(Color.accentColor)
+        .onChange(of: selectedTab) { _, _ in
+            HapticManager.shared.selectionChanged()
+        }
         .id(languageManager.currentAppLanguage)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized)
         .sheet(isPresented: Binding(

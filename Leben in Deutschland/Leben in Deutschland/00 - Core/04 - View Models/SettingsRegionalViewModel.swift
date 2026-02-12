@@ -72,12 +72,14 @@ final class SettingsRegionalViewModel: ObservableObject {
 
     func setAppLanguage(_ option: SettingsAppLanguageOption) {
         guard option != appLanguage else { return }
+        HapticManager.shared.selectionChanged()
         pendingAppLanguage = option
         showAppLanguageChangeWarning = true
     }
 
     func setTranslationLanguage(_ option: SettingsTranslationLanguageOption) {
         guard option != translationLanguage else { return }
+        HapticManager.shared.selectionChanged()
         pendingTranslationLanguage = option
         showTranslationLanguageChangeWarning = true
     }
@@ -127,7 +129,7 @@ final class SettingsRegionalViewModel: ObservableObject {
     }
 
     func setFederalState(name: String) {
-        HapticManager.shared.lightImpact()
+        HapticManager.shared.selectionChanged()
         
         guard name != stateManager.selectedState else {
             federalStateName = name
@@ -140,6 +142,7 @@ final class SettingsRegionalViewModel: ObservableObject {
     }
 
     func saveTestDate(_ date: Date) {
+        HapticManager.shared.selectionChanged()
         selectedTestDate = date
         isTestDateTrackingEnabled = true
         self.onboardingPreferences.testDate = date

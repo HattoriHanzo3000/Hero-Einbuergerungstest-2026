@@ -68,7 +68,7 @@ final class SettingsResetService: SettingsResetServicing {
         }
 
         defaults.set(true, forKey: "sound_enabled")
-        defaults.set(true, forKey: "vibration_enabled")
+        defaults.set(true, forKey: UserDefaultsKeys.vibrationEnabled)
         defaults.set("system", forKey: "app_appearance")
         defaults.synchronize()
     }

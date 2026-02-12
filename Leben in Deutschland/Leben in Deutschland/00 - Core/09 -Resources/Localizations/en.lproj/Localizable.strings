@@ -51,17 +51,15 @@
 "Thüringen" = "Thuringia";
 
 // Test date selection
-"test_date_selection_title" = "When are you taking the test? I'll place a small reminder on the screen for you.";
-"choose_test_date" = "Choose your test date.";
 "onboarding_date_prompt" = "When's your test? Set the date and we'll count down together.";
 "SELECT_DATE" = "Select date";
 "SAVE_DATE" = "SAVE DATE";
 "CANCEL" = "CANCEL";
 
 // Eagle dialogues
-"perfect_days_left" = "We've got %d days left. I'm with you!";
-"perfect_day_left" = "We've got %d day left. I'm with you!";
-"perfect_days_left_2_4" = "We've got %d days left. I'm with you!";
+"perfect_days_left" = "We've got %d %@ left. I'm with you!";
+"perfect_day_left" = "We've got %d %@ left. I'm with you!";
+"perfect_days_left_2_4" = "We've got %d %@ left. I'm with you!";
 "perfect_test_today" = "Perfect! The test is today. I'm with you!";
 "dont_know_date" = "I don't know yet";
 "no_problem_later" = "No problem! You can add or change the date later.";
@@ -288,13 +286,11 @@
 
 "quit_test_title" = "Quit Test?";
 "quit_test_message" = "Do you really want to quit the test? All progress will be lost.";
-"cancel" = "Cancel";
 "quit_test" = "Quit Test";
 
 "finish_test" = "GET RESULTS";
 "answer_all_questions_title" = "Answer all questions first";
 "answer_all_questions_message" = "You need to answer all questions before you can finish the test.";
-"ok_button" = "OK";
 
 "test_passed" = "Test Passed!";
 "test_failed" = "Test Failed";

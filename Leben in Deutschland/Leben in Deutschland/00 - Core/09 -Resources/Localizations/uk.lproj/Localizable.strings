@@ -50,17 +50,15 @@
 "Thüringen" = "Тюрингія";
 
 // Test date selection
-"test_date_selection_title" = "Коли ти складаєш тест? Я розміщу невелике нагадування на екрані для тебе.";
-"choose_test_date" = "Обери дату тесту.";
 "onboarding_date_prompt" = "Коли твій іспит? Обери дату і ми рахуватимемо дні разом.";
 "SELECT_DATE" = "Вибрати дату";
 "SAVE_DATE" = "ЗБЕРЕГТИ ДАТУ";
 "CANCEL" = "СКАСУВАТИ";
 
 // Eagle dialogues
-"perfect_days_left" = "У нас залишилося %d днів. Я з тобою!";
-"perfect_day_left" = "У нас залишився %d день. Я з тобою!";
-"perfect_days_left_2_4" = "У нас залишилося %d дні. Я з тобою!";
+"perfect_days_left" = "У нас залишилося %d %@. Я з тобою!";
+"perfect_day_left" = "У нас залишився %d %@. Я з тобою!";
+"perfect_days_left_2_4" = "У нас залишилося %d %@. Я з тобою!";
 "perfect_test_today" = "Чудово! Тест сьогодні. Я з тобою!";
 "dont_know_date" = "Поки не знаю";
 "no_problem_later" = "Не проблема! Ти можеш додати або змінити дату пізніше.";
@@ -99,7 +97,7 @@
 "eagle_desc_wise" = "Ти готовий на %d%%. Залишилося зовсім трохи — не збавляй висоти!";
 "eagle_desc_master" = "Ти готовий на %d%%. Ти — справжній орел знань!";
 
-"main_header_test_today" = "Тест уже сьогодні.";
+"main_header_test_today" = "Тест вже сьогодні.";
 "main_header_test_in_days" = "Тест через %d %@.";
 "test_header_set_date_prompt" = "Коли твій іспит? Вкажи дату в Налаштуваннях — і ми рахуватимемо дні разом.";
 "main_header_state_accessibility_label" = "Федеральна земля";
@@ -286,13 +284,11 @@
 
 "quit_test_title" = "Вийти з тесту?";
 "quit_test_message" = "Ви дійсно хочете вийти з тесту? Весь прогрес буде втрачено.";
-"cancel" = "Скасувати";
 "quit_test" = "Вийти з тесту";
 
 "finish_test" = "ДІЗНАТИСЯ РЕЗУЛЬТАТ";
 "answer_all_questions_title" = "Спочатку відповідь на всі питання";
 "answer_all_questions_message" = "Потрібно відповісти на всі питання, щоб завершити тест.";
-"ok_button" = "ОК";
 
 "test_passed" = "Тест пройдено!";
 "test_failed" = "Тест не пройдено";
@@ -409,7 +405,7 @@
 "settings_app_language" = "Мова застосунку";
 "settings_translation_language" = "Мова перекладу";
 "settings_federal_state" = "Земля";
-"settings_test_date" = "Дата теста";
+"settings_test_date" = "Дата тесту";
 "settings_test_date_not_set" = "Вкажіть дату";
 "settings_sound_toggle" = "Звук";
 "settings_language_option_english" = "Англійська";

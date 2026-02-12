@@ -48,7 +48,8 @@ class OnboardingDateViewModel: ObservableObject {
         guard let date = selectedDate, hasSelectedDate else { return nil }
         let days = max(0, daysUntil(date))
         guard days <= 365 else { return nil }
-        return [String(days)]
+        let dayWord = Pluralization.localizedDayWord(for: days, languageCode: languageManager.currentAppLanguage)
+        return [String(days), dayWord]
     }
     
     func setupInitialState() {

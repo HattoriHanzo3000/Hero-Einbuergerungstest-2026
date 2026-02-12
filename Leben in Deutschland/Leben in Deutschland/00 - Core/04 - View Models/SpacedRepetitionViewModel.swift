@@ -73,28 +73,6 @@ final class SpacedRepetitionViewModel: ObservableObject {
         )
     }
     
-    /// Message for header when test date is set, e.g. "The test is today" or "The test is in 5 days"
-    var testDateMessage: String? {
-        let days = Self.computeDaysUntilTest()
-        guard days < LayoutMetrics.maxHorizonDays else { return nil }
-        let testDate = OnboardingPreferences.shared.testDate ?? UserDefaults.standard.object(forKey: "selectedTestDate") as? Date
-        guard testDate != nil else { return nil }
-        if days == 0 { return "main_header_test_today".localized }
-        let dayWord = Self.localizedDayWord(for: days)
-        return String(format: "main_header_test_in_days".localized, days, dayWord)
-    }
-    
-    /// Recommended questions per day to reach 4 correct per question (only when test date is set)
-    var recommendedPerDay: Int? {
-        let testDate = OnboardingPreferences.shared.testDate ?? UserDefaults.standard.object(forKey: "selectedTestDate") as? Date
-        guard testDate != nil else { return nil }
-        let days = Self.computeDaysUntilTest()
-        guard days > 0 else { return nil }
-        let pool = contentService.getQuestionsForSpacedRepetition(selectedState: stateManager.selectedState)
-        let totalNeeded = pool.count * LayoutMetrics.targetCorrectPerQuestion
-        return Int(ceil(Double(totalNeeded) / Double(days)))
-    }
-    
     var isPrimaryButtonEnabled: Bool {
         if showCorrectAnswer {
             return true
@@ -181,30 +159,6 @@ private extension SpacedRepetitionViewModel {
         guard let date = testDate else { return LayoutMetrics.maxHorizonDays }
         let days = Calendar.current.dateComponents([.day], from: Date(), to: date).day ?? 0
         return min(max(0, days), LayoutMetrics.maxHorizonDays)
-    }
-    
-    private static func localizedDayWord(for days: Int) -> String {
-        let code = LanguageManager.currentAppLanguageCode
-        switch code {
-        case "de": return days == 1 ? "Tag" : "Tage"
-        case "ru":
-            let lastDigit = days % 10, lastTwo = days % 100
-            if (11...14).contains(lastTwo) { return "дней" }
-            switch lastDigit {
-            case 1: return "день"
-            case 2, 3, 4: return "дня"
-            default: return "дней"
-            }
-        case "uk":
-            let lastDigit = days % 10, lastTwo = days % 100
-            if (11...14).contains(lastTwo) { return "днів" }
-            switch lastDigit {
-            case 1: return "день"
-            case 2, 3, 4: return "дні"
-            default: return "днів"
-            }
-        default: return days == 1 ? "day" : "days"
-        }
     }
     
     static let placeholderQuestions: [QuestionModel] = [

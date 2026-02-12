@@ -50,17 +50,15 @@
 "Thüringen" = "Тюрингия";
 
 // Test date selection
-"test_date_selection_title" = "Когда ты сдаёшь тест? Я размещу небольшое напоминание на экране для тебя.";
-"choose_test_date" = "Выбери дату теста.";
 "onboarding_date_prompt" = "Когда твой экзамен? Выбери дату и мы будем вести обратный отсчёт вместе.";
 "SELECT_DATE" = "Выбрать дату";
 "SAVE_DATE" = "СОХРАНИТЬ ДАТУ";
 "CANCEL" = "ОТМЕНА";
 
 // Eagle dialogues
-"perfect_days_left" = "У нас осталось %d дней. Я с тобой!";
-"perfect_day_left" = "У нас остался %d день. Я с тобой!";
-"perfect_days_left_2_4" = "У нас осталось %d дня. Я с тобой!";
+"perfect_days_left" = "У нас осталось %d %@. Я с тобой!";
+"perfect_day_left" = "У нас остался %d %@. Я с тобой!";
+"perfect_days_left_2_4" = "У нас осталось %d %@. Я с тобой!";
 "perfect_test_today" = "Отлично! Тест сегодня. Я с тобой!";
 "dont_know_date" = "Пока не знаю";
 "no_problem_later" = "Не проблема! Ты можешь добавить или изменить дату позже.";
@@ -291,7 +289,6 @@
 "finish_test" = "УЗНАТЬ РЕЗУЛЬТАТ";
 "answer_all_questions_title" = "Сначала ответь на все вопросы";
 "answer_all_questions_message" = "Нужно ответить на все вопросы, чтобы завершить тест.";
-"ok_button" = "ОК";
 
 "test_passed" = "Тест пройден!";
 "test_failed" = "Тест не пройден";

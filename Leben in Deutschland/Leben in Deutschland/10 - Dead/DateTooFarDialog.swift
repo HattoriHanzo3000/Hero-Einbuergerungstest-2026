@@ -2,7 +2,7 @@
 //  DateTooFarDialog.swift
 //  Leben in Deutschland
 //
-//  Warning dialog when user selects a test date too far in the future
+//  DEPRECATED: Unused. Settings uses .alert() for date-too-far. Kept for reference.
 //
 
 import SwiftUI
@@ -94,4 +94,3 @@ struct DateTooFarDialog: View {
         }
     )
 }
-

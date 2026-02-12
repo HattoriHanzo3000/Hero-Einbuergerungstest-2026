@@ -35,7 +35,8 @@ struct TestHeaderContent: View {
         } else {
             key = "perfect_days_left"
         }
-        return String(format: key.localized, days)
+        let dayWord = Pluralization.localizedDayWord(for: days, languageCode: LanguageManager.currentAppLanguageCode)
+        return String(format: key.localized, days, dayWord)
     }
 
     var body: some View {

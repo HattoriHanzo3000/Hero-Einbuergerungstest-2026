@@ -2,7 +2,7 @@
 //  DatePickerSheet.swift
 //  Leben in Deutschland
 //
-//  Date picker modal component
+//  DEPRECATED: Unused. Settings uses inline DatePicker. Kept for reference.
 //
 
 import SwiftUI
