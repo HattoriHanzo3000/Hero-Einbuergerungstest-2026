@@ -20,8 +20,8 @@ struct PaywallView: View {
     @State private var isPurchasing = false
     @State private var restoreMessage: String?
     
-    private static let termsURL = URL(string: "https://www.gizatech.de/hero-leben-in-deutschland/terms-of-use")!
-    private static let privacyURL = URL(string: "https://www.gizatech.de/hero-leben-in-deutschland/privacy-policy")!
+    private static let termsURL = AppURLs.termsOfUse
+    private static let privacyURL = AppURLs.privacyPolicy
     
     var body: some View {
         NavigationStack {

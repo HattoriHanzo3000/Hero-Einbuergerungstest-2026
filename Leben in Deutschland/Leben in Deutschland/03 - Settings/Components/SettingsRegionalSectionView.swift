@@ -4,7 +4,7 @@ struct SettingsRegionalSectionView: View {
     @ObservedObject var viewModel: SettingsRegionalViewModel
 
     var body: some View {
-        Section {
+        Section("settings_regional_title".localized) {
             SettingsAppLanguageRow(viewModel: viewModel)
             SettingsTranslationLanguageRow(viewModel: viewModel)
             SettingsFederalStateRow(viewModel: viewModel)

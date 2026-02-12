@@ -5,7 +5,7 @@ struct SettingsDangerSectionView: View {
     @ObservedObject var viewModel: SettingsDangerViewModel
 
     var body: some View {
-        Section {
+        Section("settings_danger_title".localized) {
             Button(role: .destructive) {
                 viewModel.requestConfirmation()
             } label: {

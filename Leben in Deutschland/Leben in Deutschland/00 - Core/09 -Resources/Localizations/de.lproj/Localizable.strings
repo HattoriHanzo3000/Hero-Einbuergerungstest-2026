@@ -163,6 +163,9 @@
 "settings_latest_updates" = "Neueste Aktualisierungen";
 
 "settings_personalisation_title" = "Personalisierung";
+"settings_info_title" = "Über";
+"settings_regional_title" = "Region";
+"settings_danger_title" = "Daten";
 "settings_sound_button" = "Sound";
 "settings_vibration_button" = "Vibration";
 "settings_appearance" = "Erscheinungsbild";
@@ -191,6 +194,10 @@
 "settings_impressum_button" = "Impressum";
 "terms_of_service" = "Nutzungsbedingungen";
 "privacy_policy" = "Datenschutzerklärung";
+
+"mail_device_info_body" = "Bitte lösche die Geräteinformationen unten nicht, da sie uns helfen, dich besser zu unterstützen.\n\n--- Geräteinformationen ---\nApp-Version: %@ (%@)\nGerät: %@\niOS-Version: %@ %@\n\n--- Bitte beschreibe dein Problem oder deine Anfrage unten ---";
+"mail_unavailable_title" = "E-Mail nicht verfügbar";
+"mail_unavailable_message" = "Kein E-Mail-Konto eingerichtet. Du kannst die Support-E-Mail kopieren und in deine bevorzugte E-Mail-App einfügen.";
 
 "about_title" = "Über";
 "version_description" = "Dieses Update bietet wichtige Verbesserungen und Fehlerbehebungen, einschließlich der folgenden Updates:";

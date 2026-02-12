@@ -4,7 +4,7 @@ struct SettingsPremiumSectionView: View {
     @ObservedObject var viewModel: SettingsPremiumViewModel
 
     var body: some View {
-        Section {
+        Section("settings_premium_title".localized) {
             Button {
                 viewModel.handleTap()
             } label: {

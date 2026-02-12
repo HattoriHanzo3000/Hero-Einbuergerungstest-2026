@@ -5,7 +5,7 @@ struct SettingsLegalSectionView: View {
     @ObservedObject var viewModel: SettingsLegalViewModel
 
     var body: some View {
-        Section {
+        Section("legal_title".localized) {
             Button {
                 viewModel.presentImpressum()
             } label: {
@@ -43,11 +43,6 @@ struct SettingsLegalSectionView: View {
             .buttonStyle(.plain)
         }
         .id(languageManager.currentAppLanguage)
-        .sheet(item: $viewModel.presentingWebURL, onDismiss: {
-            viewModel.dismissWeb()
-        }) { document in
-            SettingsLegalWebSheetView(url: document.url)
-        }
     }
 }
 

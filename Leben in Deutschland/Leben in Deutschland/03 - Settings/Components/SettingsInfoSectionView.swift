@@ -8,7 +8,7 @@ struct SettingsInfoSectionView: View {
     private static let appBlue = Color.accentColor
 
     var body: some View {
-        Section {
+        Section("settings_info_title".localized) {
             Button {
                 onAboutTapped()
             } label: {

@@ -163,6 +163,9 @@
 "settings_latest_updates" = "Останні оновлення";
 
 "settings_personalisation_title" = "Персоналізація";
+"settings_info_title" = "Про додаток";
+"settings_regional_title" = "Регіон";
+"settings_danger_title" = "Дані";
 "settings_sound_button" = "Звук";
 "settings_vibration_button" = "Вібрація";
 "settings_appearance" = "Оформлення";
@@ -191,6 +194,10 @@
 "settings_impressum_button" = "Impressum";
 "terms_of_service" = "Умови використання";
 "privacy_policy" = "Політика конфіденційності";
+
+"mail_device_info_body" = "Будь ласка, не видаляй інформацію про пристрій нижче — вона допомагає нам краще тебе підтримувати.\n\n--- Інформація про пристрій ---\nВерсія додатку: %@ (%@)\nПристрій: %@\nВерсія iOS: %@ %@\n\n--- Опиши свою проблему або запит нижче ---";
+"mail_unavailable_title" = "Пошта недоступна";
+"mail_unavailable_message" = "Поштовий акаунт не налаштовано. Можеш скопіювати email підтримки та вставити його в поштовий додаток.";
 
 "about_title" = "Про додаток";
 "version_description" = "Це оновлення включає важливі покращення та виправлення помилок, включаючи наступні оновлення:";

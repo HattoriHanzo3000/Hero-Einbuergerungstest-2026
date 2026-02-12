@@ -166,6 +166,9 @@
 "settings_latest_updates" = "Latest updates";
 
 "settings_personalisation_title" = "Personalisation";
+"settings_info_title" = "About";
+"settings_regional_title" = "Region";
+"settings_danger_title" = "Data";
 "settings_sound_button" = "Sound";
 "settings_vibration_button" = "Vibration";
 "settings_appearance" = "Appearance";
@@ -194,6 +197,10 @@
 "settings_impressum_button" = "Impressum";
 "terms_of_service" = "Terms of Use";
 "privacy_policy" = "Privacy Policy";
+
+"mail_device_info_body" = "Please do not delete the device information below as it helps us provide better support.\n\n--- Device Information ---\nApp Version: %@ (%@)\nDevice: %@\niOS Version: %@ %@\n\n--- Please describe your problem or inquiry below ---";
+"mail_unavailable_title" = "Mail Unavailable";
+"mail_unavailable_message" = "No mail account is configured. You can copy the support email and paste it into your preferred mail app.";
 
 "about_title" = "About";
 "version_description" = "This update provides important improvements and bug fixes, including the following updates:";

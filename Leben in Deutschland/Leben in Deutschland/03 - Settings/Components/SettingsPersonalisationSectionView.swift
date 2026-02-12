@@ -4,7 +4,7 @@ struct SettingsPersonalisationSectionView: View {
     @ObservedObject var viewModel: SettingsPersonalisationViewModel
 
     var body: some View {
-        Section {
+        Section("settings_personalisation_title".localized) {
             Toggle(isOn: hapticsBinding.animation(.easeInOut(duration: 0.15))) {
                 SettingsToggleRowLabel(
                     title: "settings_haptics_toggle".localized,

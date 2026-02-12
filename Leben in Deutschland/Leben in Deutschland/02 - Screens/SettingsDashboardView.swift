@@ -73,6 +73,29 @@ struct SettingsDashboardView: View {
                 onDismiss: { viewModel.supportViewModel.dismissContactMail() }
             )
         }
+        .sheet(isPresented: faqSheetBinding, onDismiss: { viewModel.supportViewModel.dismissFAQ() }) {
+            if let url = viewModel.supportViewModel.faqURL {
+                SafariSheetView(url: url)
+            } else {
+                Text("FAQ is currently unavailable.")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+                    .padding()
+            }
+        }
+        .sheet(item: legalWebBinding, onDismiss: { viewModel.legalViewModel.dismissWeb() }) { document in
+            SafariSheetView(url: document.url)
+        }
+        .alert("mail_unavailable_title".localized, isPresented: Binding(
+            get: { viewModel.supportViewModel.showMailUnavailableAlert },
+            set: { if !$0 { viewModel.supportViewModel.dismissMailUnavailableAlert() } }
+        )) {
+            Button("ok_button".localized) {
+                viewModel.supportViewModel.dismissMailUnavailableAlert()
+            }
+        } message: {
+            Text("mail_unavailable_message".localized)
+        }
         .overlay {
             if languageManager.isApplyingLanguageChange {
                 Color(.systemBackground)
@@ -101,6 +124,19 @@ struct SettingsDashboardView: View {
         )
     }
 
+    private var faqSheetBinding: Binding<Bool> {
+        Binding(
+            get: { viewModel.supportViewModel.isPresentingFAQ },
+            set: { if !$0 { viewModel.supportViewModel.dismissFAQ() } }
+        )
+    }
+
+    private var legalWebBinding: Binding<SettingsLegalViewModel.LegalDocument?> {
+        Binding(
+            get: { viewModel.legalViewModel.presentingWebURL },
+            set: { viewModel.legalViewModel.presentingWebURL = $0 }
+        )
+    }
 }
 
 #Preview("Settings Dashboard") {

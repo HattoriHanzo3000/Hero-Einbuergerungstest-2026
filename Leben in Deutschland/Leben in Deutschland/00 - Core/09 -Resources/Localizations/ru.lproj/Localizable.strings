@@ -164,6 +164,9 @@
 "settings_latest_updates" = "Последние обновления";
 
 "settings_personalisation_title" = "Персонализация";
+"settings_info_title" = "О приложении";
+"settings_regional_title" = "Регион";
+"settings_danger_title" = "Данные";
 "settings_sound_button" = "Звук";
 "settings_vibration_button" = "Вибрация";
 "settings_appearance" = "Оформление";
@@ -192,6 +195,10 @@
 "settings_impressum_button" = "Impressum";
 "terms_of_service" = "Условия использования";
 "privacy_policy" = "Политика конфиденциальности";
+
+"mail_device_info_body" = "Пожалуйста, не удаляй информацию об устройстве ниже — она помогает нам лучше тебя поддержать.\n\n--- Информация об устройстве ---\nВерсия приложения: %@ (%@)\nУстройство: %@\nВерсия iOS: %@ %@\n\n--- Опиши свою проблему или вопрос ниже ---";
+"mail_unavailable_title" = "Почта недоступна";
+"mail_unavailable_message" = "Почтовый аккаунт не настроен. Можешь скопировать email поддержки и вставить его в приложение почты.";
 
 "about_title" = "О приложении";
 "version_description" = "Это обновление включает важные улучшения и исправления ошибок, включая следующие обновления:";
