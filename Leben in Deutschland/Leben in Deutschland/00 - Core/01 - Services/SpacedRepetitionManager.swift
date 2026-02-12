@@ -9,6 +9,8 @@ protocol SpacedRepetitionManaging: AnyObject {
     func recordReset(for questionId: String)
     func readinessPercentage(totalQuestions: Int) -> Int
     func progressBuckets(totalQuestions: Int) -> (familiar: Int, reinforced: Int, mastered: Int, expert: Int, total: Int)
+    /// Clears all statistics in memory and persistence (e.g. app reset).
+    func clearAllStatistics()
 }
 
 // MARK: - Spaced Repetition Manager
@@ -17,7 +19,6 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
     
     @Published private(set) var statistics: [String: QuestionStatisticsModel] = [:]
     
-    private let statisticsKey = "QuestionStatistics"
     private let defaults: UserDefaults
     private let calendar = Calendar.current
     
@@ -131,7 +132,7 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
     
     private func computeDaysUntilTest() -> Int {
         let testDate = OnboardingPreferences.shared.testDate
-            ?? defaults.object(forKey: "selectedTestDate") as? Date
+            ?? defaults.object(forKey: UserDefaultsKeys.selectedTestDate) as? Date
         guard let date = testDate else { return LayoutMetrics.maxHorizonDays }
         let days = calendar.dateComponents([.day], from: Date(), to: date).day ?? 0
         return min(max(0, days), LayoutMetrics.maxHorizonDays)
@@ -172,12 +173,17 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
         let expert = statistics.values.filter { $0.correctCount >= 4 }.count
         return (familiar, reinforced, mastered, expert, totalQuestions)
     }
+
+    func clearAllStatistics() {
+        statistics = [:]
+        defaults.removeObject(forKey: UserDefaultsKeys.questionStatistics)
+    }
 }
 
 // MARK: - Persistence
 private extension SpacedRepetitionManager {
     func loadStatistics() {
-        guard let data = defaults.data(forKey: statisticsKey) else {
+        guard let data = defaults.data(forKey: UserDefaultsKeys.questionStatistics) else {
             statistics = [:]
             return
         }
@@ -185,10 +191,10 @@ private extension SpacedRepetitionManager {
             statistics = decoded
         }
     }
-    
+
     func saveStatistics() {
         if let data = try? JSONEncoder().encode(statistics) {
-            defaults.set(data, forKey: statisticsKey)
+            defaults.set(data, forKey: UserDefaultsKeys.questionStatistics)
         }
     }
 }

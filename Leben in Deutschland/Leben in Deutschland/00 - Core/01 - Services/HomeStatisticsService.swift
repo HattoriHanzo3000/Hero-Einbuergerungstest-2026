@@ -10,9 +10,8 @@ protocol HomeStatisticsProviding {
 /// Reads persisted spaced-repetition metadata from `UserDefaults` and transforms it into `HomeStatisticsModel`.
 final class HomeStatisticsService: HomeStatisticsProviding {
     private let defaults: UserDefaults
-    private let statisticsKey = "QuestionStatistics"
     private let totalQuestions: Int
-    
+
     init(
         defaults: UserDefaults = .standard,
         totalQuestions: Int = LayoutMetrics.totalFederalQuestions
@@ -20,9 +19,9 @@ final class HomeStatisticsService: HomeStatisticsProviding {
         self.defaults = defaults
         self.totalQuestions = totalQuestions
     }
-    
+
     func loadStatistics() -> HomeStatisticsModel {
-        guard let data = defaults.data(forKey: statisticsKey),
+        guard let data = defaults.data(forKey: UserDefaultsKeys.questionStatistics),
               let decodedStatistics = try? JSONDecoder().decode([String: QuestionStatisticRecord].self, from: data)
         else {
             // On first launch or when no statistics exist, return 0% readiness

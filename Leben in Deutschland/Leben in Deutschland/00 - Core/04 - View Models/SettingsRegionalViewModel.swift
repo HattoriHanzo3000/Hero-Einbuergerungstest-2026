@@ -62,7 +62,7 @@ final class SettingsRegionalViewModel: ObservableObject {
         self.federalStateName = initialState
         self.originalState = self.onboardingPreferences.selectedState ?? stateManager.selectedState ?? initialState
 
-        let initialDate = self.onboardingPreferences.testDate ?? defaults.object(forKey: UserDefaultsKey.testDateRaw) as? Date
+        let initialDate = self.onboardingPreferences.testDate ?? defaults.object(forKey: UserDefaultsKeys.selectedTestDate) as? Date
         self.selectedTestDate = initialDate
         self.isTestDateTrackingEnabled = initialDate != nil
 
@@ -147,7 +147,7 @@ final class SettingsRegionalViewModel: ObservableObject {
         isTestDateTrackingEnabled = true
         self.onboardingPreferences.testDate = date
         self.onboardingPreferences.testDateDontKnow = false
-        defaults.set(date, forKey: UserDefaultsKey.testDateRaw)
+        defaults.set(date, forKey: UserDefaultsKeys.selectedTestDate)
     }
 
     func clearTestDate() {
@@ -155,7 +155,7 @@ final class SettingsRegionalViewModel: ObservableObject {
         isTestDateTrackingEnabled = false
         self.onboardingPreferences.testDate = nil
         self.onboardingPreferences.testDateDontKnow = true
-        defaults.removeObject(forKey: UserDefaultsKey.testDateRaw)
+        defaults.removeObject(forKey: UserDefaultsKeys.selectedTestDate)
     }
 
     func activateTestDateTracking() {
@@ -260,8 +260,5 @@ final class SettingsRegionalViewModel: ObservableObject {
         self.onboardingPreferences.selectedState = name
     }
 
-    private enum UserDefaultsKey {
-        static let testDateRaw = "selectedTestDate"
-    }
 }
 

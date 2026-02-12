@@ -3,6 +3,7 @@ import AVFoundation
 
 struct OnboardingStartView: View {
     @State private var player: AVPlayer?
+    @State private var minimumLoadingElapsed = false
     @State private var endObserver: NSObjectProtocol?
     @State private var didAdvance: Bool = false
     @Environment(\.scenePhase) private var scenePhase
@@ -10,31 +11,29 @@ struct OnboardingStartView: View {
     
     var body: some View {
         ZStack {
-            // Background color
-            Color.accentColor
+            // System loading screen style (matches Launch Screen)
+            Color("LaunchScreenBackground")
                 .ignoresSafeArea(.all)
-            
-            // Video player or loading state
-            if let player = player {
+
+            if let player = player, minimumLoadingElapsed {
                 AlphaVideoPlayerView(player: player, videoGravity: .resizeAspectFill)
                     .ignoresSafeArea(.all)
                     .onAppear {
                         player.play()
                     }
             } else {
-                VStack {
-                    ProgressView()
-                        .scaleEffect(1.5)
-                    Text("LOADING".localized)
-                        .font(.headline)
-                        .foregroundColor(.gray)
-                        .padding(.top, 20)
-                }
+                ProgressView()
+                    .scaleEffect(1.5)
+                    .tint(.secondary)
             }
         }
         .onAppear {
             setupAudioSession()
             setupVideo()
+            // Minimum 1 second loading screen display
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                minimumLoadingElapsed = true
+            }
             // Fallback: auto-advance even if video failed to finish rendering
             DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.videoFallbackDelay) {
                 if !didAdvance {
@@ -157,11 +156,6 @@ struct OnboardingStartView: View {
 final class PlayerContainerView: UIView {
     override static var layerClass: AnyClass { AVPlayerLayer.self }
     var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        playerLayer.frame = bounds
-    }
 }
 
 struct AlphaVideoPlayerView: UIViewRepresentable {

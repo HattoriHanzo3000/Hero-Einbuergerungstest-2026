@@ -155,7 +155,7 @@ private extension SpacedRepetitionViewModel {
 private extension SpacedRepetitionViewModel {
     static func computeDaysUntilTest() -> Int {
         let testDate = OnboardingPreferences.shared.testDate
-            ?? UserDefaults.standard.object(forKey: "selectedTestDate") as? Date
+            ?? UserDefaults.standard.object(forKey: UserDefaultsKeys.selectedTestDate) as? Date
         guard let date = testDate else { return LayoutMetrics.maxHorizonDays }
         let days = Calendar.current.dateComponents([.day], from: Date(), to: date).day ?? 0
         return min(max(0, days), LayoutMetrics.maxHorizonDays)

@@ -97,6 +97,7 @@ final class SettingsResetService: SettingsResetServicing {
     private func clearPersistedProgress() {
         answersService.clearAllAnswers()
         categoriesStateService.clearAllState()
+        SpacedRepetitionManager.shared.clearAllStatistics()
     }
 }
 

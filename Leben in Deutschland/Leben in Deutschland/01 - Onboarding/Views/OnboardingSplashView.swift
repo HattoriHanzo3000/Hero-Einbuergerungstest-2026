@@ -4,17 +4,18 @@ import AVFoundation
 // MARK: - Onboarding Splash View
 struct OnboardingSplashView: View {
     @State private var player: AVPlayer?
+    @State private var minimumLoadingElapsed = false
     @State private var isVideoFinished = false
     @State private var endObserver: NSObjectProtocol?
     let onFinish: () -> Void
-    
+
     var body: some View {
         ZStack {
-            // Background color matching the old project
-            Color(red: 134/255, green: 197/255, blue: 255/255)
+            // System loading screen style (matches Launch Screen)
+            Color("LaunchScreenBackground")
                 .ignoresSafeArea(.all)
-            
-            if let player = player {
+
+            if let player = player, minimumLoadingElapsed {
                 AlphaVideoPlayerView(player: player, videoGravity: .resizeAspectFill)
                     .ignoresSafeArea(.all)
                     .onAppear {
@@ -24,15 +25,18 @@ struct OnboardingSplashView: View {
                         player.pause()
                     }
             } else {
-                // Loading state
                 ProgressView()
                     .scaleEffect(1.5)
-                    .tint(.white)
+                    .tint(.secondary)
             }
         }
         .onAppear {
             setupAudioSession()
             setupVideo()
+            // Minimum 0.5 seconds loading screen display
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                minimumLoadingElapsed = true
+            }
         }
         .onDisappear {
             cleanupPlayback()

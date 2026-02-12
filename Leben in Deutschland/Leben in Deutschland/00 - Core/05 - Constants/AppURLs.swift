@@ -9,7 +9,7 @@
 import Foundation
 
 enum AppURLs: Sendable {
-    private static nonisolated(unsafe) let base = "https://www.gizatech.de/hero-leben-in-deutschland"
+    private static nonisolated var base: String { "https://www.gizatech.de/hero-leben-in-deutschland" }
 
     nonisolated static var faq: URL? { URL(string: "\(base)/faq") }
     nonisolated static var impressum: URL { URL(string: "\(base)/impressum")! }

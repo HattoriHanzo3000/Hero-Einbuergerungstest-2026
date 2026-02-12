@@ -14,8 +14,7 @@ final class FavoritesManager: ObservableObject, FavoritesManaging {
     
     /// Ordered list: oldest first, newest last. For “newest first” display, use reversed.
     @Published private(set) var favoriteQuestionIds: [String] = []
-    
-    private let favoritesKey = "favoriteQuestionIds"
+
     private let defaults: UserDefaults
     
     private init(defaults: UserDefaults = .standard) {
@@ -46,7 +45,7 @@ final class FavoritesManager: ObservableObject, FavoritesManaging {
 // MARK: - Persistence
 private extension FavoritesManager {
     func loadFavorites() {
-        guard let data = defaults.array(forKey: favoritesKey) as? [String] else {
+        guard let data = defaults.array(forKey: UserDefaultsKeys.favoriteQuestionIds) as? [String] else {
             favoriteQuestionIds = []
             return
         }
@@ -54,7 +53,7 @@ private extension FavoritesManager {
     }
     
     func saveFavorites() {
-        defaults.set(favoriteQuestionIds, forKey: favoritesKey)
+        defaults.set(favoriteQuestionIds, forKey: UserDefaultsKeys.favoriteQuestionIds)
     }
 }
 
