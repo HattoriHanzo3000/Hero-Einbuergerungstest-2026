@@ -60,190 +60,60 @@ struct TestAnswersView: View {
         }
     }
     
-    // MARK: - Header (matching SpacedRepetitionQuestionCard design)
+    // MARK: - Header
     private var headerView: some View {
-        headerContent
-            .padding(.vertical, layoutMetrics.adaptive(18))
-            .padding(.horizontal, layoutMetrics.adaptive(20))
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(liquidGlassBackground)
-            .clipShape(headerRoundedRectangle)
-            .overlay(headerBorderOverlay)
-            .padding(.horizontal, layoutMetrics.adaptive(20))
-            .padding(.top, layoutMetrics.adaptive(8))
-            .padding(.bottom, layoutMetrics.adaptive(12)) // Match spaced repetition: space between header and separator
-    }
-    
-    private var headerContent: some View {
-        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(16)) {
-            // Back button (down to dismiss)
-            HStack {
-                Button(action: {
-                    HapticManager.shared.lightImpact()
-                    dismiss()
-                }) {
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
-                        .foregroundColor(.white)
-                        .padding(layoutMetrics.adaptive(10))
-                        .background(
-                            Circle()
-                                .fill(Color.white.opacity(0.18))
+        QuestionCardHeader(
+            onBackTapped: {
+                HapticManager.shared.lightImpact()
+                dismiss()
+            },
+            backIcon: .down,
+            showPremiumButton: false,
+            gradient: .orange,
+            onPremiumTap: nil,
+            title: "your_answers".localized,
+            progress: nil,
+            questionId: currentQuestion?.originalId,
+            onReportTapped: { showingFeedbackReport = true },
+            trailingActions: {
+                HStack(spacing: layoutMetrics.adaptive(8)) {
+                    if languageManager.currentTranslationLanguage != "de" {
+                        QuizHeaderIconButton(
+                            systemName: "globe",
+                            isActive: isTranslationActive,
+                            activeTint: Color("AppOrange"),
+                            inactiveTint: .white,
+                            showGlow: false,
+                            showStroke: false,
+                            accessibilityLabel: "spaced_translation_button_accessibility_label".localized,
+                            accessibilityHint: nil,
+                            action: {
+                                HapticManager.shared.lightImpact()
+                                isTranslationActive.toggle()
+                            }
                         )
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("back_button_accessibility_label".localized)
-                
-                Spacer()
-            }
-            
-            // Title
-            Text("your_answers".localized)
-                .font(.system(.title2, design: .rounded).weight(.bold))
-                .foregroundColor(.white)
-            
-            // Question label and action buttons
-            questionHeaderRow
-        }
-    }
-    
-    private var questionHeaderRow: some View {
-        HStack {
-            questionLabelView
-            Spacer()
-            headerActionButtons
-        }
-    }
-    
-    private var questionLabelView: some View {
-        HStack(spacing: 8) {
-            if let q = currentQuestion {
-                Text("question_label".localized + " \(q.originalId)")
-                    .font(.system(.headline, design: .rounded).weight(.semibold))
-                    .foregroundColor(.white)
-                    .accessibilityLabel("question_label".localized + " " + q.originalId)
-                
-                Button(action: {
-                    HapticManager.shared.lightImpact()
-                    showingFeedbackReport = true
-                }) {
-                    Image(systemName: "flag.fill")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(.red)
+                    }
+                    if let q = currentQuestion {
+                        QuizHeaderIconButton(
+                            systemName: "heart",
+                            isActive: favoritesManager.isFavorite(q.originalId),
+                            activeTint: Color("AppPink"),
+                            inactiveTint: .white,
+                            showGlow: false,
+                            showStroke: false,
+                            useFilledWhenActive: true,
+                            accessibilityLabel: "spaced_favorite_button_accessibility_label".localized,
+                            accessibilityHint: nil,
+                            action: {
+                                HapticManager.shared.lightImpact()
+                                favoritesManager.toggleFavorite(for: q.originalId)
+                            }
+                        )
+                    }
                 }
             }
-        }
-    }
-    
-    private var headerActionButtons: some View {
-        HStack(spacing: layoutMetrics.adaptive(8)) {
-            // Translation button (globe) — only show when translation language is not German (test is always in German)
-            if languageManager.currentTranslationLanguage != "de" {
-                QuizHeaderIconButton(
-                    systemName: "globe",
-                    isActive: isTranslationActive,
-                    activeTint: Color("AppOrange"),
-                    inactiveTint: .white,
-                    showGlow: false,
-                    showStroke: false,
-                    accessibilityLabel: "spaced_translation_button_accessibility_label".localized,
-                    accessibilityHint: nil,
-                    action: {
-                        HapticManager.shared.lightImpact()
-                        isTranslationActive.toggle()
-                    }
-                )
-            }
-            
-            // Favorite button
-            if let q = currentQuestion {
-                QuizHeaderIconButton(
-                    systemName: "heart",
-                    isActive: favoritesManager.isFavorite(q.originalId),
-                    activeTint: Color("AppPink"),
-                    inactiveTint: .white,
-                    showGlow: false,
-                    showStroke: false,
-                    useFilledWhenActive: true,
-                    accessibilityLabel: "spaced_favorite_button_accessibility_label".localized,
-                    accessibilityHint: nil,
-                    action: {
-                        HapticManager.shared.lightImpact()
-                        favoritesManager.toggleFavorite(for: q.originalId)
-                    }
-                )
-            }
-        }
-    }
-    
-    private var headerRoundedRectangle: RoundedRectangle {
-        RoundedRectangle(
-            cornerRadius: layoutMetrics.adaptive(32),
-            style: .continuous
         )
-    }
-    
-    private var headerBorderOverlay: some View {
-        RoundedRectangle(
-            cornerRadius: layoutMetrics.adaptive(32),
-            style: .continuous
-        )
-        .stroke(
-            LinearGradient(
-                colors: [
-                    .white.opacity(0.4),
-                    .white.opacity(0.08)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ),
-            lineWidth: 0.8
-        )
-    }
-    
-    /// Same as test simulation: gradient from App Orange to App Red.
-    private var liquidGlassBackground: some View {
-        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        Color("AppOrange").opacity(0.95),
-                        Color("AppOrange").opacity(0.75),
-                        Color(red: 0.77, green: 0.21, blue: 0.12).opacity(0.85)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .overlay(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(0.20),
-                        Color.white.opacity(0.05),
-                        Color.clear
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
-                    .stroke(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(0.45),
-                                Color.white.opacity(0.12)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ),
-                        lineWidth: 0.6
-                    )
-            )
-            .background(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(38), style: .continuous)
-                    .fill(Color.white.opacity(0.05))
-            )
+        .padding(.bottom, layoutMetrics.adaptive(12))
     }
     
     // MARK: - Content

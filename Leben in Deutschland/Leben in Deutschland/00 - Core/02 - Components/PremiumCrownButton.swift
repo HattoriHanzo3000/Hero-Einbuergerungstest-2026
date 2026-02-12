@@ -10,22 +10,32 @@ import SwiftUI
 
 // MARK: - Premium Crown Button
 /// Filled crown icon that opens premium/paywall. Reusable across the app.
+/// Scales with Dynamic Type to match AdaptiveIconButton (back, search).
 struct PremiumCrownButton: View {
     let action: () -> Void
     
-    /// Icon size. Touch target is always at least 44pt.
-    var iconSize: CGFloat = 20
     /// Foreground color (e.g. .white on dark headers, .primary on light).
     var color: Color = .white
     
     @Environment(\.layoutMetrics) private var layoutMetrics
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
-    private var adaptiveIconSize: CGFloat {
-        layoutMetrics.adaptive(iconSize)
+    private var controlSize: CGFloat {
+        layoutMetrics.adaptive(baseControlSize(for: dynamicTypeSize))
     }
     
-    private var minTouchSize: CGFloat {
-        layoutMetrics.adaptive(44)
+    /// Matches AdaptiveIconButton.standard sizing for Dynamic Type.
+    private func baseControlSize(for dynamicType: DynamicTypeSize) -> CGFloat {
+        switch dynamicType {
+        case .xSmall, .small, .medium:
+            return 36
+        case .large:
+            return 38
+        case .xLarge:
+            return 40
+        default:
+            return 44
+        }
     }
     
     var body: some View {
@@ -34,10 +44,12 @@ struct PremiumCrownButton: View {
             action()
         }) {
             Image(systemName: "crown.fill")
-                .font(.system(size: adaptiveIconSize, weight: .semibold))
+                .font(.system(.body, design: .rounded).weight(.semibold))
                 .foregroundColor(color)
-                .frame(minWidth: minTouchSize, minHeight: minTouchSize)
+                .frame(width: controlSize, height: controlSize)
+                .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
         .accessibilityHidden(true)
     }
 }
