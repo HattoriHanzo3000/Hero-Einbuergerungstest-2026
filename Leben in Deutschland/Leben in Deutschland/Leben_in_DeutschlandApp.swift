@@ -28,8 +28,9 @@ struct Leben_in_DeutschlandApp: App {
                     switch appFlow.stage {
                     case .startAnimation:
                         OnboardingStartView {
-                            // After the intro video, start onboarding
+                            // After the intro video, start onboarding — clear both storage layers
                             OnboardingPreferences.shared.clearOnboardingSelections()
+                            stateManager.clearSelectedState()
                             appFlow.stage = .onboardingLanguage
                         }
                     case .onboardingLanguage:

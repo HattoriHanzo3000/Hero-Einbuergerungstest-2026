@@ -19,18 +19,18 @@ class StateManager: ObservableObject {
         guard selectedState != state else { return }
         objectWillChange.send()
         selectedState = state
-        UserDefaults.standard.set(state, forKey: "selectedState")
+        UserDefaults.standard.set(state, forKey: UserDefaultsKeys.selectedState)
     }
     
     func clearSelectedState() {
         selectedState = nil
-        UserDefaults.standard.removeObject(forKey: "selectedState")
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.selectedState)
     }
     
     // MARK: - Private Methods
     
+    /// Loads persisted state. Returns nil when none exists (user has not selected yet).
     private func loadSavedState() {
-        // Load saved state, or default to "Berlin" if none exists
-        selectedState = UserDefaults.standard.string(forKey: "selectedState") ?? "Berlin"
+        selectedState = UserDefaults.standard.string(forKey: UserDefaultsKeys.selectedState)
     }
 }

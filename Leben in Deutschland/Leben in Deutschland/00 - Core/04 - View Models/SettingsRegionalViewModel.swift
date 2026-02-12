@@ -220,10 +220,11 @@ final class SettingsRegionalViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 guard let self else { return }
-                let selected = newValue ?? FederalStateModel.allStates.first?.name ?? "Berlin"
-                self.federalStateName = selected
-                self.originalState = selected
-                self.onboardingPreferences.selectedState = selected
+                // Display fallback for Settings picker (needs a String); persist actual value only
+                let displayValue = newValue ?? FederalStateModel.allStates.first?.name ?? "Berlin"
+                self.federalStateName = displayValue
+                self.originalState = displayValue
+                self.onboardingPreferences.selectedState = newValue
             }
             .store(in: &cancellables)
     }

@@ -10,7 +10,7 @@ final class OnboardingPreferences {
     
     private enum Keys {
         static let hasLaunchedBefore = "hasLaunchedBefore"
-        static let selectedState = "selectedState"
+        static let selectedState = UserDefaultsKeys.selectedState
         static let translationSelected = "translationSelected"
         static let translationLanguageCode = "translationLanguageCode"
         static let testDateDontKnow = "testDateDontKnow"
