@@ -13,7 +13,7 @@ final class SoundManager: ObservableObject {
     }
 
     private let defaults: UserDefaults
-    private static let preferenceKey = "sound_enabled"
+    private static let preferenceKey = UserDefaultsKeys.soundEnabled
 
     private init(defaults: UserDefaults = .standard) {
         self.defaults = defaults

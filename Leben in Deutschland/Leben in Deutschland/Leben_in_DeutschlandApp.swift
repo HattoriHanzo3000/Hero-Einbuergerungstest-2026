@@ -15,7 +15,7 @@ struct Leben_in_DeutschlandApp: App {
     @StateObject private var soundManager = SoundManager.shared
     @StateObject private var appFlow = AppFlow()
     @StateObject private var stateManager = StateManager.shared
-    @AppStorage("app_appearance") private var appAppearance: String = "system"
+    @AppStorage(UserDefaultsKeys.appearance) private var appAppearance: String = "system"
     
     init() {
         configureTabBarAppearance()

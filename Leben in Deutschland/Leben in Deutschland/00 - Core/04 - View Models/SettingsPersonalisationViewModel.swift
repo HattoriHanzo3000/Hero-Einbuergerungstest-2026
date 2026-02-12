@@ -12,7 +12,7 @@ final class SettingsPersonalisationViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
 
     private enum Keys {
-        static let appearance = "app_appearance"
+        static let appearance = UserDefaultsKeys.appearance
         static let haptics = UserDefaultsKeys.vibrationEnabled
     }
 
@@ -33,6 +33,7 @@ final class SettingsPersonalisationViewModel: ObservableObject {
 
     func setAppearance(_ mode: AppearanceMode) {
         guard appearanceMode != mode else { return }
+        HapticManager.shared.selectionChanged()
         appearanceMode = mode
         defaults.set(mode.rawValue, forKey: Keys.appearance)
     }
