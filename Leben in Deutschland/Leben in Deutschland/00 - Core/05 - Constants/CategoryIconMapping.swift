@@ -18,7 +18,7 @@ enum CategoryIconMapping {
         ["Elections", "Wahlen", "Выборы", "Вибори"]: "checkmark.square.fill",
         ["State Institutions", "Staatsorgane", "Гос Органы", "Державні органи"]: "building.2.fill",
         ["Economy and Work", "Wirtschaft und Arbeit", "Экономика и работа", "Робота та Економіка"]: "briefcase.fill",
-        ["Society and Culture", "Gesellschaft und Kultur", "Общество и Культура", "Суспільство та Культура"]: "face.smiling",
+        ["Society and Culture", "Gesellschaft und Kultur", "Общество и Культура", "Суспільство та Культура"]: "face.smiling.inverse",
         ["History", "Geschichte", "История", "Історія"]: "book.closed.fill",
         ["Europe", "Europa", "Европа", "Європа та ЄС"]: "eurosign",
         ["Federal States", "Bundesländer", "Федеральные земли", "Федеральні землі"]: "mappin.and.ellipse"

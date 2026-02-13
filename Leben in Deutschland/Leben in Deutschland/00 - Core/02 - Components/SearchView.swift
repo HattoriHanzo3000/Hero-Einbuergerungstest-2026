@@ -2,7 +2,7 @@
 //  SearchView.swift
 //  Leben in Deutschland
 //
-//  Search bar with results list. Used by CategoriesView in search mode.
+//  Search bar with results list. Used by SearchTabView.
 //
 
 import SwiftUI

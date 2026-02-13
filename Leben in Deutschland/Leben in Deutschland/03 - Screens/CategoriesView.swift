@@ -13,8 +13,7 @@ struct CategoriesView: View {
     @EnvironmentObject private var premiumManager: PremiumManager
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
-    @Environment(AppRouter.self) private var router
-    
+
     @StateObject private var viewModel = CategoriesViewModel()
     @ObservedObject private var answersService = AnswersService.shared
     @State private var expandedCategoryNames: Set<String> = []
@@ -125,6 +124,8 @@ struct CategoriesView: View {
     NavigationStack(path: $router.navigationPath) {
         CategoriesView()
             .environmentObject(LanguageManager())
+            .environmentObject(PremiumManager.shared)
             .environment(router)
+            .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
     }
 }

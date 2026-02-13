@@ -2,7 +2,7 @@
 //  CategoriesTabHeaderCard.swift
 //  Leben in Deutschland
 //
-//  Header card for Categories tab. Layout: back | crown | search (top row),
+//  Header card for Categories tab. Layout: back | crown (top row),
 //  mascot + message (bottom row). Uses HeaderCard for styling.
 //  NO ANIMATION — icon and content update instantly.
 //

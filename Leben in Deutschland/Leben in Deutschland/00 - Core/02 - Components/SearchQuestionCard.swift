@@ -3,7 +3,7 @@
 //  Leben in Deutschland
 //
 //  Search result card showing question text, optional translation, and metadata.
-//  Used by CategoriesView in search mode.
+//  Used by SearchView in SearchTabView.
 //
 
 import SwiftUI

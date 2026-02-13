@@ -17,8 +17,7 @@ class CategoriesViewModel: ObservableObject {
     @Published var errorMessage: String?
     
     private let contentService: ContentService
-    private var cancellables = Set<AnyCancellable>()
-    
+
     // MARK: - Initialization
     
     init() {
@@ -45,12 +44,7 @@ class CategoriesViewModel: ObservableObject {
             await HintService.shared.loadTranslationHints(for: translation)
         }
     }
-    
-    /// Get category by name
-    func getCategory(by name: String) -> CategoryModel? {
-        return categories.first { $0.name == name }
-    }
-    
+
     // MARK: - Search
     
     /// Maximum number of search results to return.
