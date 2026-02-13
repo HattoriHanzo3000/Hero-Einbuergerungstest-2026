@@ -22,7 +22,6 @@ enum UserDefaultsKeys {
 
     // MARK: - Categories View
     static let categoriesExpanded = "categories_expanded_categories"
-    static let categoriesScrollPosition = "categories_scroll_position"
 
     /// Prefix for Learning mode position keys. Full key: "\(subcategoryPositionPrefix)\(subcategoryName)"
     static let subcategoryPositionPrefix = "subcategory_position_"

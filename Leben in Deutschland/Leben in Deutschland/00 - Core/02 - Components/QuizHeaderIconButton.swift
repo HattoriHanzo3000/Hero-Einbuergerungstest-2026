@@ -1,7 +1,7 @@
 import SwiftUI
 
 // MARK: - Quiz Header Icon Button
-/// A circular icon control used in quiz-style headers (e.g., translation toggle, favorites).
+/// A circular icon control used in question card header cards (e.g., translation toggle, favorites).
 /// Keeps the glass background, glow animation, and accessibility traits consistent.
 struct QuizHeaderIconButton: View {
     let systemName: String

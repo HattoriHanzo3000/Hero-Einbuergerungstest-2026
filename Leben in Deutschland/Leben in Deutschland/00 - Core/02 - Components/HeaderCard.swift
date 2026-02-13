@@ -1,14 +1,15 @@
 //
-//  HeaderContainer.swift
+//  HeaderCard.swift
 //  Leben in Deutschland
 //
-//  Shared container for screen and question card headers. Applies liquid glass background, border, shadow.
+//  Shared card container for headers. Applies liquid glass background, border, shadow.
+//  Used by ScreenHeaderCard and others. Header = fixed section; HeaderCard = rounded card inside.
 //
 
 import SwiftUI
 
-// MARK: - Header Container
-struct HeaderContainer<Content: View>: View {
+// MARK: - Header Card
+struct HeaderCard<Content: View>: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
 
     var gradient: LiquidGlassGradient = .blue

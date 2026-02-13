@@ -60,7 +60,7 @@ extension View {
         layoutMetrics(LayoutMetrics.make(for: size))
     }
     
-    /// Standard padding for screen headers (used by Home, Progress, etc.).
+    /// Standard padding for header (fixed section) containing header card (used by Home, Progress, etc.).
     func screenHeaderPadding(metrics: LayoutMetrics) -> some View {
         self
             .padding(.horizontal, metrics.adaptive(LayoutMetrics.headerHorizontalPadding))

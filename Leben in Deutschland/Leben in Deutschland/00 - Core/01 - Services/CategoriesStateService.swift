@@ -33,28 +33,10 @@ class CategoriesStateService {
         UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.categoriesExpanded)
     }
 
-    // MARK: - Scroll Position
-
-    /// Save scroll position (top or bottom)
-    func saveScrollPosition(isAtBottom: Bool) {
-        UserDefaults.standard.set(isAtBottom, forKey: UserDefaultsKeys.categoriesScrollPosition)
-    }
-
-    /// Load scroll position
-    func loadScrollPosition() -> Bool {
-        return UserDefaults.standard.bool(forKey: UserDefaultsKeys.categoriesScrollPosition)
-    }
-
-    /// Clear scroll position
-    func clearScrollPosition() {
-        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.categoriesScrollPosition)
-    }
-    
     // MARK: - Clear All State
     
     /// Clear all Categories view state
     func clearAllState() {
         clearExpandedCategories()
-        clearScrollPosition()
     }
 }

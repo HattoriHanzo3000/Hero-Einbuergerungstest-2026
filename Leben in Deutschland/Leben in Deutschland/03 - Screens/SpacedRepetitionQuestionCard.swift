@@ -229,7 +229,7 @@ private struct HintIconButton: View {
 // MARK: - Header
 private extension SpacedRepetitionQuestionCard {
     var headerView: some View {
-        QuestionCardHeader(
+        QuestionCardHeaderCard(
             onBackTapped: onBackTapped,
             showPremiumButton: onBackTapped != nil,
             onPremiumTap: { premiumManager.presentPaywall() },

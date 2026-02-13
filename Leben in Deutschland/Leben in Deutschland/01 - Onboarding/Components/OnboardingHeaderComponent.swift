@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Onboarding Header Component (Liquid Glass, matches Home/Test Header)
+// MARK: - Onboarding Header Card (Liquid Glass, matches ScreenHeaderCard style)
 struct OnboardingHeaderComponent: View {
     let currentStep: Int
     let totalSteps: Int
@@ -60,7 +60,7 @@ struct OnboardingHeaderComponent: View {
                 .accessibilityLabel("Progress")
                 .accessibilityValue("\(currentStep) of \(totalSteps)")
             
-            // Mascot + content row (same layout as HomeHeader / TestHeaderContent)
+            // Mascot + content row (same layout as ScreenHeaderCard)
             HStack(alignment: .center, spacing: mascotToContentSpacing) {
                 OnboardingMascotView(
                     playSignal: playSignal,
@@ -69,7 +69,7 @@ struct OnboardingHeaderComponent: View {
                 .frame(width: mascotSize, height: mascotSize)
                 
                 if let selectedState = selectedState {
-                    // With title: state name + slogan (HomeHeader style)
+                    // With title: state name + slogan (ScreenHeaderCard style)
                     VStack(alignment: .leading, spacing: titleToSloganSpacing) {
                         Text(getLocalizedStateName(selectedState))
                             .font(.system(.title, design: .rounded).bold())
@@ -84,7 +84,7 @@ struct OnboardingHeaderComponent: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
-                    // Without title: message only (TestHeaderContent style)
+                    // Without title: message only
                     Text(formattedMessage)
                         .font(.system(.body, design: .rounded).weight(.medium))
                         .lineSpacing(4)

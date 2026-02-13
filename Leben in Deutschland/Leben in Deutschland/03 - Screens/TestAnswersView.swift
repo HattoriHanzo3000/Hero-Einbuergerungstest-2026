@@ -64,7 +64,7 @@ struct TestAnswersView: View {
     
     // MARK: - Header
     private var headerView: some View {
-        QuestionCardHeader(
+        QuestionCardHeaderCard(
             onBackTapped: {
                 HapticManager.shared.lightImpact()
                 dismiss()

@@ -2,7 +2,7 @@
 //  LiquidGlassBackground.swift
 //  Leben in Deutschland
 //
-//  Shared gradient background for headers. Used by screen headers and question card headers.
+//  Shared gradient background for header cards. Used by ScreenHeaderCard, QuestionCardHeaderCard, etc.
 //
 
 import SwiftUI

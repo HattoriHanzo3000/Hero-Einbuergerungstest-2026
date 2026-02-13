@@ -18,13 +18,10 @@ struct CategoriesView: View {
     
     @StateObject private var viewModel = CategoriesViewModel()
     @ObservedObject private var answersService = AnswersService.shared
-    @State private var selectedCategory: CategoryModel?
-    @State private var showSubcategories = false
     @State private var expandedCategoryNames: Set<String> = []
     @State private var searchText = ""
     @State private var isSearchVisible = false
     @FocusState private var isSearchFocused: Bool
-    @State private var isAtBottom = false
     private let stateService = CategoriesStateService.shared
     
     private var controlSize: CGFloat {
@@ -42,76 +39,14 @@ struct CategoriesView: View {
         }
     }
     
-    private var headerVerticalPadding: CGFloat { layoutMetrics.adaptive(18) }
-    private var headerHorizontalPadding: CGFloat { layoutMetrics.adaptive(20) }
+    private var headerCardVerticalPadding: CGFloat { layoutMetrics.adaptive(18) }
+    private var headerCardHorizontalPadding: CGFloat { layoutMetrics.adaptive(20) }
     private var mascotToContentSpacing: CGFloat { layoutMetrics.adaptive(16) }
     private var mascotSize: CGFloat { layoutMetrics.adaptive(120) }
     private var titleToMessageSpacing: CGFloat { layoutMetrics.adaptive(6) }
     
-    // Flat list of matching questions for search (searches in both app language and translation language)
-    var searchResults: [(question: QuestionModel, subcategory: String, matchedByTranslation: Bool)] {
-        guard !searchText.isEmpty else { return [] }
-        
-        let query = searchText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !query.isEmpty else { return [] }
-        
-        var results: [(question: QuestionModel, subcategory: String, matchedByTranslation: Bool)] = []
-        var seenQuestionIds = Set<String>() // Track unique questions by ID
-        
-        let contentService = ContentService.shared
-        
-        // Search through all questions in all categories and subcategories
-        for category in viewModel.categories {
-            for subcategory in category.subcategories {
-                for question in subcategory.questions {
-                    // Skip if already added
-                    guard !seenQuestionIds.contains(question.id) else { continue }
-                    
-                    var matches = false
-                    var matchedByTranslation = false
-                    
-                    // Search by question ID (exact match or contains) - ID matches don't count as translation match
-                    if question.id.lowercased().contains(query) {
-                        matches = true
-                    }
-                    
-                    // Search in question text (app language)
-                    let matchedInAppLanguage = question.text.lowercased().contains(query) ||
-                        question.options.contains(where: { $0.lowercased().contains(query) })
-                    
-                    if matchedInAppLanguage {
-                        matches = true
-                    }
-                    
-                    // Search in translated question text (translation language)
-                    if let translatedQuestion = contentService.getTranslatedQuestion(id: question.id) {
-                        let matchedInTranslation = translatedQuestion.text.lowercased().contains(query) ||
-                            translatedQuestion.options.contains(where: { $0.lowercased().contains(query) })
-                        
-                        if matchedInTranslation {
-                            matches = true
-                            // Only mark as matchedByTranslation if match was in translation AND not in app language
-                            // (if both match, prefer showing translation since user searched in translation language)
-                            if !matchedInAppLanguage {
-                                matchedByTranslation = true
-                            } else {
-                                // If both match, check if query matches translation better
-                                // For simplicity, if translation matches, show it
-                                matchedByTranslation = true
-                            }
-                        }
-                    }
-                    
-                    if matches {
-                        results.append((question, subcategory.name, matchedByTranslation))
-                        seenQuestionIds.insert(question.id)
-                    }
-                }
-            }
-        }
-        
-        // Limit to 50 results
-        return Array(results.prefix(50))
+    private var searchResults: [(question: QuestionModel, subcategory: String, matchedByTranslation: Bool)] {
+        viewModel.searchResults(for: searchText)
     }
     
     var body: some View {
@@ -121,7 +56,7 @@ struct CategoriesView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Header - Apple Design Awards quality: clarity, elegance, accessibility
+                // Header (fixed section): header card + divider
                 VStack(alignment: .leading, spacing: layoutMetrics.adaptive(6)) {
                     HStack {
                         AdaptiveIconButton.backButton(action: {
@@ -169,8 +104,8 @@ struct CategoriesView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
-                .padding(.vertical, headerVerticalPadding)
-                .padding(.horizontal, headerHorizontalPadding)
+                .padding(.vertical, headerCardVerticalPadding)
+                .padding(.horizontal, headerCardHorizontalPadding)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .background(LiquidGlassBackground(gradient: .blue))
@@ -179,9 +114,9 @@ struct CategoriesView: View {
                 .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
                 .padding(.horizontal, layoutMetrics.adaptive(20))
                 .padding(.top, layoutMetrics.adaptive(8))
+                .padding(.bottom, layoutMetrics.adaptive(12))
                 
                 Divider()
-                    .padding(.top, layoutMetrics.adaptive(12))
                 
                 // Content area with system white background
                 ZStack {
@@ -293,47 +228,30 @@ struct CategoriesView: View {
                         }
                     } else {
                         // Show normal category view
-                        ScrollViewReader { scrollProxy in
-                            ZStack {
-                                ScrollView {
-                                    VStack(spacing: 16) {
-                                        // Scroll target for top
-                                        Rectangle()
-                                            .fill(Color.clear)
-                                            .frame(height: 1)
-                                            .id("top")
-                                        
-                                        ForEach(viewModel.categories) { category in
-                                            ExpandableCategoryView(
-                                                category: category,
-                                                isExpanded: expandedCategoryNames.contains(category.name),
-                                                onToggle: {
-                                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                                        if expandedCategoryNames.contains(category.name) {
-                                                            expandedCategoryNames.remove(category.name)
-                                                        } else {
-                                                            expandedCategoryNames.insert(category.name)
-                                                        }
-                                                    }
-                                                    // Save state immediately
-                                                    stateService.saveExpandedCategories(expandedCategoryNames)
-                                                    HapticManager.shared.lightImpact()
-                                                },
-                                                answersService: answersService
-                                            )
-                                        }
-                                        
-                                        // Scroll target for bottom
-                                        Rectangle()
-                                            .fill(Color.clear)
-                                            .frame(height: 1)
-                                            .id("bottom")
-                                    }
-                                    .padding(.horizontal, 24)
-                                    .padding(.top, 4)
-                                    .padding(.bottom, 32)
+                        ScrollView {
+                            VStack(spacing: 16) {
+                                ForEach(viewModel.categories) { category in
+                                    ExpandableCategoryView(
+                                        category: category,
+                                        isExpanded: expandedCategoryNames.contains(category.name),
+                                        onToggle: {
+                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                                if expandedCategoryNames.contains(category.name) {
+                                                    expandedCategoryNames.remove(category.name)
+                                                } else {
+                                                    expandedCategoryNames.insert(category.name)
+                                                }
+                                            }
+                                            stateService.saveExpandedCategories(expandedCategoryNames)
+                                            HapticManager.shared.lightImpact()
+                                        },
+                                        answersService: answersService
+                                    )
                                 }
                             }
+                            .padding(.horizontal, 24)
+                            .padding(.top, 4)
+                            .padding(.bottom, 32)
                         }
                     }
                 }
@@ -368,23 +286,13 @@ struct CategoriesView: View {
             }
         }
         .onAppear {
-            // Load saved state
             expandedCategoryNames = stateService.loadExpandedCategories()
-            isAtBottom = stateService.loadScrollPosition()
         }
         .onDisappear {
-            // Save current state
             stateService.saveExpandedCategories(expandedCategoryNames)
-            stateService.saveScrollPosition(isAtBottom: isAtBottom)
         }
         .hidesTabBar()
         .tabBarHidden(true)
-        .sheet(isPresented: $showSubcategories) {
-            if let category = selectedCategory {
-                SubcategoriesView(category: category)
-                    .environmentObject(languageManager)
-            }
-        }
     }
 }
 
@@ -395,6 +303,8 @@ private struct ExpandableCategoryView: View {
     let onToggle: () -> Void
     @ObservedObject var answersService: AnswersService
     @State private var isPressed = false
+    @State private var iconWiggle: Double = 0
+    @State private var wiggleTrigger = 0
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     // Check if all subcategories are completed
@@ -404,32 +314,8 @@ private struct ExpandableCategoryView: View {
         }
     }
     
-    // Get icon for category
     private var categoryIcon: String {
-        switch category.name {
-        case "Law and Constitution", "Recht und Verfassung", "Право и Конституция", "Право та Конституція":
-            return "building.columns.fill"
-        case "Family and Education", "Familie und Bildung", "Семья и образование", "Освіта та Сім'я":
-            return "figure.2.and.child.holdinghands"
-        case "State", "Staat", "Государство", "Держава":
-            return "flag.fill"
-        case "Elections", "Wahlen", "Выборы", "Вибори":
-            return "checkmark.square.fill"
-        case "State Institutions", "Staatsorgane", "Гос Органы", "Державні органи":
-            return "building.2.fill"
-        case "Economy and Work", "Wirtschaft und Arbeit", "Экономика и работа", "Робота та Економіка":
-            return "briefcase.fill"
-        case "Society and Culture", "Gesellschaft und Kultur", "Общество и Культура", "Суспільство та Культура":
-            return "heart.square"
-        case "History", "Geschichte", "История", "Історія":
-            return "book.closed.fill"
-        case "Europe", "Europa", "Европа", "Європа та ЄС":
-            return "globe.europe.africa.fill"
-        case "Federal States", "Bundesländer", "Федеральные земли", "Федеральні землі":
-            return "mappin.and.ellipse"
-        default:
-            return "folder.fill"
-        }
+        CategoryIconMapping.icon(for: category.name)
     }
     
     private var iconContainerSize: CGFloat {
@@ -486,21 +372,54 @@ private struct ExpandableCategoryView: View {
         )
     }
     
+    private func runWiggleAnimation() {
+        let duration: Double = 0.07
+        withAnimation(.easeInOut(duration: duration)) { iconWiggle = -8 }
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            withAnimation(.easeInOut(duration: duration)) { iconWiggle = 8 }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration * 2) {
+            withAnimation(.easeInOut(duration: duration)) { iconWiggle = -4 }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration * 3) {
+            withAnimation(.easeInOut(duration: duration)) { iconWiggle = 0 }
+        }
+    }
+    
+    @ViewBuilder
+    private var categoryIconView: some View {
+        let image = Image(systemName: categoryIcon)
+            .font(.system(.title, design: .rounded).weight(.semibold))
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        
+        if #available(iOS 18.0, *) {
+            image
+                .symbolEffect(.wiggle.byLayer, options: .default, value: wiggleTrigger)
+                .onChange(of: isExpanded) { _, newValue in
+                    if newValue { wiggleTrigger += 1 }
+                }
+        } else {
+            image
+                .rotationEffect(.degrees(iconWiggle))
+                .onChange(of: isExpanded) { _, newValue in
+                    if newValue {
+                        runWiggleAnimation()
+                    } else {
+                        withAnimation(.easeOut(duration: 0.1)) { iconWiggle = 0 }
+                    }
+                }
+        }
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             Button(action: {
-                isPressed = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    isPressed = false
-                }
                 HapticManager.shared.lightImpact()
                 onToggle()
             }) {
                 VStack(alignment: .leading, spacing: 12) {
-                        Image(systemName: categoryIcon)
-                        .font(.system(.title, design: .rounded).weight(.semibold))
-                            .foregroundColor(.white)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        categoryIconView
                         
                     HStack(spacing: 12) {
                             Text(category.name)
@@ -509,6 +428,13 @@ private struct ExpandableCategoryView: View {
                                 .foregroundColor(.white)
                                 .multilineTextAlignment(.leading)
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            if isCategoryCompleted {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.system(size: 18))
+                                    .foregroundColor(.white.opacity(0.9))
+                                    .accessibilityLabel("Category completed")
+                            }
                             
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 14, weight: .semibold))
@@ -523,33 +449,11 @@ private struct ExpandableCategoryView: View {
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
                         .fill(categoryGradient)
                 )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 33, style: .continuous)
-                        .stroke(
-                            LinearGradient(
-                                colors: [Color.white.opacity(0.45), Color.white.opacity(0.12)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            ),
-                            lineWidth: 0.6
-                        )
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .stroke(
-                            LinearGradient(
-                                colors: [.white.opacity(0.4), .white.opacity(0.08)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ),
-                            lineWidth: 0.8
-                        )
-                )
             }
             .contentShape(Rectangle())
-            .animation(.easeInOut(duration: 0.1), value: isPressed)
             .buttonStyle(.plain)
             .scaleEffect(isPressed ? 0.98 : 1.0)
+            .buttonPressAnimation(isPressed: $isPressed)
             
             // Subcategories (expandable - inside the same card)
             if isExpanded {
@@ -571,7 +475,7 @@ private struct ExpandableCategoryView: View {
                 .fill(categoryBackgroundGradient)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 33, style: .continuous)
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
                 .stroke(
                     LinearGradient(
                         colors: [Color.white.opacity(0.45), Color.white.opacity(0.12)],
@@ -579,17 +483,6 @@ private struct ExpandableCategoryView: View {
                         endPoint: .bottom
                     ),
                     lineWidth: 0.6
-                )
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .stroke(
-                    LinearGradient(
-                        colors: [.white.opacity(0.4), .white.opacity(0.08)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    lineWidth: 0.8
                 )
         )
         }
@@ -650,18 +543,9 @@ private struct SubcategoryButton: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(NoEffectButtonStyle())
+        .scaleEffect(isPressed ? 0.98 : 1.0)
+        .buttonPressAnimation(isPressed: $isPressed)
         .padding(.horizontal, 8)
-        .animation(.easeInOut(duration: 0.1), value: isPressed)
-        .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
-            if pressing {
-                isPressed = true
-            } else {
-                // Brief hold after release for visual feedback
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                    isPressed = false
-                }
-            }
-        }, perform: {})
     }
     
     private func rowHeightForDynamicType() -> CGFloat {

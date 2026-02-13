@@ -1,15 +1,15 @@
 //
-//  QuestionCardHeader.swift
+//  QuestionCardHeaderCard.swift
 //  Leben in Deutschland
 //
-//  Shared header for question cards (Learning, Spaced Repetition, Test Session, Favorites, Test Answers).
+//  Header card for question cards (Learning, Spaced Repetition, Test Session, Favorites, Test Answers).
 //  Provides back button, optional title, progress bar, question ID with report, and customizable action bar.
 //
 
 import SwiftUI
 
-// MARK: - Question Card Header
-struct QuestionCardHeader<ActionContent: View>: View {
+// MARK: - Question Card Header Card
+struct QuestionCardHeaderCard<ActionContent: View>: View {
     /// Back button action. When nil, back row is hidden.
     var onBackTapped: (() -> Void)?
     /// Back icon: .backward (chevron.backward) or .down (chevron.down).
@@ -32,7 +32,7 @@ struct QuestionCardHeader<ActionContent: View>: View {
     private var progressBarHeight: CGFloat { layoutMetrics.adaptive(8) }
 
     var body: some View {
-        headerContent
+        headerCardContent
             .padding(.vertical, layoutMetrics.adaptive(18))
             .padding(.horizontal, layoutMetrics.adaptive(20))
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -44,7 +44,7 @@ struct QuestionCardHeader<ActionContent: View>: View {
             .padding(.top, layoutMetrics.adaptive(8))
     }
 
-    private var headerContent: some View {
+    private var headerCardContent: some View {
         VStack(alignment: .leading, spacing: contentSpacing) {
             if onBackTapped != nil {
                 backButtonRow
@@ -161,7 +161,7 @@ enum QuestionCardBackIcon {
 }
 
 // MARK: - Convenience initializer for empty actions
-extension QuestionCardHeader where ActionContent == EmptyView {
+extension QuestionCardHeaderCard where ActionContent == EmptyView {
     init(
         onBackTapped: (() -> Void)? = nil,
         backIcon: QuestionCardBackIcon = .backward,
@@ -188,7 +188,7 @@ extension QuestionCardHeader where ActionContent == EmptyView {
 
 // MARK: - Preview
 #Preview {
-    QuestionCardHeader(
+    QuestionCardHeaderCard(
         onBackTapped: {},
         showPremiumButton: true,
         onPremiumTap: {},

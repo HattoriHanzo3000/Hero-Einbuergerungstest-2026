@@ -2,7 +2,7 @@
 //  TestHeaderContent.swift
 //  Leben in Deutschland
 //
-//  Header for the Test tab: mascot + test date message. Uses shared ScreenHeader.
+//  Header card for the Test tab: mascot + test date message. Uses shared ScreenHeaderCard.
 //
 
 import SwiftUI
@@ -40,7 +40,7 @@ struct TestHeaderContent: View {
     }
 
     var body: some View {
-        ScreenHeader(
+        ScreenHeaderCard(
             readinessPercentage: readinessPercentage,
             onPremiumTap: { premiumManager.presentPaywall() },
             autoPlayInterval: 60,

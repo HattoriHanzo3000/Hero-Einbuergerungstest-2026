@@ -167,7 +167,7 @@ private struct FavoritesFullScreenImageView: View {
 // MARK: - Header View
 private extension FavoritesQuestionCard {
     var headerView: some View {
-        QuestionCardHeader(
+        QuestionCardHeaderCard(
             onBackTapped: onBackTapped,
             showPremiumButton: onBackTapped != nil,
             onPremiumTap: { premiumManager.presentPaywall() },

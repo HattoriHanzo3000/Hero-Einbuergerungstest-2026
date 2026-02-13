@@ -1,16 +1,16 @@
 //
-//  ScreenHeader.swift
+//  ScreenHeaderCard.swift
 //  Leben in Deutschland
 //
-//  Shared header for mascot + message screens (Home, Test, Progress).
-//  Uses HeaderContainer with MascotView and optional trailing content.
+//  Header card for mascot + message screens (Home, Test, Progress).
+//  Uses HeaderCard with MascotView and optional trailing content.
 //
 
 import SwiftUI
 
-// MARK: - Screen Header Content
+// MARK: - Screen Header Card Content
 /// Defines the trailing content type beside the mascot.
-enum ScreenHeaderContent: Equatable {
+enum ScreenHeaderCardContent: Equatable {
     /// State title + slogan (Home).
     case state(stateName: String)
     /// Single message text (Test date, etc.).
@@ -19,12 +19,12 @@ enum ScreenHeaderContent: Equatable {
     case readiness
 }
 
-// MARK: - Screen Header
-struct ScreenHeader: View {
+// MARK: - Screen Header Card
+struct ScreenHeaderCard: View {
     let readinessPercentage: Int
     var onPremiumTap: (() -> Void)?
     var autoPlayInterval: TimeInterval? = 60
-    var content: ScreenHeaderContent
+    var content: ScreenHeaderCardContent
 
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var stateManager: StateManager
@@ -35,7 +35,7 @@ struct ScreenHeader: View {
     private var mascotSize: CGFloat { layoutMetrics.adaptive(120) }
 
     var body: some View {
-        HeaderContainer(showPremiumButton: onPremiumTap != nil, onPremiumTap: onPremiumTap) {
+        HeaderCard(showPremiumButton: onPremiumTap != nil, onPremiumTap: onPremiumTap) {
             Group {
                 switch content {
                 case .readiness, .state, .message:
@@ -159,7 +159,7 @@ struct FederalStateSloganBlock: View {
 
 // MARK: - Preview
 #Preview("State") {
-    ScreenHeader(
+    ScreenHeaderCard(
         readinessPercentage: 72,
         onPremiumTap: {},
         content: .state(stateName: "Bavaria")
@@ -170,7 +170,7 @@ struct FederalStateSloganBlock: View {
 }
 
 #Preview("Message") {
-    ScreenHeader(
+    ScreenHeaderCard(
         readinessPercentage: 72,
         onPremiumTap: {},
         content: .message("14 days left")
@@ -180,7 +180,7 @@ struct FederalStateSloganBlock: View {
 }
 
 #Preview("Readiness") {
-    ScreenHeader(
+    ScreenHeaderCard(
         readinessPercentage: 72,
         onPremiumTap: {},
         content: .readiness

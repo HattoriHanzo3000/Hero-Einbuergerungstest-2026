@@ -150,7 +150,7 @@ struct LearningView: View {
     
     // MARK: - Header View
     private var headerView: some View {
-        QuestionCardHeader(
+        QuestionCardHeaderCard(
             onBackTapped: {
                 HapticManager.shared.lightImpact()
                 if usesRouterNavigation {
