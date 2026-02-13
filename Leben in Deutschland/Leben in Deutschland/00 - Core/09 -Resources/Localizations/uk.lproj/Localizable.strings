@@ -406,6 +406,8 @@
 "tab_test_hint" = "Відкриває екран тесту";
 "tab_progress_hint" = "Відкриває прогрес і статистику";
 "tab_settings_hint" = "Відкриває налаштування";
+"tab_search_title" = "Пошук";
+"tab_search_hint" = "Відкриває пошук по всіх питаннях";
 "settings_beta_title" = "Settings Beta";
 "settings_beta_detail_placeholder" = "Ми ще наповнюємо цей розділ. Твій відгук допоможе вирішити, що тут залишити.";
 "settings_test_alerts_button" = "Тестові сповіщення";

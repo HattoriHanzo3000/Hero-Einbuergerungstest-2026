@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // MARK: - Tab Bar Visibility Helpers
 extension View {
@@ -106,25 +107,31 @@ extension View {
     func tabBarHidden(_ hidden: Bool) -> some View {
         modifier(TabBarVisibilityModifier(isHidden: hidden))
     }
-}
 
-// MARK: - Option 2: PreferenceKey-based Approach
-struct TabBarVisibilityKey: PreferenceKey {
-    static var defaultValue: Bool = false // false = visible, true = hidden
-    
-    static func reduce(value: inout Bool, nextValue: () -> Bool) {
-        value = nextValue()
+    /// Reduces spacing between tab bar items for a more compact layout.
+    func compactTabBarSpacing(_ spacing: CGFloat = 0) -> some View {
+        modifier(CompactTabBarSpacingModifier(spacing: spacing))
     }
 }
 
-extension View {
-    /// Sets tab bar visibility preference
-    func tabBarVisibility(_ hidden: Bool) -> some View {
-        preference(key: TabBarVisibilityKey.self, value: hidden)
+// MARK: - Compact Tab Bar Spacing
+private struct CompactTabBarSpacingModifier: ViewModifier {
+    let spacing: CGFloat
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear { applySpacing() }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                applySpacing()
+            }
     }
-    
-    /// Reads tab bar visibility preference and applies UIKit update
-    func onTabBarVisibilityChange(_ action: @escaping (Bool) -> Void) -> some View {
-        onPreferenceChange(TabBarVisibilityKey.self, perform: action)
+
+    private func applySpacing() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first,
+                  let tabBarController = UITabBarController.find(in: window.rootViewController) else { return }
+            tabBarController.tabBar.itemSpacing = spacing
+        }
     }
 }

@@ -162,7 +162,7 @@ struct LearningView: View {
             showPremiumButton: true,
             onPremiumTap: { premiumManager.presentPaywall() },
             title: subcategory.name,
-            progress: (viewModel.answeredCount, viewModel.questions.count),
+            progress: viewModel.questions.count > 1 ? (viewModel.answeredCount, viewModel.questions.count) : nil,
             questionId: viewModel.currentQuestion?.id,
             onReportTapped: { showingFeedbackReport = true },
             trailingActions: {

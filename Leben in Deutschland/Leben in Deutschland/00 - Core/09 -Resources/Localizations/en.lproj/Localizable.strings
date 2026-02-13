@@ -409,6 +409,8 @@
 "tab_test_hint" = "Opens the Test screen";
 "tab_progress_hint" = "Opens your progress and statistics";
 "tab_settings_hint" = "Opens Settings";
+"tab_search_title" = "Search";
+"tab_search_hint" = "Opens search across all questions";
 "settings_beta_title" = "Settings BETA";
 "settings_beta_detail_placeholder" = "We’re shaping this area right now. Your feedback will help us decide what belongs here.";
 "settings_test_alerts_button" = "Test Alerts";

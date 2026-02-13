@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Combine
 import UIKit
 
 @main
@@ -85,22 +84,21 @@ struct Leben_in_DeutschlandApp: App {
         }
     }
     
-    /// Uses native tab bar appearance (translucent blur on iOS 17). Selected tab uses AccentColor.
+    /// Tab bar: on iOS 18+ only tint (system provides floating style); on iOS 17 use default background.
     private func configureTabBarAppearance() {
         let accentColor = UIColor(named: "AccentColor") ?? .systemBlue
+        UITabBar.appearance().tintColor = accentColor
+        UITabBar.appearance().unselectedItemTintColor = .tertiaryLabel
+        guard ProcessInfo.processInfo.operatingSystemVersion.majorVersion < 18 else { return }
         let appearance = UITabBarAppearance()
         appearance.configureWithDefaultBackground()
         // Set selected state on the appearance so it isn’t overridden by SwiftUI/accent.
+        appearance.stackedLayoutAppearance.normal.iconColor = .tertiaryLabel
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.tertiaryLabel]
         appearance.stackedLayoutAppearance.selected.iconColor = accentColor
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: accentColor]
-        appearance.inlineLayoutAppearance.selected.iconColor = accentColor
-        appearance.inlineLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: accentColor]
-        appearance.compactInlineLayoutAppearance.selected.iconColor = accentColor
-        appearance.compactInlineLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: accentColor]
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
-        UITabBar.appearance().tintColor = accentColor
-        UITabBar.appearance().unselectedItemTintColor = .tertiaryLabel
     }
     
     // Convert saved appearance to ColorScheme

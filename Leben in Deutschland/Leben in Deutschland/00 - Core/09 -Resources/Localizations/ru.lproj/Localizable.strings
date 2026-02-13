@@ -408,6 +408,8 @@
 "tab_test_hint" = "Открывает экран теста";
 "tab_progress_hint" = "Открывает прогресс и статистику";
 "tab_settings_hint" = "Открывает настройки";
+"tab_search_title" = "Поиск";
+"tab_search_hint" = "Открывает поиск по всем вопросам";
 "settings_beta_title" = "Settings BETA";
 "settings_beta_detail_placeholder" = "Мы ещё создаём этот раздел. Твоё мнение поможет понять, что здесь нужно оставить.";
 "settings_test_alerts_button" = "Тестовые уведомления";

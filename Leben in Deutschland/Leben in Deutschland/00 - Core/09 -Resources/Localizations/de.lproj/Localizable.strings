@@ -406,6 +406,8 @@
 "tab_test_hint" = "Öffnet den Testbereich";
 "tab_progress_hint" = "Öffnet deinen Fortschritt und Statistiken";
 "tab_settings_hint" = "Öffnet die Einstellungen";
+"tab_search_title" = "Suche";
+"tab_search_hint" = "Öffnet die Suche über alle Fragen";
 "settings_beta_title" = "Settings BETA";
 "settings_beta_detail_placeholder" = "Wir arbeiten gerade an diesem Bereich. Dein Feedback hilft uns zu entscheiden, was hier bleiben soll.";
 "settings_test_alerts_button" = "Testwarnungen";
