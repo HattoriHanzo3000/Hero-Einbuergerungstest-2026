@@ -25,7 +25,7 @@ struct SectionContainer<Content: View>: View {
             if let title {
                 HStack {
                     title
-                        .font(.system(.title3, design: .rounded).weight(.semibold))
+                        .font(.system(.title3, weight: .thin).width(.compressed))
                         .foregroundColor(.primary)
                     
                     Spacer()

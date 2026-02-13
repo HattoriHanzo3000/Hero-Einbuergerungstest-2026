@@ -59,7 +59,7 @@
 "perfect_days_left" = "Wir haben noch %d %@. Ich bin bei dir!";
 "perfect_day_left" = "Wir haben noch %d %@. Ich bin bei dir!";
 "perfect_days_left_2_4" = "Wir haben noch %d %@. Ich bin bei dir!";
-"perfect_test_today" = "Perfekt! Der Test ist heute. Ich bin bei dir!";
+"perfect_test_today" = "Der Test ist heute. Ich bin bei dir!";
 "dont_know_date" = "Ich weiß es noch nicht";
 "no_problem_later" = "Kein Problem! Du kannst das Datum später hinzufügen oder ändern.";
 
@@ -78,8 +78,11 @@
 
 "home_learn_section_title" = "Lernoptionen";
 "home_learn_spaced_repetition" = "Intelligentes Lernen";
+"home_learn_spaced_repetition_subtitle" = "Wiederhole clever, behalte lang";
 "home_learn_by_topics" = "Nach Themen lernen";
+"home_learn_by_topics_subtitle" = "Ein Thema nach dem anderen";
 "home_learn_favorites" = "Favoriten";
+"home_learn_favorites_subtitle" = "Für später speichern";
 "spaced_repetition_title" = "Lernen starten";
 
 // Learn by Topics
@@ -121,7 +124,8 @@
 // Carousel
 "learn_option_spaced_repetition_title" = "Intelligentes Lernen";
 "learn_option_topics_title" = "Themenweise lernen";
-"learn_option_test_title" = "Test absolvieren";
+"learn_option_test_title" = "Test simulieren";
+"learn_option_test_subtitle" = "Prüfe deine Bereitschaft";
 "learn_option_favorites_title" = "Favoriten";
 
 "learn_option_spaced_repetition_description" = "Lerne clever – schwierige Fragen kommen zurück, bis du sie sicher kannst";
@@ -331,10 +335,10 @@
 "statistics_reinforced_title" = "Gefestigt";
 "statistics_mastered_title" = "Beherrscht";
 "statistics_expert_title" = "Experte";
-"statistics_familiar_description" = "1x richtig beantwortet";
-"statistics_reinforced_description" = "2x richtig beantwortet";
-"statistics_mastered_description" = "3x richtig beantwortet";
-"statistics_expert_description" = "4x oder öfter richtig beantwortet";
+"statistics_familiar_description" = "Richtig beantwortet 1 Mal";
+"statistics_reinforced_description" = "Richtig beantwortet 2 Mal";
+"statistics_mastered_description" = "Richtig beantwortet 3 Mal";
+"statistics_expert_description" = "Richtig beantwortet 4 Mal oder öfter";
 "statistics_card_flip_hint" = "Doppelt tippen, um die Karte umzudrehen";
 "ready" = "bereit";
 
@@ -393,7 +397,6 @@
 
 "tab_home_title" = "Startseite";
 "tab_learn_title" = "Lernen";
-"tab_test_title" = "Test";
 "tab_progress_title" = "Fortschritt";
 "tab_premium_title" = "Premium";
 "tab_settings_title" = "Einstellungen";
@@ -403,7 +406,6 @@
 "tab_settings_beta2_title" = "Settings BETA 2";
 "main_tab_bar_accessibility_label" = "Hauptnavigation";
 "tab_learn_hint" = "Öffnet den Lernbereich";
-"tab_test_hint" = "Öffnet den Testbereich";
 "tab_progress_hint" = "Öffnet deinen Fortschritt und Statistiken";
 "tab_settings_hint" = "Öffnet die Einstellungen";
 "tab_search_title" = "Suche";

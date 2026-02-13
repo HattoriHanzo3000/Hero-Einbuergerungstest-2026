@@ -3,7 +3,7 @@
 //  Leben in Deutschland
 //
 //  Playful press scale for a friendly, cartoon-like feel.
-//  Shared across HomeLearnOptionsSection and TestTabView.
+//  Shared across HomeLearnOptionsSection.
 //
 
 import SwiftUI

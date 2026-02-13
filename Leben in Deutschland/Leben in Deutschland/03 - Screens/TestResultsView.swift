@@ -89,7 +89,7 @@ struct TestResultsView: View {
                             
                             VStack(alignment: .leading, spacing: layoutMetrics.adaptive(4)) {
                                 Text(results.isPassed ? "test_passed".localized : "test_failed".localized)
-                                    .font(.system(.title, design: .rounded).weight(.bold))
+                                    .font(.system(.title, design: .rounded).weight(.bold).width(.condensed))
                                     .foregroundColor(resultColor)
                                 
                                 Text("\(results.correctAnswers) \("of".localized) \(results.totalQuestions) \("questions_correct".localized)")
@@ -180,8 +180,8 @@ struct TestResultsView: View {
             }
         }
         }
-        .id(languageManager.currentAppLanguage)
         .fontDesign(.rounded)
+        .id(languageManager.currentAppLanguage)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .hidesTabBar()

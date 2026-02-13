@@ -122,14 +122,14 @@ private extension QuizAnswerOptionButton {
     var labelContent: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(6)) {
             Text(primaryText)
-                .font(.system(.body, design: .rounded).weight(.regular))
+                .font(.system(.body, weight: .regular))
                 .foregroundColor(style.primaryTextColor)
                 .multilineTextAlignment(.leading)
                 .lineLimit(nil)
             
             if let secondaryText, secondaryText.isEmpty == false {
                 Text(secondaryText)
-                    .font(.system(.footnote, design: .rounded).weight(.regular))
+                    .font(.system(.footnote, weight: .regular))
                     .foregroundColor(style.secondaryTextColor)
                     .multilineTextAlignment(.leading)
                     .lineLimit(nil)

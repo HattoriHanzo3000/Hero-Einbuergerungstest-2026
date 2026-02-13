@@ -69,7 +69,7 @@ private struct HomeRingChartView: View {
             }
 
             Text("\(readinessPercentage)%")
-                .font(.system(.title2, design: .rounded).weight(.bold))
+                .font(.system(.title2, design: .default).weight(.bold).width(.expanded))
                 .foregroundColor(.primary)
                 .frame(width: chartSize, height: chartSize)
                 .contentShape(Rectangle())
@@ -284,11 +284,11 @@ private struct HomeStatisticsGridCard: View {
     private var frontFace: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
             Text("\(count)")
-                .font(.system(.title3, design: .rounded).weight(.bold))
+                .font(.system(.title3, design: .default).weight(.regular).width(.expanded))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
             Text(titleKey.localized)
-                .font(.system(.subheadline, design: .rounded).weight(.semibold))
+                .font(.system(.subheadline, design: .default).weight(.medium).width(.condensed))
                 .foregroundColor(.white.opacity(0.95))
                 .lineLimit(nil)
                 .multilineTextAlignment(.leading)
@@ -303,7 +303,7 @@ private struct HomeStatisticsGridCard: View {
     private var backFace: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
             Text(descriptionKey.localized)
-                .font(.system(.footnote, design: .rounded).weight(.semibold))
+                .font(.system(.footnote, design: .default).weight(.medium).width(.condensed))
                 .foregroundColor(.white)
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)

@@ -60,7 +60,7 @@
 "perfect_days_left" = "We've got %d %@ left. I'm with you!";
 "perfect_day_left" = "We've got %d %@ left. I'm with you!";
 "perfect_days_left_2_4" = "We've got %d %@ left. I'm with you!";
-"perfect_test_today" = "Perfect! The test is today. I'm with you!";
+"perfect_test_today" = "The test is today. I'm with you!";
 "dont_know_date" = "I don't know yet";
 "no_problem_later" = "No problem! You can add or change the date later.";
 
@@ -79,8 +79,11 @@
 
 "home_learn_section_title" = "Learn Options";
 "home_learn_spaced_repetition" = "Smart Learning";
+"home_learn_spaced_repetition_subtitle" = "Repeat smart, remember long";
 "home_learn_by_topics" = "Learn by Topics";
+"home_learn_by_topics_subtitle" = "One topic at a time";
 "home_learn_favorites" = "Favorites";
+"home_learn_favorites_subtitle" = "Bookmark for later";
 "spaced_repetition_title" = "Start Learning";
 
 // Learn by Topics
@@ -122,7 +125,8 @@
 // Carousel
 "learn_option_spaced_repetition_title" = "Smart Learning";
 "learn_option_topics_title" = "Learn by Topics";
-"learn_option_test_title" = "Take a Test";
+"learn_option_test_title" = "Simulate a Test";
+"learn_option_test_subtitle" = "Check your readiness";
 "learn_option_favorites_title" = "Favorites";
 
 "learn_option_spaced_repetition_description" = "Learn smart — tough questions come back until you master them";
@@ -396,7 +400,6 @@
 
 "tab_home_title" = "Home";
 "tab_learn_title" = "Learn";
-"tab_test_title" = "Test";
 "tab_progress_title" = "Progress";
 "tab_premium_title" = "Premium";
 "tab_settings_title" = "Settings";
@@ -406,7 +409,6 @@
 "tab_settings_beta2_title" = "Settings BETA 2";
 "main_tab_bar_accessibility_label" = "Primary navigation";
 "tab_learn_hint" = "Opens the Learn screen";
-"tab_test_hint" = "Opens the Test screen";
 "tab_progress_hint" = "Opens your progress and statistics";
 "tab_settings_hint" = "Opens Settings";
 "tab_search_title" = "Search";

@@ -59,7 +59,7 @@
 "perfect_days_left" = "У нас залишилося %d %@. Я з тобою!";
 "perfect_day_left" = "У нас залишився %d %@. Я з тобою!";
 "perfect_days_left_2_4" = "У нас залишилося %d %@. Я з тобою!";
-"perfect_test_today" = "Чудово! Тест сьогодні. Я з тобою!";
+"perfect_test_today" = "Тест сьогодні. Я з тобою!";
 "dont_know_date" = "Поки не знаю";
 "no_problem_later" = "Не проблема! Ти можеш додати або змінити дату пізніше.";
 
@@ -78,8 +78,11 @@
 
 "home_learn_section_title" = "Варіанти навчання";
 "home_learn_spaced_repetition" = "Розумне повторення";
+"home_learn_spaced_repetition_subtitle" = "Повторюй розумно, пам'ятай довго";
 "home_learn_by_topics" = "Вчити за темами";
+"home_learn_by_topics_subtitle" = "Одна тема за раз";
 "home_learn_favorites" = "Обране";
+"home_learn_favorites_subtitle" = "Збережи на пізніше";
 "spaced_repetition_title" = "Почати навчання";
 
 // Learn by Topics
@@ -121,7 +124,8 @@
 // Carousel
 "learn_option_spaced_repetition_title" = "Розумне повторення";
 "learn_option_topics_title" = "Вчитися за темами";
-"learn_option_test_title" = "Скласти тест";
+"learn_option_test_title" = "Симулювати тест";
+"learn_option_test_subtitle" = "Перевір готовність";
 "learn_option_favorites_title" = "Вибране";
 
 "learn_option_spaced_repetition_description" = "Вчися розумно — складні питання повертаються, поки ти їх не запам’ятаєш";
@@ -333,10 +337,10 @@
 "statistics_reinforced_title" = "Закріпив";
 "statistics_mastered_title" = "Освоїв";
 "statistics_expert_title" = "Експерт";
-"statistics_familiar_description" = "1 раз правильно";
-"statistics_reinforced_description" = "2 рази правильно";
-"statistics_mastered_description" = "3 рази правильно";
-"statistics_expert_description" = "4 рази та більше правильно";
+"statistics_familiar_description" = "Відповів правильно 1 раз";
+"statistics_reinforced_description" = "Відповів правильно 2 рази";
+"statistics_mastered_description" = "Відповів правильно 3 рази";
+"statistics_expert_description" = "Відповів правильно 4+ рази";
 "statistics_card_flip_hint" = "Двічі натисніть, щоб перевернути картку";
 "ready" = "готовий";
 
@@ -395,7 +399,6 @@
 
 "tab_home_title" = "Головна";
 "tab_learn_title" = "Навчання";
-"tab_test_title" = "Тест";
 "tab_progress_title" = "Прогрес";
 "tab_premium_title" = "Преміум";
 "tab_settings_title" = "Налаштування";
@@ -403,7 +406,6 @@
 "learn_header_dialog_message" = "Я готую для тебе нову навчальну подорож. Дуже скоро почнемо разом!";
 "main_tab_bar_accessibility_label" = "Основна навігація";
 "tab_learn_hint" = "Відкриває екран навчання";
-"tab_test_hint" = "Відкриває екран тесту";
 "tab_progress_hint" = "Відкриває прогрес і статистику";
 "tab_settings_hint" = "Відкриває налаштування";
 "tab_search_title" = "Пошук";

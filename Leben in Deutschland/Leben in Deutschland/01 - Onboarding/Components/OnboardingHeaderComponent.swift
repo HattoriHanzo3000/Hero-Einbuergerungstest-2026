@@ -72,7 +72,7 @@ struct OnboardingHeaderComponent: View {
                     // With title: state name + slogan (ScreenHeaderCard style)
                     VStack(alignment: .leading, spacing: titleToSloganSpacing) {
                         Text(getLocalizedStateName(selectedState))
-                            .font(.system(.title, design: .rounded).bold())
+                            .font(.system(.title, design: .rounded).weight(.bold).width(.condensed))
                             .foregroundColor(.white)
                             .multilineTextAlignment(.leading)
                             .lineLimit(nil)
@@ -84,9 +84,10 @@ struct OnboardingHeaderComponent: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
-                    // Without title: message only
+                    // Without title: message only (matches Categories mascot message)
                     Text(formattedMessage)
-                        .font(.system(.body, design: .rounded).weight(.medium))
+                        .font(.system(.body, weight: .semibold))
+                        .italic()
                         .lineSpacing(4)
                         .foregroundColor(.white)
                         .id(languageManager.currentAppLanguage)
@@ -132,7 +133,7 @@ struct OnboardingHeaderComponent: View {
     
 }
 
-// MARK: - Onboarding Slogan Block (matches FederalStateSloganBlock logic)
+// MARK: - Onboarding Slogan Block (matches FederalStateSloganBlock, Categories mascot message)
 private struct OnboardingSloganBlock: View {
     @EnvironmentObject private var languageManager: LanguageManager
     let stateName: String
@@ -140,7 +141,8 @@ private struct OnboardingSloganBlock: View {
     
     var body: some View {
         Text(localizedSlogan(for: stateName))
-            .font(.system(.body, design: .rounded).weight(.medium))
+            .font(.system(.body, weight: .semibold))
+            .italic()
             .lineSpacing(4)
             .foregroundColor(textColor)
             .multilineTextAlignment(.leading)
@@ -218,6 +220,7 @@ private struct OnboardingMascotView: View {
             .allowsHitTesting(false)
         }
         .frame(width: mascotSize, height: mascotSize)
+        .scaleEffect(x: -1, y: 1)
         .contentShape(Rectangle())
         .onTapGesture {
             HapticManager.shared.lightImpact()

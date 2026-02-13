@@ -41,13 +41,11 @@ struct PaywallView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(action: {
+                    Button {
                         HapticManager.shared.lightImpact()
                         dismiss()
-                    }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 28))
-                            .foregroundStyle(.secondary)
+                    } label: {
+                        Image(systemName: "xmark")
                     }
                     .accessibilityLabel("paywall_close".localized)
                     .accessibilityHint("paywall_close_hint".localized)
@@ -74,7 +72,7 @@ struct PaywallView: View {
                 .accessibilityHidden(true)
             
             Text("paywall_title".localized)
-                .font(.system(.title2, design: .rounded).weight(.bold))
+                .font(.system(.title2, design: .rounded).weight(.bold).width(.condensed))
                 .foregroundStyle(.primary)
                 .multilineTextAlignment(.center)
             

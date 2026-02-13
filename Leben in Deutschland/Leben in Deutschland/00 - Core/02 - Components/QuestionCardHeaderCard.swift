@@ -85,7 +85,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
             Spacer()
 
             if showPremiumButton {
-                PremiumCrownButton(action: { onPremiumTap?() }, color: .white)
+                PremiumButton(action: { onPremiumTap?() }, color: .white)
             }
         }
     }
@@ -94,7 +94,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
     private var titleSection: some View {
         if let title {
             Text(title)
-                .font(.system(.title2, design: .rounded).weight(.bold))
+                .font(.system(.title, weight: .regular).width(.condensed))
                 .foregroundColor(.white)
                 .multilineTextAlignment(.leading)
                 .lineLimit(2)
@@ -128,7 +128,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
         if let questionId {
             HStack(spacing: 8) {
                 Text("question_label".localized + " \(questionId)")
-                    .font(.system(.headline, design: .rounded).weight(.semibold))
+                    .font(.system(.title2, weight: .thin).width(.condensed))
                     .foregroundColor(.white)
                     .accessibilityLabel("question_label".localized + " " + questionId)
 
@@ -139,7 +139,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
                     }) {
                         Image(systemName: "flag.fill")
                             .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(.red)
+                            .foregroundColor(Color("AppBlue"))
                     }
                 }
             }

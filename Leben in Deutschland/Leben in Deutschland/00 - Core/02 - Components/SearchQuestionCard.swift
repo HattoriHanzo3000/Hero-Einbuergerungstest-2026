@@ -30,14 +30,13 @@ struct SearchQuestionCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text(question.text)
                     .font(.callout.weight(.semibold))
-                    .fontDesign(.rounded)
                     .foregroundColor(.primary)
                     .multilineTextAlignment(.leading)
                     .lineLimit(3)
 
                 if matchedByTranslation, let translated = translatedQuestion, translated.text != question.text {
                     Text(translated.text)
-                        .font(.system(.footnote, design: .rounded))
+                        .font(.system(.footnote))
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.leading)
                         .lineLimit(3)

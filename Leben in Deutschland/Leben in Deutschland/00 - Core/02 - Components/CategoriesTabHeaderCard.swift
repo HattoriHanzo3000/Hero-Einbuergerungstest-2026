@@ -2,7 +2,7 @@
 //  CategoriesTabHeaderCard.swift
 //  Leben in Deutschland
 //
-//  Header card for Categories tab. Layout: back | crown (top row),
+//  Header card for Categories tab. Layout: back | premium (top row),
 //  mascot + message (bottom row). Uses HeaderCard for styling.
 //  NO ANIMATION — icon and content update instantly.
 //
@@ -25,7 +25,7 @@ struct CategoriesTabHeaderCard: View {
                 HStack {
                     AdaptiveIconButton.backButton(action: onBackTapped, tintColor: .white)
                     Spacer()
-                    PremiumCrownButton(action: onPremiumTap, color: .white)
+                    PremiumButton(action: onPremiumTap, color: .white)
                 }
                 .transaction { $0.animation = nil }
 
@@ -33,7 +33,8 @@ struct CategoriesTabHeaderCard: View {
                     MascotView(autoPlayInterval: 60)
                         .frame(width: mascotSize, height: mascotSize)
                     Text("learn_by_topics_header_message".localized)
-                        .font(.system(.body, design: .rounded).weight(.medium))
+                        .font(.system(.body, weight: .semibold))
+                        .italic()
                         .lineSpacing(4)
                         .foregroundColor(.white.opacity(0.92))
                         .multilineTextAlignment(.leading)

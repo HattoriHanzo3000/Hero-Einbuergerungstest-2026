@@ -4,14 +4,13 @@ import SwiftUI
 /// Root tab navigation that hosts the primary app sections.
 /// HIG-compliant tab bar: bottom placement, translucent, 3–5 tabs with labels.
 struct TabBarView: View {
-    @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var premiumManager: PremiumManager
+    @AppStorage("appLanguage") private var appLanguage: String = "en"
     @State private var selectedTab: TabIdentifier = .learn
 
     // MARK: - Tab Identifier (legacy selection binding)
     enum TabIdentifier: Hashable {
         case learn
-        case test
         case progress
         case settings
         case search
@@ -29,35 +28,29 @@ struct TabBarView: View {
     @available(iOS 18.0, *)
     private var tabViewiOS18: some View {
         TabView {
-            Tab("tab_learn_title".localized, systemImage: "book.fill") {
+            Tab("tab_learn_title".localized(for: appLanguage), systemImage: "book.fill") {
                 HomeView()
             }
-            .accessibilityHint("tab_learn_hint".localized)
+            .accessibilityHint("tab_learn_hint".localized(for: appLanguage))
 
-            Tab("tab_test_title".localized, systemImage: "checkmark.seal.fill") {
-                TestTabView()
-            }
-            .accessibilityHint("tab_test_hint".localized)
-
-            Tab("tab_progress_title".localized, systemImage: "chart.bar.fill") {
+            Tab("tab_progress_title".localized(for: appLanguage), systemImage: "chart.bar.fill") {
                 ProgressTabView()
             }
-            .accessibilityHint("tab_progress_hint".localized)
+            .accessibilityHint("tab_progress_hint".localized(for: appLanguage))
 
-            Tab("tab_settings_title".localized, systemImage: "gear") {
+            Tab("tab_settings_title".localized(for: appLanguage), systemImage: "gear") {
                 SettingsDashboardView()
             }
-            .accessibilityHint("tab_settings_hint".localized)
+            .accessibilityHint("tab_settings_hint".localized(for: appLanguage))
 
-            Tab("tab_search_title".localized, systemImage: "magnifyingglass", role: .search) {
+            Tab("tab_search_title".localized(for: appLanguage), systemImage: "magnifyingglass", role: .search) {
                 SearchTabView()
             }
-            .accessibilityHint("tab_search_hint".localized)
+            .accessibilityHint("tab_search_hint".localized(for: appLanguage))
         }
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
-        .id(languageManager.currentAppLanguage)
-        .accessibilityLabel("main_tab_bar_accessibility_label".localized)
+        .accessibilityLabel("main_tab_bar_accessibility_label".localized(for: appLanguage))
         .paywallSheet(premiumManager: premiumManager)
     }
 
@@ -66,28 +59,23 @@ struct TabBarView: View {
         TabView(selection: $selectedTab) {
             HomeView()
                 .tabItem {
-                    Label("tab_learn_title".localized, systemImage: "book.fill")
+                    Label("tab_learn_title".localized(for: appLanguage), systemImage: "book.fill")
                 }
                 .tag(TabIdentifier.learn)
-            TestTabView()
-                .tabItem {
-                    Label("tab_test_title".localized, systemImage: "checkmark.seal.fill")
-                }
-                .tag(TabIdentifier.test)
             ProgressTabView()
                 .tabItem {
-                    Label("tab_progress_title".localized, systemImage: "chart.bar.fill")
+                    Label("tab_progress_title".localized(for: appLanguage), systemImage: "chart.bar.fill")
                 }
                 .tag(TabIdentifier.progress)
             SettingsDashboardView()
                 .tabItem {
-                    Label("tab_settings_title".localized, systemImage: "gear")
+                    Label("tab_settings_title".localized(for: appLanguage), systemImage: "gear")
                 }
                 .tag(TabIdentifier.settings)
 
             SearchTabView()
                 .tabItem {
-                    Label("tab_search_title".localized, systemImage: "magnifyingglass")
+                    Label("tab_search_title".localized(for: appLanguage), systemImage: "magnifyingglass")
                 }
                 .tag(TabIdentifier.search)
         }
@@ -96,7 +84,6 @@ struct TabBarView: View {
         .onChange(of: selectedTab) { _, _ in
             HapticManager.shared.selectionChanged()
         }
-        .id(languageManager.currentAppLanguage)
         .paywallSheet(premiumManager: premiumManager)
     }
 }

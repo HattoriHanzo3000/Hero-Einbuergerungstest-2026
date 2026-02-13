@@ -2,20 +2,39 @@
 //  TestHeaderContent.swift
 //  Leben in Deutschland
 //
-//  Header card for the Test tab: mascot + test date message. Uses shared ScreenHeaderCard.
+//  Message formatting for Home header: test date and readiness score.
 //
 
 import SwiftUI
 
-// MARK: - Test Header Content
-struct TestHeaderContent: View {
-    let readinessPercentage: Int
-    @Binding var savedTestDate: Date?
+// MARK: - Readiness Message Helper
+/// Formats the eagle-stage readiness message used in Progress and Home headers.
+enum ReadinessMessageHelper {
+    /// Returns localized eagle_desc message for the given readiness percentage.
+    static func message(readinessPercentage: Int, languageCode: String) -> String {
+        let key = eagleDescKey(for: readinessPercentage)
+        let localized = key.localized
+        let locale = Locale(identifier: languageCode)
+        return String(format: localized, locale: locale, readinessPercentage)
+    }
 
-    @EnvironmentObject private var premiumManager: PremiumManager
+    private static func eagleDescKey(for percentage: Int) -> String {
+        switch percentage {
+        case 0: return "eagle_desc_egg"
+        case 1..<17: return "eagle_desc_chick"
+        case 17..<34: return "eagle_desc_young"
+        case 34..<51: return "eagle_desc_growing"
+        case 51..<84: return "eagle_desc_wise"
+        default: return "eagle_desc_master"
+        }
+    }
+}
 
-    private var testDateMessage: String {
-        guard let date = savedTestDate else { return "test_header_set_date_prompt".localized }
+// MARK: - Test Date Message Helper
+/// Shared logic for formatting test date message. Used by HomeHeader.
+enum TestDateMessageHelper {
+    static func message(for date: Date?) -> String {
+        guard let date = date else { return "test_header_set_date_prompt".localized }
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         let testDay = calendar.startOfDay(for: date)
@@ -38,24 +57,4 @@ struct TestHeaderContent: View {
         let dayWord = Pluralization.localizedDayWord(for: days, languageCode: LanguageManager.currentAppLanguageCode)
         return String(format: key.localized, days, dayWord)
     }
-
-    var body: some View {
-        ScreenHeaderCard(
-            readinessPercentage: readinessPercentage,
-            onPremiumTap: { premiumManager.presentPaywall() },
-            autoPlayInterval: 60,
-            content: .message(testDateMessage)
-        )
-    }
-}
-
-// MARK: - Preview
-#Preview {
-    TestHeaderContent(
-        readinessPercentage: 72,
-        savedTestDate: .constant(Date().addingTimeInterval(14 * 86400))
-    )
-    .environmentObject(LanguageManager())
-    .environmentObject(PremiumManager.shared)
-    .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }

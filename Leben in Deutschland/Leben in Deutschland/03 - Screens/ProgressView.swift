@@ -34,11 +34,9 @@ struct ProgressTabView: View {
 // MARK: - Header Section
 private extension ProgressTabView {
     var progressHeaderSection: some View {
-        ScreenHeaderCard(
+        HomeHeader(
             readinessPercentage: viewModel.statistics.readinessPercentage,
-            onPremiumTap: { premiumManager.presentPaywall() },
-            autoPlayInterval: nil,
-            content: .readiness
+            onPremiumTap: { premiumManager.presentPaywall() }
         )
         .screenHeaderPadding(metrics: layoutMetrics)
     }

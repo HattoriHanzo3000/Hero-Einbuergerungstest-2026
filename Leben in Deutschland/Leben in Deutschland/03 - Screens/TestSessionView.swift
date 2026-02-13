@@ -40,7 +40,7 @@ struct TestSessionView: View {
                         showingResults = true
                     },
                     onDismiss: {
-                        // Pop twice to skip countdown and return to TestTabView
+                        // Pop twice to skip countdown and return to Home
                         router.pop()
                         router.pop()
                     }
@@ -112,7 +112,7 @@ struct TestSessionView: View {
                                 HapticManager.shared.heavyImpact()
                                 // Save partial test answers before quitting
                                 viewModel.finishTest()
-                                // Pop twice to skip countdown and return to TestTabView
+                                // Pop twice to skip countdown and return to Home
                                 router.pop()
                                 router.pop()
                 }

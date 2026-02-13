@@ -19,11 +19,10 @@ struct HeaderCard<Content: View>: View {
 
     private var verticalPadding: CGFloat { layoutMetrics.adaptive(18) }
     private var horizontalPadding: CGFloat { layoutMetrics.adaptive(20) }
-    private var crownReserveSize: CGFloat { layoutMetrics.adaptive(40) }
 
     var body: some View {
         content
-            .padding(.top, showPremiumButton ? max(verticalPadding, crownReserveSize) : verticalPadding)
+            .padding(.top, verticalPadding)
             .padding(.bottom, verticalPadding)
             .padding(.leading, horizontalPadding)
             .padding(.trailing, horizontalPadding)
@@ -32,11 +31,11 @@ struct HeaderCard<Content: View>: View {
             .clipShape(RoundedRectangle(cornerRadius: layoutMetrics.adaptive(32), style: .continuous))
             .overlay(HeaderBorderOverlay())
             .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
-            .overlay(alignment: .topTrailing) {
+            .overlay(alignment: .top) {
                 if showPremiumButton {
-                    PremiumCrownButton(action: { onPremiumTap?() }, color: .white)
-                        .padding(2)
-                        .padding(.trailing, horizontalPadding)
+                    PremiumButton(action: { onPremiumTap?() }, color: .white)
+                        .scaleEffect(0.8)
+                        .padding(.top, verticalPadding)
                 }
             }
     }

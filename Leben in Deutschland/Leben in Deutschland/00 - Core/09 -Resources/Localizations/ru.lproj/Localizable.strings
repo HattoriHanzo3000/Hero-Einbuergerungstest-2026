@@ -59,7 +59,7 @@
 "perfect_days_left" = "У нас осталось %d %@. Я с тобой!";
 "perfect_day_left" = "У нас остался %d %@. Я с тобой!";
 "perfect_days_left_2_4" = "У нас осталось %d %@. Я с тобой!";
-"perfect_test_today" = "Отлично! Тест сегодня. Я с тобой!";
+"perfect_test_today" = "Тест сегодня. Я с тобой!";
 "dont_know_date" = "Пока не знаю";
 "no_problem_later" = "Не проблема! Ты можешь добавить или изменить дату позже.";
 
@@ -78,8 +78,11 @@
 
 "home_learn_section_title" = "Варианты обучения";
 "home_learn_spaced_repetition" = "Умное повторение";
+"home_learn_spaced_repetition_subtitle" = "Повторяй умно, запоминай надолго";
 "home_learn_by_topics" = "Учить по темам";
+"home_learn_by_topics_subtitle" = "По одной теме за раз";
 "home_learn_favorites" = "Избранное";
+"home_learn_favorites_subtitle" = "Сохрани на потом";
 "spaced_repetition_title" = "Начать обучение";
 
 // Learn by Topics
@@ -121,7 +124,8 @@
 // Carousel
 "learn_option_spaced_repetition_title" = "Умное повторение";
 "learn_option_topics_title" = "Учить по темам";
-"learn_option_test_title" = "Пройти тест";
+"learn_option_test_title" = "Смоделировать тест";
+"learn_option_test_subtitle" = "Проверь готовность";
 "learn_option_favorites_title" = "Избранное";
 
 "learn_option_spaced_repetition_description" = "Учись с умом — сложные вопросы возвращаются, пока не запомнишь их";
@@ -333,10 +337,10 @@
 "statistics_reinforced_title" = "Закреплено";
 "statistics_mastered_title" = "Усвоено";
 "statistics_expert_title" = "Эксперт";
-"statistics_familiar_description" = "1 раз правильно";
-"statistics_reinforced_description" = "2 раза правильно";
-"statistics_mastered_description" = "3 раза правильно";
-"statistics_expert_description" = "4 раза и более правильно";
+"statistics_familiar_description" = "Ответил правильно 1 раз";
+"statistics_reinforced_description" = "Ответил правильно 2 раза";
+"statistics_mastered_description" = "Ответил правильно 3 раза";
+"statistics_expert_description" = "Ответил правильно 4+ раза";
 "statistics_card_flip_hint" = "Двойное нажатие переворачивает карточку";
 "ready" = "готов";
 
@@ -395,7 +399,6 @@
 
 "tab_home_title" = "Главная";
 "tab_learn_title" = "Учиться";
-"tab_test_title" = "Тест";
 "tab_progress_title" = "Прогресс";
 "tab_premium_title" = "Премиум";
 "tab_settings_title" = "Настройки";
@@ -405,7 +408,6 @@
 "tab_settings_beta2_title" = "Settings BETA 2";
 "main_tab_bar_accessibility_label" = "Основная навигация";
 "tab_learn_hint" = "Открывает экран обучения";
-"tab_test_hint" = "Открывает экран теста";
 "tab_progress_hint" = "Открывает прогресс и статистику";
 "tab_settings_hint" = "Открывает настройки";
 "tab_search_title" = "Поиск";

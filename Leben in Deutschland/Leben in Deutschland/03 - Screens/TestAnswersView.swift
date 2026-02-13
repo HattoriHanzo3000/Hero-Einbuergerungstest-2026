@@ -45,7 +45,6 @@ struct TestAnswersView: View {
         }
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
-        .fontDesign(.rounded)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .hidesTabBar()

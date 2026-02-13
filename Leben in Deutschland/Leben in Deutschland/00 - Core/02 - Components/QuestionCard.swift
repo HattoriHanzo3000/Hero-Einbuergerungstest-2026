@@ -72,7 +72,7 @@ struct QuestionCard: View {
                     
                     // Question text
                     Text(question.text)
-                        .font(.system(.headline, design: .rounded).weight(.semibold))
+                        .font(.system(.headline, weight: .semibold))
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
@@ -80,7 +80,7 @@ struct QuestionCard: View {
                     if showTranslation, let translated = effectiveTranslatedQuestion {
                         if translated.text != question.text {
                             Text(translated.text)
-                                .font(.system(.footnote, design: .rounded))
+                                .font(.system(.footnote))
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.leading)
                                 .padding(.top, 8)

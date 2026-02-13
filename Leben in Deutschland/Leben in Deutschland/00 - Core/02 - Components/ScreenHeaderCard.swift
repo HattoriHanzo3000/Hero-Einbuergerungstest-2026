@@ -13,10 +13,25 @@ import SwiftUI
 enum ScreenHeaderCardContent: Equatable {
     /// State title + slogan (Home).
     case state(stateName: String)
+    /// State title + slogan alternating with test date and optional readiness when mascot animates.
+    case stateWithTestDate(stateName: String, testDateMessage: String, readinessMessage: String? = nil)
     /// Single message text (Test date, etc.).
     case message(String)
     /// Mascot + progress text in separate containers (Progress).
     case readiness
+}
+
+private extension ScreenHeaderCardContent {
+    var isStateWithTestDate: Bool {
+        if case .stateWithTestDate = self { return true }
+        return false
+    }
+
+    /// Number of messages to cycle through (slogan + test date + optional readiness).
+    var messageCountForAlternating: Int {
+        guard case .stateWithTestDate(_, _, let readiness) = self else { return 2 }
+        return readiness != nil ? 3 : 2
+    }
 }
 
 // MARK: - Screen Header Card
@@ -26,6 +41,8 @@ struct ScreenHeaderCard: View {
     var autoPlayInterval: TimeInterval? = 60
     var content: ScreenHeaderCardContent
 
+    /// 0 = slogan, 1 = test date, 2 = readiness (when provided). Cycles on mascot animation.
+    @State private var messageIndex = 0
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var stateManager: StateManager
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -34,12 +51,29 @@ struct ScreenHeaderCard: View {
     private var titleToSloganSpacing: CGFloat { layoutMetrics.adaptive(6) }
     private var mascotSize: CGFloat { layoutMetrics.adaptive(120) }
 
+    private var premiumRowSpacing: CGFloat { layoutMetrics.adaptive(12) }
+
+    private var useHomeHeaderLayout: Bool {
+        switch content {
+        case .state, .stateWithTestDate, .readiness: return true
+        case .message: return false
+        }
+    }
+
     var body: some View {
-        HeaderCard(showPremiumButton: onPremiumTap != nil, onPremiumTap: onPremiumTap) {
+        HeaderCard(showPremiumButton: false) {
             Group {
-                switch content {
-                case .readiness, .state, .message:
-                    mascotWithContentLayout
+                if useHomeHeaderLayout {
+                    homeHeaderLayout
+                } else {
+                    VStack(alignment: .leading, spacing: premiumRowSpacing) {
+                        if onPremiumTap != nil {
+                            PremiumButton(action: { onPremiumTap?() }, color: .white)
+                                .scaleEffect(0.8)
+                                .frame(maxWidth: .infinity)
+                        }
+                        mascotWithContentLayout
+                    }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -49,10 +83,87 @@ struct ScreenHeaderCard: View {
         .id(languageManager.currentAppLanguage)
     }
 
+    /// Home layout: left = state + message; right = premium + mascot (same trailing padding).
+    @ViewBuilder
+    private var homeHeaderLayout: some View {
+        HStack(alignment: .top, spacing: mascotToContentSpacing) {
+            // Left: state + mascot message
+            VStack(alignment: .leading, spacing: premiumRowSpacing) {
+                stateTitleRow
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                mascotMessageRow
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            // Right: premium + mascot — same trailing edge
+            VStack(alignment: .trailing, spacing: premiumRowSpacing) {
+                if onPremiumTap != nil {
+                    PremiumButton(action: { onPremiumTap?() }, color: .white)
+                        .scaleEffect(0.8)
+                        .fixedSize(horizontal: true, vertical: false)
+                }
+
+                MascotView(
+                    autoPlayInterval: autoPlayInterval,
+                    onAnimationStart: content.isStateWithTestDate ? { advanceMessageIndex() } : nil
+                )
+                .frame(width: mascotSize, height: mascotSize)
+            }
+            .fixedSize(horizontal: true, vertical: false)
+        }
+    }
+
+    @ViewBuilder
+    private var stateTitleRow: some View {
+        switch content {
+        case .state(let stateName):
+            stateTitleText(stateName: stateName)
+        case .stateWithTestDate(let stateName, _, _):
+            stateTitleText(stateName: stateName)
+        case .readiness:
+            EmptyView()
+        default:
+            EmptyView()
+        }
+    }
+
+    private func stateTitleText(stateName: String) -> some View {
+        Text(getLocalizedStateName(stateName))
+            .font(.system(.title, weight: .heavy))
+            .foregroundColor(.white)
+            .multilineTextAlignment(.leading)
+            .lineLimit(nil)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .fixedSize(horizontal: false, vertical: true)
+            .id("state_title_\(stateName)")
+            .accessibilityLabel("main_header_state_accessibility_label".localized)
+            .accessibilityValue(getLocalizedStateName(stateName))
+            .accessibilityHint("main_header_state_accessibility_hint".localized)
+            .accessibilityAddTraits(.isStaticText)
+    }
+
+    @ViewBuilder
+    private var mascotMessageRow: some View {
+        switch content {
+        case .state(let stateName):
+            FederalStateSloganBlock(stateName: stateName, textColor: .white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        case .stateWithTestDate(let stateName, let testDateMessage, let readinessMessage):
+            stateContentWithAlternatingMessage(stateName: stateName, testDateMessage: testDateMessage, readinessMessage: readinessMessage)
+        case .readiness:
+            messageContent(text: formattedReadinessMessage)
+        default:
+            EmptyView()
+        }
+    }
+
     private var mascotWithContentLayout: some View {
         HStack(alignment: .center, spacing: mascotToContentSpacing) {
             MascotView(
-                autoPlayInterval: content == .readiness ? nil : autoPlayInterval
+                autoPlayInterval: content == .readiness ? nil : autoPlayInterval,
+                onAnimationStart: content.isStateWithTestDate ? { advanceMessageIndex() } : nil
             )
             .frame(width: mascotSize, height: mascotSize)
 
@@ -68,23 +179,27 @@ struct ScreenHeaderCard: View {
             messageContent(text: formattedReadinessMessage)
         case .state(let stateName):
             stateContent(stateName: stateName)
+        case .stateWithTestDate(let stateName, let testDateMessage, let readinessMessage):
+            stateContentWithAlternating(stateName: stateName, testDateMessage: testDateMessage, readinessMessage: readinessMessage)
         case .message(let text):
             messageContent(text: text)
         }
     }
 
     private var formattedReadinessMessage: String {
-        let key = "eagle_desc_chick"
-        let localized = key.localized
-        let locale = Locale(identifier: languageManager.currentAppLanguage)
-        return String(format: localized, locale: locale, readinessPercentage)
+        ReadinessMessageHelper.message(readinessPercentage: readinessPercentage, languageCode: languageManager.currentAppLanguage)
+    }
+
+    private func advanceMessageIndex() {
+        let count = content.messageCountForAlternating
+        messageIndex = (messageIndex + 1) % count
     }
 
     @ViewBuilder
     private func stateContent(stateName: String) -> some View {
         VStack(alignment: .leading, spacing: titleToSloganSpacing) {
             Text(getLocalizedStateName(stateName))
-                .font(.system(.title, design: .rounded).bold())
+                .font(.system(.title, weight: .heavy))
                 .foregroundColor(.white)
                 .multilineTextAlignment(.leading)
                 .lineLimit(nil)
@@ -101,9 +216,57 @@ struct ScreenHeaderCard: View {
         }
     }
 
+    /// Message-only block for home layout (slogan / test date / readiness). Used in mascotMessageRow.
+    @ViewBuilder
+    private func stateContentWithAlternatingMessage(stateName: String, testDateMessage: String, readinessMessage: String?) -> some View {
+        let count = readinessMessage != nil ? 3 : 2
+        let idx = messageIndex % count
+        let textMessage = idx == 1 ? testDateMessage : (readinessMessage ?? testDateMessage)
+
+        ZStack(alignment: .leading) {
+            if idx == 0 {
+                FederalStateSloganBlock(stateName: stateName, textColor: .white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .transition(.opacity)
+            } else {
+                Text(textMessage)
+                    .font(.system(.body, weight: .semibold))
+                    .italic()
+                    .lineSpacing(4)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.35), value: messageIndex)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private func stateContentWithAlternating(stateName: String, testDateMessage: String, readinessMessage: String?) -> some View {
+        VStack(alignment: .leading, spacing: titleToSloganSpacing) {
+            Text(getLocalizedStateName(stateName))
+                .font(.system(.title, weight: .heavy))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.leading)
+                .lineLimit(nil)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .id("state_title_\(stateName)")
+                .accessibilityLabel("main_header_state_accessibility_label".localized)
+                .accessibilityValue(getLocalizedStateName(stateName))
+                .accessibilityHint("main_header_state_accessibility_hint".localized)
+                .accessibilityAddTraits(.isStaticText)
+
+            stateContentWithAlternatingMessage(stateName: stateName, testDateMessage: testDateMessage, readinessMessage: readinessMessage)
+        }
+    }
+
     private func messageContent(text: String) -> some View {
         Text(text)
-            .font(.system(.body, design: .rounded).weight(.medium))
+            .font(.system(.body, weight: .semibold))
+            .italic()
             .lineSpacing(4)
             .foregroundColor(.white)
             .multilineTextAlignment(.leading)
@@ -120,7 +283,7 @@ struct ScreenHeaderCard: View {
 }
 
 // MARK: - Federal State Slogan Block
-/// Styled to match header text: .body, .rounded, .medium, lineSpacing(4).
+/// SF Pro Semibold Italic, lineSpacing(4). Matches Categories mascot message.
 struct FederalStateSloganBlock: View {
     @EnvironmentObject private var languageManager: LanguageManager
 
@@ -129,7 +292,8 @@ struct FederalStateSloganBlock: View {
 
     var body: some View {
         Text(localizedSlogan(for: stateName))
-            .font(.system(.body, design: .rounded).weight(.medium))
+            .font(.system(.body, weight: .semibold))
+            .italic()
             .lineSpacing(4)
             .foregroundColor(textColor)
             .multilineTextAlignment(.leading)

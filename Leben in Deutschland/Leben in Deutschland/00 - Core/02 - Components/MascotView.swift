@@ -8,6 +8,8 @@ struct MascotView: View {
     let autoPlayInterval: TimeInterval?
     let playSignal: UUID?
     let onPlayCompleted: (() -> Void)?
+    /// Called when mascot GIF animation starts (tap or auto-play). Use to sync UI (e.g. alternate header message).
+    let onAnimationStart: (() -> Void)?
 
     @State private var showMascotGif = false
     @State private var gifPlayToken: UUID = UUID()
@@ -19,11 +21,13 @@ struct MascotView: View {
     init(
         autoPlayInterval: TimeInterval? = nil,
         playSignal: UUID? = nil,
-        onPlayCompleted: (() -> Void)? = nil
+        onPlayCompleted: (() -> Void)? = nil,
+        onAnimationStart: (() -> Void)? = nil
     ) {
         self.autoPlayInterval = autoPlayInterval
         self.playSignal = playSignal
         self.onPlayCompleted = onPlayCompleted
+        self.onAnimationStart = onAnimationStart
     }
 
     var body: some View {
@@ -58,6 +62,7 @@ struct MascotView: View {
 
     private func playGifOnly() {
         guard !reduceMotion else { return }
+        onAnimationStart?()
         gifPlayToken = UUID()
         showMascotGif = true
         DispatchQueue.main.asyncAfter(deadline: .now() + LayoutMetrics.gifAnimationDuration) {
@@ -120,6 +125,7 @@ private extension MascotView {
             .allowsHitTesting(false)
         }
         .frame(width: mascotSize, height: mascotSize)
+        .scaleEffect(x: -1, y: 1)
         .contentShape(Rectangle())
         .onTapGesture {
             HapticManager.shared.lightImpact()

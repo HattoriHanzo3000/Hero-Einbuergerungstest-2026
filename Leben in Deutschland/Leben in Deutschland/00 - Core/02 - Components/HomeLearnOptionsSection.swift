@@ -22,6 +22,7 @@ struct HomeLearnOptionsSection: View {
                     LearnButtonContent(
                         icon: "arrow.triangle.2.circlepath",
                         title: "home_learn_spaced_repetition",
+                        subtitle: "home_learn_spaced_repetition_subtitle",
                         color: Color("AppBlueLagoon")
                     )
                 }
@@ -34,6 +35,7 @@ struct HomeLearnOptionsSection: View {
                     LearnButtonContent(
                         icon: "book.fill",
                         title: "home_learn_by_topics",
+                        subtitle: "home_learn_by_topics_subtitle",
                         color: Color("AppCaribean")
                     )
                 }
@@ -46,52 +48,30 @@ struct HomeLearnOptionsSection: View {
                     LearnButtonContent(
                         icon: "heart.fill",
                         title: "home_learn_favorites",
+                        subtitle: "home_learn_favorites_subtitle",
                         color: Color("AppPink")
                     )
                 }
                 .buttonStyle(BouncyScaleButtonStyle())
+
+                Button {
+                    HapticManager.shared.lightImpact()
+                    router.push(.testCountdown)
+                } label: {
+                    LearnButtonContent(
+                        icon: "checkmark.seal",
+                        title: "learn_option_test_title",
+                        subtitle: "learn_option_test_subtitle",
+                        color: Color("AppOrange")
+                    )
+                }
+                .buttonStyle(BouncyScaleButtonStyle())
+                .accessibilityLabel("learn_option_test_title".localized)
+                .accessibilityHint("learn_option_test_description".localized)
             }
         }
         .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
         .id(languageManager.currentAppLanguage)
-    }
-}
-
-// MARK: - Learn Button Content
-private struct LearnButtonContent: View {
-    let icon: String
-    let title: String
-    let color: Color
-    
-    @Environment(\.layoutMetrics) private var layoutMetrics
-    
-    var body: some View {
-        HStack(spacing: layoutMetrics.adaptive(16)) {
-            Image(systemName: icon)
-                .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
-                .foregroundColor(.white)
-                .frame(width: layoutMetrics.adaptive(52), height: layoutMetrics.adaptive(52))
-                .background(
-                    RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
-                        .fill(color)
-                )
-            
-            Text(title.localized)
-                .font(.system(.headline, design: .rounded).weight(.semibold))
-                .foregroundColor(.primary)
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Image(systemName: "chevron.right")
-                .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold, design: .rounded))
-                .foregroundColor(.secondary)
-        }
-        .padding(layoutMetrics.adaptive(18))
-        .background(
-            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(20), style: .continuous)
-                .fill(Color(.tertiarySystemBackground).opacity(0.9))
-        )
-        .contentShape(Rectangle())
     }
 }
 

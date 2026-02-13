@@ -4,7 +4,6 @@ import CoreImage.CIFilterBuiltins
 
 /// Share screen with QR code and share sheet. Matches Hero B2 style.
 struct SettingsShareView: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
     @State private var showShareSheet = false
@@ -28,19 +27,16 @@ struct SettingsShareView: View {
         }
         .navigationTitle("settings_share_button".localized)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                AdaptiveIconButton.backButton(action: { dismiss() }, tintColor: .primary)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                AdaptiveIconButton(
-                    systemName: "square.and.arrow.up",
-                    action: { showShareSheet = true },
-                    accessibilityLabel: "settings_share_button",
-                    accessibilityHint: "share_app_hint",
-                    tintColor: .primary
-                )
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    HapticManager.shared.lightImpact()
+                    showShareSheet = true
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                }
+                .accessibilityLabel("settings_share_button".localized)
+                .accessibilityHint("share_app_hint".localized)
             }
         }
         .sheet(isPresented: $showShareSheet) {

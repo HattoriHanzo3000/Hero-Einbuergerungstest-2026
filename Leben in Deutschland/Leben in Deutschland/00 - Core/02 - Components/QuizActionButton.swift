@@ -123,7 +123,7 @@ private extension QuizActionButton {
                 Text(verbatim: titleText)
             }
         }
-        .font(.system(.headline, design: .rounded).weight(.bold))
+        .font(.system(.headline, weight: .bold))
         .multilineTextAlignment(.center)
         .minimumScaleFactor(0.85)
         .allowsTightening(true)

@@ -97,7 +97,7 @@ struct FavoritesView: View {
                 
                 VStack(spacing: layoutMetrics.adaptive(12)) {
                     Text("favorites_empty_title".localized)
-                        .font(.system(.title2, design: .rounded).weight(.bold))
+                        .font(.system(.title2, design: .rounded).weight(.bold).width(.condensed))
                         .foregroundColor(.primary)
                     
                     Text("favorites_empty_message".localized)
