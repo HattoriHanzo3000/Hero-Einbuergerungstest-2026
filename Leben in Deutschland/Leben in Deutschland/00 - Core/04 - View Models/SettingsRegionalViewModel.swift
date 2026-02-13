@@ -12,6 +12,7 @@ final class SettingsRegionalViewModel: ObservableObject {
     @Published var showStateChangeWarning: Bool = false
     @Published var showAppLanguageChangeWarning: Bool = false
     @Published var showTranslationLanguageChangeWarning: Bool = false
+    @Published var isApplyingStateChange: Bool = false
 
     var currentLocale: Locale {
         languageManager.currentLocale
@@ -189,8 +190,13 @@ final class SettingsRegionalViewModel: ObservableObject {
         }
 
         HapticManager.shared.heavyImpact()
-        applyStateChange(name: pendingStateName, shouldResetProgress: true)
         showStateChangeWarning = false
+        isApplyingStateChange = true
+        applyStateChange(name: pendingStateName, shouldResetProgress: true)
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            isApplyingStateChange = false
+        }
     }
 
     private func bindLanguageManager() {
@@ -202,7 +208,7 @@ final class SettingsRegionalViewModel: ObservableObject {
                 self.translationOptions = Self.availableTranslationOptions(excluding: option)
                 if self.translationOptions.contains(self.translationLanguage) == false,
                    let fallback = self.translationOptions.first {
-                    self.setTranslationLanguage(fallback)
+                    self.languageManager.setTranslationLanguage(fallback.rawValue)
                 }
             }
             .store(in: &cancellables)

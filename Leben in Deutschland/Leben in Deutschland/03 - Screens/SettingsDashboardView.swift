@@ -97,7 +97,7 @@ struct SettingsDashboardView: View {
             Text("mail_unavailable_message".localized)
         }
         .overlay {
-            if languageManager.isApplyingLanguageChange {
+            if languageManager.isApplyingLanguageChange || (viewModel.regionalViewModel?.isApplyingStateChange ?? false) {
                 Color(.systemBackground)
                     .ignoresSafeArea()
                 VStack(spacing: 16) {
@@ -110,7 +110,7 @@ struct SettingsDashboardView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .transition(.opacity)
-                .animation(.easeInOut(duration: 0.2), value: languageManager.isApplyingLanguageChange)
+                .animation(.easeInOut(duration: 0.2), value: languageManager.isApplyingLanguageChange || (viewModel.regionalViewModel?.isApplyingStateChange ?? false))
             }
         }
     }

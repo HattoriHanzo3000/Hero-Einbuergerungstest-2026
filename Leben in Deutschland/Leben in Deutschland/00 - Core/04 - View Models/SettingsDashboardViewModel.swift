@@ -27,6 +27,11 @@ final class SettingsDashboardViewModel: ObservableObject {
         self.regionalViewModel = regionalViewModel
         self.personalisationViewModel = personalisationViewModel
 
+        regionalViewModel?.objectWillChange
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.objectWillChange.send() }
+            .store(in: &cancellables)
+
         // Forward supportViewModel changes so SettingsDashboardView re-renders when FAQ/mail state changes
         self.supportViewModel.objectWillChange
             .receive(on: DispatchQueue.main)
@@ -47,11 +52,16 @@ final class SettingsDashboardViewModel: ObservableObject {
     ) {
         guard regionalViewModel == nil else { return }
         let resolvedPreferences = onboardingPreferences ?? OnboardingPreferences.shared
-        regionalViewModel = SettingsRegionalViewModel(
+        let vm = SettingsRegionalViewModel(
             languageManager: languageManager,
             stateManager: stateManager,
             onboardingPreferences: resolvedPreferences
         )
+        regionalViewModel = vm
+        vm.objectWillChange
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.objectWillChange.send() }
+            .store(in: &cancellables)
     }
 
     func configurePersonalisationSection(
