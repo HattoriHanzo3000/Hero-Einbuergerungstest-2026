@@ -30,7 +30,7 @@ struct TestCountdownView: View {
 
             if count > 0 {
                 Text("\(count)")
-                    .font(.system(size: layoutMetrics.adaptive(120), weight: .bold, design: .rounded))
+                    .font(.system(size: layoutMetrics.adaptive(120), weight: .bold).width(.expanded))
                     .foregroundColor(Color("AppOrange"))
                     .scaleEffect(isVisible ? 1.0 : 0.3)
                     .opacity(isVisible ? 1.0 : 0.0)

@@ -124,6 +124,7 @@ private extension QuizActionButton {
             }
         }
         .font(.system(.headline, weight: .bold))
+        .fontDesign(.default)
         .multilineTextAlignment(.center)
         .minimumScaleFactor(0.85)
         .allowsTightening(true)

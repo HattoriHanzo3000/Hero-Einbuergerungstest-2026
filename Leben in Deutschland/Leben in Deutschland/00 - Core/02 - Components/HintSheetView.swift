@@ -28,7 +28,7 @@ struct HintSheetView: View {
                             .accessibilityHidden(true)
                         
                         Text("hint_title".localized)
-                            .font(.system(.title2, design: .rounded).weight(.bold).width(.condensed))
+                            .font(.system(.title2, weight: .regular).width(.expanded))
                             .foregroundColor(.white)
                     }
                     .padding(.vertical, layoutMetrics.adaptive(18))
@@ -48,19 +48,18 @@ struct HintSheetView: View {
                     // Hint text
                     VStack(alignment: .leading, spacing: 0) {
                         Text(hint)
-                            .font(.system(.body))
+                            .font(.system(.body, weight: .regular))
                             .foregroundColor(.primary)
-                            .lineSpacing(4)
                             .multilineTextAlignment(.leading)
+                            .lineLimit(nil)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .accessibilityLabel(hint)
                         
-                        // Translation of hint (when translation is active)
+                        // Translation of hint (when translation is active) — same style as question card translation
                         if let translatedHint = translatedHint, translatedHint != hint {
                             Text(translatedHint)
                                 .font(.system(.footnote))
                                 .foregroundColor(.secondary)
-                                .lineSpacing(4)
                                 .multilineTextAlignment(.leading)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.top, 8)
@@ -79,7 +78,10 @@ struct HintSheetView: View {
                 dismiss()
             }) {
                 Text("close".localized.uppercased())
-                    .font(.system(.headline, design: .rounded).weight(.bold))
+                    .font(.system(.headline, weight: .bold))
+                    .multilineTextAlignment(.center)
+                    .minimumScaleFactor(0.85)
+                    .allowsTightening(true)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, layoutMetrics.adaptive(18))

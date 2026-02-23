@@ -134,67 +134,50 @@ struct TestSessionQuestionCard: View {
         )
     }
     
-    // MARK: - Next/Finish Button
+    // MARK: - Next/Finish Button (same component and style as LearningView Next button)
     private var nextOrFinishButton: some View {
         let isLastQuestion = viewModel.currentQuestionIndex >= viewModel.questions.count - 1
         let allAnswered = viewModel.allQuestionsAnswered
         let isCurrentQuestionAnswered = viewModel.getAnswerForCurrentQuestion() != nil
         
-        // Label: "Finish Test" when on last question OR all answered; else "Next"
         let showFinishButton = isLastQuestion || allAnswered
         let nextEnabled = isCurrentQuestionAnswered
-        // Finish Test is active only when all answered; Next is active when current answered
-        let isButtonActive = showFinishButton ? allAnswered : nextEnabled
-        let buttonText = showFinishButton ? "finish_test".localizedUppercased() : "next_button".localizedUppercased()
-        let activeColor: Color = showFinishButton ? Color("AppOrange") : Color("AppBlueLagoon")
+        let buttonTitle = showFinishButton ? "finish_test".localized : "next_button".localized
+        let nextStyle = QuizActionButton.Style(
+            backgroundColor: Color("AppBlueLagoon"),
+            disabledBackgroundColor: Color(.systemGray2),
+            haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
+            haloSecondaryColor: Color.white.opacity(0.18),
+            suppressGlow: true
+        )
+        let finishStyle = QuizActionButton.Style(
+            backgroundColor: allAnswered ? Color("AppOrange") : Color(.systemGray2),
+            disabledBackgroundColor: Color(.systemGray2),
+            haloPrimaryColor: Color("AppOrange").opacity(0.36),
+            haloSecondaryColor: Color.white.opacity(0.18),
+            suppressGlow: true
+        )
         
-        return Button(action: {
+        return QuizActionButton(
+            buttonTitle,
+            style: showFinishButton ? finishStyle : nextStyle,
+            isEnabled: showFinishButton ? true : nextEnabled,
+            accessibilityLabel: showFinishButton ? "finish_test".localized : "next_button".localized
+        ) {
             if showFinishButton {
                 if allAnswered {
                     HapticManager.shared.mediumImpact()
                     onFinish()
                 } else {
-                    // Gray Finish Test on last question: show warning
                     HapticManager.shared.lightImpact()
                     showingIncompleteWarning = true
                 }
-            } else {
-                // Next: only act when active; gray tap does nothing
-                if nextEnabled {
-                    HapticManager.shared.mediumImpact()
-                    viewModel.nextQuestion()
-                }
+            } else if nextEnabled {
+                HapticManager.shared.mediumImpact()
+                viewModel.nextQuestion()
             }
-        }) {
-            Text(buttonText)
-                .font(.system(.headline, design: .rounded).weight(.bold))
-                .foregroundColor(.white)
-                .padding(.vertical, layoutMetrics.adaptive(18))
-                .frame(maxWidth: .infinity)
-                .background(
-                    ZStack {
-                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
-                            .fill(.ultraThinMaterial)
-                        
-                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
-                            .fill(isButtonActive ? activeColor : Color(.systemGray2))
-                    }
-                    .overlay(
-                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
-                            .stroke(Color.white.opacity(0.18), lineWidth: 1)
-                    )
-                    .shadow(
-                        color: Color.black.opacity(isButtonActive ? 0.16 : 0.08),
-                        radius: layoutMetrics.adaptive(22),
-                        y: layoutMetrics.adaptive(10)
-                    )
-                )
-                .opacity(isButtonActive ? 1 : 0.75)
-                .scaleEffect(isButtonActive ? 1 : 0.98)
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(showFinishButton ? "finish_test".localized : "next_button".localized)
-        .accessibilityAddTraits(.isButton)
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, layoutMetrics.adaptive(24))
     }
     

@@ -89,11 +89,14 @@ struct TestResultsView: View {
                             
                             VStack(alignment: .leading, spacing: layoutMetrics.adaptive(4)) {
                                 Text(results.isPassed ? "test_passed".localized : "test_failed".localized)
-                                    .font(.system(.title, design: .rounded).weight(.bold).width(.condensed))
+                                    .font(.system(.title, weight: .heavy))
+                                    .fontDesign(.default)
                                     .foregroundColor(resultColor)
                                 
                                 Text("\(results.correctAnswers) \("of".localized) \(results.totalQuestions) \("questions_correct".localized)")
-                                    .font(.system(.body, design: .rounded).weight(.semibold))
+                                    .font(.system(.body, weight: .semibold))
+                                    .fontDesign(.default)
+                                    .lineSpacing(4)
                                     .foregroundColor(.secondary)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -106,31 +109,46 @@ struct TestResultsView: View {
                             VStack(spacing: layoutMetrics.adaptive(12)) {
                                 HStack {
                                     Text("time_used".localized)
+                                        .font(.system(.body, weight: .medium))
+                                        .fontDesign(.default)
                                     Spacer()
                                     Text(results.timeString)
+                                        .font(.system(.body, weight: .medium))
+                                        .fontDesign(.default)
                                 }
                                 
                                 HStack {
                                     Text("minimum_requirement".localized)
+                                        .font(.system(.body, weight: .medium))
+                                        .fontDesign(.default)
                                     Spacer()
                                     Text("17 \("of".localized) 33")
+                                        .font(.system(.body, weight: .medium))
+                                        .fontDesign(.default)
                                 }
                                 
                                 HStack {
                                     Text("your_result".localized)
+                                        .font(.system(.body, weight: .medium))
+                                        .fontDesign(.default)
                                     Spacer()
                                     Text("\(results.correctAnswers) \("of".localized) 33")
+                                        .font(.system(.body, weight: .medium))
+                                        .fontDesign(.default)
                                         .foregroundColor(resultColor)
                                 }
                                 
                                 HStack {
                                     Text("accuracy".localized)
+                                        .font(.system(.body, weight: .medium))
+                                        .fontDesign(.default)
                                     Spacer()
                                     Text("\(Int(results.accuracy * 100))%")
+                                        .font(.system(.body, weight: .medium))
+                                        .fontDesign(.default)
                                         .foregroundColor(resultColor)
                                 }
                             }
-                            .font(.system(size: 16, weight: .medium, design: .rounded))
                         }
                         .padding(.horizontal, layoutMetrics.adaptive(20))
                         .padding(.bottom, layoutMetrics.adaptive(100)) // Space for bottom buttons
