@@ -200,8 +200,6 @@ class LearningViewModel: ObservableObject {
     private func updateStateForNewQuestion() {
         guard let question = currentQuestion else { return }
         
-        showTranslation = false
-        
         // Load saved answer if exists
         selectedAnswer = answersService.getAnswer(for: question.id)
         

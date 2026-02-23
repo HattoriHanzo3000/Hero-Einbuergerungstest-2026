@@ -12,6 +12,7 @@ struct LearningDestinationView: View {
     let subcategoryName: String
     let categoryName: String
     @EnvironmentObject var languageManager: LanguageManager
+    @Environment(AppRouter.self) private var router
     @State private var subcategory: SubcategoryModel?
     @State private var isLoading = true
     private let contentService = ContentService.shared
@@ -31,18 +32,31 @@ struct LearningDestinationView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.systemBackground))
             } else {
-                VStack(spacing: 16) {
+                VStack(spacing: 24) {
                     Image(systemName: "exclamationmark.triangle")
                         .font(.system(size: 48))
                         .foregroundColor(.secondary)
                     Text("Could not load questions for \(subcategoryName)")
                         .font(.headline)
                         .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 24)
+                    HStack(spacing: 16) {
+                        Button("try_again".localized) {
+                            Task { await loadSubcategory() }
+                        }
+                        .buttonStyle(.borderedProminent)
+                        Button("back".localized) {
+                            router.pop()
+                        }
+                        .buttonStyle(.bordered)
+                    }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.systemBackground))
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
         .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
             await loadSubcategory()
         }

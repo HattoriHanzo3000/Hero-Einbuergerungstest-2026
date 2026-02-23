@@ -13,6 +13,13 @@ struct LayoutMetrics {
     static let sectionSpacing: CGFloat = 28
     static let footerPadding: CGFloat = 36
     
+    // MARK: - Quiz Footer (Learning, Test, Spaced Repetition)
+    static let footerHorizontalPadding: CGFloat = 24
+    static let footerSectionSpacing: CGFloat = 12
+    static let footerBottomPadding: CGFloat = 16
+    /// Extra height for the nav bar row so circles are not clipped by ScrollView.
+    static let footerNavigationBarRowExtraHeight: CGFloat = 4
+    
     static let buttonTapAnimationDuration: Double = 0.22
     static let gifAnimationDuration: Double = 1.1
     static let totalFederalQuestions: Int = 310
