@@ -14,9 +14,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
     var onBackTapped: (() -> Void)?
     /// Back icon: .backward (chevron.backward) or .down (chevron.down).
     var backIcon: QuestionCardBackIcon = .backward
-    var showPremiumButton: Bool = false
     var gradient: LiquidGlassGradient = .blue
-    var onPremiumTap: (() -> Void)?
     /// Optional title (e.g. subcategory name, "Your answers").
     var title: String?
     /// When true, title is shown on the same row as the back button, right-aligned (no separate title block).
@@ -26,6 +24,9 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
     /// Question ID for label. When nil, question row is hidden.
     var questionId: String?
     var onReportTapped: (() -> Void)?
+    /// When true, shows premium shield on the same row as back arrow, aligned right.
+    var showPremiumButton: Bool = false
+    var onPremiumTap: (() -> Void)? = nil
     @ViewBuilder var trailingActions: () -> ActionContent
 
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -43,7 +44,6 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
             .overlay(HeaderBorderOverlay())
             .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
             .padding(.horizontal)
-            .padding(.top, layoutMetrics.adaptive(8))
     }
 
     private var headerCardContent: some View {
@@ -52,20 +52,21 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
                 backButtonRow
             }
 
-            if title != nil, !titleInBackRow {
-                titleSection
-            }
-
             if progress != nil {
                 progressBar
             }
 
-            if questionId != nil {
+            if title != nil, !titleInBackRow, questionId != nil {
+                titleAndQuestionRow
+            } else if title != nil, !titleInBackRow {
+                titleSection
+            } else if questionId != nil {
                 questionHeaderRow
             }
         }
     }
 
+    /// Top row: back (left) | title (optional) | Spacer | premium (optional) | action buttons (right).
     private var backButtonRow: some View {
         HStack {
             Button(action: {
@@ -75,7 +76,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
                 Image(systemName: backIcon.systemName)
                     .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
                     .foregroundColor(.white)
-                    .padding(layoutMetrics.adaptive(10))
+                    .frame(width: layoutMetrics.adaptive(40), height: layoutMetrics.adaptive(40))
                     .background(
                         Circle()
                             .fill(Color.white.opacity(0.18))
@@ -83,8 +84,6 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel("back_button_accessibility_label".localized)
-
-            Spacer()
 
             if titleInBackRow, let title {
                 Text(title)
@@ -95,9 +94,13 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
                     .minimumScaleFactor(0.85)
             }
 
-            if showPremiumButton {
-                PremiumButton(action: { onPremiumTap?() }, color: .white)
+            Spacer()
+
+            if showPremiumButton, let onPremiumTap {
+                PremiumButton(action: onPremiumTap, color: .white)
             }
+
+            trailingActions()
         }
     }
 
@@ -110,6 +113,23 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
                 .multilineTextAlignment(.leading)
                 .lineLimit(2)
                 .minimumScaleFactor(0.85)
+        }
+    }
+
+    /// Question ID + flag (left) | category title (right) on same row.
+    @ViewBuilder
+    private var titleAndQuestionRow: some View {
+        if let title, questionId != nil {
+            HStack {
+                questionLabelView
+                Spacer()
+                Text(title)
+                    .font(.system(.title2, weight: .regular).width(.condensed))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.trailing)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.85)
+            }
         }
     }
 
@@ -130,7 +150,6 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
         HStack {
             questionLabelView
             Spacer()
-            trailingActions()
         }
     }
 
@@ -139,7 +158,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
         if let questionId {
             HStack(spacing: 8) {
                 Text("question_label".localized + " \(questionId)")
-                    .font(.system(.title2, weight: .thin).width(.condensed))
+                    .font(.system(.title2, weight: .light).width(.compressed))
                     .foregroundColor(.white)
                     .accessibilityLabel("question_label".localized + " " + questionId)
 
@@ -176,23 +195,23 @@ extension QuestionCardHeaderCard where ActionContent == EmptyView {
     init(
         onBackTapped: (() -> Void)? = nil,
         backIcon: QuestionCardBackIcon = .backward,
-        showPremiumButton: Bool = false,
         gradient: LiquidGlassGradient = .blue,
-        onPremiumTap: (() -> Void)? = nil,
         title: String? = nil,
         progress: (answered: Int, total: Int)? = nil,
         questionId: String? = nil,
-        onReportTapped: (() -> Void)? = nil
+        onReportTapped: (() -> Void)? = nil,
+        showPremiumButton: Bool = false,
+        onPremiumTap: (() -> Void)? = nil
     ) {
         self.onBackTapped = onBackTapped
         self.backIcon = backIcon
-        self.showPremiumButton = showPremiumButton
         self.gradient = gradient
-        self.onPremiumTap = onPremiumTap
         self.title = title
         self.progress = progress
         self.questionId = questionId
         self.onReportTapped = onReportTapped
+        self.showPremiumButton = showPremiumButton
+        self.onPremiumTap = onPremiumTap
         self.trailingActions = { EmptyView() }
     }
 }
@@ -201,8 +220,6 @@ extension QuestionCardHeaderCard where ActionContent == EmptyView {
 #Preview {
     QuestionCardHeaderCard(
         onBackTapped: {},
-        showPremiumButton: true,
-        onPremiumTap: {},
         title: "Politics in Democracy",
         progress: (5, 10),
         questionId: "101",

@@ -35,7 +35,6 @@ struct HomeView: View {
                         .fill(LiquidGlassGradient.blue.screenBackground)
                         .ignoresSafeArea(edges: .top)
                 )
-                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.orange, lineWidth: 1))
 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: sectionSpacing) {

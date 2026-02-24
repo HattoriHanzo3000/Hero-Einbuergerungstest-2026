@@ -11,6 +11,7 @@ import SwiftUI
 struct FavoritesView: View {
     @Environment(AppRouter.self) private var router
     @EnvironmentObject private var languageManager: LanguageManager
+    @EnvironmentObject private var premiumManager: PremiumManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     
     @StateObject private var viewModel = FavoritesViewModel()
@@ -59,6 +60,7 @@ struct FavoritesView: View {
                 onGoToQuestion: { viewModel.currentIndex = $0 }
             )
             .environmentObject(languageManager)
+            .environmentObject(premiumManager)
         }
     }
     

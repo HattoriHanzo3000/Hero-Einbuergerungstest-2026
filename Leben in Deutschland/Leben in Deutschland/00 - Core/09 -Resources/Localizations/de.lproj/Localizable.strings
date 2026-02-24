@@ -299,14 +299,25 @@
 "answer_all_questions_title" = "Erst alle Fragen beantworten";
 "answer_all_questions_message" = "Du musst alle Fragen beantworten, bevor du den Test beenden kannst.";
 
-"test_passed" = "Test bestanden!";
-"test_failed" = "Test nicht bestanden";
+"test_passed" = "Hurra, Test bestanden!";
+"test_failed" = "Leider nicht bestanden";
+"test_result_only_prefix" = "Nur";
 "of" = "von";
 "questions_correct" = "Fragen richtig";
 "time_used" = "Benötigte Zeit:";
 "minimum_requirement" = "Mindestanforderung:";
 "your_result" = "Ihr Ergebnis:";
 "accuracy" = "Genauigkeit:";
+"test_results_summary" = "Zusammenfassung";
+"test_results_weakest_category" = "Schwächste Kategorie";
+"test_results_strongest_category" = "Stärkste Kategorie";
+"test_results_correct_in_category" = "%d von %d richtig";
+"test_results_correct_in_category_label" = "Richtig in dieser Kategorie";
+"test_results_category_breakdown" = "Nach Kategorie";
+"test_results_all_correct" = "Alles richtig";
+"test_results_some_mistakes" = "Einige Fehler";
+"test_results_all_wrong" = "Alles falsch";
+"test_results_x_of_y" = "%d von %d";
 
 "view_answers" = "ANTWORTEN ANZEIGEN";
 "try_again" = "ERNEUT VERSUCHEN";

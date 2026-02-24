@@ -17,8 +17,9 @@ struct QuizHeaderIconButton: View {
     
     @Environment(\.layoutMetrics) private var layoutMetrics
     
-    private var iconSize: CGFloat { layoutMetrics.adaptive(18) }
-    private var containerSize: CGFloat { layoutMetrics.adaptive(38) }
+    /// Matches back arrow: icon 20pt, fixed 40pt circle (reference size).
+    private var iconSize: CGFloat { layoutMetrics.adaptive(20) }
+    private var circleSize: CGFloat { layoutMetrics.adaptive(40) }
     
     init(
         systemName: String,
@@ -56,7 +57,7 @@ extension QuizHeaderIconButton {
         QuizHeaderIconButton(
             systemName: "globe",
             isActive: isActive,
-            activeTint: Color("AppOrange"),
+            activeTint: AppActionIconColors.translationActive,
             inactiveTint: .white,
             showGlow: false,
             showStroke: false,
@@ -71,7 +72,7 @@ extension QuizHeaderIconButton {
         QuizHeaderIconButton(
             systemName: "heart",
             isActive: isActive,
-            activeTint: Color("AppPink"),
+            activeTint: AppActionIconColors.favoriteActive,
             inactiveTint: .white,
             showGlow: false,
             showStroke: false,
@@ -87,56 +88,26 @@ private extension QuizHeaderIconButton {
     @ViewBuilder
     var buttonContent: some View {
         let baseButton = Button(action: action) {
-            ZStack {
-                Circle()
-                    .fill(.thinMaterial)
-                    .overlay(glowMask.opacity(showGlow && isActive ? 1 : 0))
-                    .overlay(
-                        Group {
-                            if showStroke {
-                                Circle()
-                                    .stroke(Color.white.opacity(0.22), lineWidth: 1)
-                            }
-                        }
-                    )
-                    .shadow(
-                        color: showGlow ? activeTint.opacity(isActive ? 0.55 : 0) : .clear,
-                        radius: showGlow && isActive ? layoutMetrics.adaptive(22) : 0,
-                        y: showGlow && isActive ? layoutMetrics.adaptive(4) : 0
-                    )
-                    .frame(width: containerSize, height: containerSize)
-                
-                Image(systemName: systemName)
-                    .font(.system(size: iconSize, weight: .semibold))
-                    .symbolVariant(useFilledWhenActive && isActive ? .fill : .none)
-                    .foregroundStyle(isActive ? activeTint : (inactiveTint ?? Color(.systemGray6)))
-            }
-            .frame(width: containerSize, height: containerSize)
-            .animation(.easeInOut(duration: 0.25), value: isActive)
+            Image(systemName: systemName)
+                .font(.system(size: iconSize, weight: .semibold))
+                .symbolVariant(useFilledWhenActive && isActive ? .fill : .none)
+                .foregroundColor(isActive ? activeTint : (inactiveTint ?? .white))
+                .frame(width: circleSize, height: circleSize)
+                .background(
+                    Circle()
+                        .fill(Color.white.opacity(0.18))
+                )
         }
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityLabel)
         .accessibilityAddTraits(.isButton)
+        .animation(.easeInOut(duration: 0.25), value: isActive)
         
         if let accessibilityHint {
             baseButton.accessibilityHint(accessibilityHint)
         } else {
             baseButton
         }
-    }
-    
-    var glowMask: some View {
-        RadialGradient(
-            colors: [
-                activeTint.opacity(0.8),
-                activeTint.opacity(0.12),
-                Color.clear
-            ],
-            center: .center,
-            startRadius: 0,
-            endRadius: containerSize * 0.95
-        )
-        .clipShape(Circle())
     }
 }
 

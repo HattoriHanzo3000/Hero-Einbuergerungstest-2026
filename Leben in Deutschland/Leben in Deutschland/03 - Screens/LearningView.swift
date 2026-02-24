@@ -23,6 +23,7 @@ struct LearningView: View {
     @State private var showingFeedbackReport = false
     @State private var showingHintSheet = false
     @State private var resetButtonFlash = false
+    @State private var hintGlowPhase = false
     
     private let hintService = HintService.shared
     
@@ -37,18 +38,15 @@ struct LearningView: View {
             // Header with title, progress, and actions
             headerView
                 .padding(.bottom, layoutMetrics.adaptive(12))
-            
+
             Divider()
                 .background(Color(.separator))
-            
-            // Question and answers content
+
+            // Question and answers content (fades into footer, no separator)
             if !viewModel.questions.isEmpty {
                 questionContentView
             }
-            
-            Divider()
-                .background(Color(.separator))
-            
+
             // Footer with navigation and check button
             footerView
         }
@@ -97,7 +95,91 @@ struct LearningView: View {
             viewModel.loadInitialState()
         }
     }
-    
+
+    private func footerIconCircle<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        content()
+            .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
+            .frame(width: layoutMetrics.adaptive(44), height: layoutMetrics.adaptive(44))
+            .background(Circle().fill(Color(.secondarySystemFill)))
+    }
+
+    private var hintFooterButton: some View {
+        let bulbColor = hintGlowPhase ? Color("AppAmber") : Color(.secondaryLabel)
+        return Button(action: {
+            HapticManager.shared.lightImpact()
+            hintAction()
+        }) {
+            footerIconCircle {
+                Image(systemName: "lightbulb.fill")
+                    .foregroundColor(bulbColor)
+                    .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: hintGlowPhase)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("hint_button_title".localized)
+        .accessibilityAddTraits(.isButton)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                hintGlowPhase = true
+            }
+        }
+    }
+
+    private var resetFooterButton: some View {
+        Button(action: {
+            HapticManager.shared.lightImpact()
+            withAnimation(.easeOut(duration: 0.3)) { resetButtonFlash = true }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                withAnimation(.easeOut(duration: 0.2)) { resetButtonFlash = false }
+            }
+            viewModel.resetCurrentQuestion()
+        }) {
+            footerIconCircle {
+                Image(systemName: "arrow.counterclockwise")
+                    .foregroundColor(resetButtonFlash ? Color.green : Color(.secondaryLabel))
+                    .animation(.easeOut(duration: 0.3), value: resetButtonFlash)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Reset question")
+        .accessibilityAddTraits(.isButton)
+    }
+
+    private var translationFooterButton: some View {
+        Button(action: {
+            HapticManager.shared.lightImpact()
+            viewModel.toggleTranslation()
+        }) {
+            footerIconCircle {
+                Image(systemName: "globe")
+                    .foregroundColor(viewModel.showTranslation ? AppActionIconColors.translationActive : Color(.secondaryLabel))
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("spaced_translation_button_accessibility_label".localized)
+        .accessibilityAddTraits(.isButton)
+    }
+
+    private var favoriteFooterButton: some View {
+        Group {
+            if let currentQuestion = viewModel.currentQuestion {
+                let isFavorite = viewModel.isFavorite(questionId: currentQuestion.id)
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    viewModel.toggleFavorite(for: currentQuestion.id)
+                }) {
+                    footerIconCircle {
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .foregroundColor(isFavorite ? AppActionIconColors.favoriteActive : Color(.secondaryLabel))
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("spaced_favorite_button_accessibility_label".localized)
+                .accessibilityAddTraits(.isButton)
+            }
+        }
+    }
+
     // MARK: - Header View
     private var headerView: some View {
         QuestionCardHeaderCard(
@@ -108,60 +190,14 @@ struct LearningView: View {
                     dismiss()
                 }
             },
-            showPremiumButton: true,
-            onPremiumTap: { premiumManager.presentPaywall() },
             title: subcategory.name,
             progress: viewModel.questions.count > 1 ? (viewModel.answeredCount, viewModel.questions.count) : nil,
             questionId: viewModel.currentQuestion?.id,
             onReportTapped: { showingFeedbackReport = true },
-            trailingActions: {
-                HStack(spacing: layoutMetrics.adaptive(8)) {
-                    resetButtonWithFlash
-                    QuizHeaderIconButton.translation(isActive: viewModel.showTranslation) {
-                        HapticManager.shared.lightImpact()
-                        viewModel.toggleTranslation()
-                    }
-                    if let currentQuestion = viewModel.currentQuestion {
-                        QuizHeaderIconButton.favorite(isActive: viewModel.isFavorite(questionId: currentQuestion.id)) {
-                            HapticManager.shared.lightImpact()
-                            viewModel.toggleFavorite(for: currentQuestion.id)
-                        }
-                    }
-                }
-            }
+            showPremiumButton: true,
+            onPremiumTap: { premiumManager.presentPaywall() },
+            trailingActions: { EmptyView() }
         )
-    }
-
-    private var resetButtonWithFlash: some View {
-        Button(action: {
-            HapticManager.shared.lightImpact()
-            // Trigger flash animation
-            withAnimation(.easeOut(duration: 0.3)) {
-                resetButtonFlash = true
-            }
-            // Reset flash after animation
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                withAnimation(.easeOut(duration: 0.2)) {
-                    resetButtonFlash = false
-                }
-            }
-            viewModel.resetCurrentQuestion()
-        }) {
-            ZStack {
-                Circle()
-                    .fill(.thinMaterial)
-                    .frame(width: layoutMetrics.adaptive(38), height: layoutMetrics.adaptive(38))
-                
-                Image(systemName: "arrow.counterclockwise")
-                    .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold))
-                    .foregroundStyle(resetButtonFlash ? Color.green : Color.white)
-                    .animation(.easeOut(duration: 0.3), value: resetButtonFlash)
-            }
-            .frame(width: layoutMetrics.adaptive(38), height: layoutMetrics.adaptive(38))
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Reset question")
-        .accessibilityAddTraits(.isButton)
     }
     
     // MARK: - Question Content
@@ -189,21 +225,43 @@ struct LearningView: View {
             }
         }
         .background(Color(.systemBackground))
+        .overlay(alignment: .bottom) {
+            // Dissolve effect: content fades as it scrolls under the footer (iOS Photos-style)
+            LinearGradient(
+                colors: [
+                    Color(.systemBackground).opacity(0),
+                    Color(.systemBackground)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: layoutMetrics.adaptive(40))
+            .allowsHitTesting(false)
+        }
     }
     
     // MARK: - Footer View
     private var footerView: some View {
         VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
-            HStack(spacing: layoutMetrics.adaptive(12)) {
-                // Hint button (appears when answer is shown and hint exists)
-                if viewModel.showCorrectAnswer,
-                   let currentQuestion = viewModel.currentQuestion,
-                   hintService.getHint(for: currentQuestion.id) != nil {
-                    HintIconButton(action: hintAction)
-                        .transition(.scale.combined(with: .opacity))
+            // Action bar: hint (left, appears with animation after answer), reset, translation, favorite (right)
+            if viewModel.currentQuestion != nil {
+                HStack(spacing: layoutMetrics.adaptive(12)) {
+                    if viewModel.showCorrectAnswer,
+                       let currentQuestion = viewModel.currentQuestion,
+                       hintService.getHint(for: currentQuestion.id) != nil {
+                        hintFooterButton
+                            .transition(.opacity.combined(with: .scale(scale: 0.96)))
+                    }
+                    Spacer(minLength: 0)
+                    resetFooterButton
+                    translationFooterButton
+                    favoriteFooterButton
                 }
-                
-                // Check/Next button (shrinks when hint appears)
+                .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
+            }
+
+            HStack(spacing: layoutMetrics.adaptive(12)) {
+                // Check/Next button
                 QuizActionButton(
                     buttonTitle,
                     style: checkButtonStyle,
@@ -227,17 +285,24 @@ struct LearningView: View {
                     questionCount: viewModel.questions.count,
                     currentIndex: viewModel.currentIndex,
                     circleColor: circleColor(for:),
+                    circleTextColor: { _ in .white },
                     onPrevious: { viewModel.goToQuestion(at: viewModel.currentIndex - 1) },
                     onNext: { viewModel.goToQuestion(at: viewModel.currentIndex + 1) },
                     onSelectIndex: { viewModel.goToQuestion(at: $0) },
+                    gradient: .blue,
+                    circleGradient: circleGradient(for:),
                     arrowCircleSize: layoutMetrics.adaptive(42),
-                    enableScrollHaptic: true
+                    enableScrollHaptic: true,
+                    enableChangeHaptic: false
                 )
             }
         }
         .padding(.top, layoutMetrics.adaptive(12))
         .background(Color(.systemBackground))
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.showCorrectAnswer)
+        .onChange(of: viewModel.showCorrectAnswer) { _, isRevealed in
+            if !isRevealed { hintGlowPhase = false }
+        }
     }
     
     private var buttonTitle: String {
@@ -259,7 +324,8 @@ struct LearningView: View {
             haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
             haloSecondaryColor: Color.white.opacity(0.18),
             showsHaloWhenDisabled: viewModel.showCorrectAnswer,
-            suppressGlow: true
+            suppressGlow: true,
+            gradient: .blue
         )
     }
     
@@ -277,6 +343,13 @@ struct LearningView: View {
             return Color(.systemGray5)
         }
     }
+
+    /// Green gradient for correct, red for wrong, nil for unanswered (uses circleColor).
+    private func circleGradient(for index: Int) -> LiquidGlassGradient? {
+        if viewModel.isCorrect(at: index) { return .green }
+        if viewModel.isIncorrect(at: index) { return .red }
+        return nil
+    }
     
 }
 
@@ -290,30 +363,64 @@ struct LearningView: View {
 @MainActor
 private enum LearningViewPreview {
     static func basicLawPreview() -> some View {
-        let subcategory = loadBasicLawSubcategory()
+        let subcategory = loadPreviewSubcategoryWithHint()
         populateCorrectAnswers()
+        injectHintForQuestion003()
         return LearningPreviewHost(subcategory: subcategory)
     }
     
-    private static func loadBasicLawSubcategory() -> SubcategoryModel {
+    /// Inject hint for question 003 so the hint icon appears after answering in preview.
+    private static func injectHintForQuestion003() {
+        let hintText = "Remember the key dates and events that shaped modern German history."
+        HintService.shared.hints["003"] = hintText
+        HintService.shared.hints["q003"] = hintText
+    }
+    
+    /// Load a subcategory whose first question is 003 (real question with hint in hints_en).
+    private static func loadPreviewSubcategoryWithHint() -> SubcategoryModel {
         guard
             let url = Bundle.main.url(forResource: "content_en", withExtension: "json", subdirectory: "Content"),
             let data = try? Data(contentsOf: url),
             let contentArray = try? JSONDecoder().decode([ContentData].self, from: data),
             let content = contentArray.first
         else {
-            return fallbackSubcategory()
+            return fallbackSubcategoryWithQuestion003()
         }
         
-        if let match = content.content.first(where: { $0.category == "Law and Constitution" && $0.subcategory == "Basic Law" }) {
+        if let match = content.content.first(where: { $0.subcategory == "Democracy" && $0.questions.contains(where: { $0.id == "003" }) }) {
+            let questions = match.questions
+            guard let indexOf003 = questions.firstIndex(where: { $0.id == "003" }) else {
+                return fallbackSubcategoryWithQuestion003()
+            }
+            let q003 = questions[indexOf003]
             return SubcategoryModel(
                 name: match.subcategory,
                 categoryName: match.category,
-                questions: Array(match.questions.prefix(10))
+                questions: [q003] + questions.prefix(3).filter { $0.id != "003" }
             )
         }
         
-        return fallbackSubcategory()
+        return fallbackSubcategoryWithQuestion003()
+    }
+    
+    private static func fallbackSubcategoryWithQuestion003() -> SubcategoryModel {
+        let question003 = QuestionModel(
+            id: "003",
+            text: "Germany is a constitutional state. What does that mean?",
+            options: [
+                "All residents and the state must abide by the laws.",
+                "The state does not have to follow the laws.",
+                "Only Germans must follow the laws.",
+                "Courts create the laws."
+            ],
+            category: "State",
+            subcategory: "Democracy"
+        )
+        return SubcategoryModel(
+            name: "Democracy",
+            categoryName: "State",
+            questions: [question003]
+        )
     }
     
     private static func populateCorrectAnswers() {
@@ -326,41 +433,6 @@ private enum LearningViewPreview {
         }
         
         ContentService.shared.correctAnswers = Dictionary(uniqueKeysWithValues: decoded.map { ($0.questionId, $0.answerIndex) })
-    }
-    
-    private static func fallbackSubcategory() -> SubcategoryModel {
-        let sampleQuestions: [QuestionModel] = [
-            QuestionModel(
-                id: "Sample-001",
-                text: "Which institution is responsible for protecting the Basic Law in Germany?",
-                options: [
-                    "The Federal Constitutional Court",
-                    "The Federal Council",
-                    "The Federal Chancellor",
-                    "The Bundestag"
-                ],
-                category: "Law and Constitution",
-                subcategory: "Basic Law"
-            ),
-            QuestionModel(
-                id: "Sample-002",
-                text: "What is the first article of the German Basic Law about?",
-                options: [
-                    "Freedom of speech",
-                    "Human dignity",
-                    "Freedom of assembly",
-                    "Right to asylum"
-                ],
-                category: "Law and Constitution",
-                subcategory: "Basic Law"
-            )
-        ]
-        
-        return SubcategoryModel(
-            name: "Basic Law",
-            categoryName: "Law and Constitution",
-            questions: sampleQuestions
-        )
     }
 }
 #endif

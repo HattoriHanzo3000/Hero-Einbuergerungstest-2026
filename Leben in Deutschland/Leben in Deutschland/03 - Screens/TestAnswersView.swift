@@ -26,31 +26,35 @@ struct TestAnswersView: View {
         return viewModel.questions[currentQuestionIndex]
     }
     
-    /// Header gradient (shared with TestResultsView).
-    private var resultHeaderGradient: LinearGradient {
-        (viewModel.isPassed ? LiquidGlassGradient.green : .red).screenBackground
+    /// Swipe-down on header dismisses the sheet; gesture is only on the header so body scroll is unaffected.
+    private var headerSwipeToDismissGesture: some Gesture {
+        DragGesture(minimumDistance: 20)
+            .onEnded { value in
+                let dragDown = value.translation.height > 0
+                let sufficient = value.translation.height > 80 || value.predictedEndTranslation.height > 120
+                if dragDown && sufficient {
+                    HapticManager.shared.lightImpact()
+                    dismiss()
+                }
+            }
     }
 
     var body: some View {
         VStack(spacing: 0) {
-            headerView
-                .padding(.horizontal, layoutMetrics.adaptive(16))
-                .padding(.top, layoutMetrics.adaptive(12))
-                .padding(.bottom, layoutMetrics.adaptive(12))
-                .background(
-                    Rectangle()
-                        .fill(resultHeaderGradient)
-                        .ignoresSafeArea(edges: .top)
-                )
-            Divider()
-                .background(Color(.separator))
-            answersContent
-            Divider()
-                .background(Color(.separator))
-            navigationBar
+            // Stack 1: Header only — swipe down here dismisses the sheet
+            headerSection
+                .contentShape(Rectangle())
+                .gesture(headerSwipeToDismissGesture)
+
+            // Stack 2: Body + footer — scroll lives here only; touches here never dismiss the sheet
+            bodySection
         }
+        .padding(.top, layoutMetrics.adaptive(16))
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
+        .fullScreenCover(item: $zoomedAsset) { item in
+            FullScreenImageView(assetName: item.name, onDismiss: { zoomedAsset = nil })
+        }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .hidesTabBar()
@@ -67,74 +71,35 @@ struct TestAnswersView: View {
         }
     }
     
-    // MARK: - Header (content on gradient; same logic as TestResultsView: no card, safe area + 16pt sides, 12pt bottom)
-    private var headerView: some View {
-        let contentSpacing: CGFloat = layoutMetrics.adaptive(16)
-        return VStack(alignment: .leading, spacing: contentSpacing) {
-            // Back row
-            HStack {
-                Button(action: {
-                    HapticManager.shared.lightImpact()
-                    dismiss()
-                }) {
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
-                        .foregroundColor(.white)
-                        .padding(layoutMetrics.adaptive(10))
-                        .background(Circle().fill(Color.white.opacity(0.18)))
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("back_button_accessibility_label".localized)
-                Spacer()
-            }
-
-            // Title
-            Text("your_answers".localized)
-                .font(.system(.title, weight: .regular).width(.condensed))
-                .foregroundColor(.white)
-                .multilineTextAlignment(.leading)
-                .lineLimit(2)
-                .minimumScaleFactor(0.85)
-
-            // Question row: label + report, trailing actions
-            if currentQuestion != nil {
-                HStack {
-                    HStack(spacing: 8) {
-                        Text("question_label".localized + " \(currentQuestion!.originalId)")
-                            .font(.system(.title2, weight: .thin).width(.condensed))
-                            .foregroundColor(.white)
-                            .accessibilityLabel("question_label".localized + " " + currentQuestion!.originalId)
-                        Button(action: {
-                            HapticManager.shared.lightImpact()
-                            showingFeedbackReport = true
-                        }) {
-                            Image(systemName: "flag.fill")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(.white)
-                        }
-                    }
-                    Spacer()
-                    HStack(spacing: layoutMetrics.adaptive(8)) {
-                        if languageManager.currentTranslationLanguage != "de" {
-                            QuizHeaderIconButton.translation(isActive: isTranslationActive) {
-                                HapticManager.shared.lightImpact()
-                                isTranslationActive.toggle()
-                            }
-                        }
-                        if let q = currentQuestion {
-                            QuizHeaderIconButton.favorite(isActive: favoritesManager.isFavorite(q.originalId)) {
-                                HapticManager.shared.lightImpact()
-                                favoritesManager.toggleFavorite(for: q.originalId)
-                            }
-                        }
-                    }
-                }
-            }
+    // MARK: - Header section (separate stack; swipe-down gesture attached here only)
+    private var headerSection: some View {
+        VStack(spacing: 0) {
+            QuestionCardHeaderCard(
+                onBackTapped: { dismiss() },
+                backIcon: .down,
+                gradient: viewModel.isPassed ? .green : .red,
+                title: "your_answers".localized,
+                titleInBackRow: false,
+                questionId: currentQuestion?.originalId,
+                onReportTapped: { showingFeedbackReport = true },
+                trailingActions: { EmptyView() }
+            )
+            .padding(.bottom, layoutMetrics.adaptive(12))
+            Divider()
+                .background(Color(.separator))
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
-    // MARK: - Content (matches LearningView: single ScrollView, QuestionCard owns full content)
+
+    // MARK: - Body section (separate stack; ScrollView + footer — scroll only, no sheet dismiss)
+    private var bodySection: some View {
+        VStack(spacing: 0) {
+            answersContent
+            footerView
+        }
+        .frame(minHeight: 0, maxHeight: .infinity)
+    }
+
+    // MARK: - Content (scroll + bottom gradient, same as other question cards)
     private var answersContent: some View {
         ScrollView {
             if let q = currentQuestion {
@@ -164,36 +129,103 @@ struct TestAnswersView: View {
                 .padding(.bottom, layoutMetrics.adaptive(16))
             }
         }
+        .frame(minHeight: 0, maxHeight: .infinity)
+        .scrollBounceBehavior(.basedOnSize)
+        .background(Color(.systemBackground))
+        .overlay(alignment: .bottom) {
+            LinearGradient(
+                colors: [
+                    Color(.systemBackground).opacity(0),
+                    Color(.systemBackground)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: layoutMetrics.adaptive(40))
+            .allowsHitTesting(false)
+        }
+    }
+
+    // MARK: - Footer (action bar + navigation, same as SpacedRepetitionQuestionCard / FavoritesQuestionCard)
+    private var footerView: some View {
+        VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
+            HStack(spacing: layoutMetrics.adaptive(12)) {
+                Spacer(minLength: 0)
+                if languageManager.currentTranslationLanguage != "de" {
+                    translationFooterButton
+                }
+                if currentQuestion != nil {
+                    favoriteFooterButton
+                }
+            }
+            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
+
+            if viewModel.questions.count > 1 {
+                QuestionNavigationBar(
+                    questionCount: viewModel.questions.count,
+                    currentIndex: currentQuestionIndex,
+                    circleColor: circleColor(for:),
+                    circleTextColor: { _ in .white },
+                    onPrevious: {
+                        if currentQuestionIndex > 0 { currentQuestionIndex -= 1 }
+                    },
+                    onNext: {
+                        if currentQuestionIndex < viewModel.questions.count - 1 {
+                            currentQuestionIndex += 1
+                        }
+                    },
+                    onSelectIndex: { currentQuestionIndex = $0 },
+                    gradient: viewModel.isPassed ? .green : .red,
+                    circleGradient: circleGradient(for:),
+                    arrowCircleSize: layoutMetrics.adaptive(42),
+                    enableScrollHaptic: true,
+                    enableChangeHaptic: true
+                )
+            }
+        }
+        .padding(.top, layoutMetrics.adaptive(12))
         .background(Color(.systemBackground))
     }
-    
-    // MARK: - Navigation (matching LearningView style; circles slide under vertical separators)
-    private var navigationBar: some View {
-        VStack(spacing: 0) {
-            QuestionNavigationBar(
-                questionCount: viewModel.questions.count,
-                currentIndex: currentQuestionIndex,
-                circleColor: circleColor(for:),
-                onPrevious: {
-                    if currentQuestionIndex > 0 {
-                        currentQuestionIndex -= 1
-                    }
-                },
-                onNext: {
-                    if currentQuestionIndex < viewModel.questions.count - 1 {
-                        currentQuestionIndex += 1
-                    }
-                },
-                onSelectIndex: { currentQuestionIndex = $0 },
-                arrowCircleSize: layoutMetrics.adaptive(42),
-                enableScrollHaptic: true,
-                enableChangeHaptic: true
-            )
-            .padding(.top, layoutMetrics.adaptive(12))
+
+    private func footerIconCircle<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        content()
+            .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
+            .frame(width: layoutMetrics.adaptive(44), height: layoutMetrics.adaptive(44))
+            .background(Circle().fill(Color(.secondarySystemFill)))
+    }
+
+    private var translationFooterButton: some View {
+        Button(action: {
+            HapticManager.shared.lightImpact()
+            isTranslationActive.toggle()
+        }) {
+            footerIconCircle {
+                Image(systemName: "globe")
+                    .foregroundColor(isTranslationActive ? AppActionIconColors.translationActive : Color(.secondaryLabel))
+            }
         }
-        .background(Color(.systemBackground))
-        .fullScreenCover(item: $zoomedAsset) { item in
-            FullScreenImageView(assetName: item.name, onDismiss: { zoomedAsset = nil })
+        .buttonStyle(.plain)
+        .accessibilityLabel("spaced_translation_button_accessibility_label".localized)
+        .accessibilityAddTraits(.isButton)
+    }
+
+    private var favoriteFooterButton: some View {
+        Group {
+            if let q = currentQuestion {
+                let isFavorite = favoritesManager.isFavorite(q.originalId)
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    favoritesManager.toggleFavorite(for: q.originalId)
+                }) {
+                    footerIconCircle {
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .foregroundColor(isFavorite ? AppActionIconColors.favoriteActive : Color(.secondaryLabel))
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("spaced_favorite_button_accessibility_label".localized)
+                .accessibilityAddTraits(.isButton)
+            }
         }
     }
     
@@ -211,6 +243,16 @@ struct TestAnswersView: View {
             }
         }
         return Color(.systemGray5)
+    }
+
+    /// Green gradient for correct, red for wrong, nil for unanswered.
+    private func circleGradient(for index: Int) -> LiquidGlassGradient? {
+        guard index < viewModel.questions.count else { return nil }
+        let question = viewModel.questions[index]
+        let userAnswer = viewModel.answers.first(where: { $0.questionId == question.id })
+        guard let selectedIndex = userAnswer?.selectedIndex else { return nil }
+        let correctIndex = ContentService.shared.correctAnswers[question.originalId]
+        return selectedIndex == correctIndex ? .green : .red
     }
 }
 

@@ -110,7 +110,6 @@ struct ScreenHeaderCard: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.green, lineWidth: 1))
 
             // Right: premium always row 1, mascot always row 2 — fixed positions
             VStack(alignment: .trailing, spacing: premiumRowSpacing) {
@@ -124,12 +123,9 @@ struct ScreenHeaderCard: View {
                     onAnimationStart: content.isStateWithTestDate ? { advanceMessageIndex() } : nil
                 )
                 .frame(width: mascotSize, height: mascotSize)
-                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.blue, lineWidth: 1))
             }
             .fixedSize(horizontal: true, vertical: false)
-            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.purple, lineWidth: 1))
         }
-        .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.red, lineWidth: 1))
     }
 
     @ViewBuilder

@@ -2,7 +2,7 @@
 //  QuestionNavigationBar.swift
 //  Leben in Deutschland
 //
-//  Shared horizontal nav row: back arrow + scrollable numbered circles + forward arrow.
+//  Horizontal scroll of numbered circles only (no back/forward arrows).
 //  Used by LearningView, TestSessionQuestionCard, TestAnswersView, FavoritesQuestionCard.
 //
 
@@ -17,6 +17,13 @@ struct QuestionNavigationBar: View {
     let onPrevious: () -> Void
     let onNext: () -> Void
     let onSelectIndex: (Int) -> Void
+
+    /// When set, back/forward arrows use this gradient (matches header).
+    var gradient: LiquidGlassGradient? = nil
+    /// When gradient is set, which circles use it. Default: circles where circleColor != gray.
+    var circleUsesGradient: ((Int) -> Bool)? = nil
+    /// Per-circle gradient (e.g. .green correct, .red wrong). When non-nil, overrides gradient for that circle.
+    var circleGradient: ((Int) -> LiquidGlassGradient?)? = nil
     
     /// Arrow button size. Default 34; Learning uses 42.
     var arrowCircleSize: CGFloat? = nil
@@ -44,47 +51,20 @@ struct QuestionNavigationBar: View {
     
     var body: some View {
         ScrollViewReader { proxy in
-            HStack(spacing: layoutMetrics.adaptive(12)) {
-                backButton
-                circlesZStack(proxy: proxy)
-                forwardButton
-            }
-            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
-            .frame(height: rowHeight)
-            .onChange(of: currentIndex) { _, newIndex in
-                withAnimation {
-                    proxy.scrollTo(newIndex, anchor: .center)
+            circlesZStack(proxy: proxy)
+                .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
+                .frame(height: rowHeight)
+                .onChange(of: currentIndex) { _, newIndex in
+                    withAnimation {
+                        proxy.scrollTo(newIndex, anchor: .center)
+                    }
+                    if enableChangeHaptic {
+                        HapticManager.shared.lightImpact()
+                    }
                 }
-                if enableChangeHaptic {
-                    HapticManager.shared.lightImpact()
-                }
-            }
         }
     }
-    
-    private var backButton: some View {
-        Button(action: {
-            HapticManager.shared.lightImpact()
-            onPrevious()
-        }) {
-            Image(systemName: "chevron.backward")
-                .font(.system(size: arrowFontSize, weight: .semibold))
-                .foregroundColor(currentIndex > 0 ? .white : Color.white.opacity(0.5))
-                .frame(width: resolvedArrowSize, height: resolvedArrowSize)
-                .background(Circle().fill(Color("AppBlueLagoon")))
-        }
-        .disabled(currentIndex <= 0)
-        .buttonStyle(.plain)
-        .accessibilityLabel("Previous question")
-        .accessibilityHint("Go to previous question")
-    }
-    
-    private var arrowFontSize: CGFloat {
-        resolvedArrowSize > resolvedNumberedSize
-            ? layoutMetrics.adaptive(18)
-            : layoutMetrics.adaptive(16)
-    }
-    
+
     private func circlesZStack(proxy: ScrollViewProxy) -> some View {
         ZStack(alignment: .center) {
             ScrollView(.horizontal, showsIndicators: false) {
@@ -92,12 +72,20 @@ struct QuestionNavigationBar: View {
                     ForEach(0..<questionCount, id: \.self) { index in
                         let isActive = index == currentIndex
                         let circleSize = isActive ? resolvedArrowSize : resolvedNumberedSize
+                        let usesGradient = gradient != nil && (circleUsesGradient?(index) ?? (circleColor(index) != Color(.systemGray5)))
+                        let fillStyle: AnyShapeStyle = if let perCircle = circleGradient?(index) {
+                            AnyShapeStyle(perCircle.screenBackground)
+                        } else if let g = gradient, usesGradient {
+                            AnyShapeStyle(g.screenBackground)
+                        } else {
+                            AnyShapeStyle(circleColor(index))
+                        }
                         Button(action: {
                             HapticManager.shared.lightImpact()
                             onSelectIndex(index)
                         }) {
                             Circle()
-                                .fill(circleColor(index))
+                                .fill(fillStyle)
                                 .frame(width: circleSize, height: circleSize)
                                 .overlay(
                                     Text("\(index + 1)")
@@ -123,29 +111,12 @@ struct QuestionNavigationBar: View {
         }
         .frame(maxWidth: .infinity)
     }
-    
+
     private var verticalSeparator: some View {
         Rectangle()
             .fill(Color(.separator))
             .frame(width: 1)
             .frame(height: resolvedNumberedSize)
-    }
-    
-    private var forwardButton: some View {
-        Button(action: {
-            HapticManager.shared.lightImpact()
-            onNext()
-        }) {
-            Image(systemName: "chevron.forward")
-                .font(.system(size: arrowFontSize, weight: .semibold))
-                .foregroundColor(currentIndex < questionCount - 1 ? .white : Color.white.opacity(0.5))
-                .frame(width: resolvedArrowSize, height: resolvedArrowSize)
-                .background(Circle().fill(Color("AppBlueLagoon")))
-        }
-        .disabled(currentIndex >= questionCount - 1)
-        .buttonStyle(.plain)
-        .accessibilityLabel("Next question")
-        .accessibilityHint("Go to next question")
     }
 }
 
@@ -175,9 +146,11 @@ private struct ScrollHapticModifier: ViewModifier {
         questionCount: 10,
         currentIndex: 2,
         circleColor: { $0 == 2 ? Color("AppBlueLagoon") : Color(.systemGray5) },
+        circleTextColor: { _ in .white },
         onPrevious: {},
         onNext: {},
-        onSelectIndex: { _ in }
+        onSelectIndex: { _ in },
+        gradient: .blue
     )
     .layoutMetrics(size: CGSize(width: 390, height: 844))
 }

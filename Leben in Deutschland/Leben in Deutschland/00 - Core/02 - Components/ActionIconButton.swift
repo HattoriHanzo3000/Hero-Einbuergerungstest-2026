@@ -63,7 +63,7 @@ extension ActionIconButton {
         ActionIconButton(
             systemName: "globe",
             action: action,
-            foregroundColor: isActive ? Color("AppOrange") : Color(.systemGray6),
+            foregroundColor: isActive ? AppActionIconColors.translationActive : Color(.systemGray6),
             backgroundColor: Color.white.opacity(isActive ? 0.32 : 0.18),
             accessibilityLabel: "Toggle translation",
             accessibilityHint: "Show translated question text"
@@ -77,7 +77,7 @@ extension ActionIconButton {
         ActionIconButton(
             systemName: "heart.fill",
             action: action,
-            foregroundColor: isActive ? .red : Color(.systemGray6),
+            foregroundColor: isActive ? AppActionIconColors.favoriteActive : Color(.systemGray6),
             backgroundColor: Color.white.opacity(isActive ? 0.32 : 0.18),
             accessibilityLabel: isActive ? "Remove from Favorites" : "Add to Favorites",
             accessibilityHint: isActive ? "Remove this question from favorites" : "Add this question to favorites"

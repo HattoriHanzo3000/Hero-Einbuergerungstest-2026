@@ -283,6 +283,17 @@
 "History" = "История";
 "Europe" = "Европа";
 "Federal States" = "Федеральные земли";
+// German category names (when content is loaded from content_de.json)
+"Recht und Verfassung" = "Право и Конституция";
+"Staat" = "Государство";
+"Staatsorgane" = "Государственные органы";
+"Wahlen" = "Выборы";
+"Familie und Bildung" = "Семья и образование";
+"Wirtschaft und Arbeit" = "Экономика и работа";
+"Gesellschaft und Kultur" = "Общество и культура";
+"Geschichte" = "История";
+"Europa" = "Европа";
+"Bundesländer" = "Федеральные земли";
 
 // =============================================================================
 //   TEST SIMULATION
@@ -301,14 +312,25 @@
 "answer_all_questions_title" = "Сначала ответь на все вопросы";
 "answer_all_questions_message" = "Нужно ответить на все вопросы, чтобы завершить тест.";
 
-"test_passed" = "Тест пройден!";
-"test_failed" = "Тест не пройден";
+"test_passed" = "Ура, тест пройден!";
+"test_failed" = "Увы, тест не пройден";
+"test_result_only_prefix" = "Только";
 "of" = "из";
 "questions_correct" = "вопросов правильно";
 "time_used" = "Затраченное время:";
 "minimum_requirement" = "Минимальное требование:";
 "your_result" = "Ваш результат:";
 "accuracy" = "Точность:";
+"test_results_summary" = "Сводка";
+"test_results_weakest_category" = "Слабая категория";
+"test_results_strongest_category" = "Сильная категория";
+"test_results_correct_in_category" = "%d из %d правильно";
+"test_results_correct_in_category_label" = "Правильно в этой категории";
+"test_results_category_breakdown" = "По категориям";
+"test_results_all_correct" = "Всё правильно";
+"test_results_some_mistakes" = "Есть ошибки";
+"test_results_all_wrong" = "Всё неправильно";
+"test_results_x_of_y" = "%d из %d";
 
 "view_answers" = "ПОСМОТРЕТЬ ОТВЕТЫ";
 "try_again" = "ПОПРОБОВАТЬ СНОВА";

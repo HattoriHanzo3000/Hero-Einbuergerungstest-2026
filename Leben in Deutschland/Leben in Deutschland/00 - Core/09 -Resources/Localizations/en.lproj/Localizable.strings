@@ -286,6 +286,17 @@
 "History" = "History";
 "Europe" = "Europe";
 "Federal States" = "Federal States";
+// German category names (when content is loaded from content_de.json)
+"Recht und Verfassung" = "Law and Constitution";
+"Staat" = "State";
+"Staatsorgane" = "State Institutions";
+"Wahlen" = "Elections";
+"Familie und Bildung" = "Family and Education";
+"Wirtschaft und Arbeit" = "Economy and Work";
+"Gesellschaft und Kultur" = "Society and Culture";
+"Geschichte" = "History";
+"Europa" = "Europe";
+"Bundesländer" = "Federal States";
 
 // =============================================================================
 //   TEST SIMULATION
@@ -303,14 +314,25 @@
 "answer_all_questions_title" = "Answer all questions first";
 "answer_all_questions_message" = "You need to answer all questions before you can finish the test.";
 
-"test_passed" = "Test Passed!";
-"test_failed" = "Test Failed";
+"test_passed" = "Hooray, you passed the test!";
+"test_failed" = "Unfortunately, you didn’t pass";
+"test_result_only_prefix" = "Only";
 "of" = "of";
 "questions_correct" = "questions correct";
 "time_used" = "Time Used:";
 "minimum_requirement" = "Minimum Requirement:";
 "your_result" = "Your Result:";
 "accuracy" = "Accuracy:";
+"test_results_summary" = "Summary";
+"test_results_weakest_category" = "Weakest category";
+"test_results_strongest_category" = "Strongest category";
+"test_results_correct_in_category" = "%d of %d correct";
+"test_results_correct_in_category_label" = "Correct in this category";
+"test_results_category_breakdown" = "By category";
+"test_results_all_correct" = "All correct";
+"test_results_some_mistakes" = "Some mistakes";
+"test_results_all_wrong" = "All wrong";
+"test_results_x_of_y" = "%d of %d";
 
 "view_answers" = "VIEW ANSWERS";
 "try_again" = "TRY AGAIN";

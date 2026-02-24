@@ -38,7 +38,6 @@ struct CategoriesView: View {
                         .fill(LiquidGlassGradient.blue.screenBackground)
                         .ignoresSafeArea(edges: .top)
                 )
-                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.orange, lineWidth: 1))
 
                 Divider()
                 
@@ -119,7 +118,8 @@ struct CategoriesView: View {
         .onDisappear {
             stateService.saveExpandedCategories(expandedCategoryNames)
         }
-        .tabBarHidden(false)
+        .hidesTabBar()
+        .tabBarHidden(true)
     }
 }
 

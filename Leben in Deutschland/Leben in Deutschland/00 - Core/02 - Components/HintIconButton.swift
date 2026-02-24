@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// Orange lightbulb button used next to Check/Next in question cards when a hint is available.
+/// Amber lightbulb button used next to Check/Next in question cards when a hint is available.
 struct HintIconButton: View {
     let action: () -> Void
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -28,7 +28,7 @@ struct HintIconButton: View {
                             .fill(.ultraThinMaterial)
                         
                         RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
-                            .fill(Color("AppOrange"))
+                            .fill(Color("AppAmber"))
                     }
                     .overlay(
                         RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)

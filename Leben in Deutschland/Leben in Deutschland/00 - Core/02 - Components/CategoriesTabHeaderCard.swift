@@ -28,12 +28,10 @@ struct CategoriesTabHeaderCard: View {
                 PremiumButton(action: onPremiumTap, color: .white)
             }
             .transaction { $0.animation = nil }
-            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.red, lineWidth: 1))
 
             HStack(alignment: .center, spacing: mascotToContentSpacing) {
                 MascotView(autoPlayInterval: 60)
                     .frame(width: mascotSize, height: mascotSize)
-                    .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.blue, lineWidth: 1))
                 Text("learn_by_topics_header_message".localized)
                     .font(.system(.body, weight: .semibold))
                     .italic()
@@ -42,9 +40,7 @@ struct CategoriesTabHeaderCard: View {
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.green, lineWidth: 1))
             }
-            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.purple, lineWidth: 1))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .fixedSize(horizontal: false, vertical: true)

@@ -61,6 +61,8 @@ struct SpacedRepetitionQuestionCard: View {
     @State private var showingFeedbackReport = false
     @State private var showingHintSheet = false
     @State private var zoomedAsset: ZoomedAsset?
+    @State private var hintBarGlowPhase = false
+    @State private var hintBarRevealed = false
     private let hintService = HintService.shared
     private let contentService = ContentService.shared
     
@@ -71,27 +73,7 @@ struct SpacedRepetitionQuestionCard: View {
                 .padding(.bottom, layoutMetrics.adaptive(12))
             Divider()
                 .background(Color(.separator))
-            ScrollView {
-                let assetName = contentService.getIllustrationAsset(for: question.id)
-                QuestionCard(
-                    question: question,
-                    selectedAnswer: selectedAnswer,
-                    showCorrectAnswer: showCorrectAnswer,
-                    showTranslation: showTranslation,
-                    onAnswerSelected: onAnswerSelected,
-                    illustrationAssetName: assetName,
-                    onImageTapped: {
-                        guard let assetName = assetName else { return }
-                        HapticManager.shared.lightImpact()
-                        zoomedAsset = ZoomedAsset(name: assetName)
-                    },
-                    suppressAnswerGlow: true
-                )
-                .padding(.bottom, layoutMetrics.adaptive(16))
-            }
-            .background(Color(.systemBackground))
-            Divider()
-                .background(Color(.separator))
+            questionScrollView
             footerContent
         }
         .background(Color(.systemBackground))
@@ -138,7 +120,8 @@ private extension SpacedRepetitionQuestionCard {
             haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
             haloSecondaryColor: Color.white.opacity(0.18),
             showsHaloWhenDisabled: showCorrectAnswer,
-            suppressGlow: true
+            suppressGlow: true,
+            gradient: .blue
         )
     }
     
@@ -149,52 +132,169 @@ private extension SpacedRepetitionQuestionCard {
 
 // MARK: - Private UI
 private extension SpacedRepetitionQuestionCard {
-    var footerContent: some View {
-        HStack(spacing: layoutMetrics.adaptive(12)) {
-            if showCorrectAnswer, hintService.getHint(for: question.id) != nil {
-                HintIconButton(action: hintAction)
-                    .transition(.scale.combined(with: .opacity))
-            }
-            if let onCheckTapped {
-                QuizActionButton(
-                    buttonTitle,
-                    style: checkButtonStyle,
-                    isEnabled: isCheckEnabled,
-                    accessibilityLabel: checkButtonAccessibilityLabel
-                ) {
-                    onCheckTapped()
-                }
-                .frame(maxWidth: .infinity)
-            }
+    var questionScrollView: some View {
+        ScrollView {
+            let assetName = contentService.getIllustrationAsset(for: question.id)
+            QuestionCard(
+                question: question,
+                selectedAnswer: selectedAnswer,
+                showCorrectAnswer: showCorrectAnswer,
+                showTranslation: showTranslation,
+                onAnswerSelected: onAnswerSelected,
+                illustrationAssetName: assetName,
+                onImageTapped: {
+                    guard let assetName = assetName else { return }
+                    HapticManager.shared.lightImpact()
+                    zoomedAsset = ZoomedAsset(name: assetName)
+                },
+                suppressAnswerGlow: true
+            )
+            .padding(.bottom, layoutMetrics.adaptive(16))
         }
-        .padding(.horizontal, layoutMetrics.adaptive(24))
+        .background(Color(.systemBackground))
+        .overlay(alignment: .bottom) {
+            LinearGradient(
+                colors: [
+                    Color(.systemBackground).opacity(0),
+                    Color(.systemBackground)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: layoutMetrics.adaptive(40))
+            .allowsHitTesting(false)
+        }
+    }
+
+    var footerContent: some View {
+        VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
+            // Action bar: hint (left, when available, with pulse), translation + favorite (right)
+            HStack(spacing: layoutMetrics.adaptive(12)) {
+                if hintService.getHint(for: question.id) != nil {
+                    hintFooterButton
+                        .opacity(hintBarRevealed ? 1 : 0)
+                        .scaleEffect(hintBarRevealed ? 1 : 0.85)
+                        .transition(.scale.combined(with: .opacity))
+                }
+                Spacer(minLength: 0)
+                if onToggleTranslation != nil {
+                    translationFooterButton
+                }
+                if onToggleFavorite != nil {
+                    favoriteFooterButton
+                }
+            }
+            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
+            .onAppear {
+                if hintService.getHint(for: question.id) != nil {
+                    withAnimation(.easeOut(duration: 0.35)) { hintBarRevealed = true }
+                    withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                        hintBarGlowPhase = true
+                    }
+                }
+            }
+            .onChange(of: question.id) { _, _ in
+                hintBarRevealed = false
+                hintBarGlowPhase = false
+                if hintService.getHint(for: question.id) != nil {
+                    withAnimation(.easeOut(duration: 0.35)) { hintBarRevealed = true }
+                    withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                        hintBarGlowPhase = true
+                    }
+                }
+            }
+
+            HStack(spacing: layoutMetrics.adaptive(12)) {
+                if let onCheckTapped {
+                    QuizActionButton(
+                        buttonTitle,
+                        style: checkButtonStyle,
+                        isEnabled: isCheckEnabled,
+                        accessibilityLabel: checkButtonAccessibilityLabel
+                    ) {
+                        onCheckTapped()
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
+        }
         .padding(.top, layoutMetrics.adaptive(12))
-        .padding(.bottom, layoutMetrics.adaptive(24))
         .background(Color(.systemBackground))
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showCorrectAnswer)
     }
-    
+
+    private func footerIconCircle<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        content()
+            .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
+            .frame(width: layoutMetrics.adaptive(44), height: layoutMetrics.adaptive(44))
+            .background(Circle().fill(Color(.secondarySystemFill)))
+    }
+
+    private var translationFooterButton: some View {
+        Button(action: {
+            HapticManager.shared.lightImpact()
+            onToggleTranslation?()
+        }) {
+            footerIconCircle {
+                Image(systemName: "globe")
+                    .foregroundColor(isTranslationActive ? AppActionIconColors.translationActive : Color(.secondaryLabel))
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("spaced_translation_button_accessibility_label".localized)
+        .accessibilityAddTraits(.isButton)
+    }
+
+    private var favoriteFooterButton: some View {
+        Button(action: {
+            HapticManager.shared.lightImpact()
+            onToggleFavorite?()
+        }) {
+            footerIconCircle {
+                Image(systemName: isFavorite ? "heart.fill" : "heart")
+                    .foregroundColor(isFavorite ? AppActionIconColors.favoriteActive : Color(.secondaryLabel))
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("spaced_favorite_button_accessibility_label".localized)
+        .accessibilityAddTraits(.isButton)
+    }
+
+    /// Hint button in action bar: same circle style, amber icon, pulsing amber glow (fade in/out).
+    private var hintFooterButton: some View {
+        let glowOpacity = hintBarGlowPhase ? 0.5 : 0.15
+        return Button(action: {
+            HapticManager.shared.lightImpact()
+            hintAction()
+        }) {
+            footerIconCircle {
+                Image(systemName: "lightbulb.fill")
+                    .foregroundColor(Color("AppAmber"))
+            }
+            .overlay(
+                Circle()
+                    .fill(Color("AppAmber").opacity(glowOpacity))
+                    .blur(radius: layoutMetrics.adaptive(6))
+                    .scaleEffect(1.35)
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("hint_button_title".localized)
+        .accessibilityAddTraits(.isButton)
+    }
+
     var headerView: some View {
         QuestionCardHeaderCard(
             onBackTapped: onBackTapped,
-            showPremiumButton: onBackTapped != nil,
-            onPremiumTap: { premiumManager.presentPaywall() },
             title: nil,
             progress: progress.map { ($0.answeredCount, $0.totalCount) },
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
-            trailingActions: {
-                HStack(spacing: layoutMetrics.adaptive(8)) {
-                    if let onToggleTranslation {
-                        QuizHeaderIconButton.translation(isActive: isTranslationActive, action: onToggleTranslation)
-                    }
-                    if let onToggleFavorite {
-                        QuizHeaderIconButton.favorite(isActive: isFavorite, action: onToggleFavorite)
-                    }
-                }
-            }
+            showPremiumButton: true,
+            onPremiumTap: { premiumManager.presentPaywall() },
+            trailingActions: { EmptyView() }
         )
-        .padding(.bottom, layoutMetrics.adaptive(12))
     }
 }
 

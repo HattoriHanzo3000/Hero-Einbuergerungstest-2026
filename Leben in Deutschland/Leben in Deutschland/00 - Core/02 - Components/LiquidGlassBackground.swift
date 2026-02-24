@@ -13,6 +13,7 @@ enum LiquidGlassGradient {
     case orange
     case green
     case red
+    case amber
 }
 
 // MARK: - Screen Header Gradient (full-width header background, shared across screens)
@@ -56,6 +57,16 @@ extension LiquidGlassGradient {
                     Color.red.opacity(0.9),
                     Color.red.opacity(0.65),
                     Color(red: 0.9, green: 0.2, blue: 0.2).opacity(0.5)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .amber:
+            return LinearGradient(
+                colors: [
+                    Color("AppAmber").opacity(0.95),
+                    Color("AppAmber").opacity(0.75),
+                    Color("AppAmber").opacity(0.5)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -130,6 +141,13 @@ struct HeaderBorderOverlay: View {
 
 #Preview("Red") {
     LiquidGlassBackground(gradient: .red)
+        .frame(height: 120)
+        .padding()
+        .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
+}
+
+#Preview("Amber") {
+    LiquidGlassBackground(gradient: .amber)
         .frame(height: 120)
         .padding()
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))

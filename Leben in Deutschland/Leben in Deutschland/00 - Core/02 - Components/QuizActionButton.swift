@@ -1,5 +1,23 @@
 import SwiftUI
 
+// MARK: - Background Modifier Chain
+private struct QuizActionButtonBackgroundModifier: ViewModifier {
+    let shape: RoundedRectangle
+    let isEnabled: Bool
+    let layoutMetrics: LayoutMetrics
+
+    func body(content: Content) -> some View {
+        content
+            .overlay(shape.stroke(Color.white.opacity(0.18), lineWidth: 1))
+            .clipShape(shape)
+            .shadow(
+                color: Color.black.opacity(isEnabled ? 0.16 : 0.08),
+                radius: layoutMetrics.adaptive(22),
+                y: layoutMetrics.adaptive(10)
+            )
+    }
+}
+
 // MARK: - Quiz Action Button
 /// A reusable rounded button used across quiz and test flows.
 /// It keeps typography, layout, and subtle glass styling consistent while allowing
@@ -12,14 +30,17 @@ struct QuizActionButton: View {
         let haloSecondaryColor: Color
         let showsHaloWhenDisabled: Bool
         let suppressGlow: Bool
-        
+        /// When set, uses LiquidGlassBackground (gradient + material) matching the header card.
+        let gradient: LiquidGlassGradient?
+
         init(
             backgroundColor: Color,
             disabledBackgroundColor: Color,
             haloPrimaryColor: Color,
             haloSecondaryColor: Color,
             showsHaloWhenDisabled: Bool = false,
-            suppressGlow: Bool = false
+            suppressGlow: Bool = false,
+            gradient: LiquidGlassGradient? = nil
         ) {
             self.backgroundColor = backgroundColor
             self.disabledBackgroundColor = disabledBackgroundColor
@@ -27,6 +48,7 @@ struct QuizActionButton: View {
             self.haloSecondaryColor = haloSecondaryColor
             self.showsHaloWhenDisabled = showsHaloWhenDisabled
             self.suppressGlow = suppressGlow
+            self.gradient = gradient
         }
     }
     
@@ -130,25 +152,41 @@ private extension QuizActionButton {
         .allowsTightening(true)
     }
     
+    @ViewBuilder
     var backgroundLayer: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
-                .fill(.ultraThinMaterial)
-            
-            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
-                .fill(isEnabled ? style.backgroundColor : style.disabledBackgroundColor)
+        let cornerRadius = layoutMetrics.adaptive(28)
+        let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        let modifier = QuizActionButtonBackgroundModifier(
+            shape: shape,
+            isEnabled: isEnabled,
+            layoutMetrics: layoutMetrics
+        )
+
+        if let gradient = style.gradient {
+            shape
+                .fill(gradient.screenBackground)
+                .overlay(highlightOverlay)
+                .modifier(modifier)
+        } else {
+            ZStack {
+                shape.fill(.ultraThinMaterial)
+                shape.fill(isEnabled ? style.backgroundColor : style.disabledBackgroundColor)
+            }
+            .modifier(modifier)
         }
-        .overlay(
-            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
-                .stroke(Color.white.opacity(0.18), lineWidth: 1)
-        )
-        .clipShape(
-            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(28), style: .continuous)
-        )
-        .shadow(
-            color: Color.black.opacity(isEnabled ? 0.16 : 0.08),
-            radius: layoutMetrics.adaptive(22),
-            y: layoutMetrics.adaptive(10)
+    }
+
+    private var highlightOverlay: some View {
+        Rectangle().fill(
+            LinearGradient(
+                colors: [
+                    Color.white.opacity(0.20),
+                    Color.white.opacity(0.05),
+                    Color.clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         )
     }
     

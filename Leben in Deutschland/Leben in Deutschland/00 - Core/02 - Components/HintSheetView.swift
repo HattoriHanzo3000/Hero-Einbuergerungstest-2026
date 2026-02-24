@@ -20,7 +20,8 @@ struct HintSheetView: View {
             // Content
             ScrollView {
                 VStack(alignment: .leading, spacing: layoutMetrics.adaptive(20)) {
-                    // Title section with liquid glass background
+                    // Title section: single rounded rectangle (lightbulb + title)
+                    let headerRadius = layoutMetrics.adaptive(24)
                     HStack {
                         Image(systemName: "lightbulb.fill")
                             .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
@@ -34,13 +35,11 @@ struct HintSheetView: View {
                     .padding(.vertical, layoutMetrics.adaptive(18))
                     .padding(.horizontal, layoutMetrics.adaptive(20))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(liquidGlassBackground)
-                    .clipShape(
-                        RoundedRectangle(
-                            cornerRadius: layoutMetrics.adaptive(24),
-                            style: .continuous
-                        )
+                    .background(
+                        RoundedRectangle(cornerRadius: headerRadius, style: .continuous)
+                            .fill(LiquidGlassGradient.amber.screenBackground)
                     )
+                    .clipShape(RoundedRectangle(cornerRadius: headerRadius, style: .continuous))
                     .padding(.horizontal, layoutMetrics.adaptive(20))
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel("hint_title".localized)
@@ -88,8 +87,8 @@ struct HintSheetView: View {
                     .background(
                         LinearGradient(
                             colors: [
-                                Color("AppOrange").opacity(0.9),
-                                Color("AppOrange").opacity(0.7)
+                                Color("AppAmber").opacity(0.9),
+                                Color("AppAmber").opacity(0.7)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -125,9 +124,6 @@ struct HintSheetView: View {
         .presentationDragIndicator(.visible)
     }
     
-    private var liquidGlassBackground: some View {
-        LiquidGlassBackground(gradient: .orange)
-    }
 }
 
 // MARK: - Preview

@@ -21,6 +21,7 @@ struct FavoritesQuestionCard: View {
     @State private var showingFeedbackReport = false
     @State private var showingHintSheet = false
     @State private var zoomedAsset: ZoomedAsset?
+    @State private var hintGlowPhase = false
     
     private let hintService = HintService.shared
     
@@ -70,15 +71,11 @@ struct FavoritesQuestionCard: View {
         VStack(spacing: 0) {
             headerView
                 .padding(.bottom, layoutMetrics.adaptive(12))
-            
+
             Divider()
                 .background(Color(.separator))
-            
-            questionContentView
-            
-            Divider()
-                .background(Color(.separator))
-            
+
+            questionScrollView
             footerView
         }
         .background(Color(.systemBackground).ignoresSafeArea(edges: .bottom))
@@ -113,35 +110,20 @@ private extension FavoritesQuestionCard {
     var headerView: some View {
         QuestionCardHeaderCard(
             onBackTapped: onBackTapped,
-            showPremiumButton: true,
-            onPremiumTap: { premiumManager.presentPaywall() },
             title: (question.subcategory ?? "").isEmpty ? (question.category ?? "Favorites") : (question.subcategory ?? ""),
             progress: (progress.currentIndex, progress.totalCount),
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
-            trailingActions: {
-                HStack(spacing: layoutMetrics.adaptive(8)) {
-                    if let onToggleTranslation {
-                        QuizHeaderIconButton.translation(isActive: isTranslationActive, action: {
-                            HapticManager.shared.lightImpact()
-                            onToggleTranslation()
-                        })
-                    }
-                    if let onToggleFavorite {
-                        QuizHeaderIconButton.favorite(isActive: isFavorite, action: {
-                            HapticManager.shared.lightImpact()
-                            onToggleFavorite()
-                        })
-                    }
-                }
-            }
+            showPremiumButton: true,
+            onPremiumTap: { premiumManager.presentPaywall() },
+            trailingActions: { EmptyView() }
         )
     }
 }
 
-// MARK: - Question Content (matches LearningView)
+// MARK: - Question Content (scroll + bottom gradient dissolve)
 private extension FavoritesQuestionCard {
-    var questionContentView: some View {
+    var questionScrollView: some View {
         ScrollView {
             let assetName = ContentService.shared.getIllustrationAsset(for: question.id)
             QuestionCard(
@@ -162,29 +144,48 @@ private extension FavoritesQuestionCard {
             .padding(.bottom, layoutMetrics.adaptive(16))
         }
         .background(Color(.systemBackground))
+        .overlay(alignment: .bottom) {
+            LinearGradient(
+                colors: [
+                    Color(.systemBackground).opacity(0),
+                    Color(.systemBackground)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: layoutMetrics.adaptive(40))
+            .allowsHitTesting(false)
+        }
     }
 }
 
-// MARK: - Footer View (matches LearningView)
+// MARK: - Footer View (action bar + hint + nav, same style as LearningView / SpacedRepetition)
 private extension FavoritesQuestionCard {
     var footerView: some View {
         VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
-            // Hint button (appears when answer is shown and hint exists)
-            if showCorrectAnswer, hintService.getHint(for: question.id) != nil {
-                HStack {
-                    HintIconButton(action: hintAction)
-                        .transition(.scale.combined(with: .opacity))
+            // Action bar: hint (left, when available), translation + favorite (right)
+            HStack(spacing: layoutMetrics.adaptive(12)) {
+                if showCorrectAnswer, hintService.getHint(for: question.id) != nil {
+                    hintFooterButton
+                        .transition(.opacity.combined(with: .scale(scale: 0.96)))
                 }
-                .padding(.horizontal, layoutMetrics.adaptive(24))
+                Spacer(minLength: 0)
+                if onToggleTranslation != nil {
+                    translationFooterButton
+                }
+                if onToggleFavorite != nil {
+                    favoriteFooterButton
+                }
             }
-            
-            if progress.totalCount > 1, let onGoToQuestion {
+            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
+
+            if progress.totalCount >= 1, let onGoToQuestion {
                 let current0Based = progress.currentIndex - 1
                 QuestionNavigationBar(
                     questionCount: progress.totalCount,
                     currentIndex: current0Based,
                     circleColor: circleColor(for:),
-                    circleTextColor: circleTextColor(for:),
+                    circleTextColor: { $0 == current0Based ? .white : .primary },
                     onPrevious: {
                         if current0Based > 0 {
                             onGoToQuestion(current0Based - 1)
@@ -196,6 +197,8 @@ private extension FavoritesQuestionCard {
                         }
                     },
                     onSelectIndex: onGoToQuestion,
+                    gradient: .blue,
+                    circleUsesGradient: { $0 == current0Based },
                     arrowCircleSize: layoutMetrics.adaptive(42),
                     enableScrollHaptic: true,
                     enableChangeHaptic: true
@@ -205,18 +208,78 @@ private extension FavoritesQuestionCard {
         .padding(.top, layoutMetrics.adaptive(12))
         .background(Color(.systemBackground))
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showCorrectAnswer)
+        .onChange(of: showCorrectAnswer) { _, isRevealed in
+            if !isRevealed { hintGlowPhase = false }
+        }
     }
-    
+
+    private func footerIconCircle<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        content()
+            .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
+            .frame(width: layoutMetrics.adaptive(44), height: layoutMetrics.adaptive(44))
+            .background(Circle().fill(Color(.secondarySystemFill)))
+    }
+
+    private var hintFooterButton: some View {
+        let bulbColor = hintGlowPhase ? Color("AppAmber") : Color(.secondaryLabel)
+        return Button(action: {
+            HapticManager.shared.lightImpact()
+            hintAction()
+        }) {
+            footerIconCircle {
+                Image(systemName: "lightbulb.fill")
+                    .foregroundColor(bulbColor)
+                    .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: hintGlowPhase)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("hint_button_title".localized)
+        .accessibilityAddTraits(.isButton)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                hintGlowPhase = true
+            }
+        }
+    }
+
+    private var translationFooterButton: some View {
+        Button(action: {
+            HapticManager.shared.lightImpact()
+            onToggleTranslation?()
+        }) {
+            footerIconCircle {
+                Image(systemName: "globe")
+                    .foregroundColor(isTranslationActive ? AppActionIconColors.translationActive : Color(.secondaryLabel))
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("spaced_translation_button_accessibility_label".localized)
+        .accessibilityAddTraits(.isButton)
+    }
+
+    private var favoriteFooterButton: some View {
+        Button(action: {
+            HapticManager.shared.lightImpact()
+            onToggleFavorite?()
+        }) {
+            footerIconCircle {
+                Image(systemName: isFavorite ? "heart.fill" : "heart")
+                    .foregroundColor(isFavorite ? AppActionIconColors.favoriteActive : Color(.secondaryLabel))
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("spaced_favorite_button_accessibility_label".localized)
+        .accessibilityAddTraits(.isButton)
+    }
+
     func hintAction() {
         showingHintSheet = true
     }
-    
-    /// Favorites: all gray (no correct/wrong). Active circle is larger, not blue.
+
     private func circleColor(for index: Int) -> Color {
         Color(.systemGray5)
     }
-    
-    /// Favorites: primary on gray (no white needed).
+
     private func circleTextColor(for index: Int) -> Color {
         .primary
     }

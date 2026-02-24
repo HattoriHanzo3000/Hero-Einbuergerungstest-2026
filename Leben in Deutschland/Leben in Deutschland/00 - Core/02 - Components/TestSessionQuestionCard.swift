@@ -28,19 +28,13 @@ struct TestSessionQuestionCard: View {
         VStack(spacing: 0) {
             headerView
                 .padding(.bottom, layoutMetrics.adaptive(12))
-            
+
             Divider()
                 .background(Color(.separator))
-            
-            // Question and answers content
+
             if viewModel.currentQuestion != nil {
-                questionContentView
+                questionScrollView
             }
-            
-            Divider()
-                .background(Color(.separator))
-            
-            // Bottom buttons
             footerView
         }
         .background(Color(.systemBackground).ignoresSafeArea(edges: .bottom))
@@ -61,8 +55,8 @@ struct TestSessionQuestionCard: View {
         }
     }
     
-    // MARK: - Question Content
-    private var questionContentView: some View {
+    // MARK: - Question Content (scroll + bottom gradient dissolve)
+    private var questionScrollView: some View {
         ScrollView {
             if let currentQuestion = viewModel.currentQuestion {
                 let questionModel = QuestionModel(
@@ -72,10 +66,7 @@ struct TestSessionQuestionCard: View {
                     category: currentQuestion.category,
                     subcategory: nil
                 )
-                
-                // Get illustration asset - ensure ContentService.shared is used directly
                 let assetName = ContentService.shared.getIllustrationAsset(for: currentQuestion.originalId)
-                
                 QuestionCard(
                     question: questionModel,
                     selectedAnswer: viewModel.getAnswerForCurrentQuestion()?.selectedIndex,
@@ -97,15 +88,32 @@ struct TestSessionQuestionCard: View {
             }
         }
         .background(Color(.systemBackground))
+        .overlay(alignment: .bottom) {
+            LinearGradient(
+                colors: [
+                    Color(.systemBackground).opacity(0),
+                    Color(.systemBackground)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: layoutMetrics.adaptive(40))
+            .allowsHitTesting(false)
+        }
     }
-    
+
     // MARK: - Footer View
     private var footerView: some View {
         VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
-            // Next/Finish button above navigation circles
+            // Action bar: favorite only (timer is in header)
+            HStack(spacing: layoutMetrics.adaptive(12)) {
+                Spacer(minLength: 0)
+                favoriteFooterButton
+            }
+            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
+
             nextOrFinishButton
-            
-            // Same nav row as TestAnswersView/LearningView: back + circles (under separators) + forward. Answered = AppBlueLagoon.
+
             if viewModel.questions.count > 1 {
                 QuestionNavigationBar(
                     questionCount: viewModel.questions.count,
@@ -119,6 +127,7 @@ struct TestSessionQuestionCard: View {
                         }
                     },
                     onSelectIndex: { viewModel.goToQuestion($0) },
+                    gradient: .orange,
                     arrowCircleSize: layoutMetrics.adaptive(42),
                     enableScrollHaptic: true,
                     enableChangeHaptic: true
@@ -155,14 +164,16 @@ struct TestSessionQuestionCard: View {
             disabledBackgroundColor: Color(.systemGray2),
             haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
             haloSecondaryColor: Color.white.opacity(0.18),
-            suppressGlow: true
+            suppressGlow: true,
+            gradient: .orange
         )
         let finishStyle = QuizActionButton.Style(
             backgroundColor: allAnswered ? Color("AppOrange") : Color(.systemGray2),
             disabledBackgroundColor: Color(.systemGray2),
             haloPrimaryColor: Color("AppOrange").opacity(0.36),
             haloSecondaryColor: Color.white.opacity(0.18),
-            suppressGlow: true
+            suppressGlow: true,
+            gradient: .orange
         )
         
         return QuizActionButton(
@@ -188,57 +199,79 @@ struct TestSessionQuestionCard: View {
         .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
     }
     
+    private func footerIconCircle<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        content()
+            .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
+            .frame(width: layoutMetrics.adaptive(44), height: layoutMetrics.adaptive(44))
+            .background(Circle().fill(Color(.secondarySystemFill)))
+    }
+
+    private var favoriteFooterButton: some View {
+        Group {
+            if let currentQuestion = viewModel.currentQuestion {
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    favoritesManager.toggleFavorite(for: currentQuestion.originalId)
+                }) {
+                    footerIconCircle {
+                        Image(systemName: favoritesManager.isFavorite(currentQuestion.originalId) ? "heart.fill" : "heart")
+                            .foregroundColor(favoritesManager.isFavorite(currentQuestion.originalId) ? AppActionIconColors.favoriteActive : Color(.secondaryLabel))
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("spaced_favorite_button_accessibility_label".localized)
+                .accessibilityAddTraits(.isButton)
+            }
+        }
+    }
+
     // MARK: - Header View
     private var headerView: some View {
         QuestionCardHeaderCard(
             onBackTapped: { showingConfirmation = true },
-            showPremiumButton: false,
             gradient: .orange,
-            onPremiumTap: nil,
             title: "test_simulation_title".localized,
-            titleInBackRow: true,
+            titleInBackRow: false,
             progress: (viewModel.answers.count, viewModel.questions.count),
             questionId: viewModel.currentQuestion?.originalId,
             onReportTapped: { showingFeedbackReport = true },
-            trailingActions: {
-                HStack(spacing: layoutMetrics.adaptive(8)) {
-                    Button(action: {
-                        HapticManager.shared.lightImpact()
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            showingTimerPopup.toggle()
-                        }
-                    }) {
-                        HStack(spacing: layoutMetrics.adaptive(4)) {
-                            Image(systemName: "gauge.with.needle.fill")
-                                .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold))
-                                .foregroundColor(viewModel.remainingTime < 300 ? .red : .white)
-                                .rotationEffect(.degrees(Double(viewModel.timerTick * 6)))
-                            if showingTimerPopup {
-                                Text(timeString(from: viewModel.remainingTime))
-                                    .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold, design: .monospaced))
-                                    .foregroundColor(viewModel.remainingTime < 300 ? .red : .white)
-                            }
-                        }
-                        .padding(.horizontal, layoutMetrics.adaptive(12))
-                        .frame(height: layoutMetrics.adaptive(38))
-                        .background(
-                            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(19), style: .continuous)
-                                .fill(.thinMaterial)
-                        )
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Timer")
-                    .accessibilityAddTraits(.isButton)
-
-                    if let currentQuestion = viewModel.currentQuestion {
-                        QuizHeaderIconButton.favorite(isActive: favoritesManager.isFavorite(currentQuestion.originalId)) {
-                            HapticManager.shared.lightImpact()
-                            favoritesManager.toggleFavorite(for: currentQuestion.originalId)
-                        }
-                    }
+            trailingActions: { headerTimerButton }
+        )
+    }
+    
+    /// Expandable timer in header row (same row as back arrow): icon only when collapsed, icon + time when expanded, inside a rounded rectangle.
+    private var headerTimerButton: some View {
+        let isLowTime = viewModel.remainingTime < 300
+        let timerColor: Color = isLowTime ? .red : .white
+        return Button(action: {
+            HapticManager.shared.lightImpact()
+            withAnimation(.easeInOut(duration: 0.2)) {
+                showingTimerPopup.toggle()
+            }
+        }) {
+            HStack(spacing: layoutMetrics.adaptive(2)) {
+                Image(systemName: "gauge.with.needle.fill")
+                    .font(.system(size: layoutMetrics.adaptive(22), weight: .semibold, design: .rounded))
+                    .foregroundColor(timerColor)
+                    .rotationEffect(.degrees(showingTimerPopup ? Double(viewModel.timerTick * 6) : 0))
+                if showingTimerPopup {
+                    Text(timeString(from: viewModel.remainingTime))
+                        .font(.system(size: layoutMetrics.adaptive(26), weight: .semibold, design: .monospaced))
+                        .foregroundColor(timerColor)
+                        .transition(.opacity.combined(with: .scale(scale: 0.95)))
                 }
             }
-        )
+            .padding(.horizontal, layoutMetrics.adaptive(12))
+            .padding(.vertical, layoutMetrics.adaptive(8))
+            .background(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(20), style: .continuous)
+                    .fill(Color.white.opacity(0.18))
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Timer")
+        .accessibilityValue(Text(timeString(from: viewModel.remainingTime)))
+        .accessibilityAddTraits(.isButton)
     }
     
     private func timeString(from timeInterval: TimeInterval) -> String {

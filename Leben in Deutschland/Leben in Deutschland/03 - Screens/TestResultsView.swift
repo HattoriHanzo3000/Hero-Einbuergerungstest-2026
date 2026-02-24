@@ -50,7 +50,7 @@ struct TestResultsView: View {
         (results.isPassed ? LiquidGlassGradient.green : .red).screenBackground
     }
     
-    /// Try Again: matches result — green when passed, red when failed.
+    /// Try Again: matches result and header — green when passed, red when failed, with same gradient as header.
     private var tryAgainButtonStyle: QuizActionButton.Style {
         QuizActionButton.Style(
             backgroundColor: resultColor,
@@ -58,19 +58,17 @@ struct TestResultsView: View {
             haloPrimaryColor: resultColor.opacity(0.36),
             haloSecondaryColor: Color.white.opacity(0.18),
             showsHaloWhenDisabled: false,
-            suppressGlow: true
+            suppressGlow: true,
+            gradient: results.isPassed ? .green : .red
         )
     }
     
     var body: some View {
-        ZStack {
-            Color(.systemBackground)
-                .ignoresSafeArea()
-            
-            // Hide results content when countdown is showing so it never flashes after countdown
-            if !showingRetryCountdown {
+        Group {
+            if showingRetryCountdown {
+                Color(.systemBackground).ignoresSafeArea()
+            } else {
                 VStack(spacing: 0) {
-                    // Fixed header: safe area only on top; 16pt sides, 12pt bottom
                     testResultsHeaderSection
                         .padding(.horizontal, layoutMetrics.adaptive(16))
                         .padding(.bottom, layoutMetrics.adaptive(12))
@@ -79,119 +77,13 @@ struct TestResultsView: View {
                                 .fill(resultHeaderGradient)
                                 .ignoresSafeArea(edges: .top)
                         )
-
                     Divider()
                         .background(Color(.separator))
-
-                    // Scrollable body: statistics sections
-                    ScrollView {
-                    VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.sectionSpacing)) {
-                        // Statistics Section: Summary + By Categories — two sections
-                        VStack(spacing: layoutMetrics.adaptive(16)) {
-                            // Section 1: Summary
-                            SectionContainer(spacing: layoutMetrics.adaptive(12)) {
-                                VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
-                                    Text("test_results_summary".localized)
-                                        .font(.headline)
-                                        .fontWidth(.compressed)
-                                    HStack {
-                                        Text("time_used".localized.withTrailingColon)
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                        Spacer()
-                                        Text(results.timeString)
-                                            .font(.body.weight(.medium))
-                                            .fontWidth(.compressed)
-                                            .monospacedDigit()
-                                    }
-                                    HStack {
-                                        Text("minimum_requirement".localized.withTrailingColon)
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                        Spacer()
-                                        Text("17 \("of".localized) 33")
-                                            .font(.body.weight(.medium))
-                                            .fontWidth(.compressed)
-                                            .monospacedDigit()
-                                    }
-                                    HStack {
-                                        Text("your_result".localized.withTrailingColon)
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                        Spacer()
-                                        Text("\(results.correctAnswers) \("of".localized) 33")
-                                            .font(.body.weight(.medium))
-                                            .fontWidth(.compressed)
-                                            .monospacedDigit()
-                                    }
-                                    HStack {
-                                        Text("accuracy".localized.withTrailingColon)
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                        Spacer()
-                                        Text("\(Int(results.accuracy * 100))%")
-                                            .font(.body.weight(.medium))
-                                            .fontWidth(.compressed)
-                                            .monospacedDigit()
-                                    }
-                                }
-                            }
-
-                            // Section 2: By Categories (breakdown only)
-                            SectionContainer(spacing: layoutMetrics.adaptive(12)) {
-                                VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
-                                    Text("test_results_category_breakdown".localized)
-                                        .font(.headline)
-                                        .fontWidth(.compressed)
-                                    if !categoryBreakdown.isEmpty {
-                                        ForEach(Array(categoryBreakdown.enumerated()), id: \.offset) { _, item in
-                                            HStack {
-                                                Text(item.name.localized(for: languageManager.currentAppLanguage))
-                                                    .font(.subheadline)
-                                                    .foregroundColor(.secondary)
-                                                Spacer()
-                                                Text(String(format: "test_results_x_of_y".localized, item.correct, item.total))
-                                                    .font(.body.weight(.medium))
-                                                    .fontWidth(.compressed)
-                                                    .monospacedDigit()
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        .padding(.horizontal, layoutMetrics.adaptive(20))
-                        .padding(.top, layoutMetrics.adaptive(20))
-                        .padding(.bottom, layoutMetrics.adaptive(100)) // Space for bottom buttons
-                    }
+                    resultsBodyView
+                    resultsFooterView
                 }
-                
-                // Separator above buttons
-                Divider()
-                    .background(Color(.separator))
-                
-                // Buttons fixed at bottom
-                VStack(spacing: layoutMetrics.adaptive(12)) {
-                    QuizActionButton(
-                        "try_again".localized,
-                        style: tryAgainButtonStyle
-                    ) {
-                        HapticManager.shared.lightImpact()
-                        // Start loading test immediately (during countdown)
-                        onStartTestLoading?()
-                        // Show countdown immediately from TestResultsView
-                        showingRetryCountdown = true
-                    }
-                }
-                .padding(.horizontal, layoutMetrics.adaptive(24))
-                .padding(.top, layoutMetrics.adaptive(16))
-                .padding(.bottom, 0)
-                .background(
-                    Color(.systemBackground)
-                        .shadow(color: Color.black.opacity(0.05), radius: 8, y: -4)
-                )
+                .background(Color(.systemBackground))
             }
-        }
         }
         .id(languageManager.currentAppLanguage)
         .navigationBarTitleDisplayMode(.inline)
@@ -202,6 +94,7 @@ struct TestResultsView: View {
             TestAnswersView(viewModel: viewModel)
                 .environmentObject(languageManager)
                 .environmentObject(favoritesManager)
+                .interactiveDismissDisabled(true) // Prevent swipe-down dismissal; use header button instead
         }
         .fullScreenCover(isPresented: $showingRetryCountdown) {
             TestCountdownView {
@@ -262,7 +155,6 @@ private extension TestResultsView {
                 )
             }
             .transaction { $0.animation = nil }
-            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.red, lineWidth: 1))
 
             HStack(alignment: .top, spacing: mascotToContentSpacing) {
                 // Left: title + result message
@@ -285,18 +177,126 @@ private extension TestResultsView {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.green, lineWidth: 1))
 
                 // Right: mascot
                 MascotView(autoPlayInterval: nil)
                     .frame(width: mascotSize, height: mascotSize)
-                    .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.blue, lineWidth: 1))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.purple, lineWidth: 1))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.orange, lineWidth: 1))
+    }
+}
+
+// MARK: - Body and Footer (same logic as SpacedRepetitionQuestionCard: scroll + gradient overlay, then footer)
+private extension TestResultsView {
+    var resultsBodyView: some View {
+        ScrollView {
+            VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.sectionSpacing)) {
+                VStack(spacing: layoutMetrics.adaptive(16)) {
+                    SectionContainer(spacing: layoutMetrics.adaptive(12)) {
+                        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
+                            Text("test_results_summary".localized)
+                                .font(.headline)
+                                .fontWidth(.compressed)
+                            HStack {
+                                Text("time_used".localized.withTrailingColon)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text(results.timeString)
+                                    .font(.body.weight(.medium))
+                                    .fontWidth(.compressed)
+                                    .monospacedDigit()
+                            }
+                            HStack {
+                                Text("minimum_requirement".localized.withTrailingColon)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("17 \("of".localized) 33")
+                                    .font(.body.weight(.medium))
+                                    .fontWidth(.compressed)
+                                    .monospacedDigit()
+                            }
+                            HStack {
+                                Text("your_result".localized.withTrailingColon)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("\(results.correctAnswers) \("of".localized) 33")
+                                    .font(.body.weight(.medium))
+                                    .fontWidth(.compressed)
+                                    .monospacedDigit()
+                            }
+                            HStack {
+                                Text("accuracy".localized.withTrailingColon)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("\(Int(results.accuracy * 100))%")
+                                    .font(.body.weight(.medium))
+                                    .fontWidth(.compressed)
+                                    .monospacedDigit()
+                            }
+                        }
+                    }
+                    SectionContainer(spacing: layoutMetrics.adaptive(12)) {
+                        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
+                            Text("test_results_category_breakdown".localized)
+                                .font(.headline)
+                                .fontWidth(.compressed)
+                            if !categoryBreakdown.isEmpty {
+                                ForEach(Array(categoryBreakdown.enumerated()), id: \.offset) { _, item in
+                                    HStack {
+                                        Text(item.name.localized(for: languageManager.currentAppLanguage))
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        Spacer()
+                                        Text(String(format: "test_results_x_of_y".localized, item.correct, item.total))
+                                            .font(.body.weight(.medium))
+                                            .fontWidth(.compressed)
+                                            .monospacedDigit()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, layoutMetrics.adaptive(20))
+                .padding(.top, layoutMetrics.adaptive(20))
+                .padding(.bottom, layoutMetrics.adaptive(100))
+            }
+        }
+        .background(Color(.systemBackground))
+        .overlay(alignment: .bottom) {
+            LinearGradient(
+                colors: [
+                    Color(.systemBackground).opacity(0),
+                    Color(.systemBackground)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: layoutMetrics.adaptive(40))
+            .allowsHitTesting(false)
+        }
+    }
+
+    var resultsFooterView: some View {
+        VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
+            QuizActionButton(
+                "try_again".localized,
+                style: tryAgainButtonStyle
+            ) {
+                HapticManager.shared.lightImpact()
+                onStartTestLoading?()
+                showingRetryCountdown = true
+            }
+        }
+        .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
+        .padding(.top, layoutMetrics.adaptive(12))
+        .background(Color(.systemBackground))
     }
 }
 
