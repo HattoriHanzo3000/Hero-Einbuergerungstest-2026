@@ -58,10 +58,7 @@ struct TestAnswersView: View {
     // MARK: - Header
     private var headerView: some View {
         QuestionCardHeaderCard(
-            onBackTapped: {
-                HapticManager.shared.lightImpact()
-                dismiss()
-            },
+            onBackTapped: { dismiss() },
             backIcon: .down,
             showPremiumButton: false,
             gradient: .orange,
@@ -87,58 +84,39 @@ struct TestAnswersView: View {
                 }
             }
         )
-        .padding(.bottom, layoutMetrics.adaptive(12))
     }
     
-    // MARK: - Content
+    // MARK: - Content (matches LearningView: single ScrollView, QuestionCard owns full content)
     private var answersContent: some View {
         ScrollView {
-            VStack(spacing: layoutMetrics.adaptive(20)) {
-                if let q = currentQuestion {
-                    answerContent(for: q)
-                }
+            if let q = currentQuestion {
+                let userAnswer = viewModel.answers.first(where: { $0.questionId == q.id })
+                let assetName = contentService.getIllustrationAsset(for: q.originalId)
+                let questionModel = QuestionModel(
+                    id: q.originalId,
+                    text: q.text,
+                    options: q.options,
+                    category: q.category,
+                    subcategory: nil
+                )
+                QuestionCard(
+                    question: questionModel,
+                    selectedAnswer: userAnswer?.selectedIndex,
+                    showCorrectAnswer: true,
+                    showTranslation: isTranslationActive,
+                    onAnswerSelected: { _ in },
+                    illustrationAssetName: assetName,
+                    onImageTapped: {
+                        guard let assetName = assetName else { return }
+                        HapticManager.shared.lightImpact()
+                        zoomedAsset = ZoomedAsset(name: assetName)
+                    },
+                    suppressAnswerGlow: true
+                )
+                .padding(.bottom, layoutMetrics.adaptive(16))
             }
         }
-    }
-    
-    @ViewBuilder
-    private func answerContent(for q: TestQuestion) -> some View {
-        let userAnswer = viewModel.answers.first(where: { $0.questionId == q.id })
-        let assetName = contentService.getIllustrationAsset(for: q.originalId)
-        
-        // Question illustration
-        if let assetName = assetName {
-            Image(assetName)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity)
-                .frame(maxHeight: 280)
-                .padding(.horizontal, layoutMetrics.adaptive(22))
-                .padding(.top, layoutMetrics.adaptive(8))
-                .onTapGesture {
-                    HapticManager.shared.lightImpact()
-                    zoomedAsset = ZoomedAsset(name: assetName)
-                }
-        }
-        
-        // Convert TestQuestion to QuestionModel for QuestionCard
-        let questionModel = QuestionModel(
-            id: q.originalId,
-            text: q.text,
-            options: q.options,
-            category: q.category,
-            subcategory: nil
-        )
-        
-        QuestionCard(
-            question: questionModel,
-            selectedAnswer: userAnswer?.selectedIndex,
-            showCorrectAnswer: true, // Show correct/incorrect answers in review
-            showTranslation: isTranslationActive, // Show translation when globe button is active
-            onAnswerSelected: { _ in }, // Answers are read-only in review
-            suppressAnswerGlow: true // Remove glow effect from answers
-        )
-        .padding(.bottom, layoutMetrics.adaptive(80))
+        .background(Color(.systemBackground))
     }
     
     // MARK: - Navigation (matching LearningView style; circles slide under vertical separators)
@@ -159,6 +137,7 @@ struct TestAnswersView: View {
                     }
                 },
                 onSelectIndex: { currentQuestionIndex = $0 },
+                arrowCircleSize: layoutMetrics.adaptive(42),
                 enableScrollHaptic: true,
                 enableChangeHaptic: true
             )

@@ -19,6 +19,8 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
     var onPremiumTap: (() -> Void)?
     /// Optional title (e.g. subcategory name, "Your answers").
     var title: String?
+    /// When true, title is shown on the same row as the back button, right-aligned (no separate title block).
+    var titleInBackRow: Bool = false
     /// Optional progress (answered, total).
     var progress: (answered: Int, total: Int)?
     /// Question ID for label. When nil, question row is hidden.
@@ -50,7 +52,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
                 backButtonRow
             }
 
-            if title != nil {
+            if title != nil, !titleInBackRow {
                 titleSection
             }
 
@@ -83,6 +85,15 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
             .accessibilityLabel("back_button_accessibility_label".localized)
 
             Spacer()
+
+            if titleInBackRow, let title {
+                Text(title)
+                    .font(.system(.title, weight: .regular).width(.condensed))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.trailing)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.85)
+            }
 
             if showPremiumButton {
                 PremiumButton(action: { onPremiumTap?() }, color: .white)

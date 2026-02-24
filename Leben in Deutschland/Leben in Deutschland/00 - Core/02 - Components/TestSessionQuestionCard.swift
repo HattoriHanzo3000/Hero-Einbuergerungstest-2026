@@ -43,8 +43,7 @@ struct TestSessionQuestionCard: View {
             // Bottom buttons
             footerView
         }
-        .background(Color(.systemBackground))
-        .ignoresSafeArea(edges: .bottom)
+        .background(Color(.systemBackground).ignoresSafeArea(edges: .bottom))
         .fullScreenCover(item: $zoomedAsset) { item in
             FullScreenImageView(assetName: item.name, onDismiss: {
                 zoomedAsset = nil
@@ -102,7 +101,7 @@ struct TestSessionQuestionCard: View {
     
     // MARK: - Footer View
     private var footerView: some View {
-        VStack(spacing: layoutMetrics.adaptive(12)) {
+        VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
             // Next/Finish button above navigation circles
             nextOrFinishButton
             
@@ -120,6 +119,7 @@ struct TestSessionQuestionCard: View {
                         }
                     },
                     onSelectIndex: { viewModel.goToQuestion($0) },
+                    arrowCircleSize: layoutMetrics.adaptive(42),
                     enableScrollHaptic: true,
                     enableChangeHaptic: true
                 )
@@ -185,68 +185,50 @@ struct TestSessionQuestionCard: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, layoutMetrics.adaptive(24))
+        .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
     }
     
     // MARK: - Header View
     private var headerView: some View {
         QuestionCardHeaderCard(
-            onBackTapped: {
-                HapticManager.shared.lightImpact()
-                showingConfirmation = true
-            },
+            onBackTapped: { showingConfirmation = true },
             showPremiumButton: false,
             gradient: .orange,
             onPremiumTap: nil,
-            title: nil,
+            title: "test_simulation_title".localized,
+            titleInBackRow: true,
             progress: (viewModel.answers.count, viewModel.questions.count),
             questionId: viewModel.currentQuestion?.originalId,
             onReportTapped: { showingFeedbackReport = true },
             trailingActions: {
                 HStack(spacing: layoutMetrics.adaptive(8)) {
-                    if showingTimerPopup {
-                        Button(action: {
-                            HapticManager.shared.lightImpact()
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                showingTimerPopup.toggle()
-                            }
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(19), style: .continuous)
-                                    .fill(.thinMaterial)
-                                    .frame(width: layoutMetrics.adaptive(80), height: layoutMetrics.adaptive(38))
-
-                                HStack(spacing: 4) {
-                                    Image(systemName: "gauge.with.needle.fill")
-                                        .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold))
-                                        .foregroundColor(viewModel.remainingTime < 300 ? .red : .white)
-                                        .rotationEffect(.degrees(Double(viewModel.timerTick * 6)))
-                                    Text(timeString(from: viewModel.remainingTime))
-                                        .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold, design: .monospaced))
-                                        .foregroundColor(viewModel.remainingTime < 300 ? .red : .white)
-                                }
-                            }
-                            .frame(height: layoutMetrics.adaptive(38))
+                    Button(action: {
+                        HapticManager.shared.lightImpact()
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showingTimerPopup.toggle()
                         }
-                        .buttonStyle(.plain)
-                    } else {
-                        QuizHeaderIconButton(
-                            systemName: "gauge.with.needle.fill",
-                            isActive: viewModel.remainingTime < 300,
-                            activeTint: viewModel.remainingTime < 300 ? .red : .orange,
-                            inactiveTint: .white,
-                            showGlow: false,
-                            showStroke: false,
-                            accessibilityLabel: "Timer",
-                            accessibilityHint: nil,
-                            action: {
-                                HapticManager.shared.lightImpact()
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    showingTimerPopup.toggle()
-                                }
+                    }) {
+                        HStack(spacing: layoutMetrics.adaptive(4)) {
+                            Image(systemName: "gauge.with.needle.fill")
+                                .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold))
+                                .foregroundColor(viewModel.remainingTime < 300 ? .red : .white)
+                                .rotationEffect(.degrees(Double(viewModel.timerTick * 6)))
+                            if showingTimerPopup {
+                                Text(timeString(from: viewModel.remainingTime))
+                                    .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold, design: .monospaced))
+                                    .foregroundColor(viewModel.remainingTime < 300 ? .red : .white)
                             }
+                        }
+                        .padding(.horizontal, layoutMetrics.adaptive(12))
+                        .frame(height: layoutMetrics.adaptive(38))
+                        .background(
+                            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(19), style: .continuous)
+                                .fill(.thinMaterial)
                         )
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Timer")
+                    .accessibilityAddTraits(.isButton)
 
                     if let currentQuestion = viewModel.currentQuestion {
                         QuizHeaderIconButton.favorite(isActive: favoritesManager.isFavorite(currentQuestion.originalId)) {
@@ -257,18 +239,6 @@ struct TestSessionQuestionCard: View {
                 }
             }
         )
-        .padding(.bottom, layoutMetrics.adaptive(12))
-    }
-    
-    private var finishButtonStyle: QuizActionButton.Style {
-        QuizActionButton.Style(
-            backgroundColor: Color("AppOrange"),
-            disabledBackgroundColor: Color(.systemGray2),
-            haloPrimaryColor: Color("AppOrange").opacity(0.36),
-            haloSecondaryColor: Color.white.opacity(0.18),
-            showsHaloWhenDisabled: false,
-            suppressGlow: true
-        )
     }
     
     private func timeString(from timeInterval: TimeInterval) -> String {
@@ -278,11 +248,11 @@ struct TestSessionQuestionCard: View {
     }
     
     // MARK: - Helper Functions
-    /// Test simulation: answered = App Orange, unanswered = gray. Active circle is larger, not blue.
+    /// Test simulation: answered = blue (match Learning), unanswered = gray.
     private func circleColor(for index: Int) -> Color {
         let isAnswered = viewModel.answers.contains(where: { $0.questionId == viewModel.questions[index].id })
         if isAnswered {
-            return Color("AppOrange")
+            return Color("AppBlueLagoon")
         }
         return Color(.systemGray5)
     }

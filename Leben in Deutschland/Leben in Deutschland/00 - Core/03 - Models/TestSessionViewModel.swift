@@ -131,14 +131,6 @@ class TestSessionViewModel: ObservableObject {
         }
     }
     
-    func canGoNext() -> Bool {
-        return true // Always can go to next question
-    }
-    
-    func canGoPrevious() -> Bool {
-        return currentQuestionIndex > 0
-    }
-    
     // MARK: - Timer Management
     
     func startTimer() {

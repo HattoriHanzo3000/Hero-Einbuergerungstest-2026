@@ -20,7 +20,6 @@ struct TestSessionView: View {
     @State private var showingResults = false
     @State private var showingConfirmation = false
     @State private var showingTimerPopup = false
-    @State private var lastHorizontalScrollHapticTs: Double = 0.0
     @State private var isLoading = true
     
     private let contentService = ContentService.shared
@@ -182,7 +181,7 @@ struct TestSessionView: View {
     }
     
     func createTestQuestions() -> [TestQuestion] {
-        return [
+        [
             TestQuestion(
                 id: 1,
                 originalId: "test_1",
@@ -194,9 +193,15 @@ struct TestSessionView: View {
             )
         ]
     }
-    
-    var liquidGlassBackground: some View {
-        LiquidGlassBackground(gradient: .blue)
-    }
+}
+
+// MARK: - Preview
+#Preview("Test Session View") {
+    TestSessionView()
+        .environmentObject(LanguageManager())
+        .environmentObject(FavoritesManager.shared)
+        .environmentObject(StateManager.shared)
+        .environment(AppRouter())
+        .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
 
