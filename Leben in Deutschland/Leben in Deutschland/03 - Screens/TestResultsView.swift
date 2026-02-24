@@ -194,9 +194,10 @@ private extension TestResultsView {
         ScrollView {
             VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.sectionSpacing)) {
                 VStack(spacing: layoutMetrics.adaptive(16)) {
+                    // Section 1: High-level results (time, requirement, your score, accuracy)
                     SectionContainer(spacing: layoutMetrics.adaptive(12)) {
                         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
-                            Text("test_results_summary".localized)
+                            Text("test_results_your_results".localized)
                                 .font(.headline)
                                 .fontWidth(.compressed)
                             HStack {
@@ -241,6 +242,7 @@ private extension TestResultsView {
                             }
                         }
                     }
+                    // Section 2: Breakdown by category
                     SectionContainer(spacing: layoutMetrics.adaptive(12)) {
                         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
                             Text("test_results_category_breakdown".localized)

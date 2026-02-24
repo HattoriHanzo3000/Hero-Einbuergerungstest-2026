@@ -89,7 +89,10 @@ struct QuestionNavigationBar: View {
                                 .frame(width: circleSize, height: circleSize)
                                 .overlay(
                                     Text("\(index + 1)")
-                                        .font(.system(size: layoutMetrics.adaptive(isActive ? 16 : 14), weight: .semibold))
+                                        .font(
+                                            .system(size: layoutMetrics.adaptive(isActive ? 16 : 14), weight: .semibold)
+                                                .width(.condensed)
+                                        )
                                         .foregroundColor(circleTextColor(index))
                                 )
                         }

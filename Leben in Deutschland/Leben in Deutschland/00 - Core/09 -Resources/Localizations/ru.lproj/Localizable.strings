@@ -87,7 +87,7 @@
 
 // Learn by Topics
 "learn_by_topics_title" = "Изучать по темам";
-"learn_by_topics_header_message" = "Я сгруппировал все 310 вопросов по темам — выбирай маршрут и взлетай.";
+"learn_by_topics_header_message" = "Я сгруппировал все вопросы по темам — выбирай маршрут и взлетай.";
 "no_categories_found" = "Категории не найдены";
 "no_search_results" = "Ничего не найдено";
 "question_label" = "Вопрос";
@@ -321,6 +321,7 @@
 "minimum_requirement" = "Минимальное требование:";
 "your_result" = "Ваш результат:";
 "accuracy" = "Точность:";
+"test_results_your_results" = "Твой результат";
 "test_results_summary" = "Сводка";
 "test_results_weakest_category" = "Слабая категория";
 "test_results_strongest_category" = "Сильная категория";

@@ -256,7 +256,11 @@ struct TestSessionQuestionCard: View {
                     .rotationEffect(.degrees(showingTimerPopup ? Double(viewModel.timerTick * 6) : 0))
                 if showingTimerPopup {
                     Text(timeString(from: viewModel.remainingTime))
-                        .font(.system(size: layoutMetrics.adaptive(26), weight: .semibold, design: .monospaced))
+                        .font(
+                            .system(size: layoutMetrics.adaptive(26), weight: .semibold)
+                                .width(.expanded)
+                        )
+                        .monospacedDigit()
                         .foregroundColor(timerColor)
                         .transition(.opacity.combined(with: .scale(scale: 0.95)))
                 }

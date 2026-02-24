@@ -87,7 +87,7 @@
 
 // Learn by Topics
 "learn_by_topics_title" = "Lernen nach Themen";
-"learn_by_topics_header_message" = "Ich habe alle 310 Fragen für dich nach Themen gruppiert — wähle deinen Weg und leg los.";
+"learn_by_topics_header_message" = "Ich habe alle Fragen für dich nach Themen gruppiert — wähle deinen Weg und leg los.";
 "no_categories_found" = "Keine Kategorien gefunden";
 "no_search_results" = "Keine Ergebnisse gefunden";
 "question_label" = "Aufgabe";
@@ -308,6 +308,7 @@
 "minimum_requirement" = "Mindestanforderung:";
 "your_result" = "Ihr Ergebnis:";
 "accuracy" = "Genauigkeit:";
+"test_results_your_results" = "Dein Ergebnis";
 "test_results_summary" = "Zusammenfassung";
 "test_results_weakest_category" = "Schwächste Kategorie";
 "test_results_strongest_category" = "Stärkste Kategorie";

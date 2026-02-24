@@ -88,7 +88,7 @@
 
 // Learn by Topics
 "learn_by_topics_title" = "Learn by Topics";
-"learn_by_topics_header_message" = "I grouped all 310 questions by themes for you — choose a path and soar.";
+"learn_by_topics_header_message" = "I grouped all questions by themes for you — choose a path and soar.";
 "no_categories_found" = "No categories found";
 "no_search_results" = "No results found";
 "question_label" = "Question";
@@ -323,6 +323,7 @@
 "minimum_requirement" = "Minimum Requirement:";
 "your_result" = "Your Result:";
 "accuracy" = "Accuracy:";
+"test_results_your_results" = "Your results";
 "test_results_summary" = "Summary";
 "test_results_weakest_category" = "Weakest category";
 "test_results_strongest_category" = "Strongest category";

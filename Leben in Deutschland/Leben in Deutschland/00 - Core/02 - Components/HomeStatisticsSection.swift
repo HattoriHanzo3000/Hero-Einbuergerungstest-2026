@@ -74,11 +74,12 @@ private struct HomeRingChartView: View {
                 .frame(width: chartSize, height: chartSize)
                 .contentShape(Rectangle())
                 .scaleEffect(isPulsing ? 1.1 : 1.0)
-                .animation(reduceMotion ? nil : .easeInOut(duration: 0.9).repeatForever(autoreverses: true), value: isPulsing)
                 .onAppear {
                     guard !reduceMotion else { return }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        isPulsing = true
+                        withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) {
+                            isPulsing = true
+                        }
                     }
                 }
                 .onDisappear { isPulsing = false }

@@ -87,7 +87,7 @@
 
 // Learn by Topics
 "learn_by_topics_title" = "Вчитися за темами";
-"learn_by_topics_header_message" = "Я згрупував усі 310 питань за темами — обирай свій маршрут і злітай.";
+"learn_by_topics_header_message" = "Я згрупував усі питання за темами — обирай свій маршрут і злітай.";
 "no_categories_found" = "Категорії не знайдено";
 "no_search_results" = "Нічого не знайдено";
 "question_label" = "Питання";
@@ -321,6 +321,7 @@
 "minimum_requirement" = "Мінімальна вимога:";
 "your_result" = "Ваш результат:";
 "accuracy" = "Точність:";
+"test_results_your_results" = "Твій результат";
 "test_results_summary" = "Підсумок";
 "test_results_weakest_category" = "Найслабша категорія";
 "test_results_strongest_category" = "Найсильніша категорія";
