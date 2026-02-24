@@ -83,11 +83,11 @@ struct ScreenHeaderCard: View {
         .id(languageManager.currentAppLanguage)
     }
 
-    /// Home layout: left = state + message; right = premium + mascot (same trailing padding).
+    /// Home layout: left = state + message (flexible); right = premium (row 1) + mascot (row 2), fixed positions.
     @ViewBuilder
     private var homeHeaderLayout: some View {
         HStack(alignment: .top, spacing: mascotToContentSpacing) {
-            // Left: state + mascot message
+            // Left: state + mascot message (wraps as needed)
             VStack(alignment: .leading, spacing: premiumRowSpacing) {
                 stateTitleRow
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -97,11 +97,10 @@ struct ScreenHeaderCard: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            // Right: premium + mascot — same trailing edge
+            // Right: premium always row 1, mascot always row 2 — fixed positions
             VStack(alignment: .trailing, spacing: premiumRowSpacing) {
                 if onPremiumTap != nil {
                     PremiumButton(action: { onPremiumTap?() }, color: .white)
-                        .scaleEffect(0.8)
                         .fixedSize(horizontal: true, vertical: false)
                 }
 
@@ -216,7 +215,6 @@ struct ScreenHeaderCard: View {
         }
     }
 
-    /// Message-only block for home layout (slogan / test date / readiness). Used in mascotMessageRow.
     @ViewBuilder
     private func stateContentWithAlternatingMessage(stateName: String, testDateMessage: String, readinessMessage: String?) -> some View {
         let count = readinessMessage != nil ? 3 : 2
@@ -319,36 +317,4 @@ struct FederalStateSloganBlock: View {
 
         return localizedValue
     }
-}
-
-// MARK: - Preview
-#Preview("State") {
-    ScreenHeaderCard(
-        readinessPercentage: 72,
-        onPremiumTap: {},
-        content: .state(stateName: "Bavaria")
-    )
-    .environmentObject(LanguageManager())
-    .environmentObject(StateManager.shared)
-    .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
-}
-
-#Preview("Message") {
-    ScreenHeaderCard(
-        readinessPercentage: 72,
-        onPremiumTap: {},
-        content: .message("14 days left")
-    )
-    .environmentObject(LanguageManager())
-    .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
-}
-
-#Preview("Readiness") {
-    ScreenHeaderCard(
-        readinessPercentage: 72,
-        onPremiumTap: {},
-        content: .readiness
-    )
-    .environmentObject(LanguageManager())
-    .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }

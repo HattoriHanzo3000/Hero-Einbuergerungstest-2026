@@ -139,7 +139,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
                     }) {
                         Image(systemName: "flag.fill")
                             .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(Color("AppBlue"))
+                            .foregroundColor(.white)
                     }
                 }
             }

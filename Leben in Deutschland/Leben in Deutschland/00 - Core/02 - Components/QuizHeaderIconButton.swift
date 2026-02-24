@@ -49,6 +49,40 @@ struct QuizHeaderIconButton: View {
     }
 }
 
+// MARK: - Convenience Factories
+extension QuizHeaderIconButton {
+    /// Translation toggle (globe icon) with standard quiz header styling.
+    static func translation(isActive: Bool, action: @escaping () -> Void) -> QuizHeaderIconButton {
+        QuizHeaderIconButton(
+            systemName: "globe",
+            isActive: isActive,
+            activeTint: Color("AppOrange"),
+            inactiveTint: .white,
+            showGlow: false,
+            showStroke: false,
+            accessibilityLabel: "spaced_translation_button_accessibility_label".localized,
+            accessibilityHint: nil,
+            action: action
+        )
+    }
+    
+    /// Favorite toggle (heart icon) with standard quiz header styling.
+    static func favorite(isActive: Bool, action: @escaping () -> Void) -> QuizHeaderIconButton {
+        QuizHeaderIconButton(
+            systemName: "heart",
+            isActive: isActive,
+            activeTint: Color("AppPink"),
+            inactiveTint: .white,
+            showGlow: false,
+            showStroke: false,
+            useFilledWhenActive: true,
+            accessibilityLabel: "spaced_favorite_button_accessibility_label".localized,
+            accessibilityHint: nil,
+            action: action
+        )
+    }
+}
+
 private extension QuizHeaderIconButton {
     @ViewBuilder
     var buttonContent: some View {
@@ -110,28 +144,13 @@ private extension QuizHeaderIconButton {
 struct QuizHeaderIconButton_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            QuizHeaderIconButton(
-                systemName: "globe",
-                isActive: true,
-                activeTint: Color("AppOrange"),
-                accessibilityLabel: "Sprachoption ändern",
-                accessibilityHint: "Wechsle zwischen Originaltext und Übersetzung."
-            ) {}
-            .padding()
+            QuizHeaderIconButton.translation(isActive: true) {}
+                .padding()
+                .preferredColorScheme(.dark)
             
-            .preferredColorScheme(.dark)
-            
-            QuizHeaderIconButton(
-                systemName: "heart",
-                isActive: false,
-                activeTint: Color("AppPink"),
-                useFilledWhenActive: true,
-                accessibilityLabel: "Zu Favoriten hinzufügen",
-                accessibilityHint: nil
-            ) {}
-            .padding()
-            
-            .preferredColorScheme(.dark)
+            QuizHeaderIconButton.favorite(isActive: false) {}
+                .padding()
+                .preferredColorScheme(.dark)
         }
     }
 }

@@ -36,8 +36,6 @@ struct FavoritesQuestionCard: View {
     let onToggleFavorite: (() -> Void)?
     let isFavorite: Bool
     let onGoToQuestion: ((Int) -> Void)?
-    let isCorrectAt: (Int) -> Bool
-    let isIncorrectAt: (Int) -> Bool
     
     init(
         question: QuestionModel,
@@ -52,9 +50,7 @@ struct FavoritesQuestionCard: View {
         isTranslationActive: Bool = false,
         onToggleFavorite: (() -> Void)? = nil,
         isFavorite: Bool = false,
-        onGoToQuestion: ((Int) -> Void)? = nil,
-        isCorrectAt: @escaping (Int) -> Bool = { _ in false },
-        isIncorrectAt: @escaping (Int) -> Bool = { _ in false }
+        onGoToQuestion: ((Int) -> Void)? = nil
     ) {
         self.question = question
         self.selectedAnswer = selectedAnswer
@@ -68,8 +64,6 @@ struct FavoritesQuestionCard: View {
         self.onToggleFavorite = onToggleFavorite
         self.isFavorite = isFavorite
         self.onGoToQuestion = onGoToQuestion
-        self.isCorrectAt = isCorrectAt
-        self.isIncorrectAt = isIncorrectAt
     }
     
     var body: some View {
@@ -87,8 +81,7 @@ struct FavoritesQuestionCard: View {
             
             footerView
         }
-        .background(Color(.systemBackground))
-        .ignoresSafeArea(edges: .bottom)
+        .background(Color(.systemBackground).ignoresSafeArea(edges: .bottom))
         .fullScreenCover(item: $zoomedAsset) { item in
             FullScreenImageView(assetName: item.name, onDismiss: { zoomedAsset = nil })
         }
@@ -120,7 +113,7 @@ private extension FavoritesQuestionCard {
     var headerView: some View {
         QuestionCardHeaderCard(
             onBackTapped: onBackTapped,
-            showPremiumButton: onBackTapped != nil,
+            showPremiumButton: true,
             onPremiumTap: { premiumManager.presentPaywall() },
             title: (question.subcategory ?? "").isEmpty ? (question.category ?? "Favorites") : (question.subcategory ?? ""),
             progress: (progress.currentIndex, progress.totalCount),
@@ -129,15 +122,20 @@ private extension FavoritesQuestionCard {
             trailingActions: {
                 HStack(spacing: layoutMetrics.adaptive(8)) {
                     if let onToggleTranslation {
-                        QuizHeaderIconButton.translation(isActive: isTranslationActive, action: onToggleTranslation)
+                        QuizHeaderIconButton.translation(isActive: isTranslationActive, action: {
+                            HapticManager.shared.lightImpact()
+                            onToggleTranslation()
+                        })
                     }
                     if let onToggleFavorite {
-                        QuizHeaderIconButton.favorite(isActive: isFavorite, action: onToggleFavorite)
+                        QuizHeaderIconButton.favorite(isActive: isFavorite, action: {
+                            HapticManager.shared.lightImpact()
+                            onToggleFavorite()
+                        })
                     }
                 }
             }
         )
-        .padding(.bottom, layoutMetrics.adaptive(12))
     }
 }
 
@@ -170,7 +168,7 @@ private extension FavoritesQuestionCard {
 // MARK: - Footer View (matches LearningView)
 private extension FavoritesQuestionCard {
     var footerView: some View {
-        VStack(spacing: layoutMetrics.adaptive(8)) {
+        VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
             // Hint button (appears when answer is shown and hint exists)
             if showCorrectAnswer, hintService.getHint(for: question.id) != nil {
                 HStack {
@@ -181,22 +179,24 @@ private extension FavoritesQuestionCard {
             }
             
             if progress.totalCount > 1, let onGoToQuestion {
+                let current0Based = progress.currentIndex - 1
                 QuestionNavigationBar(
                     questionCount: progress.totalCount,
-                    currentIndex: progress.currentIndex - 1,
+                    currentIndex: current0Based,
                     circleColor: circleColor(for:),
                     circleTextColor: circleTextColor(for:),
                     onPrevious: {
-                        if progress.currentIndex > 1 {
-                            onGoToQuestion(progress.currentIndex - 2)
+                        if current0Based > 0 {
+                            onGoToQuestion(current0Based - 1)
                         }
                     },
                     onNext: {
-                        if progress.currentIndex < progress.totalCount {
-                            onGoToQuestion(progress.currentIndex)
+                        if current0Based < progress.totalCount - 1 {
+                            onGoToQuestion(current0Based + 1)
                         }
                     },
                     onSelectIndex: onGoToQuestion,
+                    arrowCircleSize: layoutMetrics.adaptive(42),
                     enableScrollHaptic: true,
                     enableChangeHaptic: true
                 )
@@ -208,7 +208,6 @@ private extension FavoritesQuestionCard {
     }
     
     func hintAction() {
-        HapticManager.shared.lightImpact()
         showingHintSheet = true
     }
     
@@ -248,6 +247,7 @@ private extension FavoritesQuestionCard {
         isFavorite: true,
     )
     .environmentObject(LanguageManager())
+    .environmentObject(PremiumManager.shared)
     .background(Color(.systemGroupedBackground))
     .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }

@@ -25,7 +25,7 @@ struct TestSessionView: View {
     
     private let contentService = ContentService.shared
     
-    @State private var zoomedAsset: TestSessionQuestionCard.ZoomedAsset?
+    @State private var zoomedAsset: ZoomedAsset?
     
     var body: some View {
         Group {

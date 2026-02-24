@@ -102,7 +102,6 @@ struct LearningView: View {
     private var headerView: some View {
         QuestionCardHeaderCard(
             onBackTapped: {
-                HapticManager.shared.lightImpact()
                 if usesRouterNavigation {
                     router.pop()
                 } else {
@@ -231,7 +230,8 @@ struct LearningView: View {
                     onPrevious: { viewModel.goToQuestion(at: viewModel.currentIndex - 1) },
                     onNext: { viewModel.goToQuestion(at: viewModel.currentIndex + 1) },
                     onSelectIndex: { viewModel.goToQuestion(at: $0) },
-                    arrowCircleSize: layoutMetrics.adaptive(42)
+                    arrowCircleSize: layoutMetrics.adaptive(42),
+                    enableScrollHaptic: true
                 )
             }
         }

@@ -13,13 +13,10 @@ import Combine
 class FavoritesViewModel: ObservableObject {
     @Published var favoriteQuestions: [QuestionModel] = []
     @Published var currentIndex: Int = 0
-    @Published var selectedAnswers: [String: Int] = [:]
-    @Published var showCorrectAnswers: [String: Bool] = [:]
     @Published var showTranslation: Bool = false
     
     private let favoritesManager = FavoritesManager.shared
     private let contentService = ContentService.shared
-    private let answersService = AnswersService.shared
     private var cancellables = Set<AnyCancellable>()
     
     private var languageManager: LanguageManager?
@@ -31,7 +28,10 @@ class FavoritesViewModel: ObservableObject {
             .sink { [weak self] _ in
                 Task { @MainActor in
                     guard let self = self, let languageManager = self.languageManager else { return }
-                    await self.loadFavorites(language: languageManager.currentAppLanguage)
+                    await self.loadFavorites(
+                        language: languageManager.currentAppLanguage,
+                        translationLanguage: languageManager.currentTranslationLanguage
+                    )
                 }
             }
             .store(in: &cancellables)
@@ -69,26 +69,7 @@ class FavoritesViewModel: ObservableObject {
             }
         }
         favoriteQuestions = questions
-        
-        // Favorites is read-only - don't load saved answers, always show correct answer
-    }
-    
-    func selectAnswer(_ index: Int, for questionId: String) {
-        // Read-only mode: answer selection disabled
-    }
-    
-    func checkAnswer(for questionId: String) {
-        guard let answer = selectedAnswers[questionId] else { return }
-        
-        // Save answer
-        answersService.saveAnswer(answer, for: questionId)
-        showCorrectAnswers[questionId] = true
-    }
-    
-    func resetCurrentQuestion(for questionId: String) {
-        answersService.clearAnswer(for: questionId)
-        selectedAnswers[questionId] = nil
-        showCorrectAnswers[questionId] = false
+        currentIndex = min(currentIndex, max(0, questions.count - 1))
     }
     
     func toggleTranslation() {
@@ -102,28 +83,6 @@ class FavoritesViewModel: ObservableObject {
     func toggleFavorite(for questionId: String) {
         favoritesManager.toggleFavorite(for: questionId)
         // Questions will reload automatically via Combine subscription
-    }
-    
-    func isCorrect(at index: Int) -> Bool {
-        guard index < favoriteQuestions.count else { return false }
-        let questionId = favoriteQuestions[index].id
-        guard showCorrectAnswers[questionId] == true,
-              let selected = selectedAnswers[questionId],
-              let correctIndex = contentService.correctAnswers[questionId] else {
-            return false
-        }
-        return selected == correctIndex
-    }
-    
-    func isIncorrect(at index: Int) -> Bool {
-        guard index < favoriteQuestions.count else { return false }
-        let questionId = favoriteQuestions[index].id
-        guard showCorrectAnswers[questionId] == true,
-              let selected = selectedAnswers[questionId],
-              let correctIndex = contentService.correctAnswers[questionId] else {
-            return false
-        }
-        return selected != correctIndex
     }
 }
 

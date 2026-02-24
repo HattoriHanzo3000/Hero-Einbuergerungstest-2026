@@ -25,7 +25,7 @@ struct PremiumButton: View {
             action()
         }) {
             Text("settings_premium_title".localized.uppercased())
-                .font(.system(.callout, weight: .regular).width(.expanded))
+                .font(.system(.footnote, weight: .regular).width(.expanded))
                 .foregroundColor(color)
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)

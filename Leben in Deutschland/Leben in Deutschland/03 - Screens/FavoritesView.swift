@@ -39,37 +39,26 @@ struct FavoritesView: View {
     }
     
     // MARK: - Carousel View
+    @ViewBuilder
     private var carouselView: some View {
-        Group {
-            if viewModel.currentIndex < viewModel.favoriteQuestions.count {
-                let question = viewModel.favoriteQuestions[viewModel.currentIndex]
-                FavoritesQuestionCard(
-                    question: question,
-                    selectedAnswer: nil, // Read-only: don't show selected answer
-                    showCorrectAnswer: true, // Always show correct answer in green
-                    showTranslation: viewModel.showTranslation,
-                    currentIndex: viewModel.currentIndex + 1,
-                    totalCount: viewModel.favoriteQuestions.count,
-                    onAnswerSelected: { _ in }, // Read-only: disable answer selection
-                    onBackTapped: {
-                        router.pop()
-                    },
-                    onToggleTranslation: {
-                        viewModel.toggleTranslation()
-                    },
-                    isTranslationActive: viewModel.showTranslation,
-                    onToggleFavorite: {
-                        viewModel.toggleFavorite(for: question.id)
-                    },
-                    isFavorite: viewModel.isFavorite(questionId: question.id),
-                    onGoToQuestion: { newIndex in
-                        viewModel.currentIndex = newIndex
-                    },
-                    isCorrectAt: { viewModel.isCorrect(at: $0) },
-                    isIncorrectAt: { viewModel.isIncorrect(at: $0) }
-                )
-                .environmentObject(languageManager)
-            }
+        if viewModel.currentIndex < viewModel.favoriteQuestions.count {
+            let question = viewModel.favoriteQuestions[viewModel.currentIndex]
+            FavoritesQuestionCard(
+                question: question,
+                selectedAnswer: nil,
+                showCorrectAnswer: true,
+                showTranslation: viewModel.showTranslation,
+                currentIndex: viewModel.currentIndex + 1,
+                totalCount: viewModel.favoriteQuestions.count,
+                onAnswerSelected: { _ in },
+                onBackTapped: { router.pop() },
+                onToggleTranslation: { viewModel.toggleTranslation() },
+                isTranslationActive: viewModel.showTranslation,
+                onToggleFavorite: { viewModel.toggleFavorite(for: question.id) },
+                isFavorite: viewModel.isFavorite(questionId: question.id),
+                onGoToQuestion: { viewModel.currentIndex = $0 }
+            )
+            .environmentObject(languageManager)
         }
     }
     
@@ -83,8 +72,8 @@ struct FavoritesView: View {
                 }, tintColor: .primary)
                 Spacer()
             }
-            .padding(.horizontal, layoutMetrics.adaptive(20))
-            .padding(.top, layoutMetrics.adaptive(8))
+            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+            .padding(.top, layoutMetrics.adaptive(LayoutMetrics.headerTopPadding))
             
             // Empty state content
             VStack(spacing: layoutMetrics.adaptive(24)) {
@@ -118,6 +107,7 @@ struct FavoritesView: View {
 #Preview("Favorites View") {
     FavoritesView()
         .environmentObject(LanguageManager())
+        .environmentObject(PremiumManager.shared)
         .environment(AppRouter())
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
@@ -125,6 +115,7 @@ struct FavoritesView: View {
 #Preview("Favorites Empty State") {
     FavoritesView()
         .environmentObject(LanguageManager())
+        .environmentObject(PremiumManager.shared)
         .environment(AppRouter())
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
