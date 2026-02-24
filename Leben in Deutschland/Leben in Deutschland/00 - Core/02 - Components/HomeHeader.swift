@@ -5,6 +5,8 @@ import SwiftUI
 struct HomeHeader: View {
     let readinessPercentage: Int
     var onPremiumTap: (() -> Void)?
+    /// When false, renders content only for flat gradient headers (no rounded card).
+    var useCard: Bool = true
 
     @EnvironmentObject private var stateManager: StateManager
     @EnvironmentObject private var languageManager: LanguageManager
@@ -25,7 +27,8 @@ struct HomeHeader: View {
             readinessPercentage: readinessPercentage,
             onPremiumTap: onPremiumTap,
             autoPlayInterval: 60,
-            content: content
+            content: content,
+            useCard: useCard
         )
     }
 }

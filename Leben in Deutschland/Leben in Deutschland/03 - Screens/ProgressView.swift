@@ -11,15 +11,19 @@ struct ProgressTabView: View {
     private var sectionSpacing: CGFloat { layoutMetrics.adaptive(LayoutMetrics.sectionSpacing) }
 
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(spacing: sectionSpacing) {
-                progressHeaderSection
-                HomeStatisticsSection(statistics: viewModel.statistics)
-                    .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+        VStack(spacing: 0) {
+            progressHeaderSection
+
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: sectionSpacing) {
+                    HomeStatisticsSection(statistics: viewModel.statistics)
+                        .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+                }
+                .padding(.top, layoutMetrics.adaptive(12))
+                .padding(.bottom, layoutMetrics.adaptive(LayoutMetrics.footerPadding))
+                .frame(maxWidth: .infinity, alignment: .top)
+                .id(languageManager.currentAppLanguage)
             }
-            .padding(.bottom, layoutMetrics.adaptive(LayoutMetrics.footerPadding))
-            .frame(maxWidth: .infinity, alignment: .top)
-            .id(languageManager.currentAppLanguage)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
@@ -31,14 +35,21 @@ struct ProgressTabView: View {
     }
 }
 
-// MARK: - Header Section
+// MARK: - Header Section (flat gradient, same as Home)
 private extension ProgressTabView {
     var progressHeaderSection: some View {
         HomeHeader(
             readinessPercentage: viewModel.statistics.readinessPercentage,
-            onPremiumTap: { premiumManager.presentPaywall() }
+            onPremiumTap: { premiumManager.presentPaywall() },
+            useCard: false
         )
-        .screenHeaderPadding(metrics: layoutMetrics)
+        .padding(.horizontal, layoutMetrics.adaptive(16))
+        .padding(.bottom, layoutMetrics.adaptive(12))
+        .background(
+            Rectangle()
+                .fill(LiquidGlassGradient.blue.screenBackground)
+                .ignoresSafeArea(edges: .top)
+        )
     }
 }
 

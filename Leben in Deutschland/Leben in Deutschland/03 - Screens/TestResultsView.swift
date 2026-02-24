@@ -70,9 +70,9 @@ struct TestResultsView: View {
             // Hide results content when countdown is showing so it never flashes after countdown
             if !showingRetryCountdown {
                 VStack(spacing: 0) {
-                    // Fixed header: result-colored gradient behind card (red/green, same as card)
+                    // Fixed header: safe area only on top; 16pt sides, 12pt bottom
                     testResultsHeaderSection
-                        .screenHeaderPadding(metrics: layoutMetrics)
+                        .padding(.horizontal, layoutMetrics.adaptive(16))
                         .padding(.bottom, layoutMetrics.adaptive(12))
                         .background(
                             Rectangle()
@@ -237,64 +237,66 @@ private extension TestResultsView {
     }
 }
 
-// MARK: - Header Island (matches Progress layout: title + message left, mascot right)
+// MARK: - Header (content directly on gradient; padding applied at section level)
 private extension TestResultsView {
     var testResultsHeaderSection: some View {
-        let gradient: LiquidGlassGradient = results.isPassed ? .green : .red
         let mascotSize: CGFloat = layoutMetrics.adaptive(120)
         let mascotToContentSpacing: CGFloat = layoutMetrics.adaptive(16)
         let titleToMessageSpacing: CGFloat = layoutMetrics.adaptive(6)
 
-        return HeaderCard(gradient: gradient, showPremiumButton: false) {
-            VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
-                // Back arrow (quit with confirmation) + checklist (view answers), same design
-                HStack {
-                    AdaptiveIconButton.backButton(action: {
-                        HapticManager.shared.lightImpact()
-                        showingQuitConfirmation = true
-                    }, tintColor: .white)
-                    Spacer()
-                    AdaptiveIconButton(
-                        systemName: "checklist.checked",
-                        action: { showingAnswers = true },
-                        accessibilityLabel: "view_answers".localized,
-                        tintColor: .white,
-                        backgroundColor: Color.white.opacity(0.18),
-                        sizePreset: .standard
-                    )
-                }
-                .transaction { $0.animation = nil }
+        return VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
+            // Back arrow (quit with confirmation) + checklist (view answers)
+            HStack {
+                AdaptiveIconButton.backButton(action: {
+                    HapticManager.shared.lightImpact()
+                    showingQuitConfirmation = true
+                }, tintColor: .white)
+                Spacer()
+                AdaptiveIconButton(
+                    systemName: "checklist.checked",
+                    action: { showingAnswers = true },
+                    accessibilityLabel: "view_answers".localized,
+                    tintColor: .white,
+                    backgroundColor: Color.white.opacity(0.18),
+                    sizePreset: .standard
+                )
+            }
+            .transaction { $0.animation = nil }
+            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.red, lineWidth: 1))
 
-                HStack(alignment: .top, spacing: mascotToContentSpacing) {
-                    // Left: title + result message (same font params as Progress state/slogan)
-                    VStack(alignment: .leading, spacing: titleToMessageSpacing) {
-                        Text(results.isPassed ? "test_passed".localized : "test_failed".localized)
-                            .font(.system(.title, weight: .heavy))
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.leading)
-                            .lineLimit(nil)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(alignment: .top, spacing: mascotToContentSpacing) {
+                // Left: title + result message
+                VStack(alignment: .leading, spacing: titleToMessageSpacing) {
+                    Text(results.isPassed ? "test_passed".localized : "test_failed".localized)
+                        .font(.system(.title, weight: .heavy))
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(nil)
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
-                        Text(results.isPassed
-                             ? "\(results.correctAnswers) \("of".localized) \(results.totalQuestions) \("questions_correct".localized)"
-                             : "\("test_result_only_prefix".localized) \(results.correctAnswers) \("of".localized) \(results.totalQuestions) \("questions_correct".localized)")
-                            .font(.system(.body, weight: .semibold))
-                            .italic()
-                            .lineSpacing(4)
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                    // Right: mascot (same as Progress)
-                    MascotView(autoPlayInterval: nil)
-                        .frame(width: mascotSize, height: mascotSize)
+                    Text(results.isPassed
+                         ? "\(results.correctAnswers) \("of".localized) \(results.totalQuestions) \("questions_correct".localized)"
+                         : "\("test_result_only_prefix".localized) \(results.correctAnswers) \("of".localized) \(results.totalQuestions) \("questions_correct".localized)")
+                        .font(.system(.body, weight: .semibold))
+                        .italic()
+                        .lineSpacing(4)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.green, lineWidth: 1))
+
+                // Right: mascot
+                MascotView(autoPlayInterval: nil)
+                    .frame(width: mascotSize, height: mascotSize)
+                    .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.blue, lineWidth: 1))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.purple, lineWidth: 1))
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.orange, lineWidth: 1))
     }
 }
 

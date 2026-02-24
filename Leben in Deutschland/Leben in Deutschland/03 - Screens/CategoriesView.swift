@@ -28,15 +28,17 @@ struct CategoriesView: View {
             VStack(spacing: 0) {
                 CategoriesTabHeaderCard(
                     onBackTapped: { dismiss() },
-                    onPremiumTap: { premiumManager.presentPaywall() }
+                    onPremiumTap: { premiumManager.presentPaywall() },
+                    useCard: false
                 )
-                .screenHeaderPadding(metrics: layoutMetrics)
+                .padding(.horizontal, layoutMetrics.adaptive(16))
                 .padding(.bottom, layoutMetrics.adaptive(12))
                 .background(
                     Rectangle()
                         .fill(LiquidGlassGradient.blue.screenBackground)
                         .ignoresSafeArea(edges: .top)
                 )
+                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.orange, lineWidth: 1))
 
                 Divider()
                 
@@ -86,7 +88,7 @@ struct CategoriesView: View {
                                 }
                             }
                             .padding(.horizontal, 24)
-                            .padding(.top, 4)
+                            .padding(.top, 12)
                             .padding(.bottom, 32)
                         }
                     }

@@ -35,11 +35,14 @@ private extension ScreenHeaderCardContent {
 }
 
 // MARK: - Screen Header Card
+/// Header for mascot + message screens (Home, Progress). When useCard is false, renders content only for flat gradient headers.
 struct ScreenHeaderCard: View {
     let readinessPercentage: Int
     var onPremiumTap: (() -> Void)?
     var autoPlayInterval: TimeInterval? = 60
     var content: ScreenHeaderCardContent
+    /// When false, renders content only (no rounded card). Use with gradient background for flat header (Home, Progress).
+    var useCard: Bool = true
 
     /// 0 = slogan, 1 = test date, 2 = readiness (when provided). Cycles on mascot animation.
     @State private var messageIndex = 0
@@ -61,26 +64,37 @@ struct ScreenHeaderCard: View {
     }
 
     var body: some View {
-        HeaderCard(showPremiumButton: false) {
-            Group {
-                if useHomeHeaderLayout {
-                    homeHeaderLayout
-                } else {
-                    VStack(alignment: .leading, spacing: premiumRowSpacing) {
-                        if onPremiumTap != nil {
-                            PremiumButton(action: { onPremiumTap?() }, color: .white)
-                                .scaleEffect(0.8)
-                                .frame(maxWidth: .infinity)
-                        }
-                        mascotWithContentLayout
-                    }
+        Group {
+            if useCard {
+                HeaderCard(showPremiumButton: false) {
+                    headerContent
                 }
+            } else {
+                headerContent
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .fixedSize(horizontal: false, vertical: true)
         }
         .accessibilityAddTraits(.isHeader)
         .id(languageManager.currentAppLanguage)
+    }
+
+    /// Reusable content (state, slogan, mascot, premium). No card wrapper.
+    private var headerContent: some View {
+        Group {
+            if useHomeHeaderLayout {
+                homeHeaderLayout
+            } else {
+                VStack(alignment: .leading, spacing: premiumRowSpacing) {
+                    if onPremiumTap != nil {
+                        PremiumButton(action: { onPremiumTap?() }, color: .white)
+                            .scaleEffect(0.8)
+                            .frame(maxWidth: .infinity)
+                    }
+                    mascotWithContentLayout
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     /// Home layout: left = state + message (flexible); right = premium (row 1) + mascot (row 2), fixed positions.
@@ -96,6 +110,7 @@ struct ScreenHeaderCard: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.green, lineWidth: 1))
 
             // Right: premium always row 1, mascot always row 2 — fixed positions
             VStack(alignment: .trailing, spacing: premiumRowSpacing) {
@@ -109,9 +124,12 @@ struct ScreenHeaderCard: View {
                     onAnimationStart: content.isStateWithTestDate ? { advanceMessageIndex() } : nil
                 )
                 .frame(width: mascotSize, height: mascotSize)
+                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.blue, lineWidth: 1))
             }
             .fixedSize(horizontal: true, vertical: false)
+            .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.purple, lineWidth: 1))
         }
+        .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.red, lineWidth: 1))
     }
 
     @ViewBuilder

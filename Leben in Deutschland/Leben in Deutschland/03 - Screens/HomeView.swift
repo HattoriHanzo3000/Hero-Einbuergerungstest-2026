@@ -22,20 +22,31 @@ struct HomeView: View {
     var body: some View {
         NavigationStack(path: $router.navigationPath) {
         GeometryReader { geometry in
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: sectionSpacing) {
-                    HomeHeader(
-                        readinessPercentage: viewModel.statistics.readinessPercentage,
-                        onPremiumTap: { premiumManager.presentPaywall() }
-                    )
-                    .screenHeaderPadding(metrics: layoutMetrics)
+            VStack(spacing: 0) {
+                HomeHeader(
+                    readinessPercentage: viewModel.statistics.readinessPercentage,
+                    onPremiumTap: { premiumManager.presentPaywall() },
+                    useCard: false
+                )
+                .padding(.horizontal, layoutMetrics.adaptive(16))
+                .padding(.bottom, layoutMetrics.adaptive(12))
+                .background(
+                    Rectangle()
+                        .fill(LiquidGlassGradient.blue.screenBackground)
+                        .ignoresSafeArea(edges: .top)
+                )
+                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.orange, lineWidth: 1))
 
-                    HomeLearnOptionsSection()
-                        .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: sectionSpacing) {
+                        HomeLearnOptionsSection()
+                            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+                    }
+                    .padding(.top, layoutMetrics.adaptive(12))
+                    .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
+                    .frame(maxWidth: .infinity, alignment: .top)
+                    .id(languageManager.currentAppLanguage)
                 }
-                .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
-                .frame(maxWidth: .infinity, alignment: .top)
-                .id(languageManager.currentAppLanguage)
             }
             .frame(width: geometry.size.width)
             .background(Color(.systemBackground))

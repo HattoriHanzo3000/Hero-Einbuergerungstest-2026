@@ -26,34 +26,16 @@ struct TestAnswersView: View {
         return viewModel.questions[currentQuestionIndex]
     }
     
-    /// Header gradient matching test result (green when passed, red when failed).
+    /// Header gradient (shared with TestResultsView).
     private var resultHeaderGradient: LinearGradient {
-        if viewModel.isPassed {
-            return LinearGradient(
-                colors: [
-                    Color("AppGreen").opacity(0.9),
-                    Color("AppGreen").opacity(0.65),
-                    Color("AppGreen").opacity(0.45)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        } else {
-            return LinearGradient(
-                colors: [
-                    Color.red.opacity(0.9),
-                    Color.red.opacity(0.65),
-                    Color(red: 0.9, green: 0.2, blue: 0.2).opacity(0.5)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        }
+        (viewModel.isPassed ? LiquidGlassGradient.green : .red).screenBackground
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             headerView
+                .padding(.horizontal, layoutMetrics.adaptive(16))
+                .padding(.top, layoutMetrics.adaptive(12))
                 .padding(.bottom, layoutMetrics.adaptive(12))
                 .background(
                     Rectangle()
@@ -85,35 +67,71 @@ struct TestAnswersView: View {
         }
     }
     
-    // MARK: - Header (gradient matches result: green when passed, red when failed)
+    // MARK: - Header (content on gradient; same logic as TestResultsView: no card, safe area + 16pt sides, 12pt bottom)
     private var headerView: some View {
-        QuestionCardHeaderCard(
-            onBackTapped: { dismiss() },
-            backIcon: .down,
-            showPremiumButton: false,
-            gradient: viewModel.isPassed ? .green : .red,
-            onPremiumTap: nil,
-            title: "your_answers".localized,
-            progress: nil,
-            questionId: currentQuestion?.originalId,
-            onReportTapped: { showingFeedbackReport = true },
-            trailingActions: {
-                HStack(spacing: layoutMetrics.adaptive(8)) {
-                    if languageManager.currentTranslationLanguage != "de" {
-                        QuizHeaderIconButton.translation(isActive: isTranslationActive) {
+        let contentSpacing: CGFloat = layoutMetrics.adaptive(16)
+        return VStack(alignment: .leading, spacing: contentSpacing) {
+            // Back row
+            HStack {
+                Button(action: {
+                    HapticManager.shared.lightImpact()
+                    dismiss()
+                }) {
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding(layoutMetrics.adaptive(10))
+                        .background(Circle().fill(Color.white.opacity(0.18)))
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("back_button_accessibility_label".localized)
+                Spacer()
+            }
+
+            // Title
+            Text("your_answers".localized)
+                .font(.system(.title, weight: .regular).width(.condensed))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.leading)
+                .lineLimit(2)
+                .minimumScaleFactor(0.85)
+
+            // Question row: label + report, trailing actions
+            if currentQuestion != nil {
+                HStack {
+                    HStack(spacing: 8) {
+                        Text("question_label".localized + " \(currentQuestion!.originalId)")
+                            .font(.system(.title2, weight: .thin).width(.condensed))
+                            .foregroundColor(.white)
+                            .accessibilityLabel("question_label".localized + " " + currentQuestion!.originalId)
+                        Button(action: {
                             HapticManager.shared.lightImpact()
-                            isTranslationActive.toggle()
+                            showingFeedbackReport = true
+                        }) {
+                            Image(systemName: "flag.fill")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.white)
                         }
                     }
-                    if let q = currentQuestion {
-                        QuizHeaderIconButton.favorite(isActive: favoritesManager.isFavorite(q.originalId)) {
-                            HapticManager.shared.lightImpact()
-                            favoritesManager.toggleFavorite(for: q.originalId)
+                    Spacer()
+                    HStack(spacing: layoutMetrics.adaptive(8)) {
+                        if languageManager.currentTranslationLanguage != "de" {
+                            QuizHeaderIconButton.translation(isActive: isTranslationActive) {
+                                HapticManager.shared.lightImpact()
+                                isTranslationActive.toggle()
+                            }
+                        }
+                        if let q = currentQuestion {
+                            QuizHeaderIconButton.favorite(isActive: favoritesManager.isFavorite(q.originalId)) {
+                                HapticManager.shared.lightImpact()
+                                favoritesManager.toggleFavorite(for: q.originalId)
+                            }
                         }
                     }
                 }
             }
-        )
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     // MARK: - Content (matches LearningView: single ScrollView, QuestionCard owns full content)
