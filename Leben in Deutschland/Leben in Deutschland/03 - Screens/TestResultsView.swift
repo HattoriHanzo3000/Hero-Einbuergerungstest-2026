@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+/// Ensures label text ends with ":" for left-side titles and category names.
+private extension String {
+    var withTrailingColon: String { hasSuffix(":") ? self : self + ":" }
+}
+
 struct TestResultsView: View {
     @ObservedObject var viewModel: TestSessionViewModel
     let onBackToMainMenu: () -> Void
@@ -20,6 +25,7 @@ struct TestResultsView: View {
     
     @State private var showingAnswers = false
     @State private var showingRetryCountdown = false
+    @State private var showingQuitConfirmation = false
     
     private var results: TestResults {
         TestResults(
@@ -32,38 +38,24 @@ struct TestResultsView: View {
     }
     
     private var resultColor: Color {
-        results.isPassed ? .green : .red
+        if results.isPassed {
+            return Color("AppGreen")
+        } else {
+            return Color(red: 0.9, green: 0.2, blue: 0.2)
+        }
     }
     
-    /// View answers: red or green to match result (Test failed / Test passed).
-    private var viewAnswersButtonStyle: QuizActionButton.Style {
+    /// Gradient for header area (shared LiquidGlassGradient .green / .red).
+    private var resultHeaderGradient: LinearGradient {
+        (results.isPassed ? LiquidGlassGradient.green : .red).screenBackground
+    }
+    
+    /// Try Again: matches result — green when passed, red when failed.
+    private var tryAgainButtonStyle: QuizActionButton.Style {
         QuizActionButton.Style(
             backgroundColor: resultColor,
             disabledBackgroundColor: Color(.systemGray2),
             haloPrimaryColor: resultColor.opacity(0.36),
-            haloSecondaryColor: Color.white.opacity(0.18),
-            showsHaloWhenDisabled: false,
-            suppressGlow: true
-        )
-    }
-    
-    /// Try Again: App Orange.
-    private var tryAgainButtonStyle: QuizActionButton.Style {
-        QuizActionButton.Style(
-            backgroundColor: Color("AppOrange"),
-            disabledBackgroundColor: Color(.systemGray2),
-            haloPrimaryColor: Color("AppOrange").opacity(0.36),
-            haloSecondaryColor: Color.white.opacity(0.18),
-            showsHaloWhenDisabled: false,
-            suppressGlow: true
-        )
-    }
-    
-    private var quitButtonStyle: QuizActionButton.Style {
-        QuizActionButton.Style(
-            backgroundColor: Color("AppBlueLagoon"),
-            disabledBackgroundColor: Color(.systemGray2),
-            haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
             haloSecondaryColor: Color.white.opacity(0.18),
             showsHaloWhenDisabled: false,
             suppressGlow: true
@@ -77,80 +69,99 @@ struct TestResultsView: View {
             
             // Hide results content when countdown is showing so it never flashes after countdown
             if !showingRetryCountdown {
-            VStack(spacing: 0) {
-                ScrollView {
-                    VStack(spacing: layoutMetrics.adaptive(24)) {
-                        // Header: Mascot + Title
-                        HStack(alignment: .center, spacing: layoutMetrics.adaptive(16)) {
-                            MascotView(
-                                autoPlayInterval: nil
-                            )
-                            .fixedSize(horizontal: true, vertical: false)
-                            
-                            VStack(alignment: .leading, spacing: layoutMetrics.adaptive(4)) {
-                                Text(results.isPassed ? "test_passed".localized : "test_failed".localized)
-                                    .font(.system(.title, weight: .heavy))
-                                    .fontDesign(.default)
-                                    .foregroundColor(resultColor)
-                                
-                                Text("\(results.correctAnswers) \("of".localized) \(results.totalQuestions) \("questions_correct".localized)")
-                                    .font(.system(.body, weight: .semibold))
-                                    .fontDesign(.default)
-                                    .lineSpacing(4)
-                                    .foregroundColor(.secondary)
+                VStack(spacing: 0) {
+                    // Fixed header: result-colored gradient behind card (red/green, same as card)
+                    testResultsHeaderSection
+                        .screenHeaderPadding(metrics: layoutMetrics)
+                        .padding(.bottom, layoutMetrics.adaptive(12))
+                        .background(
+                            Rectangle()
+                                .fill(resultHeaderGradient)
+                                .ignoresSafeArea(edges: .top)
+                        )
+
+                    Divider()
+                        .background(Color(.separator))
+
+                    // Scrollable body: statistics sections
+                    ScrollView {
+                    VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.sectionSpacing)) {
+                        // Statistics Section: Summary + By Categories — two sections
+                        VStack(spacing: layoutMetrics.adaptive(16)) {
+                            // Section 1: Summary
+                            SectionContainer(spacing: layoutMetrics.adaptive(12)) {
+                                VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
+                                    Text("test_results_summary".localized)
+                                        .font(.headline)
+                                        .fontWidth(.compressed)
+                                    HStack {
+                                        Text("time_used".localized.withTrailingColon)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        Spacer()
+                                        Text(results.timeString)
+                                            .font(.body.weight(.medium))
+                                            .fontWidth(.compressed)
+                                            .monospacedDigit()
+                                    }
+                                    HStack {
+                                        Text("minimum_requirement".localized.withTrailingColon)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        Spacer()
+                                        Text("17 \("of".localized) 33")
+                                            .font(.body.weight(.medium))
+                                            .fontWidth(.compressed)
+                                            .monospacedDigit()
+                                    }
+                                    HStack {
+                                        Text("your_result".localized.withTrailingColon)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        Spacer()
+                                        Text("\(results.correctAnswers) \("of".localized) 33")
+                                            .font(.body.weight(.medium))
+                                            .fontWidth(.compressed)
+                                            .monospacedDigit()
+                                    }
+                                    HStack {
+                                        Text("accuracy".localized.withTrailingColon)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                        Spacer()
+                                        Text("\(Int(results.accuracy * 100))%")
+                                            .font(.body.weight(.medium))
+                                            .fontWidth(.compressed)
+                                            .monospacedDigit()
+                                    }
+                                }
                             }
-                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                            // Section 2: By Categories (breakdown only)
+                            SectionContainer(spacing: layoutMetrics.adaptive(12)) {
+                                VStack(alignment: .leading, spacing: layoutMetrics.adaptive(12)) {
+                                    Text("test_results_category_breakdown".localized)
+                                        .font(.headline)
+                                        .fontWidth(.compressed)
+                                    if !categoryBreakdown.isEmpty {
+                                        ForEach(Array(categoryBreakdown.enumerated()), id: \.offset) { _, item in
+                                            HStack {
+                                                Text(item.name.localized(for: languageManager.currentAppLanguage))
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.secondary)
+                                                Spacer()
+                                                Text(String(format: "test_results_x_of_y".localized, item.correct, item.total))
+                                                    .font(.body.weight(.medium))
+                                                    .fontWidth(.compressed)
+                                                    .monospacedDigit()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                         .padding(.horizontal, layoutMetrics.adaptive(20))
                         .padding(.top, layoutMetrics.adaptive(20))
-                    
-                        // Statistics Section (matching home section style)
-                        SectionContainer(spacing: layoutMetrics.adaptive(12)) {
-                            VStack(spacing: layoutMetrics.adaptive(12)) {
-                                HStack {
-                                    Text("time_used".localized)
-                                        .font(.system(.body, weight: .medium))
-                                        .fontDesign(.default)
-                                    Spacer()
-                                    Text(results.timeString)
-                                        .font(.system(.body, weight: .medium))
-                                        .fontDesign(.default)
-                                }
-                                
-                                HStack {
-                                    Text("minimum_requirement".localized)
-                                        .font(.system(.body, weight: .medium))
-                                        .fontDesign(.default)
-                                    Spacer()
-                                    Text("17 \("of".localized) 33")
-                                        .font(.system(.body, weight: .medium))
-                                        .fontDesign(.default)
-                                }
-                                
-                                HStack {
-                                    Text("your_result".localized)
-                                        .font(.system(.body, weight: .medium))
-                                        .fontDesign(.default)
-                                    Spacer()
-                                    Text("\(results.correctAnswers) \("of".localized) 33")
-                                        .font(.system(.body, weight: .medium))
-                                        .fontDesign(.default)
-                                        .foregroundColor(resultColor)
-                                }
-                                
-                                HStack {
-                                    Text("accuracy".localized)
-                                        .font(.system(.body, weight: .medium))
-                                        .fontDesign(.default)
-                                    Spacer()
-                                    Text("\(Int(results.accuracy * 100))%")
-                                        .font(.system(.body, weight: .medium))
-                                        .fontDesign(.default)
-                                        .foregroundColor(resultColor)
-                                }
-                            }
-                        }
-                        .padding(.horizontal, layoutMetrics.adaptive(20))
                         .padding(.bottom, layoutMetrics.adaptive(100)) // Space for bottom buttons
                     }
                 }
@@ -162,14 +173,6 @@ struct TestResultsView: View {
                 // Buttons fixed at bottom
                 VStack(spacing: layoutMetrics.adaptive(12)) {
                     QuizActionButton(
-                        "view_answers".localized,
-                        style: viewAnswersButtonStyle
-                    ) {
-                        HapticManager.shared.lightImpact()
-                        showingAnswers = true
-                    }
-                    
-                    QuizActionButton(
                         "try_again".localized,
                         style: tryAgainButtonStyle
                     ) {
@@ -179,18 +182,10 @@ struct TestResultsView: View {
                         // Show countdown immediately from TestResultsView
                         showingRetryCountdown = true
                     }
-                    
-                    QuizActionButton(
-                        "quit_the_test".localized,
-                        style: quitButtonStyle
-                    ) {
-                        HapticManager.shared.lightImpact()
-                        onBackToMainMenu()
-                    }
                 }
                 .padding(.horizontal, layoutMetrics.adaptive(24))
                 .padding(.top, layoutMetrics.adaptive(16))
-                .padding(.bottom, layoutMetrics.adaptive(24))
+                .padding(.bottom, 0)
                 .background(
                     Color(.systemBackground)
                         .shadow(color: Color.black.opacity(0.05), radius: 8, y: -4)
@@ -198,7 +193,6 @@ struct TestResultsView: View {
             }
         }
         }
-        .fontDesign(.rounded)
         .id(languageManager.currentAppLanguage)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -218,12 +212,104 @@ struct TestResultsView: View {
             .environmentObject(StateManager.shared)
             .interactiveDismissDisabled(true)
         }
+        .alert("quit_test_title".localized, isPresented: $showingQuitConfirmation) {
+            Button("cancel".localized, role: .cancel) {
+                HapticManager.shared.lightImpact()
+            }
+            Button("quit_test".localized, role: .destructive) {
+                HapticManager.shared.heavyImpact()
+                onBackToMainMenu()
+            }
+        } message: {
+            Text("quit_test_message".localized)
+        }
     }
 }
 
-// MARK: - Previews
+// MARK: - Category breakdown (via TestResultsCategoryService)
+private extension TestResultsView {
+    var categoryBreakdown: [TestResultsCategoryStat] {
+        TestResultsCategoryService.computeBreakdown(
+            questions: viewModel.questions,
+            answers: viewModel.answers,
+            languageCode: languageManager.currentAppLanguage
+        )
+    }
+}
+
+// MARK: - Header Island (matches Progress layout: title + message left, mascot right)
+private extension TestResultsView {
+    var testResultsHeaderSection: some View {
+        let gradient: LiquidGlassGradient = results.isPassed ? .green : .red
+        let mascotSize: CGFloat = layoutMetrics.adaptive(120)
+        let mascotToContentSpacing: CGFloat = layoutMetrics.adaptive(16)
+        let titleToMessageSpacing: CGFloat = layoutMetrics.adaptive(6)
+
+        return HeaderCard(gradient: gradient, showPremiumButton: false) {
+            VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
+                // Back arrow (quit with confirmation) + checklist (view answers), same design
+                HStack {
+                    AdaptiveIconButton.backButton(action: {
+                        HapticManager.shared.lightImpact()
+                        showingQuitConfirmation = true
+                    }, tintColor: .white)
+                    Spacer()
+                    AdaptiveIconButton(
+                        systemName: "checklist.checked",
+                        action: { showingAnswers = true },
+                        accessibilityLabel: "view_answers".localized,
+                        tintColor: .white,
+                        backgroundColor: Color.white.opacity(0.18),
+                        sizePreset: .standard
+                    )
+                }
+                .transaction { $0.animation = nil }
+
+                HStack(alignment: .top, spacing: mascotToContentSpacing) {
+                    // Left: title + result message (same font params as Progress state/slogan)
+                    VStack(alignment: .leading, spacing: titleToMessageSpacing) {
+                        Text(results.isPassed ? "test_passed".localized : "test_failed".localized)
+                            .font(.system(.title, weight: .heavy))
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(nil)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        Text(results.isPassed
+                             ? "\(results.correctAnswers) \("of".localized) \(results.totalQuestions) \("questions_correct".localized)"
+                             : "\("test_result_only_prefix".localized) \(results.correctAnswers) \("of".localized) \(results.totalQuestions) \("questions_correct".localized)")
+                            .font(.system(.body, weight: .semibold))
+                            .italic()
+                            .lineSpacing(4)
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    // Right: mascot (same as Progress)
+                    MascotView(autoPlayInterval: nil)
+                        .frame(width: mascotSize, height: mascotSize)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+}
+
+// MARK: - Previews (real category names so breakdown matches app design)
+private let previewCategoryNames = [
+    "Law and Constitution",
+    "History",
+    "Federal States",
+    "Elections",
+    "Family and Education"
+]
+
 private func makePreviewResultsViewModel(passed: Bool) -> TestSessionViewModel {
-    let sampleQuestions: [TestQuestion] = (0..<3).map { i in
+    // 33 questions across categories to match real test; correctCount >= 17 when passed.
+    let sampleQuestions: [TestQuestion] = (0..<33).map { i in
         TestQuestion(
             id: i,
             originalId: "\(100 + i)",
@@ -231,7 +317,7 @@ private func makePreviewResultsViewModel(passed: Bool) -> TestSessionViewModel {
             options: ["Option A", "Option B", "Option C", "Option D"],
             correctIndex: 0,
             isRegional: false,
-            category: "Politics"
+            category: previewCategoryNames[i % previewCategoryNames.count]
         )
     }
     let vm = TestSessionViewModel()
@@ -239,7 +325,14 @@ private func makePreviewResultsViewModel(passed: Bool) -> TestSessionViewModel {
     for i in 0..<vm.questions.count {
         vm.goToQuestion(i)
         let q = vm.questions[i]
-        let chosen = passed ? q.correctIndex : (q.correctIndex + 1) % max(1, q.options.count)
+        let chosen: Int
+        if passed {
+            chosen = q.correctIndex
+        } else {
+            // Vary by category index so breakdown differs across categories
+            let catIndex = i % previewCategoryNames.count
+            chosen = (catIndex % 3 == 0) ? q.correctIndex : (q.correctIndex + 1) % max(1, q.options.count)
+        }
         vm.answerQuestion(selectedIndex: chosen)
     }
     vm.finishTest()

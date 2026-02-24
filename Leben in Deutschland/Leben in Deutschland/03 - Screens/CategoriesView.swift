@@ -30,10 +30,14 @@ struct CategoriesView: View {
                     onBackTapped: { dismiss() },
                     onPremiumTap: { premiumManager.presentPaywall() }
                 )
-                .padding(.horizontal, layoutMetrics.adaptive(20))
-                .padding(.top, layoutMetrics.adaptive(8))
+                .screenHeaderPadding(metrics: layoutMetrics)
                 .padding(.bottom, layoutMetrics.adaptive(12))
-                
+                .background(
+                    Rectangle()
+                        .fill(LiquidGlassGradient.blue.screenBackground)
+                        .ignoresSafeArea(edges: .top)
+                )
+
                 Divider()
                 
                 // Content area with system white background

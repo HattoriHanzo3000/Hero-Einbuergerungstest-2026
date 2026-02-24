@@ -26,10 +26,40 @@ struct TestAnswersView: View {
         return viewModel.questions[currentQuestionIndex]
     }
     
+    /// Header gradient matching test result (green when passed, red when failed).
+    private var resultHeaderGradient: LinearGradient {
+        if viewModel.isPassed {
+            return LinearGradient(
+                colors: [
+                    Color("AppGreen").opacity(0.9),
+                    Color("AppGreen").opacity(0.65),
+                    Color("AppGreen").opacity(0.45)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        } else {
+            return LinearGradient(
+                colors: [
+                    Color.red.opacity(0.9),
+                    Color.red.opacity(0.65),
+                    Color(red: 0.9, green: 0.2, blue: 0.2).opacity(0.5)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             headerView
                 .padding(.bottom, layoutMetrics.adaptive(12))
+                .background(
+                    Rectangle()
+                        .fill(resultHeaderGradient)
+                        .ignoresSafeArea(edges: .top)
+                )
             Divider()
                 .background(Color(.separator))
             answersContent
@@ -55,13 +85,13 @@ struct TestAnswersView: View {
         }
     }
     
-    // MARK: - Header
+    // MARK: - Header (gradient matches result: green when passed, red when failed)
     private var headerView: some View {
         QuestionCardHeaderCard(
             onBackTapped: { dismiss() },
             backIcon: .down,
             showPremiumButton: false,
-            gradient: .orange,
+            gradient: viewModel.isPassed ? .green : .red,
             onPremiumTap: nil,
             title: "your_answers".localized,
             progress: nil,
