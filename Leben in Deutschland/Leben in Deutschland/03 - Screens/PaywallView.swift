@@ -64,7 +64,7 @@ struct PaywallView: View {
                 .font(.system(size: layoutMetrics.adaptive(52), weight: .semibold))
                 .foregroundStyle(
                     LinearGradient(
-                        colors: [Color("AppOrange"), Color(red: 0.77, green: 0.21, blue: 0.12)],
+                        colors: [Color("AppOrange"), Color("AppOrange").opacity(0.6)],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -118,7 +118,7 @@ struct PaywallView: View {
                     LinearGradient(
                         colors: [
                             Color("AppOrange"),
-                            Color(red: 0.77, green: 0.21, blue: 0.12)
+                            Color("AppOrange").opacity(0.6)
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing

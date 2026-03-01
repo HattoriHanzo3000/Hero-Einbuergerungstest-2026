@@ -57,7 +57,7 @@
 
 // Eagle dialogues
 "perfect_days_left" = "У нас осталось %d %@. Я с тобой!";
-"perfect_day_left" = "У нас остался %d %@. Я с тобой!";
+"perfect_day_left" = "У нас осталось %d %@. Я с тобой!";
 "perfect_days_left_2_4" = "У нас осталось %d %@. Я с тобой!";
 "perfect_test_today" = "Тест сегодня. Я с тобой!";
 "dont_know_date" = "Пока не знаю";
@@ -93,12 +93,12 @@
 "question_label" = "Вопрос";
 
 // Gamification - stage descriptions
-"eagle_desc_egg" = "Ты готов к тесту на %d%%. Ты только вылупился! Вперёд к знаниям!";
-"eagle_desc_chick" = "Ты готов на %d%%. Вперёд! Первые взмахи крыльев уже за тобой.";
-"eagle_desc_young" = "Ты готов на %d%%. Крылья крепнут! Продолжай в том же духе.";
-"eagle_desc_growing" = "Ты готов на %d%%. Отличный полёт! До вершины — рукой подать.";
-"eagle_desc_wise" = "Ты готов на %d%%. Осталось совсем чуть-чуть — не сбавляй высоты!";
-"eagle_desc_master" = "Ты готов на %d%%. Ты — настоящий орёл знаний!";
+"eagle_desc_egg" = "Готовность к тесту — %d%%. Первые шаги! Вперёд к знаниям!";
+"eagle_desc_chick" = "Готовность %d%%. Вперёд! Первые взмахи крыльев уже за тобой.";
+"eagle_desc_young" = "Готовность %d%%. Крылья крепнут! Продолжай в том же духе.";
+"eagle_desc_growing" = "Готовность %d%%. Отличный полёт! До вершины — рукой подать.";
+"eagle_desc_wise" = "Готовность %d%%. Осталось совсем чуть-чуть — не сбавляй высоты!";
+"eagle_desc_master" = "Готовность %d%%. Ты — орёл знаний!";
 
 "main_header_test_today" = "Тест уже сегодня.";
 "main_header_test_in_days" = "Тест через %d %@.";
@@ -108,7 +108,7 @@
 "main_header_state_slogan_accessibility_label" = "Слоган земли";
 "main_header_test_date_accessibility_label" = "Дней до экзамена";
 "home_statistics_title" = "Твой прогресс";
-"home_statistics_description" = "Ты готов на %d%% к тесту. Продолжай — каждый маленький шаг работает.";
+"home_statistics_description" = "Готовность к тесту — %d%%. Продолжай — каждый маленький шаг работает.";
 "home_statistics_caption" = "Готов к тесту";
 "progress_card_flip_hint" = "Двойное нажатие — перевернуть. Карточка вернётся через 10 секунд.";
 "home_statistics_accessibility_label" = "Прогресс готовности";
@@ -141,7 +141,7 @@
 // Federal State
 "federal_states_title" = "Федеральные земли";
 "change_state_confirmation_title" = "Изменить федеральную землю?";
-"change_state_confirmation_message" = "Вы действительно хотите изменить федеральную землю? Весь текущий прогресс будет потерян.";
+"change_state_confirmation_message" = "Ты действительно хочешь изменить федеральную землю? Весь текущий прогресс будет потерян.";
 "change_state_confirmation_cancel" = "Отмена";
 "change_state_confirmation_confirm" = "Изменить";
 
@@ -366,6 +366,9 @@
 "statistics_expert_description" = "Ответил правильно 4+ раза";
 "statistics_card_flip_hint" = "Двойное нажатие переворачивает карточку";
 "ready" = "готов";
+"progress_readiness_explanation" = "Это твоя оценка готовности. Чем выше процент, тем ближе ты к готовности к экзамену; полные 100%% означают полную готовность. Такого результата можно достичь, если ответить правильно на каждый из %d вопросов четыре раза. Четыре цвета показывают количество по уровням: один раз правильно (Знакомо), два (Закреплено), три (Усвоено), четыре и больше (Эксперт).";
+"progress_readiness_info_accessibility_label" = "Как считается готовность";
+"progress_readiness_info_accessibility_hint" = "Двойное нажатие — показать объяснение";
 
 // =============================================================================
 //   GAMIFICATION

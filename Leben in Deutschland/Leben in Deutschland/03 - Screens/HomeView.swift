@@ -15,8 +15,10 @@ struct HomeView: View {
     private var sectionSpacing: CGFloat { layoutMetrics.adaptive(LayoutMetrics.sectionSpacing) }
     private var footerPadding: CGFloat { layoutMetrics.adaptive(LayoutMetrics.footerPadding) }
     
-    init(viewModel: HomeViewModel = HomeViewModel()) {
-        _viewModel = StateObject(wrappedValue: viewModel)
+    init(viewModel: HomeViewModel? = nil) {
+        _viewModel = StateObject(wrappedValue: viewModel ?? MainActor.assumeIsolated {
+            HomeViewModel(statisticsProvider: HomeStatisticsService(), stateManager: StateManager.shared)
+        })
     }
     
     var body: some View {
@@ -36,15 +38,19 @@ struct HomeView: View {
                         .ignoresSafeArea(edges: .top)
                 )
 
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: sectionSpacing) {
-                        HomeLearnOptionsSection()
-                            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+                ScrollViewReader { proxy in
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(spacing: sectionSpacing) {
+                            Color.clear.frame(height: 0).id("scrollTop")
+                            HomeLearnOptionsSection()
+                                .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+                        }
+                        .padding(.top, layoutMetrics.adaptive(12))
+                        .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
+                        .frame(maxWidth: .infinity, alignment: .top)
+                        .id(languageManager.currentAppLanguage)
                     }
-                    .padding(.top, layoutMetrics.adaptive(12))
-                    .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
-                    .frame(maxWidth: .infinity, alignment: .top)
-                    .id(languageManager.currentAppLanguage)
+                    .onAppear { proxy.scrollTo("scrollTop", anchor: .top) }
                 }
             }
             .frame(width: geometry.size.width)
@@ -116,9 +122,12 @@ struct HomeView: View {
 // MARK: - Preview
 #Preview {
     HomeView(
-        viewModel: HomeViewModel(
-            statisticsProvider: PreviewHomeStatisticsProvider()
-        )
+        viewModel: MainActor.assumeIsolated {
+            HomeViewModel(
+                statisticsProvider: PreviewHomeStatisticsProvider(),
+                stateManager: StateManager.shared
+            )
+        }
     )
         .environmentObject(LanguageManager())
         .environmentObject(StateManager.shared)
@@ -147,14 +156,15 @@ private extension HomeView {
 
 // MARK: - Preview Provider
 private struct PreviewHomeStatisticsProvider: HomeStatisticsProviding {
-    func loadStatistics() -> HomeStatisticsModel {
-        HomeStatisticsModel(
+    func loadStatistics(selectedState: String?) -> HomeStatisticsModel {
+        let total = selectedState != nil ? LayoutMetrics.totalSpacedRepetitionQuestions : LayoutMetrics.totalFederalQuestions
+        return HomeStatisticsModel(
             readinessPercentage: 72,
             familiar: 86,
             reinforced: 54,
             mastered: 158,
             expert: 12,
-            totalQuestions: LayoutMetrics.totalFederalQuestions
+            totalQuestions: total
         )
     }
 }

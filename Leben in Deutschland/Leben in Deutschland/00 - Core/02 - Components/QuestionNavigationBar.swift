@@ -91,7 +91,7 @@ struct QuestionNavigationBar: View {
                                     Text("\(index + 1)")
                                         .font(
                                             .system(size: layoutMetrics.adaptive(isActive ? 16 : 14), weight: .semibold)
-                                                .width(.condensed)
+                                                .width(.expanded)
                                         )
                                         .foregroundColor(circleTextColor(index))
                                 )

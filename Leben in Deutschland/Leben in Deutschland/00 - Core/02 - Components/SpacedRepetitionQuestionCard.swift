@@ -287,7 +287,7 @@ private extension SpacedRepetitionQuestionCard {
     var headerView: some View {
         QuestionCardHeaderCard(
             onBackTapped: onBackTapped,
-            title: nil,
+            title: question.subcategory ?? question.category,
             progress: progress.map { ($0.answeredCount, $0.totalCount) },
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },

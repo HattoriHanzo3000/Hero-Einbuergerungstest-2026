@@ -6,9 +6,23 @@ struct HomeStatisticsSection: View {
     let statistics: HomeStatisticsModel
     @Environment(\.layoutMetrics) private var layoutMetrics
     @Environment(\.colorScheme) private var colorScheme
+    @State private var showExplanationAlert = false
 
     var body: some View {
-        SectionContainer(title: "home_statistics_title", spacing: 18) {
+        SectionContainer(title: "home_statistics_title", spacing: 18, trailing: {
+            AnyView(
+                Button {
+                    showExplanationAlert = true
+                } label: {
+                    Image(systemName: "info.circle")
+                        .font(.system(.title3))
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("progress_readiness_info_accessibility_label".localized)
+                .accessibilityHint("progress_readiness_info_accessibility_hint".localized)
+            )
+        }) {
             VStack(spacing: layoutMetrics.adaptive(20)) {
                 HomeRingChartView(
                     progress: (familiar: statistics.familiar, reinforced: statistics.reinforced, mastered: statistics.mastered, expert: statistics.expert, total: statistics.totalQuestions),
@@ -23,6 +37,11 @@ struct HomeStatisticsSection: View {
             .frame(maxWidth: .infinity, alignment: .center)
         }
         .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
+        .alert("home_statistics_title".localized, isPresented: $showExplanationAlert) {
+            Button("ok".localized) {}
+        } message: {
+            Text(String(format: "progress_readiness_explanation".localized, statistics.totalQuestions))
+        }
         .accessibilityElement(children: .contain)
     }
 }

@@ -6,7 +6,9 @@ struct ProgressTabView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var premiumManager: PremiumManager
-    @StateObject private var viewModel: HomeViewModel = HomeViewModel()
+    @StateObject private var viewModel: HomeViewModel = MainActor.assumeIsolated {
+        HomeViewModel(statisticsProvider: HomeStatisticsService(), stateManager: StateManager.shared)
+    }
 
     private var sectionSpacing: CGFloat { layoutMetrics.adaptive(LayoutMetrics.sectionSpacing) }
 
@@ -14,15 +16,19 @@ struct ProgressTabView: View {
         VStack(spacing: 0) {
             progressHeaderSection
 
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: sectionSpacing) {
-                    HomeStatisticsSection(statistics: viewModel.statistics)
-                        .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+            ScrollViewReader { proxy in
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: sectionSpacing) {
+                        Color.clear.frame(height: 0).id("scrollTop")
+                        HomeStatisticsSection(statistics: viewModel.statistics)
+                            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+                    }
+                    .padding(.top, layoutMetrics.adaptive(12))
+                    .padding(.bottom, layoutMetrics.adaptive(LayoutMetrics.footerPadding))
+                    .frame(maxWidth: .infinity, alignment: .top)
+                    .id(languageManager.currentAppLanguage)
                 }
-                .padding(.top, layoutMetrics.adaptive(12))
-                .padding(.bottom, layoutMetrics.adaptive(LayoutMetrics.footerPadding))
-                .frame(maxWidth: .infinity, alignment: .top)
-                .id(languageManager.currentAppLanguage)
+                .onAppear { proxy.scrollTo("scrollTop", anchor: .top) }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -141,7 +141,7 @@
 // Federal State
 "federal_states_title" = "Bundesländer";
 "change_state_confirmation_title" = "Bundesland ändern?";
-"change_state_confirmation_message" = "Möchten Sie wirklich das Bundesland ändern? Der gesamte Fortschritt geht verloren.";
+"change_state_confirmation_message" = "Möchtest du wirklich das Bundesland ändern? Der gesamte Fortschritt geht verloren.";
 "change_state_confirmation_cancel" = "Abbrechen";
 "change_state_confirmation_confirm" = "Ändern";
 
@@ -353,6 +353,9 @@
 "statistics_expert_description" = "Richtig beantwortet 4 Mal oder öfter";
 "statistics_card_flip_hint" = "Doppelt tippen, um die Karte umzudrehen";
 "ready" = "bereit";
+"progress_readiness_explanation" = "Das ist deine Bereitschaftsbewertung. Je höher der Prozentsatz, desto näher bist du an der Prüfungsbereitschaft; 100%% heißt volle Bereitschaft. Das erreichst du, wenn du jede der %d Fragen viermal richtig beantwortest. Die vier Farben zeigen, wie viele Fragen du pro Stufe hast: einmal (Bekannt), zweimal (Gefestigt), dreimal (Beherrscht) oder viermal bzw. öfter (Experte).";
+"progress_readiness_info_accessibility_label" = "Erklärung zur Bereitschaft";
+"progress_readiness_info_accessibility_hint" = "Doppelt tippen, um die Berechnung anzuzeigen";
 
 // =============================================================================
 //   GAMIFICATION

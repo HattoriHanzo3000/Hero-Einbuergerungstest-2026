@@ -367,6 +367,9 @@
 "statistics_expert_description" = "Answered correctly 4+ times";
 "statistics_card_flip_hint" = "Double tap to flip card";
 "ready" = "ready";
+"progress_readiness_explanation" = "This is your readiness score. The higher the percentage, the closer you are to being ready for the exam; 100%% means full readiness. You can reach that by answering each of the %d questions correctly four times. The four colors show how many questions you've got at each level: once (Familiar), twice (Reinforced), three times (Mastered), or four and more (Expert).";
+"progress_readiness_info_accessibility_label" = "Readiness explanation";
+"progress_readiness_info_accessibility_hint" = "Double tap to show how readiness is calculated";
 
 // =============================================================================
 //   GAMIFICATION

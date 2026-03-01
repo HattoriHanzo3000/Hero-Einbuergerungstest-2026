@@ -5,10 +5,13 @@ struct SectionContainer<Content: View>: View {
     private let title: Text?
     private let spacing: CGFloat
     private let content: Content
-    
+    /// Optional trailing view (e.g. info button) shown on the right of the title row.
+    private let trailing: (() -> AnyView)?
+
     init(
         title: String? = nil,
         spacing: CGFloat = 16,
+        trailing: (() -> AnyView)? = nil,
         @ViewBuilder content: () -> Content
     ) {
         if let title {
@@ -17,9 +20,10 @@ struct SectionContainer<Content: View>: View {
             self.title = nil
         }
         self.spacing = spacing
+        self.trailing = trailing
         self.content = content()
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: spacing) {
             if let title {
@@ -27,11 +31,15 @@ struct SectionContainer<Content: View>: View {
                     title
                         .font(.system(.title3, weight: .light).width(.compressed))
                         .foregroundColor(.primary)
-                    
+
                     Spacer()
+
+                    if let trailing {
+                        trailing()
+                    }
                 }
             }
-            
+
             content
         }
         .sectionContainerStyle()

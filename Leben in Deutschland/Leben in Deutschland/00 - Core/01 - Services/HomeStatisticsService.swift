@@ -3,28 +3,27 @@ import Foundation
 // MARK: - Home Statistics Providing
 /// Abstraction that surfaces the learner’s spaced-repetition progress for the home screen.
 protocol HomeStatisticsProviding {
-    func loadStatistics() -> HomeStatisticsModel
+    /// Loads statistics. When `selectedState` is set, readiness is calculated out of 320 (310 federal + 10 regional); otherwise 310.
+    func loadStatistics(selectedState: String?) -> HomeStatisticsModel
 }
 
 // MARK: - Home Statistics Service
 /// Reads persisted spaced-repetition metadata from `UserDefaults` and transforms it into `HomeStatisticsModel`.
 final class HomeStatisticsService: HomeStatisticsProviding {
     private let defaults: UserDefaults
-    private let totalQuestions: Int
 
-    init(
-        defaults: UserDefaults = .standard,
-        totalQuestions: Int = LayoutMetrics.totalFederalQuestions
-    ) {
+    init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-        self.totalQuestions = totalQuestions
     }
 
-    func loadStatistics() -> HomeStatisticsModel {
+    func loadStatistics(selectedState: String?) -> HomeStatisticsModel {
+        let totalQuestions = selectedState != nil
+            ? LayoutMetrics.totalSpacedRepetitionQuestions  // 310 federal + 10 regional
+            : LayoutMetrics.totalFederalQuestions           // 310 federal only
+
         guard let data = defaults.data(forKey: UserDefaultsKeys.questionStatistics),
               let decodedStatistics = try? JSONDecoder().decode([String: QuestionStatisticRecord].self, from: data)
         else {
-            // On first launch or when no statistics exist, return 0% readiness
             return HomeStatisticsModel(
                 readinessPercentage: 0,
                 familiar: 0,
@@ -34,20 +33,20 @@ final class HomeStatisticsService: HomeStatisticsProviding {
                 totalQuestions: totalQuestions
             )
         }
-        
+
         let statistics = decodedStatistics.values
         let familiar = statistics.filter { ($0.correctCount ?? 0) == 1 }.count
         let reinforced = statistics.filter { ($0.correctCount ?? 0) == 2 }.count
         let mastered = statistics.filter { ($0.correctCount ?? 0) == 3 }.count
         let expert = statistics.filter { ($0.correctCount ?? 0) >= 4 }.count
-        
-        // Readiness: 1→0.25, 2→0.5, 3→0.75, 4+→1.0 (100% only when all 310 have 4+)
+
+        // Readiness: 1→0.25, 2→0.5, 3→0.75, 4+→1.0 (100% when all questions have 4+ correct)
         let totalContribution = statistics.reduce(0.0) { sum, record in
             let correctCount = record.correctCount ?? 0
             return sum + readinessContribution(correctCount: correctCount)
         }
         let readinessFromStats = Int((totalContribution / Double(totalQuestions)) * 100)
-        
+
         return HomeStatisticsModel(
             readinessPercentage: min(max(readinessFromStats, 0), 100),
             familiar: familiar,

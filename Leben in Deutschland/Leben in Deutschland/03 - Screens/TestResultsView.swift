@@ -25,7 +25,6 @@ struct TestResultsView: View {
     
     @State private var showingAnswers = false
     @State private var showingRetryCountdown = false
-    @State private var showingQuitConfirmation = false
     
     private var results: TestResults {
         TestResults(
@@ -105,17 +104,6 @@ struct TestResultsView: View {
             .environmentObject(StateManager.shared)
             .interactiveDismissDisabled(true)
         }
-        .alert("quit_test_title".localized, isPresented: $showingQuitConfirmation) {
-            Button("cancel".localized, role: .cancel) {
-                HapticManager.shared.lightImpact()
-            }
-            Button("quit_test".localized, role: .destructive) {
-                HapticManager.shared.heavyImpact()
-                onBackToMainMenu()
-            }
-        } message: {
-            Text("quit_test_message".localized)
-        }
     }
 }
 
@@ -138,11 +126,11 @@ private extension TestResultsView {
         let titleToMessageSpacing: CGFloat = layoutMetrics.adaptive(6)
 
         return VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
-            // Back arrow (quit with confirmation) + checklist (view answers)
+            // Back arrow (return to main; test is complete, no confirmation needed)
             HStack {
                 AdaptiveIconButton.backButton(action: {
                     HapticManager.shared.lightImpact()
-                    showingQuitConfirmation = true
+                    onBackToMainMenu()
                 }, tintColor: .white)
                 Spacer()
                 AdaptiveIconButton(

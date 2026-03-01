@@ -36,7 +36,7 @@ extension LiquidGlassGradient {
                 colors: [
                     Color("AppOrange").opacity(0.95),
                     Color("AppOrange").opacity(0.75),
-                    Color(red: 0.77, green: 0.21, blue: 0.12).opacity(0.85)
+                    Color("AppOrange").opacity(0.5)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
