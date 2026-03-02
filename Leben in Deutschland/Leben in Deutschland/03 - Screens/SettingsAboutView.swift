@@ -40,7 +40,6 @@ struct SettingsAboutView: View {
         }
         .frame(maxWidth: layoutMetrics.adaptive(200), maxHeight: layoutMetrics.adaptive(200))
         .frame(maxWidth: .infinity)
-        .scaleEffect(x: -1, y: 1)
         .padding(.vertical, layoutMetrics.adaptive(8))
         .accessibilityLabel("settings_about_mascot_accessibility".localized)
     }

@@ -28,7 +28,8 @@ struct HomeView: View {
                 HomeHeader(
                     readinessPercentage: viewModel.statistics.readinessPercentage,
                     onPremiumTap: { premiumManager.presentPaywall() },
-                    useCard: false
+                    useCard: false,
+                    mascotAssetBaseName: "MainChickFlipped"
                 )
                 .padding(.horizontal, layoutMetrics.adaptive(16))
                 .padding(.bottom, layoutMetrics.adaptive(12))

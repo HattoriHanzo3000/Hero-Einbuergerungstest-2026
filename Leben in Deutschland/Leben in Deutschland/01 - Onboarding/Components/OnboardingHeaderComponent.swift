@@ -220,7 +220,6 @@ private struct OnboardingMascotView: View {
             .allowsHitTesting(false)
         }
         .frame(width: mascotSize, height: mascotSize)
-        .scaleEffect(x: -1, y: 1)
         .contentShape(Rectangle())
         .onTapGesture {
             HapticManager.shared.lightImpact()

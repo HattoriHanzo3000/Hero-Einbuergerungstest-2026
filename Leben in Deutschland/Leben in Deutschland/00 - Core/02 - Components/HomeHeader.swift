@@ -7,6 +7,8 @@ struct HomeHeader: View {
     var onPremiumTap: (() -> Void)?
     /// When false, renders content only for flat gradient headers (no rounded card).
     var useCard: Bool = true
+    /// Base name for the mascot asset used in this header (e.g. "MainChick" or "MainChickFlipped").
+    var mascotAssetBaseName: String = "MainChick"
 
     @EnvironmentObject private var stateManager: StateManager
     @EnvironmentObject private var languageManager: LanguageManager
@@ -28,7 +30,8 @@ struct HomeHeader: View {
             onPremiumTap: onPremiumTap,
             autoPlayInterval: 60,
             content: content,
-            useCard: useCard
+            useCard: useCard,
+            mascotAssetBaseName: mascotAssetBaseName
         )
     }
 }

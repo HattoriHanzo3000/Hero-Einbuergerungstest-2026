@@ -5,6 +5,9 @@ import UIKit
 /// Shows the Hero eagle mascot with optional GIF animation on tap or auto-play.
 /// Used in headers (Home, Test, Progress, Categories, Test Results).
 struct MascotView: View {
+    /// Base name for the mascot asset, e.g. "MainChick" or "MainChickFlipped".
+    /// Dark variants use the "Dark" suffix when available (e.g. "MainChickDark").
+    let assetBaseName: String
     let autoPlayInterval: TimeInterval?
     let playSignal: UUID?
     let onPlayCompleted: (() -> Void)?
@@ -19,11 +22,13 @@ struct MascotView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
 
     init(
+        assetBaseName: String = "MainChick",
         autoPlayInterval: TimeInterval? = nil,
         playSignal: UUID? = nil,
         onPlayCompleted: (() -> Void)? = nil,
         onAnimationStart: (() -> Void)? = nil
     ) {
+        self.assetBaseName = assetBaseName
         self.autoPlayInterval = autoPlayInterval
         self.playSignal = playSignal
         self.onPlayCompleted = onPlayCompleted
@@ -83,17 +88,17 @@ private extension MascotView {
     var mascotSize: CGFloat { layoutMetrics.adaptive(120) }
 
     var staticMascotAssetName: String {
-        if colorScheme == .dark, UIImage(named: "MainChickDark") != nil {
-            return "MainChickDark"
+        if colorScheme == .dark, UIImage(named: "\(assetBaseName)Dark") != nil {
+            return "\(assetBaseName)Dark"
         }
-        return "MainChick"
+        return assetBaseName
     }
 
     var gifMascotAssetName: String {
-        if colorScheme == .dark, gifExists(named: "MainChickDark") {
-            return "MainChickDark"
+        if colorScheme == .dark, gifExists(named: "\(assetBaseName)Dark") {
+            return "\(assetBaseName)Dark"
         }
-        return "MainChick"
+        return assetBaseName
     }
 
     var mascotView: some View {
@@ -125,7 +130,6 @@ private extension MascotView {
             .allowsHitTesting(false)
         }
         .frame(width: mascotSize, height: mascotSize)
-        .scaleEffect(x: -1, y: 1)
         .contentShape(Rectangle())
         .onTapGesture {
             HapticManager.shared.lightImpact()

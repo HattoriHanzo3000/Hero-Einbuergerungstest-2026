@@ -43,6 +43,8 @@ struct ScreenHeaderCard: View {
     var content: ScreenHeaderCardContent
     /// When false, renders content only (no rounded card). Use with gradient background for flat header (Home, Progress).
     var useCard: Bool = true
+    /// Base name for the mascot asset used in this header (e.g. "MainChick" or "MainChickFlipped").
+    var mascotAssetBaseName: String = "MainChick"
 
     /// 0 = slogan, 1 = test date, 2 = readiness (when provided). Cycles on mascot animation.
     @State private var messageIndex = 0
@@ -119,6 +121,7 @@ struct ScreenHeaderCard: View {
                 }
 
                 MascotView(
+                    assetBaseName: mascotAssetBaseName,
                     autoPlayInterval: autoPlayInterval,
                     onAnimationStart: content.isStateWithTestDate ? { advanceMessageIndex() } : nil
                 )
@@ -175,6 +178,7 @@ struct ScreenHeaderCard: View {
     private var mascotWithContentLayout: some View {
         HStack(alignment: .center, spacing: mascotToContentSpacing) {
             MascotView(
+                assetBaseName: mascotAssetBaseName,
                 autoPlayInterval: content == .readiness ? nil : autoPlayInterval,
                 onAnimationStart: content.isStateWithTestDate ? { advanceMessageIndex() } : nil
             )
