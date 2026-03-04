@@ -61,11 +61,8 @@ final class SpacedRepetitionViewModel: ObservableObject {
     
     var progressState: SpacedRepetitionQuestionCard.ProgressState {
         // Calculate overall readiness percentage (same as main screen)
-        // This shows the user's overall progress from 0% to 100%
-        let totalForReadiness = stateManager.selectedState != nil
-            ? LayoutMetrics.totalSpacedRepetitionQuestions
-            : LayoutMetrics.totalFederalQuestions
-        let readinessPercentage = manager.readinessPercentage(totalQuestions: totalForReadiness)
+        // Exam is always 310 questions (300 federal + 10 state-specific).
+        let readinessPercentage = manager.readinessPercentage(totalQuestions: LayoutMetrics.totalFederalQuestions)
         
         return .init(
             answeredCount: readinessPercentage,

@@ -3,7 +3,7 @@ import Foundation
 // MARK: - Home Statistics Providing
 /// Abstraction that surfaces the learner’s spaced-repetition progress for the home screen.
 protocol HomeStatisticsProviding {
-    /// Loads statistics. When `selectedState` is set, readiness is calculated out of 320 (310 federal + 10 regional); otherwise 310.
+    /// Loads statistics. Readiness is always calculated out of 310 (300 federal + 10 state-specific).
     func loadStatistics(selectedState: String?) -> HomeStatisticsModel
 }
 
@@ -17,9 +17,7 @@ final class HomeStatisticsService: HomeStatisticsProviding {
     }
 
     func loadStatistics(selectedState: String?) -> HomeStatisticsModel {
-        let totalQuestions = selectedState != nil
-            ? LayoutMetrics.totalSpacedRepetitionQuestions  // 310 federal + 10 regional
-            : LayoutMetrics.totalFederalQuestions           // 310 federal only
+        let totalQuestions = LayoutMetrics.totalFederalQuestions  // 310 (300 federal + 10 state)
 
         guard let data = defaults.data(forKey: UserDefaultsKeys.questionStatistics),
               let decodedStatistics = try? JSONDecoder().decode([String: QuestionStatisticRecord].self, from: data)

@@ -158,14 +158,13 @@ private extension HomeView {
 // MARK: - Preview Provider
 private struct PreviewHomeStatisticsProvider: HomeStatisticsProviding {
     func loadStatistics(selectedState: String?) -> HomeStatisticsModel {
-        let total = selectedState != nil ? LayoutMetrics.totalSpacedRepetitionQuestions : LayoutMetrics.totalFederalQuestions
         return HomeStatisticsModel(
             readinessPercentage: 72,
             familiar: 86,
             reinforced: 54,
             mastered: 158,
             expert: 12,
-            totalQuestions: total
+            totalQuestions: LayoutMetrics.totalFederalQuestions
         )
     }
 }

@@ -22,12 +22,14 @@ struct LayoutMetrics {
     
     static let buttonTapAnimationDuration: Double = 0.22
     static let gifAnimationDuration: Double = 1.1
+    /// Total exam questions: 300 federal + 10 state-specific = 310.
     static let totalFederalQuestions: Int = 310
     
     // MARK: - Spaced Repetition
     static let maxHorizonDays: Int = 30
     static let targetCorrectPerQuestion: Int = 4
-    static let totalSpacedRepetitionQuestions: Int = 320
+    /// Same as totalFederalQuestions (exam is always 310 questions).
+    static let totalSpacedRepetitionQuestions: Int = 310
     
     let scale: CGFloat
     let screenSize: CGSize
