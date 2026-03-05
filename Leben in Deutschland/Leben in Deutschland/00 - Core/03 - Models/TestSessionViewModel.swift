@@ -141,8 +141,12 @@ class TestSessionViewModel: ObservableObject {
                 self.timerTick += 1
                 if self.remainingTime <= 0 {
                     self.timer?.invalidate()
+                    self.timer = nil
                 }
             }
+        }
+        if let t = timer {
+            RunLoop.main.add(t, forMode: .common)
         }
     }
     

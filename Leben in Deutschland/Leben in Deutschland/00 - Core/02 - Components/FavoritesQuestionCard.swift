@@ -291,6 +291,7 @@ private extension FavoritesQuestionCard {
         id: "001",
         text: "What is the capital of Germany?",
         options: ["Berlin", "Munich", "Hamburg", "Frankfurt"],
+        hint: nil,
         category: "Geography",
         subcategory: "Cities"
     )

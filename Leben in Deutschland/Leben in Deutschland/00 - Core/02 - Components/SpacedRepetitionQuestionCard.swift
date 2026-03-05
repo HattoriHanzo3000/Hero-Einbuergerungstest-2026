@@ -309,6 +309,7 @@ private extension SpacedRepetitionQuestionCard {
             "Das Recht auf kostenlose Verkehrstickets",
             "Das Recht auf eine Luxuswohnung"
         ],
+        hint: nil,
         category: "Grundrechte",
         subcategory: "Meinungsfreiheit"
     )

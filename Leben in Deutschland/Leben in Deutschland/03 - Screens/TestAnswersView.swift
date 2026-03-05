@@ -109,6 +109,7 @@ struct TestAnswersView: View {
                     id: q.originalId,
                     text: q.text,
                     options: q.options,
+                    hint: nil,
                     category: q.category,
                     subcategory: nil
                 )

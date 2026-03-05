@@ -12,6 +12,7 @@ struct QuestionModel: Codable, Identifiable, Hashable {
     let id: String
     let text: String
     let options: [String]
+    var hint: String?
     var category: String?
     var subcategory: String?
     

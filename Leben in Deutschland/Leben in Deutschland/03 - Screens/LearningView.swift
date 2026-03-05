@@ -376,7 +376,7 @@ private enum LearningViewPreview {
         HintService.shared.hints["q003"] = hintText
     }
     
-    /// Load a subcategory whose first question is 003 (real question with hint in hints_en).
+    /// Load a subcategory whose first question is 003 (for preview with injected hint).
     private static func loadPreviewSubcategoryWithHint() -> SubcategoryModel {
         guard
             let url = Bundle.main.url(forResource: "content_en", withExtension: "json", subdirectory: "Content"),
@@ -413,6 +413,7 @@ private enum LearningViewPreview {
                 "Only Germans must follow the laws.",
                 "Courts create the laws."
             ],
+            hint: nil,
             category: "State",
             subcategory: "Democracy"
         )

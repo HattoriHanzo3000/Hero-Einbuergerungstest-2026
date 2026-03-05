@@ -9,6 +9,7 @@
           {
             "id": "006",
             "text": "What is the name of the German constitution?",
+            "hint": "The constitution is the base of the democratic system.",
             "options": [
               "People's Law",
               "Federal Law",

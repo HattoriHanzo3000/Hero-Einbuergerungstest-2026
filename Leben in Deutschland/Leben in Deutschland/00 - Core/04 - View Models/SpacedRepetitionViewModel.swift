@@ -168,6 +168,7 @@ private extension SpacedRepetitionViewModel {
                 "Artikel 1 des Grundgesetzes",
                 "Artikel 6 des Grundgesetzes"
             ],
+            hint: nil,
             category: nil,
             subcategory: nil
         ),
@@ -180,6 +181,7 @@ private extension SpacedRepetitionViewModel {
                 "16",
                 "17"
             ],
+            hint: nil,
             category: nil,
             subcategory: nil
         )

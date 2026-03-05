@@ -63,6 +63,7 @@ struct TestSessionQuestionCard: View {
                     id: currentQuestion.originalId,
                     text: currentQuestion.text,
                     options: currentQuestion.options,
+                    hint: nil,
                     category: currentQuestion.category,
                     subcategory: nil
                 )

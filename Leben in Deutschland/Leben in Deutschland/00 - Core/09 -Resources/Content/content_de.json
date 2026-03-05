@@ -9,6 +9,7 @@
           {
             "id": "006",
             "text": "Wie heißt die deutsche Verfassung?",
+            "hint": "Die Verfassung ist der Grund der demokratischen Ordnung.",
             "options": [
               "Volksgesetz",
               "Bundesgesetz",

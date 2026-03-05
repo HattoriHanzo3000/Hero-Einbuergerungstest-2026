@@ -147,14 +147,22 @@ class ContentService: ObservableObject {
             categoryMap[data.category]?.append(data)
         }
         
-        // Create CategoryModel array in original order
+        // Create CategoryModel array in original order, and inject category/subcategory
+        // into each QuestionModel so that test/statistics logic can see them.
         return categoryOrder.map { categoryName in
             let subcategoryData = categoryMap[categoryName] ?? []
             let subcategories = subcategoryData.map { data in
-                SubcategoryModel(
+                let enrichedQuestions: [QuestionModel] = data.questions.map { question in
+                    var q = question
+                    q.category = categoryName
+                    q.subcategory = data.subcategory
+                    return q
+                }
+                
+                return SubcategoryModel(
                     name: data.subcategory,
                     categoryName: categoryName,
-                    questions: data.questions
+                    questions: enrichedQuestions
                 )
             }
             
@@ -231,6 +239,11 @@ class ContentService: ObservableObject {
     /// Get a translated question by ID (from cache if available)
     func getTranslatedQuestion(id: String) -> QuestionModel? {
         return translatedQuestionsMap[id]
+    }
+    
+    /// Get all translated questions (for HintService to build translation hints)
+    func getAllTranslatedQuestions() -> [QuestionModel] {
+        return Array(translatedQuestionsMap.values)
     }
     
     /// Clear translation cache (e.g., when languages change)
