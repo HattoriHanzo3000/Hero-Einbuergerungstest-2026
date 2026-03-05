@@ -188,7 +188,7 @@
 "settings_share_button" = "Teilen";
 "settings_about_heading" = "Über diese App";
 "settings_about_mascot_accessibility" = "Hero-Maskottchen";
-"settings_about_description" = "Hero – Leben in Deutschland hilft dir bei der Vorbereitung auf den Einbürgerungstest mit 310 offiziellen Fragen, Spaced-Repetition-Lernen und vollständiger Testsimulation. Wähle dein Bundesland, übe in deinem eigenen Tempo und fühle dich am Prüfungstag sicher.";
+"settings_about_description" = "Hero – Einbürgerungstest hilft dir bei der Vorbereitung auf den Einbürgerungstest mit 310 offiziellen Fragen, Spaced-Repetition-Lernen und vollständiger Testsimulation. Wähle dein Bundesland, übe in deinem eigenen Tempo und fühle dich am Prüfungstag sicher.";
 "settings_share_scan_title" = "Zum Herunterladen scannen";
 "settings_share_qr_accessibility" = "QR-Code zum Herunterladen der App";
 "settings_share_scan_subtitle" = "Teile diesen QR-Code, damit Freunde die App im App Store finden.";
@@ -460,7 +460,7 @@
 "premium_feature_favorites" = "Favoriten";
 "premium_subscribe_now" = "Jetzt abonnieren";
 "premium_choose_plan" = "Wähle deinen Plan";
-"premium_plan_monthly" = "Monatlich";
+"premium_plan_monthly" = "Monatliches Abo";
 "premium_plan_lifetime" = "Lebenslang";
 "premium_per_month" = "pro Monat";
 "premium_limited_offer" = "Zeitlich begrenztes Angebot";
@@ -483,7 +483,7 @@
 "premium_favorites_alert_upgrade" = "Upgraden";
 "premium_accessibility_label" = "Premium";
 "premium_accessibility_hint" = "Öffnet Premium-Funktionen und Abonnementoptionen";
-"premium_plan_yearly" = "Jährlich";
+"premium_plan_yearly" = "Jährliches Abo";
 "premium_per_year" = "pro Jahr";
 
 "paywall_title" = "Premium freischalten";
@@ -498,7 +498,7 @@
 "paywall_terms_hint" = "Öffnet die AGB";
 "paywall_privacy" = "Datenschutz";
 "paywall_privacy_hint" = "Öffnet die Datenschutzerklärung";
-"paywall_terms_boilerplate" = "Die Zahlung wird deinem Apple-Konto belastet. Abos verlängern sich automatisch, sofern sie nicht mindestens 24 Stunden vor Ende des aktuellen Zeitraums gekündigt werden. Verwalten und kündigen kannst du in den Einstellungen des App Stores.";
+"paywall_terms_boilerplate" = "Hero Premium ist als Abonnement verfügbar: Monatlich (1 Monat, 1,99 € pro Monat) und Jährlich (12 Monate, 14,99 € pro Jahr). Die Zahlung wird deinem Apple-Konto belastet. Abos verlängern sich automatisch, sofern sie nicht mindestens 24 Stunden vor Ende des aktuellen Zeitraums gekündigt werden. Verwalten und kündigen kannst du dein Abo in den Einstellungen des App Stores.";
 "paywall_best_value" = "Bester Preis";
 "paywall_year_savings" = "37 % Ersparnis gegenüber Monat";
 

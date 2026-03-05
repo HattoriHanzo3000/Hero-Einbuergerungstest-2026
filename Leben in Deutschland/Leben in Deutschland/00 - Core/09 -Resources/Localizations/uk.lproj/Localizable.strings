@@ -188,7 +188,7 @@
 "settings_share_button" = "Поділитися";
 "settings_about_heading" = "Про цей додаток";
 "settings_about_mascot_accessibility" = "Талісман Hero";
-"settings_about_description" = "Hero – Leben in Deutschland допомагає підготуватися до тесту на громадянство: 310 офіційних питань, інтервальне повторення та повна симуляція іспиту. Обери федеральну землю, практикуйся у своєму темпі та почувайся впевнено в день іспиту.";
+"settings_about_description" = "Hero – Einbürgerungstest допомагає підготуватися до тесту на громадянство: 310 офіційних питань, інтервальне повторення та повна симуляція іспиту. Обери федеральну землю, практикуйся у своєму темпі та почувайся впевнено в день іспиту.";
 "settings_share_scan_title" = "Скануйте для завантаження";
 "settings_share_qr_accessibility" = "QR-код для завантаження додатку";
 "settings_share_scan_subtitle" = "Поділіться цим QR-кодом, щоб друзі могли знайти додаток у App Store.";
@@ -471,7 +471,7 @@
 "premium_feature_favorites" = "Обране";
 "premium_subscribe_now" = "Підписатися зараз";
 "premium_choose_plan" = "Обери свій план";
-"premium_plan_monthly" = "Щомісячно";
+"premium_plan_monthly" = "Щомісячна підписка";
 "premium_plan_lifetime" = "Назавжди";
 "premium_per_month" = "на місяць";
 "premium_limited_offer" = "Обмежена пропозиція";
@@ -494,7 +494,7 @@
 "premium_favorites_alert_upgrade" = "Оновити";
 "premium_accessibility_label" = "Преміум";
 "premium_accessibility_hint" = "Відкриває преміум-функції та варіанти підписки";
-"premium_plan_yearly" = "Щорічно";
+"premium_plan_yearly" = "Щорічна підписка";
 "premium_per_year" = "на рік";
 
 "paywall_title" = "Розблокувати Premium";
@@ -509,7 +509,7 @@
 "paywall_terms_hint" = "Відкрити умови використання";
 "paywall_privacy" = "Політика конфіденційності";
 "paywall_privacy_hint" = "Відкрити політику конфіденційності";
-"paywall_terms_boilerplate" = "Оплата буде списана з вашого Apple ID. Підписка продовжується автоматично, якщо не скасувати не менше ніж за 24 години до кінця періоду. Керування та скасування — у налаштуваннях App Store.";
+"paywall_terms_boilerplate" = "Hero Premium доступний за підпискою: Щомісячна (1 місяць, 1,99 € на місяць) та Щорічна (12 місяців, 14,99 € на рік). Оплату буде списано з вашого Apple ID. Підписка автоматично продовжується, якщо не скасувати її щонайменше за 24 години до кінця поточного періоду. Керувати підпискою та скасувати її можна в налаштуваннях App Store.";
 "paywall_best_value" = "Вигідно";
 "paywall_year_savings" = "Економія 37 % порівняно з щомісячною";
 

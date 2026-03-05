@@ -11,7 +11,7 @@ struct SettingsShareView: View {
     private let appStoreURL = "https://apps.apple.com/app/id6752272685"
 
     private var shareText: String {
-        let appName = "Hero - Leben in Deutschland"
+        let appName = "Hero – Einbürgerungstest"
         return "\(appName)\n\(appStoreURL)"
     }
 

@@ -34,7 +34,7 @@ final class SettingsSupportViewModel: ObservableObject {
         if MFMailComposeViewController.canSendMail() {
             presentMail(
                 recipients: [contactEmail],
-                subject: "Contact - Leben in Deutschland",
+                subject: "Contact - Hero – Einbürgerungstest",
                 body: Self.deviceInfoBody
             )
         } else {
@@ -68,7 +68,7 @@ final class SettingsSupportViewModel: ObservableObject {
 
         let body = String(format: "mail_device_info_body".localized, appVersion, buildNumber, deviceModel, systemName, systemVersion)
         let encodedBody = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? body
-        let subject = "Contact - Leben in Deutschland".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "Contact"
+        let subject = "Contact - Hero – Einbürgerungstest".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "Contact"
 
         let mailtoString = "mailto:\(contactEmail)?subject=\(subject)&body=\(encodedBody)"
         guard let mailtoURL = URL(string: mailtoString) else {

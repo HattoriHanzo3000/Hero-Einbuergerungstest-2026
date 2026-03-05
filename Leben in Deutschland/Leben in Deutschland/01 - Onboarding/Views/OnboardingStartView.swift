@@ -13,7 +13,20 @@ struct OnboardingStartView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 24) {
-                VStack(spacing: 8) {
+                VStack(spacing: 4) {
+                    Text("HERO")
+                        .font(
+                            .system(size: 90, weight: .heavy)
+                                .width(.expanded)
+                        )
+                        .kerning(2)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                        .allowsTightening(true)
+                        .truncationMode(.tail)
+                        .foregroundColor(.white)
+                        .padding(.bottom, -4)
                     Text("Einbürgerungtest")
                         .font(.system(size: 40, weight: .heavy))
                         .kerning(0.5)

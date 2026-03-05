@@ -13,12 +13,13 @@ import SwiftUI
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
-    @Environment(\.openURL) private var openURL
     @EnvironmentObject private var premiumManager: PremiumManager
+    @EnvironmentObject private var storeService: StoreService
     
     @State private var selectedPlan: SubscriptionPlanType? = .yearly
     @State private var isPurchasing = false
     @State private var restoreMessage: String?
+    @State private var activeLegalURL: URL?
     
     private static let termsURL = AppURLs.termsOfUse
     private static let privacyURL = AppURLs.privacyPolicy
@@ -52,8 +53,19 @@ struct PaywallView: View {
                 }
             }
         }
+        .sheet(
+            isPresented: Binding(
+                get: { activeLegalURL != nil },
+                set: { if !$0 { activeLegalURL = nil } }
+            )
+        ) {
+            if let url = activeLegalURL {
+                SafariSheetView(url: url)
+            }
+        }
         .onAppear {
             if selectedPlan == nil { selectedPlan = .yearly }
+            Task { await storeService.loadProducts() }
         }
     }
     
@@ -158,7 +170,7 @@ struct PaywallView: View {
             paywallTermsText
             
             HStack(spacing: layoutMetrics.adaptive(20)) {
-                Button(action: { openURL(PaywallView.termsURL) }) {
+                Button(action: { activeLegalURL = PaywallView.termsURL }) {
                     Text("paywall_terms".localized)
                         .font(.system(.caption, design: .rounded).weight(.medium))
                         .foregroundStyle(Color("AppOrange"))
@@ -169,7 +181,7 @@ struct PaywallView: View {
                 Text("·")
                     .foregroundStyle(.tertiary)
                 
-                Button(action: { openURL(PaywallView.privacyURL) }) {
+                Button(action: { activeLegalURL = PaywallView.privacyURL }) {
                     Text("paywall_privacy".localized)
                         .font(.system(.caption, design: .rounded).weight(.medium))
                         .foregroundStyle(Color("AppOrange"))
@@ -192,35 +204,29 @@ struct PaywallView: View {
         guard let plan = selectedPlan else { return }
         HapticManager.shared.mediumImpact()
         isPurchasing = true
-        // TODO: Replace with StoreKit 2 purchase flow when products are configured in App Store Connect
-        handlePurchaseSuccess(plan: plan)
-    }
-    
-    private func handlePurchaseSuccess(plan: SubscriptionPlanType) {
-        let expiry: Date?
-        switch plan {
-        case .monthly:
-            expiry = Calendar.current.date(byAdding: .month, value: 1, to: Date())
-        case .yearly:
-            expiry = Calendar.current.date(byAdding: .year, value: 1, to: Date())
-        case .lifetime:
-            expiry = nil
+        restoreMessage = nil
+        Task {
+            let success = await storeService.purchase(plan)
+            await MainActor.run {
+                isPurchasing = false
+                if success {
+                    dismiss()
+                } else if let error = storeService.purchaseError {
+                    restoreMessage = error
+                }
+            }
         }
-        premiumManager.activateSubscription(type: plan, expiryDate: expiry)
-        isPurchasing = false
-        dismiss()
     }
     
     private func restorePurchases() {
         HapticManager.shared.lightImpact()
         isPurchasing = true
         restoreMessage = nil
-        // TODO: Call StoreKit 2 Transaction.currentEntitlements and sync with PremiumManager
         Task {
-            try? await Task.sleep(nanoseconds: 800_000_000)
+            let found = await storeService.restorePurchases()
             await MainActor.run {
                 premiumManager.checkPremiumStatus()
-                if premiumManager.isPremium {
+                if found && premiumManager.isPremium {
                     restoreMessage = "paywall_restore_success".localized
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                         dismiss()
@@ -310,5 +316,6 @@ private struct PaywallPlanRow: View {
 #Preview("Paywall") {
     PaywallView()
         .environmentObject(PremiumManager.shared)
+        .environmentObject(StoreService.shared)
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }

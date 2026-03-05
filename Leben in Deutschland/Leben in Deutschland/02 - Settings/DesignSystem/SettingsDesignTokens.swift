@@ -15,12 +15,16 @@ enum SettingsDesignTokens {
     }
 
     enum Layout {
-        static let rowSpacing: CGFloat = 12
+        /// Horizontal spacing between icon, title, and trailing controls in a row.
+        /// Slightly tighter to better match native Settings rows.
+        static let rowSpacing: CGFloat = 8
         static let sectionSpacing: CGFloat = 20
         static let cornerRadius: CGFloat = 12
         static let iconCornerRadius: CGFloat = 8
         static let iconStrokeWidth: CGFloat = 0.6
-        static let rowVerticalPadding: CGFloat = 4
+        /// Extra vertical padding inside custom HStack rows (most vertical sizing comes from List itself).
+        /// Set to 0 to keep rows visually closer to system defaults.
+        static let rowVerticalPadding: CGFloat = 0
     }
 
     enum Icon {

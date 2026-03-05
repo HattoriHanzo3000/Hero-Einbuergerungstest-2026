@@ -191,7 +191,7 @@
 "settings_share_button" = "Share";
 "settings_about_heading" = "About this app";
 "settings_about_mascot_accessibility" = "Hero mascot";
-"settings_about_description" = "Hero – Leben in Deutschland helps you prepare for the citizenship test with 310 official questions, spaced repetition learning, and a full test simulation. Choose your federal state, practice at your own pace, and feel confident on exam day.";
+"settings_about_description" = "Hero – Einbürgerungstest helps you prepare for the citizenship test with 310 official questions, spaced repetition learning, and a full test simulation. Choose your federal state, practice at your own pace, and feel confident on exam day.";
 "settings_share_scan_title" = "Scan to download";
 "settings_share_qr_accessibility" = "QR code to download the app";
 "settings_share_scan_subtitle" = "Share this QR code so friends can find the app in the App Store.";
@@ -474,7 +474,7 @@
 "premium_feature_favorites" = "Favorites";
 "premium_subscribe_now" = "Subscribe Now";
 "premium_choose_plan" = "Choose Your Plan";
-"premium_plan_monthly" = "Monthly";
+"premium_plan_monthly" = "Monthly subscription";
 "premium_plan_lifetime" = "Lifetime";
 "premium_per_month" = "per month";
 "premium_limited_offer" = "Limited Time Offer";
@@ -497,11 +497,11 @@
 "premium_favorites_alert_upgrade" = "Upgrade";
 "premium_accessibility_label" = "Premium";
 "premium_accessibility_hint" = "Opens premium features and subscription options";
-"premium_plan_yearly" = "Yearly";
+"premium_plan_yearly" = "Yearly subscription";
 "premium_per_year" = "per year";
 
 // Paywall (first-run / crown)
-"paywall_title" = "Unlock Premium";
+"paywall_title" = "Unlock Hero Premium";
 "paywall_subtitle" = "Full access to all materials, progress tracking, and more.";
 "paywall_close" = "Close";
 "paywall_close_hint" = "Dismisses the paywall";
@@ -513,7 +513,7 @@
 "paywall_terms_hint" = "Opens Terms and Conditions";
 "paywall_privacy" = "Privacy Policy";
 "paywall_privacy_hint" = "Opens Privacy Policy";
-"paywall_terms_boilerplate" = "Payment will be charged to your Apple ID. Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period. You can manage and cancel in App Store settings.";
+"paywall_terms_boilerplate" = "Hero Premium is available as a subscription: Monthly (1 month, 1.99 € per month) and Yearly (12 months, 14.99 € per year). Payment will be charged to your Apple ID. Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period. You can manage and cancel your subscription in App Store settings.";
 "paywall_best_value" = "Best value";
 "paywall_year_savings" = "Save 37% vs monthly";
 

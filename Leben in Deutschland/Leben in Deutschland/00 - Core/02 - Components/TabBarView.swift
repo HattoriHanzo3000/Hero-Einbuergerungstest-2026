@@ -51,6 +51,7 @@ struct TabBarView: View {
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized(for: appLanguage))
+        .task { await StoreService.shared.syncEntitlementsOnLaunch() }
         .paywallSheet(premiumManager: premiumManager)
     }
 
@@ -81,6 +82,7 @@ struct TabBarView: View {
         }
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
+        .task { await StoreService.shared.syncEntitlementsOnLaunch() }
         .onChange(of: selectedTab) { _, _ in
             HapticManager.shared.selectionChanged()
         }
@@ -99,6 +101,7 @@ private extension View {
         }) {
             PaywallView()
                 .environmentObject(premiumManager)
+                .environmentObject(StoreService.shared)
         }
     }
 }
