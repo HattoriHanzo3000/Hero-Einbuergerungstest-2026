@@ -65,7 +65,10 @@ struct Leben_in_DeutschlandApp: App {
                             )
                         )
                     case .onboardingSplash:
-                        OnboardingSplashView(onFinish: { appFlow.stage = .main })
+                        OnboardingStartView {
+                            UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+                            appFlow.stage = .main
+                        }
                     case .main:
                         TabBarView()
                     }

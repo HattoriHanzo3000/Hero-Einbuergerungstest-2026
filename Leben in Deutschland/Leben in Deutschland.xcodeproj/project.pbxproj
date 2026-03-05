@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		74B1060F2F55E8BB0091BAC0 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 74B1060E2F55E8BB0091BAC0 /* AppIcon.icon */; };
 		E623807F2E82C0E2000C28AB /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E623807E2E82C0E2000C28AB /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		74B1060E2F55E8BB0091BAC0 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		E612E89C2E8299CD00513716 /* Leben in Deutschland.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Leben in Deutschland.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E619899F2E8836B400A0B582 /* Leben in Deutschland.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Leben in Deutschland.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		E623807E2E82C0E2000C28AB /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -38,6 +40,7 @@
 		E612E8932E8299CD00513716 = {
 			isa = PBXGroup;
 			children = (
+				74B1060E2F55E8BB0091BAC0 /* AppIcon.icon */,
 				E623807E2E82C0E2000C28AB /* Launch Screen.storyboard */,
 				E612E89E2E8299CD00513716 /* Leben in Deutschland */,
 				E619899F2E8836B400A0B582 /* Leben in Deutschland.xcodeproj */,
@@ -132,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E623807F2E82C0E2000C28AB /* Launch Screen.storyboard in Resources */,
+				74B1060F2F55E8BB0091BAC0 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,8 +281,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = all;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = SZQ626NP5U;
