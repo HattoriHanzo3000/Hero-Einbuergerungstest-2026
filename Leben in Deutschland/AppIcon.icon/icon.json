@@ -1,91 +1,158 @@
 {
-  "fill" : "system-light",
+  "fill" : {
+    "solid" : "gray:0.00000,1.00000"
+  },
   "groups" : [
     {
+      "blend-mode" : "normal",
+      "blur-material" : null,
+      "hidden" : false,
       "layers" : [
         {
-          "image-name" : "Pass signs 2.svg",
-          "name" : "Pass signs 2",
+          "image-name" : "Adler.png",
+          "name" : "Adler",
           "position" : {
             "scale" : 1,
             "translation-in-points" : [
-              20,
+              -20,
               0
             ]
           }
         }
       ],
+      "lighting" : "individual",
+      "name" : "Group",
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.5
+      },
+      "specular" : true,
+      "translucency-specializations" : [
+        {
+          "value" : {
+            "enabled" : false,
+            "value" : 0.5
+          }
+        },
+        {
+          "appearance" : "dark",
+          "value" : {
+            "enabled" : false,
+            "value" : 0.5
+          }
+        }
+      ]
+    },
+    {
+      "blur-material" : null,
+      "layers" : [
+        {
+          "image-name" : "Pass Signs.png",
+          "name" : "Pass Signs",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              114,
+              1
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "name" : "Group",
       "shadow" : {
         "kind" : "neutral",
         "opacity" : 0.5
       },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
+      "specular" : true,
+      "translucency-specializations" : [
+        {
+          "value" : {
+            "enabled" : false,
+            "value" : 0.5
+          }
+        },
+        {
+          "appearance" : "dark",
+          "value" : {
+            "enabled" : true,
+            "value" : 0.5
+          }
+        }
+      ]
     },
     {
       "blend-mode" : "normal",
       "blur-material" : null,
+      "hidden" : false,
       "layers" : [
         {
-          "image-name" : "Bundesadler.svg",
-          "name" : "Bundesadler",
+          "glass" : true,
+          "image-name" : "Passport cover.png",
+          "name" : "Passport cover",
           "position" : {
             "scale" : 1,
             "translation-in-points" : [
-              -213,
-              -2.000013393613358
+              178.5,
+              1
             ]
           }
         }
       ],
+      "lighting" : "individual",
       "name" : "Group",
       "shadow" : {
-        "kind" : "neutral",
+        "kind" : "layer-color",
         "opacity" : 0.5
       },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
-    },
-    {
-      "layers" : [
+      "specular" : true,
+      "translucency-specializations" : [
         {
-          "image-name" : "Passport 2.svg",
-          "name" : "Passport 2",
-          "position" : {
-            "scale" : 1,
-            "translation-in-points" : [
-              203,
-              -0.9999866063867557
-            ]
+          "value" : {
+            "enabled" : false,
+            "value" : 0.5
+          }
+        },
+        {
+          "appearance" : "dark",
+          "value" : {
+            "enabled" : true,
+            "value" : 0.5
           }
         }
-      ],
-      "name" : "Group",
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
-      },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
+      ]
     },
     {
+      "blend-mode" : "normal",
       "layers" : [
-
+        {
+          "glass" : true,
+          "image-name" : "BG.png",
+          "name" : "BG"
+        }
       ],
+      "lighting" : "individual",
+      "name" : "Group",
       "shadow" : {
-        "kind" : "neutral",
+        "kind" : "layer-color",
         "opacity" : 0.5
       },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
+      "specular" : false,
+      "translucency-specializations" : [
+        {
+          "value" : {
+            "enabled" : false,
+            "value" : 0.5
+          }
+        },
+        {
+          "appearance" : "dark",
+          "value" : {
+            "enabled" : true,
+            "value" : 0.5
+          }
+        }
+      ]
     }
   ],
   "supported-platforms" : {

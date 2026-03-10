@@ -3,7 +3,7 @@
 //  Leben in Deutschland
 //
 //  StoreKit 2 service for subscription purchases and restore.
-//  Product IDs must match App Store Connect: hero_premium_monthly, hero_premium_yearly.
+//  Product IDs must match App Store Connect: hero.lid.premium.monthly, hero.lid.premium.yearly.
 //
 
 import Foundation
@@ -17,8 +17,8 @@ final class StoreService: ObservableObject {
     
     /// Product IDs — must match App Store Connect subscription product IDs.
     private enum ProductID {
-        static let monthly = "hero_premium_monthly"
-        static let yearly = "hero_premium_yearly"
+        static let monthly = "hero.lid.premium.monthly"
+        static let yearly = "hero.lid.premium.yearly"
         static var all: [String] { [monthly, yearly] }
     }
     
