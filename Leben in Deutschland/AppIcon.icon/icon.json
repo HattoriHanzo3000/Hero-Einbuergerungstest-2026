@@ -14,7 +14,7 @@
           "position" : {
             "scale" : 1,
             "translation-in-points" : [
-              -20,
+              -30,
               0
             ]
           }
@@ -52,7 +52,7 @@
           "position" : {
             "scale" : 1,
             "translation-in-points" : [
-              114,
+              136.80078125,
               1
             ]
           }
@@ -60,6 +60,13 @@
       ],
       "lighting" : "individual",
       "name" : "Group",
+      "position" : {
+        "scale" : 1,
+        "translation-in-points" : [
+          10,
+          0
+        ]
+      },
       "shadow" : {
         "kind" : "neutral",
         "opacity" : 0.5
@@ -93,7 +100,7 @@
           "position" : {
             "scale" : 1,
             "translation-in-points" : [
-              178.5,
+              188.5,
               1
             ]
           }
@@ -126,6 +133,22 @@
       "blend-mode" : "normal",
       "layers" : [
         {
+          "fill" : {
+            "linear-gradient" : [
+              "display-p3:0.91708,0.74513,0.15899,1.00000",
+              "display-p3:0.98607,0.82685,0.28413,1.00000"
+            ],
+            "orientation" : {
+              "start" : {
+                "x" : 0.5,
+                "y" : 1
+              },
+              "stop" : {
+                "x" : 0.5,
+                "y" : 0.3
+              }
+            }
+          },
           "glass" : true,
           "image-name" : "BG.png",
           "name" : "BG"
