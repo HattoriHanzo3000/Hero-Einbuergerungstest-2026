@@ -14,6 +14,7 @@ final class AppRouter {
     
     // MARK: - Navigation Destinations
     enum Destination: Hashable {
+        case allQuestions
         case categories
         case learning(subcategoryName: String, categoryName: String)
         case favorites

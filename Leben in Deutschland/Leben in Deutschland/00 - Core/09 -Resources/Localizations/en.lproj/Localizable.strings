@@ -84,6 +84,10 @@
 "home_learn_by_topics_subtitle" = "One topic at a time";
 "home_learn_favorites" = "Favorites";
 "home_learn_favorites_subtitle" = "Bookmark for later";
+"home_learn_all_questions" = "All Questions";
+"home_learn_all_questions_subtitle" = "All 310 official exam questions";
+"all_questions_empty_title" = "No Questions Yet";
+"all_questions_empty_message" = "Questions will appear here once content is loaded. Pull to refresh or try again.";
 "spaced_repetition_title" = "Start Learning";
 
 // Learn by Topics

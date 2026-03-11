@@ -5,7 +5,7 @@ import SwiftUI
 struct ProgressTabView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
-    @EnvironmentObject private var premiumManager: PremiumManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @StateObject private var viewModel: HomeViewModel = MainActor.assumeIsolated {
         HomeViewModel(statisticsProvider: HomeStatisticsService(), stateManager: StateManager.shared)
     }
@@ -36,6 +36,9 @@ struct ProgressTabView: View {
         .toolbar(.visible, for: .tabBar)
         .onAppear {
             viewModel.refreshStatistics()
+            if !subscriptionManager.isPremium {
+                subscriptionManager.gateFeature(placement: "progress") { }
+            }
         }
         .tabBarHidden(false)
     }
@@ -46,7 +49,7 @@ private extension ProgressTabView {
     var progressHeaderSection: some View {
         HomeHeader(
             readinessPercentage: viewModel.statistics.readinessPercentage,
-            onPremiumTap: { premiumManager.presentPaywall() },
+            onPremiumTap: { subscriptionManager.presentPaywall() },
             useCard: false,
             mascotAssetBaseName: "MainChickFlipped"
         )
@@ -64,7 +67,7 @@ private extension ProgressTabView {
 #Preview {
     ProgressTabView()
         .environmentObject(LanguageManager())
-        .environmentObject(PremiumManager.shared)
+        .environmentObject(SubscriptionManager.shared)
         .environmentObject(StateManager.shared)
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }

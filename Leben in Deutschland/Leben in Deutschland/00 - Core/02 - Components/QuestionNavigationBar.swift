@@ -25,9 +25,9 @@ struct QuestionNavigationBar: View {
     /// Per-circle gradient (e.g. .green correct, .red wrong). When non-nil, overrides gradient for that circle.
     var circleGradient: ((Int) -> LiquidGlassGradient?)? = nil
     
-    /// Arrow button size. Default 34; Learning uses 42.
+    /// Arrow button size. Default 38; callers use 46 for active circle.
     var arrowCircleSize: CGFloat? = nil
-    /// Numbered circle size. Default 34.
+    /// Numbered circle size. Default 38 (bumped for 3-digit numbers).
     var numberedCircleSize: CGFloat? = nil
     /// Haptic on scroll drag. Test/Favorites use this.
     var enableScrollHaptic: Bool = false
@@ -38,7 +38,7 @@ struct QuestionNavigationBar: View {
     @State private var lastScrollHapticTs: Double = 0
     
     private var resolvedNumberedSize: CGFloat {
-        numberedCircleSize ?? layoutMetrics.adaptive(34)
+        numberedCircleSize ?? layoutMetrics.adaptive(38)
     }
     
     private var resolvedArrowSize: CGFloat {
@@ -90,7 +90,7 @@ struct QuestionNavigationBar: View {
                                 .overlay(
                                     Text("\(index + 1)")
                                         .font(
-                                            .system(size: layoutMetrics.adaptive(isActive ? 16 : 14), weight: .semibold)
+                                            .system(size: layoutMetrics.adaptive(isActive ? 15 : 13), weight: .semibold)
                                                 .width(.expanded)
                                         )
                                         .foregroundColor(circleTextColor(index))

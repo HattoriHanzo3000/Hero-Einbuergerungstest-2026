@@ -25,4 +25,8 @@ enum UserDefaultsKeys {
 
     /// Prefix for Learning mode position keys. Full key: "\(subcategoryPositionPrefix)\(subcategoryName)"
     static let subcategoryPositionPrefix = "subcategory_position_"
+
+    // MARK: - Premium / Test Simulation
+    /// Number of free test simulation sessions used (max 3 for non-premium).
+    static let testSimulationFreeSessionsUsed = "test_simulation_free_sessions_used"
 }

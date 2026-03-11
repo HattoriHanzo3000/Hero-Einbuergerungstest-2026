@@ -14,19 +14,67 @@ struct LearnButtonContent: View {
     let title: String
     let subtitle: String
     let color: Color
+    /// When set, used for icon background instead of solid color (e.g. German flag gradient).
+    var iconGradient: LinearGradient? = nil
+    /// When set with iconSplitColors, overrides icon background (e.g. gold for German flag book).
+    var iconBackgroundColor: Color? = nil
+    /// When set, applies gradient to the icon itself (e.g. black-to-red for German flag book pages).
+    var iconForegroundGradient: LinearGradient? = nil
+    /// When set, splits icon: left half first color, right half second color (sharp divide, no gradient).
+    var iconSplitColors: (left: Color, right: Color)? = nil
 
     @Environment(\.layoutMetrics) private var layoutMetrics
 
+    private var resolvedIconBackground: some ShapeStyle {
+        if let bg = iconBackgroundColor {
+            return AnyShapeStyle(bg)
+        }
+        if let gradient = iconGradient {
+            return AnyShapeStyle(gradient)
+        }
+        return AnyShapeStyle(color)
+    }
+
     var body: some View {
         HStack(spacing: layoutMetrics.adaptive(16)) {
-            Image(systemName: icon)
-                .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
-                .foregroundColor(.white)
-                .frame(width: layoutMetrics.adaptive(52), height: layoutMetrics.adaptive(52))
-                .background(
-                    RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
-                        .fill(color)
-                )
+            Group {
+                if let split = iconSplitColors {
+                    ZStack(alignment: .leading) {
+                        Image(systemName: icon)
+                            .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
+                            .foregroundColor(split.left)
+                            .frame(width: layoutMetrics.adaptive(52), height: layoutMetrics.adaptive(52))
+                            .mask(
+                                Rectangle()
+                                    .frame(width: layoutMetrics.adaptive(52) / 2)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                            )
+                        Image(systemName: icon)
+                            .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
+                            .foregroundColor(split.right)
+                            .frame(width: layoutMetrics.adaptive(52), height: layoutMetrics.adaptive(52))
+                            .mask(
+                                Rectangle()
+                                    .frame(width: layoutMetrics.adaptive(52) / 2)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                            )
+                    }
+                    .frame(width: layoutMetrics.adaptive(52), height: layoutMetrics.adaptive(52))
+                } else if let gradient = iconForegroundGradient {
+                    Image(systemName: icon)
+                        .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
+                        .foregroundStyle(gradient)
+                } else {
+                    Image(systemName: icon)
+                        .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
+                        .foregroundColor(.white)
+                }
+            }
+            .frame(width: layoutMetrics.adaptive(52), height: layoutMetrics.adaptive(52))
+            .background(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
+                    .fill(resolvedIconBackground)
+            )
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title.localized)
@@ -50,5 +98,18 @@ struct LearnButtonContent: View {
                 .fill(Color(.tertiarySystemBackground).opacity(0.9))
         )
         .contentShape(Rectangle())
+    }
+}
+
+// MARK: - German Flag Colors
+extension LearnButtonContent {
+    /// Gold background for All Questions icon (German flag).
+    static var germanFlagGold: Color {
+        Color(red: 1, green: 0.8, blue: 0)  // #FFCC00
+    }
+
+    /// Book icon split: left page black, right page red (German flag), sharp divide.
+    static var germanFlagBookSplit: (left: Color, right: Color) {
+        (left: .black, right: Color(red: 0.867, green: 0, blue: 0))  // Red #DD0000
     }
 }

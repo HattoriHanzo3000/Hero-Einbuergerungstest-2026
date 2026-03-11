@@ -14,7 +14,7 @@ struct LearningView: View {
     
     @StateObject private var viewModel: LearningViewModel
     @EnvironmentObject var languageManager: LanguageManager
-    @EnvironmentObject private var premiumManager: PremiumManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(AppRouter.self) private var router
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -195,7 +195,7 @@ struct LearningView: View {
             questionId: viewModel.currentQuestion?.id,
             onReportTapped: { showingFeedbackReport = true },
             showPremiumButton: true,
-            onPremiumTap: { premiumManager.presentPaywall() },
+            onPremiumTap: { subscriptionManager.presentPaywall() },
             trailingActions: { EmptyView() }
         )
     }
@@ -291,7 +291,7 @@ struct LearningView: View {
                     onSelectIndex: { viewModel.goToQuestion(at: $0) },
                     gradient: .blue,
                     circleGradient: circleGradient(for:),
-                    arrowCircleSize: layoutMetrics.adaptive(42),
+                    arrowCircleSize: layoutMetrics.adaptive(46),
                     enableScrollHaptic: true,
                     enableChangeHaptic: false
                 )

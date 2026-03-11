@@ -13,7 +13,7 @@ import SwiftUI
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
-    @EnvironmentObject private var premiumManager: PremiumManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @EnvironmentObject private var storeService: StoreService
     
     @State private var selectedPlan: SubscriptionPlanType? = .yearly
@@ -113,6 +113,14 @@ struct PaywallView: View {
                 onSelect: {
                     HapticManager.shared.lightImpact()
                     selectedPlan = .yearly
+                }
+            )
+            PaywallPlanRow(
+                plan: .lifetimePlan,
+                isSelected: selectedPlan == .lifetime,
+                onSelect: {
+                    HapticManager.shared.lightImpact()
+                    selectedPlan = .lifetime
                 }
             )
         }
@@ -224,9 +232,9 @@ struct PaywallView: View {
         restoreMessage = nil
         Task {
             let found = await storeService.restorePurchases()
+            await subscriptionManager.refreshPremiumStatus()
             await MainActor.run {
-                premiumManager.checkPremiumStatus()
-                if found && premiumManager.isPremium {
+                if found && subscriptionManager.isPremium {
                     restoreMessage = "paywall_restore_success".localized
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                         dismiss()
@@ -315,7 +323,7 @@ private struct PaywallPlanRow: View {
 // MARK: - Preview
 #Preview("Paywall") {
     PaywallView()
-        .environmentObject(PremiumManager.shared)
+        .environmentObject(SubscriptionManager.shared)
         .environmentObject(StoreService.shared)
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }

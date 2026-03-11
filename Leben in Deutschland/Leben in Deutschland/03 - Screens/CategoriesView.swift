@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - Categories View
 struct CategoriesView: View {
     @EnvironmentObject var languageManager: LanguageManager
-    @EnvironmentObject private var premiumManager: PremiumManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
 
@@ -28,7 +28,7 @@ struct CategoriesView: View {
             VStack(spacing: 0) {
                 CategoriesTabHeaderCard(
                     onBackTapped: { dismiss() },
-                    onPremiumTap: { premiumManager.presentPaywall() },
+                    onPremiumTap: { subscriptionManager.presentPaywall() },
                     useCard: false
                 )
                 .padding(.horizontal, layoutMetrics.adaptive(16))
@@ -130,7 +130,7 @@ struct CategoriesView: View {
     NavigationStack(path: $router.navigationPath) {
         CategoriesView()
             .environmentObject(LanguageManager())
-            .environmentObject(PremiumManager.shared)
+            .environmentObject(SubscriptionManager.shared)
             .environment(router)
             .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
     }

@@ -129,7 +129,7 @@ struct TestSessionQuestionCard: View {
                     },
                     onSelectIndex: { viewModel.goToQuestion($0) },
                     gradient: .orange,
-                    arrowCircleSize: layoutMetrics.adaptive(42),
+                    arrowCircleSize: layoutMetrics.adaptive(46),
                     enableScrollHaptic: true,
                     enableChangeHaptic: true
                 )

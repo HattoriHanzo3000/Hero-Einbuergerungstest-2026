@@ -83,6 +83,10 @@
 "home_learn_by_topics_subtitle" = "Ein Thema nach dem anderen";
 "home_learn_favorites" = "Favoriten";
 "home_learn_favorites_subtitle" = "Für später speichern";
+"home_learn_all_questions" = "Alle Fragen";
+"home_learn_all_questions_subtitle" = "Alle 310 offiziellen Prüfungsfragen";
+"all_questions_empty_title" = "Noch keine Fragen";
+"all_questions_empty_message" = "Die Fragen erscheinen hier, sobald die Inhalte geladen sind. Ziehen zum Aktualisieren oder erneut versuchen.";
 "spaced_repetition_title" = "Lernen starten";
 
 // Learn by Topics

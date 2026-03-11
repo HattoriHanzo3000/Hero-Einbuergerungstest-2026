@@ -4,7 +4,6 @@ import SwiftUI
 /// Root tab navigation that hosts the primary app sections.
 /// HIG-compliant tab bar: bottom placement, translucent, 3–5 tabs with labels.
 struct TabBarView: View {
-    @EnvironmentObject private var premiumManager: PremiumManager
     @AppStorage("appLanguage") private var appLanguage: String = "en"
     @State private var selectedTab: TabIdentifier = .learn
 
@@ -51,8 +50,7 @@ struct TabBarView: View {
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized(for: appLanguage))
-        .task { await StoreService.shared.syncEntitlementsOnLaunch() }
-        .paywallSheet(premiumManager: premiumManager)
+        .task { await SubscriptionManager.shared.refreshPremiumStatus() }
     }
 
     @ViewBuilder
@@ -82,26 +80,9 @@ struct TabBarView: View {
         }
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
-        .task { await StoreService.shared.syncEntitlementsOnLaunch() }
+        .task { await SubscriptionManager.shared.refreshPremiumStatus() }
         .onChange(of: selectedTab) { _, _ in
             HapticManager.shared.selectionChanged()
-        }
-        .paywallSheet(premiumManager: premiumManager)
-    }
-}
-
-// MARK: - Paywall Sheet Modifier
-private extension View {
-    func paywallSheet(premiumManager: PremiumManager) -> some View {
-        sheet(isPresented: Binding(
-            get: { premiumManager.showPaywall },
-            set: { premiumManager.showPaywall = $0 }
-        ), onDismiss: {
-            premiumManager.showPaywall = false
-        }) {
-            PaywallView()
-                .environmentObject(premiumManager)
-                .environmentObject(StoreService.shared)
         }
     }
 }
@@ -113,6 +94,6 @@ private extension View {
         .environmentObject(StateManager.shared)
         .environmentObject(SoundManager.shared)
         .environmentObject(AppFlow())
-        .environmentObject(PremiumManager.shared)
+        .environmentObject(SubscriptionManager.shared)
         .environmentObject(FavoritesManager.shared)
 }

@@ -5,7 +5,7 @@ import Foundation
 @MainActor
 final class SettingsPremiumViewModel: ObservableObject {
     func handleTap() {
-        PremiumManager.shared.presentPaywall()
+        SubscriptionManager.shared.presentPaywall()
     }
 }
 

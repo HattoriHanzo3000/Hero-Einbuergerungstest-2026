@@ -5,7 +5,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject private var stateManager: StateManager
     @EnvironmentObject private var languageManager: LanguageManager
-    @EnvironmentObject private var premiumManager: PremiumManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     @StateObject private var viewModel: HomeViewModel
     @StateObject private var ratingManager = AppRatingManager.shared
@@ -27,7 +27,7 @@ struct HomeView: View {
             VStack(spacing: 0) {
                 HomeHeader(
                     readinessPercentage: viewModel.statistics.readinessPercentage,
-                    onPremiumTap: { premiumManager.presentPaywall() },
+                    onPremiumTap: { subscriptionManager.presentPaywall() },
                     useCard: false,
                     mascotAssetBaseName: "MainChickFlipped"
                 )
@@ -90,6 +90,11 @@ struct HomeView: View {
     @ViewBuilder
     private func destinationView(for destination: AppRouter.Destination) -> some View {
         switch destination {
+        case .allQuestions:
+            AllQuestionsView(stateManager: stateManager)
+                .environmentObject(languageManager)
+                .environmentObject(stateManager)
+                .environmentObject(subscriptionManager)
         case .categories:
             CategoriesView()
                 .environmentObject(languageManager)
@@ -132,7 +137,7 @@ struct HomeView: View {
     )
         .environmentObject(LanguageManager())
         .environmentObject(StateManager.shared)
-        .environmentObject(PremiumManager.shared)
+        .environmentObject(SubscriptionManager.shared)
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
 

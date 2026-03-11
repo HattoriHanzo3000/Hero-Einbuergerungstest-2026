@@ -1,72 +1,33 @@
 //
-//  FavoritesQuestionCard.swift
+//  AllQuestionsQuestionCard.swift
 //  Leben in Deutschland
 //
-//  Question card component for favorites - matches LearningView design
+//  Question card for All Questions reading mode. Shows question, answers, and correct answer.
+//  Design blends Spaced Repetition colors, Learning view nav bar, and Favorites reading mode.
 //
 
 import SwiftUI
 
-// MARK: - Favorites Question Card
-struct FavoritesQuestionCard: View {
-    struct ProgressState {
-        let currentIndex: Int
-        let totalCount: Int
-    }
-    
+// MARK: - All Questions Question Card
+struct AllQuestionsQuestionCard: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
-    
+
     @State private var showingFeedbackReport = false
-    @State private var showingHintSheet = false
     @State private var zoomedAsset: ZoomedAsset?
-    @State private var hintGlowPhase = false
-    
-    private let hintService = HintService.shared
-    
+
     let question: QuestionModel
-    let selectedAnswer: Int?
-    let showCorrectAnswer: Bool
     let showTranslation: Bool
-    let progress: ProgressState
-    let onAnswerSelected: (Int) -> Void
+    let currentIndex: Int
+    let totalCount: Int
     let onBackTapped: (() -> Void)?
     let onToggleTranslation: (() -> Void)?
     let isTranslationActive: Bool
     let onToggleFavorite: (() -> Void)?
     let isFavorite: Bool
-    let onGoToQuestion: ((Int) -> Void)?
-    
-    init(
-        question: QuestionModel,
-        selectedAnswer: Int?,
-        showCorrectAnswer: Bool,
-        showTranslation: Bool,
-        currentIndex: Int,
-        totalCount: Int,
-        onAnswerSelected: @escaping (Int) -> Void,
-        onBackTapped: (() -> Void)? = nil,
-        onToggleTranslation: (() -> Void)? = nil,
-        isTranslationActive: Bool = false,
-        onToggleFavorite: (() -> Void)? = nil,
-        isFavorite: Bool = false,
-        onGoToQuestion: ((Int) -> Void)? = nil
-    ) {
-        self.question = question
-        self.selectedAnswer = selectedAnswer
-        self.showCorrectAnswer = showCorrectAnswer
-        self.showTranslation = showTranslation
-        self.progress = ProgressState(currentIndex: currentIndex, totalCount: totalCount)
-        self.onAnswerSelected = onAnswerSelected
-        self.onBackTapped = onBackTapped
-        self.onToggleTranslation = onToggleTranslation
-        self.isTranslationActive = isTranslationActive
-        self.onToggleFavorite = onToggleFavorite
-        self.isFavorite = isFavorite
-        self.onGoToQuestion = onGoToQuestion
-    }
-    
+    let onGoToQuestion: (Int) -> Void
+
     var body: some View {
         VStack(spacing: 0) {
             headerView
@@ -90,28 +51,16 @@ struct FavoritesQuestionCard: View {
             )
             .environmentObject(languageManager)
         }
-        .sheet(isPresented: $showingHintSheet) {
-            if let hint = hintService.getHint(for: question.id) {
-                HintSheetView(
-                    hint: hint,
-                    translatedHint: showTranslation && languageManager.currentTranslationLanguage != languageManager.currentAppLanguage
-                        ? hintService.getTranslationHint(for: question.id)
-                        : nil
-                )
-            } else {
-                HintSheetView(hint: "no_hint_available".localized)
-            }
-        }
     }
 }
 
 // MARK: - Header View
-private extension FavoritesQuestionCard {
+private extension AllQuestionsQuestionCard {
     var headerView: some View {
         QuestionCardHeaderCard(
             onBackTapped: onBackTapped,
-            title: (question.subcategory ?? "").isEmpty ? (question.category ?? "Favorites") : (question.subcategory ?? ""),
-            progress: (progress.currentIndex, progress.totalCount),
+            title: "home_learn_all_questions".localized,
+            progress: (currentIndex + 1, totalCount),
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
             showPremiumButton: true,
@@ -121,17 +70,17 @@ private extension FavoritesQuestionCard {
     }
 }
 
-// MARK: - Question Content (scroll + bottom gradient dissolve)
-private extension FavoritesQuestionCard {
+// MARK: - Question Content
+private extension AllQuestionsQuestionCard {
     var questionScrollView: some View {
         ScrollView {
             let assetName = ContentService.shared.getIllustrationAsset(for: question.id)
             QuestionCard(
                 question: question,
-                selectedAnswer: selectedAnswer,
-                showCorrectAnswer: showCorrectAnswer,
+                selectedAnswer: nil,
+                showCorrectAnswer: true,
                 showTranslation: showTranslation,
-                onAnswerSelected: onAnswerSelected,
+                onAnswerSelected: { _ in },
                 illustrationAssetName: assetName,
                 onImageTapped: {
                     guard let assetName = assetName else { return }
@@ -159,46 +108,53 @@ private extension FavoritesQuestionCard {
     }
 }
 
-// MARK: - Footer View (action bar + hint + nav, same style as LearningView / SpacedRepetition)
-private extension FavoritesQuestionCard {
+// MARK: - Footer View
+private extension AllQuestionsQuestionCard {
     var footerView: some View {
         VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
-            // Action bar: hint (left, when available), translation + favorite (right)
             HStack(spacing: layoutMetrics.adaptive(12)) {
-                if showCorrectAnswer, hintService.getHint(for: question.id) != nil {
-                    hintFooterButton
-                        .transition(.opacity.combined(with: .scale(scale: 0.96)))
-                }
                 Spacer(minLength: 0)
-                if onToggleTranslation != nil {
-                    translationFooterButton
-                }
-                if onToggleFavorite != nil {
-                    favoriteFooterButton
-                }
+                translationFooterButton
+                favoriteFooterButton
             }
             .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
 
-            if progress.totalCount >= 1, let onGoToQuestion {
-                let current0Based = progress.currentIndex - 1
+            // Next button above navigation circles
+            if totalCount >= 1 {
+                QuizActionButton(
+                    "next_button".localized,
+                    style: nextButtonStyle,
+                    isEnabled: currentIndex < totalCount - 1,
+                    accessibilityLabel: "next_button".localized
+                ) {
+                    HapticManager.shared.lightImpact()
+                    if currentIndex < totalCount - 1 {
+                        onGoToQuestion(currentIndex + 1)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
+            }
+
+            if totalCount >= 1 {
                 QuestionNavigationBar(
-                    questionCount: progress.totalCount,
-                    currentIndex: current0Based,
-                    circleColor: circleColor(for:),
-                    circleTextColor: { $0 == current0Based ? .white : .primary },
+                    questionCount: totalCount,
+                    currentIndex: currentIndex,
+                    circleColor: { _ in Color(.systemGray5) },
+                    circleTextColor: { $0 == currentIndex ? .white : .primary },
                     onPrevious: {
-                        if current0Based > 0 {
-                            onGoToQuestion(current0Based - 1)
+                        if currentIndex > 0 {
+                            onGoToQuestion(currentIndex - 1)
                         }
                     },
                     onNext: {
-                        if current0Based < progress.totalCount - 1 {
-                            onGoToQuestion(current0Based + 1)
+                        if currentIndex < totalCount - 1 {
+                            onGoToQuestion(currentIndex + 1)
                         }
                     },
                     onSelectIndex: onGoToQuestion,
                     gradient: .blue,
-                    circleUsesGradient: { $0 == current0Based },
+                    circleUsesGradient: { $0 == currentIndex },
                     arrowCircleSize: layoutMetrics.adaptive(46),
                     enableScrollHaptic: true,
                     enableChangeHaptic: true
@@ -207,10 +163,6 @@ private extension FavoritesQuestionCard {
         }
         .padding(.top, layoutMetrics.adaptive(12))
         .background(Color(.systemBackground))
-        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showCorrectAnswer)
-        .onChange(of: showCorrectAnswer) { _, isRevealed in
-            if !isRevealed { hintGlowPhase = false }
-        }
     }
 
     private func footerIconCircle<Content: View>(@ViewBuilder content: () -> Content) -> some View {
@@ -218,28 +170,6 @@ private extension FavoritesQuestionCard {
             .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
             .frame(width: layoutMetrics.adaptive(44), height: layoutMetrics.adaptive(44))
             .background(Circle().fill(Color(.secondarySystemFill)))
-    }
-
-    private var hintFooterButton: some View {
-        let bulbColor = hintGlowPhase ? Color("AppAmber") : Color(.secondaryLabel)
-        return Button(action: {
-            HapticManager.shared.lightImpact()
-            hintAction()
-        }) {
-            footerIconCircle {
-                Image(systemName: "lightbulb.fill")
-                    .foregroundColor(bulbColor)
-                    .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: hintGlowPhase)
-            }
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("hint_button_title".localized)
-        .accessibilityAddTraits(.isButton)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
-                hintGlowPhase = true
-            }
-        }
     }
 
     private var translationFooterButton: some View {
@@ -272,43 +202,45 @@ private extension FavoritesQuestionCard {
         .accessibilityAddTraits(.isButton)
     }
 
-    func hintAction() {
-        showingHintSheet = true
-    }
-
-    private func circleColor(for index: Int) -> Color {
-        Color(.systemGray5)
-    }
-
-    private func circleTextColor(for index: Int) -> Color {
-        .primary
+    private var nextButtonStyle: QuizActionButton.Style {
+        QuizActionButton.Style(
+            backgroundColor: Color("AppBlueLagoon"),
+            disabledBackgroundColor: Color(.systemGray2),
+            haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
+            haloSecondaryColor: Color.white.opacity(0.18),
+            suppressGlow: true,
+            gradient: .blue
+        )
     }
 }
 
 // MARK: - Preview
-#Preview("Favorites Question Card") {
+#Preview {
     let sampleQuestion = QuestionModel(
         id: "001",
-        text: "What is the capital of Germany?",
-        options: ["Berlin", "Munich", "Hamburg", "Frankfurt"],
+        text: "Welches Grundrecht steht allen Menschen in Deutschland zu?",
+        options: [
+            "Das Recht auf freie Meinungsäußerung",
+            "Das Recht auf Steuerbefreiung",
+            "Das Recht auf kostenlose Verkehrstickets",
+            "Das Recht auf eine Luxuswohnung"
+        ],
         hint: nil,
-        category: "Geography",
-        subcategory: "Cities"
+        category: "Grundrechte",
+        subcategory: nil
     )
-    
-    FavoritesQuestionCard(
+
+    AllQuestionsQuestionCard(
         question: sampleQuestion,
-        selectedAnswer: nil,
-        showCorrectAnswer: false,
         showTranslation: false,
-        currentIndex: 1,
-        totalCount: 5,
-        onAnswerSelected: { _ in },
+        currentIndex: 0,
+        totalCount: 310,
         onBackTapped: {},
         onToggleTranslation: {},
-        isTranslationActive: true,
+        isTranslationActive: false,
         onToggleFavorite: {},
-        isFavorite: true,
+        isFavorite: false,
+        onGoToQuestion: { _ in }
     )
     .environmentObject(LanguageManager())
     .environmentObject(SubscriptionManager.shared)

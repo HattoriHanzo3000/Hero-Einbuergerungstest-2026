@@ -7,6 +7,8 @@
 
 import SwiftUI
 import UIKit
+import RevenueCat
+import SuperwallKit
 
 @main
 struct Leben_in_DeutschlandApp: App {
@@ -17,6 +19,13 @@ struct Leben_in_DeutschlandApp: App {
     @AppStorage(UserDefaultsKeys.appearance) private var appAppearance: String = "system"
     
     init() {
+        Purchases.configure(withAPIKey: AppConfiguration.revenueCatAPIKey)
+        let purchaseController = RevenueCatPurchaseController()
+        Superwall.configure(
+            apiKey: AppConfiguration.superwallAPIKey,
+            purchaseController: purchaseController
+        )
+        purchaseController.syncSubscriptionStatus()
         configureTabBarAppearance()
     }
     
@@ -80,7 +89,7 @@ struct Leben_in_DeutschlandApp: App {
                 .environmentObject(appFlow)
                 .environmentObject(stateManager)
                 .environmentObject(FavoritesManager.shared)
-                .environmentObject(PremiumManager.shared)
+                .environmentObject(SubscriptionManager.shared)
                 .environmentObject(StoreService.shared)
                 // Apply appearance mode - updates immediately when @AppStorage changes
                 .preferredColorScheme(getColorScheme())

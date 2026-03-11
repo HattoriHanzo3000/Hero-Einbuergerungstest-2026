@@ -178,7 +178,7 @@ struct TestAnswersView: View {
                     onSelectIndex: { currentQuestionIndex = $0 },
                     gradient: viewModel.isPassed ? .green : .red,
                     circleGradient: circleGradient(for:),
-                    arrowCircleSize: layoutMetrics.adaptive(42),
+                    arrowCircleSize: layoutMetrics.adaptive(46),
                     enableScrollHaptic: true,
                     enableChangeHaptic: true
                 )

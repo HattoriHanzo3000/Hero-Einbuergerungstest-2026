@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		749C2CE22F61AA0900B90896 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 749C2CE12F61AA0900B90896 /* RevenueCat */; };
+		749C2CE72F61ACFF00B90896 /* SuperwallKit in Frameworks */ = {isa = PBXBuildFile; productRef = 749C2CE62F61ACFF00B90896 /* SuperwallKit */; };
 		74B1060F2F55E8BB0091BAC0 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 74B1060E2F55E8BB0091BAC0 /* AppIcon.icon */; };
 		E623807F2E82C0E2000C28AB /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E623807E2E82C0E2000C28AB /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
@@ -31,6 +33,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				749C2CE22F61AA0900B90896 /* RevenueCat in Frameworks */,
+				749C2CE72F61ACFF00B90896 /* SuperwallKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +85,8 @@
 			);
 			name = "Leben in Deutschland";
 			packageProductDependencies = (
+				749C2CE12F61AA0900B90896 /* RevenueCat */,
+				749C2CE62F61ACFF00B90896 /* SuperwallKit */,
 			);
 			productName = "Leben in Deutschland";
 			productReference = E612E89C2E8299CD00513716 /* Leben in Deutschland.app */;
@@ -113,6 +119,10 @@
 			);
 			mainGroup = E612E8932E8299CD00513716;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				749C2CE02F61AA0900B90896 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+				749C2CE52F61ACFF00B90896 /* XCRemoteSwiftPackageReference "Superwall-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E612E89D2E8299CD00513716 /* Products */;
 			projectDirPath = "";
@@ -375,6 +385,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		749C2CE02F61AA0900B90896 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.61.0;
+			};
+		};
+		749C2CE52F61ACFF00B90896 /* XCRemoteSwiftPackageReference "Superwall-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/superwall/Superwall-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.14.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		749C2CE12F61AA0900B90896 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 749C2CE02F61AA0900B90896 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		749C2CE62F61ACFF00B90896 /* SuperwallKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 749C2CE52F61ACFF00B90896 /* XCRemoteSwiftPackageReference "Superwall-iOS" */;
+			productName = SuperwallKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E612E8942E8299CD00513716 /* Project object */;
 }

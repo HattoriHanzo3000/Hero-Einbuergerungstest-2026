@@ -42,7 +42,7 @@ struct SubscriptionPlanModel {
     
     static let lifetimePlan = SubscriptionPlanModel(
         type: .lifetime,
-        price: "9,99",
+        price: "49,99",
         periodKey: nil,
         originalPrice: "11,99",
         isLimitedOffer: true,

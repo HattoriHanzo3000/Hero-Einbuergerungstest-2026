@@ -3,7 +3,7 @@
 //  Leben in Deutschland
 //
 //  StoreKit 2 service for subscription purchases and restore.
-//  Product IDs must match App Store Connect: hero.lid.premium.monthly, hero.lid.premium.yearly.
+//  Product IDs must match App Store Connect: hero.lid.premium.monthly, hero.lid.premium.yearly, hero.lid.premium.lifetime.
 //
 
 import Foundation
@@ -19,11 +19,13 @@ final class StoreService: ObservableObject {
     private enum ProductID {
         static let monthly = "hero.lid.premium.monthly"
         static let yearly = "hero.lid.premium.yearly"
-        static var all: [String] { [monthly, yearly] }
+        static let lifetime = "hero.lid.premium.lifetime"
+        static var all: [String] { [monthly, yearly, lifetime] }
     }
     
     @Published private(set) var monthlyProduct: Product?
     @Published private(set) var yearlyProduct: Product?
+    @Published private(set) var lifetimeProduct: Product?
     @Published private(set) var isLoading = false
     @Published private(set) var purchaseError: String?
     
@@ -41,6 +43,7 @@ final class StoreService: ObservableObject {
             let products = try await Product.products(for: ProductID.all)
             monthlyProduct = products.first { $0.id == ProductID.monthly }
             yearlyProduct = products.first { $0.id == ProductID.yearly }
+            lifetimeProduct = products.first { $0.id == ProductID.lifetime }
         } catch {
             purchaseError = error.localizedDescription
         }
@@ -55,7 +58,7 @@ final class StoreService: ObservableObject {
         switch plan {
         case .monthly: product = monthlyProduct
         case .yearly: product = yearlyProduct
-        case .lifetime: product = nil
+        case .lifetime: product = lifetimeProduct
         }
         
         guard let product else {
@@ -90,6 +93,7 @@ final class StoreService: ObservableObject {
     /// Call this at startup to detect subscriptions from previous installs or renewals.
     func syncEntitlementsOnLaunch() async {
         _ = await restorePurchases()
+        await SubscriptionManager.shared.refreshPremiumStatus()
     }
     
     // MARK: - Restore
@@ -114,14 +118,12 @@ final class StoreService: ObservableObject {
     // MARK: - Helpers
     
     private func syncEntitlement(transaction: Transaction) async {
-        let planType = planType(for: transaction.productID)
-        let expiry = transaction.expirationDate
-        await MainActor.run {
-            PremiumManager.shared.activateSubscription(type: planType, expiryDate: expiry)
-        }
+        // SubscriptionManager observes RevenueCat; refresh to pick up any new entitlements
+        await SubscriptionManager.shared.refreshPremiumStatus()
     }
     
     private func planType(for productID: String) -> SubscriptionPlanType {
+        if productID.contains("lifetime") { return .lifetime }
         if productID.contains("yearly") { return .yearly }
         if productID.contains("monthly") { return .monthly }
         return .yearly

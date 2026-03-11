@@ -57,7 +57,7 @@ struct SpacedRepetitionQuestionCard: View {
     // MARK: - Dependencies
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
-    @EnvironmentObject private var premiumManager: PremiumManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @State private var showingFeedbackReport = false
     @State private var showingHintSheet = false
     @State private var zoomedAsset: ZoomedAsset?
@@ -292,7 +292,7 @@ private extension SpacedRepetitionQuestionCard {
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
             showPremiumButton: true,
-            onPremiumTap: { premiumManager.presentPaywall() },
+            onPremiumTap: { subscriptionManager.presentPaywall() },
             trailingActions: { EmptyView() }
         )
     }
@@ -330,6 +330,6 @@ private extension SpacedRepetitionQuestionCard {
         isCheckEnabled: true
     )
     .environmentObject(LanguageManager())
-    .environmentObject(PremiumManager.shared)
+    .environmentObject(SubscriptionManager.shared)
     .background(Color(.systemGroupedBackground))
 }

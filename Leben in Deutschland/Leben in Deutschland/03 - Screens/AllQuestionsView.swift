@@ -1,27 +1,35 @@
 //
-//  FavoritesView.swift
+//  AllQuestionsView.swift
 //  Leben in Deutschland
 //
-//  View for displaying favorited questions in a carousel
+//  Reading mode for all 310 questions (300 General + 10 from selected state).
+//  Always free. Design blends Spaced Repetition colors, Learning nav bar, Favorites reading mode.
 //
 
 import SwiftUI
 
-// MARK: - Favorites View
-struct FavoritesView: View {
+// MARK: - All Questions View
+struct AllQuestionsView: View {
     @Environment(AppRouter.self) private var router
     @EnvironmentObject private var languageManager: LanguageManager
+    @EnvironmentObject private var stateManager: StateManager
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(\.layoutMetrics) private var layoutMetrics
-    
-    @StateObject private var viewModel = FavoritesViewModel()
-    
+
+    @StateObject private var viewModel: AllQuestionsViewModel
+
+    init(stateManager: StateManager) {
+        _viewModel = StateObject(wrappedValue: AllQuestionsViewModel(stateManager: stateManager))
+    }
+
     var body: some View {
         VStack(spacing: 0) {
-            if viewModel.favoriteQuestions.isEmpty {
+            if viewModel.isLoading {
+                loadingView
+            } else if viewModel.questions.isEmpty {
                 emptyStateView
             } else {
-                carouselView
+                contentView
             }
         }
         .id(languageManager.currentAppLanguage)
@@ -30,74 +38,83 @@ struct FavoritesView: View {
         .toolbar(.hidden, for: .navigationBar)
         .hidesTabBar()
         .tabBarHidden(true)
-        .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
-            viewModel.setLanguageManager(languageManager)
-            await viewModel.loadFavorites(
+        .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)-\(stateManager.selectedState ?? "")") {
+            await viewModel.loadQuestions(
                 language: languageManager.currentAppLanguage,
-                translationLanguage: languageManager.currentTranslationLanguage
+                translationLanguage: languageManager.currentTranslationLanguage,
+                selectedState: stateManager.selectedState
             )
         }
     }
-    
-    // MARK: - Carousel View
+
+    // MARK: - Content View
     @ViewBuilder
-    private var carouselView: some View {
-        if viewModel.currentIndex < viewModel.favoriteQuestions.count {
-            let question = viewModel.favoriteQuestions[viewModel.currentIndex]
-            FavoritesQuestionCard(
+    private var contentView: some View {
+        if viewModel.currentIndex < viewModel.questions.count {
+            let question = viewModel.questions[viewModel.currentIndex]
+            AllQuestionsQuestionCard(
                 question: question,
-                selectedAnswer: nil,
-                showCorrectAnswer: true,
                 showTranslation: viewModel.showTranslation,
-                currentIndex: viewModel.currentIndex + 1,
-                totalCount: viewModel.favoriteQuestions.count,
-                onAnswerSelected: { _ in },
+                currentIndex: viewModel.currentIndex,
+                totalCount: viewModel.questions.count,
                 onBackTapped: { router.pop() },
                 onToggleTranslation: { viewModel.toggleTranslation() },
                 isTranslationActive: viewModel.showTranslation,
                 onToggleFavorite: { viewModel.toggleFavorite(for: question.id) },
                 isFavorite: viewModel.isFavorite(questionId: question.id),
-                onGoToQuestion: { viewModel.currentIndex = $0 }
+                onGoToQuestion: { viewModel.goToQuestion(at: $0) }
             )
             .environmentObject(languageManager)
             .environmentObject(subscriptionManager)
         }
     }
-    
+
+    // MARK: - Loading View
+    private var loadingView: some View {
+        ProgressView()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
     // MARK: - Empty State View
     private var emptyStateView: some View {
         VStack(spacing: 0) {
-            // Back button header
             HStack {
-                AdaptiveIconButton.backButton(action: {
-                    router.pop()
-                }, tintColor: .primary)
+                AdaptiveIconButton.backButton(action: { router.pop() }, tintColor: .primary)
                 Spacer()
             }
             .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
             .padding(.top, layoutMetrics.adaptive(LayoutMetrics.headerTopPadding))
-            
-            // Empty state content
+
             VStack(spacing: layoutMetrics.adaptive(24)) {
                 Spacer()
-                
-                Image(systemName: "heart.slash")
+                Image(systemName: "book.closed")
                     .font(.system(size: layoutMetrics.adaptive(64)))
                     .foregroundColor(.secondary)
                     .symbolRenderingMode(.hierarchical)
-                
+
                 VStack(spacing: layoutMetrics.adaptive(12)) {
-                    Text("favorites_empty_title".localized)
+                    Text("all_questions_empty_title".localized)
                         .font(.system(.title2, design: .rounded).weight(.bold).width(.condensed))
                         .foregroundColor(.primary)
-                    
-                    Text("favorites_empty_message".localized)
+
+                    Text("all_questions_empty_message".localized)
                         .font(.system(.body, design: .rounded))
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, layoutMetrics.adaptive(32))
                 }
-                
+
+                Button("try_again".localized) {
+                    Task {
+                        await viewModel.loadQuestions(
+                            language: languageManager.currentAppLanguage,
+                            translationLanguage: languageManager.currentTranslationLanguage,
+                            selectedState: stateManager.selectedState
+                        )
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -106,19 +123,11 @@ struct FavoritesView: View {
 }
 
 // MARK: - Preview
-#Preview("Favorites View") {
-    FavoritesView()
+#Preview {
+    AllQuestionsView(stateManager: StateManager.shared)
         .environmentObject(LanguageManager())
+        .environmentObject(StateManager.shared)
         .environmentObject(SubscriptionManager.shared)
         .environment(AppRouter())
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
-
-#Preview("Favorites Empty State") {
-    FavoritesView()
-        .environmentObject(LanguageManager())
-        .environmentObject(SubscriptionManager.shared)
-        .environment(AppRouter())
-        .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
-}
-
