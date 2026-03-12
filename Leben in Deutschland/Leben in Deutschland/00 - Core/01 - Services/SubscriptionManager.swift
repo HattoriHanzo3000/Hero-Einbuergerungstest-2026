@@ -58,20 +58,35 @@ final class SubscriptionManager: ObservableObject {
     // MARK: - Superwall Placements
     /// Triggers Superwall placement. Use for crown tap or generic paywall.
     func presentPaywall(placement: String = "paywall_trigger") {
-        Superwall.shared.register(placement: placement) {
+        let presentationHandler = PaywallPresentationHandler()
+        presentationHandler.onDismiss { [weak self] _, _ in
             Task { @MainActor in
-                await self.refreshPremiumStatus()
+                await self?.refreshPremiumStatus()
             }
         }
+        Superwall.shared.register(placement: placement, handler: presentationHandler)
     }
 
-    /// Triggers Superwall placement for a gated feature. Handler runs if user has access.
+    /// Triggers Superwall placement for a gated feature. Handler runs only when user has access (purchased, restored, or already subscribed).
     func gateFeature(placement: String, handler: @escaping () -> Void) {
-        Superwall.shared.register(placement: placement) {
-            Task { @MainActor in
-                await self.refreshPremiumStatus()
-            }
+        if isPremium {
             handler()
+            return
         }
+        let presentationHandler = PaywallPresentationHandler()
+        presentationHandler.onDismiss { [weak self] _, result in
+            Task { @MainActor in
+                await self?.refreshPremiumStatus()
+                switch result {
+                case .purchased, .restored:
+                    handler()
+                case .declined:
+                    break
+                @unknown default:
+                    break
+                }
+            }
+        }
+        Superwall.shared.register(placement: placement, handler: presentationHandler)
     }
 }

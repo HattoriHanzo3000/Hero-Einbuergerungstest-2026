@@ -54,6 +54,9 @@ struct QuestionNavigationBar: View {
             circlesZStack(proxy: proxy)
                 .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
                 .frame(height: rowHeight)
+                .onAppear {
+                    proxy.scrollTo(currentIndex, anchor: .center)
+                }
                 .onChange(of: currentIndex) { _, newIndex in
                     withAnimation {
                         proxy.scrollTo(newIndex, anchor: .center)

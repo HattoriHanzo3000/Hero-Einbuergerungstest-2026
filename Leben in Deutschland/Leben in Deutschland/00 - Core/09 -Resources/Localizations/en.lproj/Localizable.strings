@@ -440,6 +440,7 @@
 "main_tab_bar_accessibility_label" = "Primary navigation";
 "tab_learn_hint" = "Opens the Learn screen";
 "tab_progress_hint" = "Opens your progress and statistics";
+"progress_premium_gate_message" = "Upgrade to Premium to see your progress and statistics.";
 "tab_settings_hint" = "Opens Settings";
 "tab_search_title" = "Search";
 "tab_search_hint" = "Opens search across all questions";

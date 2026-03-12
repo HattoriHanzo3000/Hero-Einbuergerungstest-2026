@@ -437,6 +437,7 @@
 "main_tab_bar_accessibility_label" = "Основна навігація";
 "tab_learn_hint" = "Відкриває екран навчання";
 "tab_progress_hint" = "Відкриває прогрес і статистику";
+"progress_premium_gate_message" = "Онови до Premium, щоб бачити свій прогрес і статистику.";
 "tab_settings_hint" = "Відкриває налаштування";
 "tab_search_title" = "Пошук";
 "tab_search_hint" = "Відкриває пошук по всіх питаннях";

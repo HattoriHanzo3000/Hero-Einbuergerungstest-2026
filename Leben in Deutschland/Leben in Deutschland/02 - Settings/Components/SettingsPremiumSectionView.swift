@@ -15,7 +15,8 @@ struct SettingsPremiumSectionView: View {
                     showsChevron: false
                 )
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.borderless)
+            .tint(.primary)
             .accessibilityLabel(Text("settings_premium_title".localized))
             .accessibilityHint(Text("settings_premium_accessibility_hint".localized))
         }

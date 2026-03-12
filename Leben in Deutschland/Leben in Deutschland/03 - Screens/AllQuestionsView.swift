@@ -45,6 +45,9 @@ struct AllQuestionsView: View {
                 selectedState: stateManager.selectedState
             )
         }
+        .onDisappear {
+            viewModel.saveCurrentPosition()
+        }
     }
 
     // MARK: - Content View

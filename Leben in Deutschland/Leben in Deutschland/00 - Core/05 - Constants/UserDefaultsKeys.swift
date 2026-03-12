@@ -20,13 +20,13 @@ enum UserDefaultsKeys {
     static let favoriteQuestionIds = "favoriteQuestionIds"
     static let selectedTestDate = "selectedTestDate"
 
+    // MARK: - All Questions
+    /// Last viewed question index in All Questions mode (0-based).
+    static let allQuestionsCurrentIndex = "all_questions_current_index"
+
     // MARK: - Categories View
     static let categoriesExpanded = "categories_expanded_categories"
 
     /// Prefix for Learning mode position keys. Full key: "\(subcategoryPositionPrefix)\(subcategoryName)"
     static let subcategoryPositionPrefix = "subcategory_position_"
-
-    // MARK: - Premium / Test Simulation
-    /// Number of free test simulation sessions used (max 3 for non-premium).
-    static let testSimulationFreeSessionsUsed = "test_simulation_free_sessions_used"
 }

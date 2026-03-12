@@ -22,6 +22,17 @@ final class AllQuestionsViewModel: ObservableObject {
 
     init(stateManager: StateManager) {
         self.stateManager = stateManager
+        self.currentIndex = Self.loadSavedIndex()
+    }
+
+    private static func loadSavedIndex() -> Int {
+        let saved = UserDefaults.standard.integer(forKey: UserDefaultsKeys.allQuestionsCurrentIndex)
+        return max(0, saved)
+    }
+
+    /// Persists current question index so the user returns to the same position.
+    func saveCurrentPosition() {
+        UserDefaults.standard.set(currentIndex, forKey: UserDefaultsKeys.allQuestionsCurrentIndex)
     }
 
     func loadQuestions(language: String, translationLanguage: String? = nil, selectedState: String? = nil) async {
@@ -38,6 +49,7 @@ final class AllQuestionsViewModel: ObservableObject {
         var loaded = contentService.getQuestionsForSpacedRepetition(selectedState: resolvedState)
         loaded.sort { sortOrder(for: $0.id) < sortOrder(for: $1.id) }
         questions = loaded
+        // Restore saved position, clamped to valid range
         currentIndex = min(currentIndex, max(0, questions.count - 1))
     }
 
@@ -66,5 +78,6 @@ final class AllQuestionsViewModel: ObservableObject {
     func goToQuestion(at index: Int) {
         guard index >= 0, index < questions.count else { return }
         currentIndex = index
+        saveCurrentPosition()
     }
 }

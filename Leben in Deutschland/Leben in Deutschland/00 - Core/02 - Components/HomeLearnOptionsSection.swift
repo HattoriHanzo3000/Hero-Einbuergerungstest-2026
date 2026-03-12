@@ -78,7 +78,9 @@ struct HomeLearnOptionsSection: View {
 
                 Button {
                     HapticManager.shared.lightImpact()
-                    handleTestSimulationTap()
+                    subscriptionManager.gateFeature(placement: "test_simulation") {
+                        router.push(.testCountdown)
+                    }
                 } label: {
                     LearnButtonContent(
                         icon: "checkmark.seal",
@@ -94,22 +96,6 @@ struct HomeLearnOptionsSection: View {
         }
         .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
         .id(languageManager.currentAppLanguage)
-    }
-
-    private func handleTestSimulationTap() {
-        if subscriptionManager.isPremium {
-            router.push(.testCountdown)
-            return
-        }
-        let used = UserDefaults.standard.integer(forKey: UserDefaultsKeys.testSimulationFreeSessionsUsed)
-        if used < 3 {
-            UserDefaults.standard.set(used + 1, forKey: UserDefaultsKeys.testSimulationFreeSessionsUsed)
-            router.push(.testCountdown)
-        } else {
-            subscriptionManager.gateFeature(placement: "test_simulation") {
-                router.push(.testCountdown)
-            }
-        }
     }
 }
 

@@ -11,11 +11,11 @@ import Foundation
 enum AppConfiguration {
     // MARK: - RevenueCat
     /// RevenueCat Public API Key. Set in App Store Connect / RevenueCat dashboard.
-    static let revenueCatAPIKey = "YOUR_REVENUECAT_PUBLIC_API_KEY"
+    static let revenueCatAPIKey = "test_MAziVxFjwMzqPkdjDmnoGubtHVj"
     
     // MARK: - Superwall
     /// Superwall Public API Key. Set in Superwall dashboard.
-    static let superwallAPIKey = "YOUR_SUPERWALL_PUBLIC_API_KEY"
+    static let superwallAPIKey = "pk_ggK4lMHzvT_dnwyVPF1FX"
     
     // MARK: - Entitlement
     /// RevenueCat entitlement identifier for premium access.

@@ -16,19 +16,23 @@ struct ProgressTabView: View {
         VStack(spacing: 0) {
             progressHeaderSection
 
-            ScrollViewReader { proxy in
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: sectionSpacing) {
-                        Color.clear.frame(height: 0).id("scrollTop")
-                        HomeStatisticsSection(statistics: viewModel.statistics)
-                            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+            if subscriptionManager.isPremium {
+                ScrollViewReader { proxy in
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(spacing: sectionSpacing) {
+                            Color.clear.frame(height: 0).id("scrollTop")
+                            HomeStatisticsSection(statistics: viewModel.statistics)
+                                .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+                        }
+                        .padding(.top, layoutMetrics.adaptive(12))
+                        .padding(.bottom, layoutMetrics.adaptive(LayoutMetrics.footerPadding))
+                        .frame(maxWidth: .infinity, alignment: .top)
+                        .id(languageManager.currentAppLanguage)
                     }
-                    .padding(.top, layoutMetrics.adaptive(12))
-                    .padding(.bottom, layoutMetrics.adaptive(LayoutMetrics.footerPadding))
-                    .frame(maxWidth: .infinity, alignment: .top)
-                    .id(languageManager.currentAppLanguage)
+                    .onAppear { proxy.scrollTo("scrollTop", anchor: .top) }
                 }
-                .onAppear { proxy.scrollTo("scrollTop", anchor: .top) }
+            } else {
+                progressGatePlaceholder
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -36,11 +40,26 @@ struct ProgressTabView: View {
         .toolbar(.visible, for: .tabBar)
         .onAppear {
             viewModel.refreshStatistics()
-            if !subscriptionManager.isPremium {
-                subscriptionManager.gateFeature(placement: "progress") { }
-            }
         }
         .tabBarHidden(false)
+    }
+
+    /// Placeholder shown when user is not premium. Paywall is triggered on appear.
+    private var progressGatePlaceholder: some View {
+        VStack(spacing: layoutMetrics.adaptive(24)) {
+            Spacer()
+            Image(systemName: "chart.bar.fill")
+                .font(.system(size: layoutMetrics.adaptive(56)))
+                .foregroundStyle(.secondary)
+                .symbolRenderingMode(.hierarchical)
+            Text("progress_premium_gate_message".localized)
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, layoutMetrics.adaptive(32))
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

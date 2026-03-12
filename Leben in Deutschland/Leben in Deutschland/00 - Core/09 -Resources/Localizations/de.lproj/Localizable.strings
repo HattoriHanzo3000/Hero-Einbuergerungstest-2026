@@ -426,6 +426,7 @@
 "main_tab_bar_accessibility_label" = "Hauptnavigation";
 "tab_learn_hint" = "Öffnet den Lernbereich";
 "tab_progress_hint" = "Öffnet deinen Fortschritt und Statistiken";
+"progress_premium_gate_message" = "Upgrade auf Premium, um deinen Fortschritt und deine Statistiken zu sehen.";
 "tab_settings_hint" = "Öffnet die Einstellungen";
 "tab_search_title" = "Suche";
 "tab_search_hint" = "Öffnet die Suche über alle Fragen";
