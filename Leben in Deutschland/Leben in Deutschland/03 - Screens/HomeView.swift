@@ -39,24 +39,19 @@ struct HomeView: View {
                         .ignoresSafeArea(edges: .top)
                 )
 
-                ScrollViewReader { proxy in
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing: sectionSpacing) {
-                            Color.clear.frame(height: 0).id("scrollTop")
-                            HomeLearnOptionsSection()
-                                .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
-                        }
+                ScrollView(.vertical, showsIndicators: false) {
+                    HomeLearnOptionsSection()
+                        .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
                         .padding(.top, layoutMetrics.adaptive(12))
                         .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
                         .frame(maxWidth: .infinity, alignment: .top)
                         .id(languageManager.currentAppLanguage)
-                    }
-                    .onAppear { proxy.scrollTo("scrollTop", anchor: .top) }
                 }
             }
-            .frame(width: geometry.size.width)
+            .frame(width: geometry.size.width, height: geometry.size.height)
             .background(Color(.systemBackground))
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground).ignoresSafeArea())
             .navigationDestination(for: AppRouter.Destination.self) { destination in
                 destinationView(for: destination)

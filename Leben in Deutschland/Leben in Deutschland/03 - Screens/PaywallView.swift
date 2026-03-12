@@ -16,7 +16,7 @@ struct PaywallView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @EnvironmentObject private var storeService: StoreService
     
-    @State private var selectedPlan: SubscriptionPlanType? = .yearly
+    @State private var selectedPlan: SubscriptionPlanType? = .monthly
     @State private var isPurchasing = false
     @State private var restoreMessage: String?
     @State private var activeLegalURL: URL?
@@ -64,7 +64,7 @@ struct PaywallView: View {
             }
         }
         .onAppear {
-            if selectedPlan == nil { selectedPlan = .yearly }
+            if selectedPlan == nil { selectedPlan = .monthly }
             Task { await storeService.loadProducts() }
         }
     }
@@ -108,14 +108,6 @@ struct PaywallView: View {
                 }
             )
             PaywallPlanRow(
-                plan: .yearlyPlan,
-                isSelected: selectedPlan == .yearly,
-                onSelect: {
-                    HapticManager.shared.lightImpact()
-                    selectedPlan = .yearly
-                }
-            )
-            PaywallPlanRow(
                 plan: .lifetimePlan,
                 isSelected: selectedPlan == .lifetime,
                 onSelect: {
@@ -123,7 +115,51 @@ struct PaywallView: View {
                     selectedPlan = .lifetime
                 }
             )
+            experimentalPlansSection
         }
+    }
+    
+    /// Additional experimental plans for UI testing only. Not wired to purchases.
+    private var experimentalPlansSection: some View {
+        VStack(spacing: layoutMetrics.adaptive(12)) {
+            experimentalPlanRow(
+                title: "3‑month subscription",
+                price: "4,99 €",
+                period: "every 3 months"
+            )
+            experimentalPlanRow(
+                title: "Weekly subscription",
+                price: "0,99 €",
+                period: "per week"
+            )
+        }
+    }
+    
+    private func experimentalPlanRow(title: String, price: String, period: String) -> some View {
+        HStack(spacing: layoutMetrics.adaptive(16)) {
+            VStack(alignment: .leading, spacing: layoutMetrics.adaptive(4)) {
+                Text(title)
+                    .font(.system(.headline, design: .rounded).weight(.bold))
+                    .foregroundStyle(.primary)
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text(price)
+                        .font(.system(.title3, design: .rounded).weight(.bold))
+                        .foregroundStyle(.primary)
+                    Text(period)
+                        .font(.system(.subheadline, design: .rounded))
+                        .foregroundStyle(.secondary)
+                }
+            }
+            Spacer()
+            Image(systemName: "circle")
+                .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
+                .foregroundStyle(.secondary)
+        }
+        .padding(layoutMetrics.adaptive(16))
+        .background(
+            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
+                .fill(Color(.secondarySystemBackground))
+        )
     }
     
     // MARK: - Subscribe Button

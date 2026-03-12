@@ -56,9 +56,9 @@
 "CANCEL" = "ОТМЕНА";
 
 // Eagle dialogues
-"perfect_days_left" = "У нас осталось %d %@. Я с тобой!";
-"perfect_day_left" = "У нас осталось %d %@. Я с тобой!";
-"perfect_days_left_2_4" = "У нас осталось %d %@. Я с тобой!";
+"perfect_days_left" = "До теста %d %@. Я с тобой!";
+"perfect_day_left" = "До теста %d %@. Я с тобой!";
+"perfect_days_left_2_4" = "До теста %d %@. Я с тобой!";
 "perfect_test_today" = "Тест сегодня. Я с тобой!";
 "dont_know_date" = "Пока не знаю";
 "no_problem_later" = "Не проблема! Ты можешь добавить или изменить дату позже.";

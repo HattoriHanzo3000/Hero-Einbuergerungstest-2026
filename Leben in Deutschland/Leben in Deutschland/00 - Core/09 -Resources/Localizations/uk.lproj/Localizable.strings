@@ -56,9 +56,9 @@
 "CANCEL" = "СКАСУВАТИ";
 
 // Eagle dialogues
-"perfect_days_left" = "У нас залишилося %d %@. Я з тобою!";
-"perfect_day_left" = "У нас залишилося %d %@. Я з тобою!";
-"perfect_days_left_2_4" = "У нас залишилося %d %@. Я з тобою!";
+"perfect_days_left" = "До тесту %d %@. Я з тобою!";
+"perfect_day_left" = "До тесту %d %@. Я з тобою!";
+"perfect_days_left_2_4" = "До тесту %d %@. Я з тобою!";
 "perfect_test_today" = "Тест сьогодні. Я з тобою!";
 "dont_know_date" = "Поки не знаю";
 "no_problem_later" = "Не проблема! Ти можеш додати або змінити дату пізніше.";
