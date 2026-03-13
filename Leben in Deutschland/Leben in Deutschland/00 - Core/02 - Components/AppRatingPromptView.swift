@@ -4,6 +4,7 @@ import SwiftUI
 /// A friendly, funny prompt asking users to rate the app
 struct AppRatingPromptView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
+    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var languageManager: LanguageManager
     @ObservedObject private var ratingManager: AppRatingManager
     
@@ -19,26 +20,36 @@ struct AppRatingPromptView: View {
         self.onRateNow = onRateNow
         self.onAskLater = onAskLater
     }
-    
+
+    private var ratingMascotAssetName: String {
+        if colorScheme == .dark, UIImage(named: "MainChick_AboutDark") != nil {
+            return "MainChick_AboutDark"
+        }
+        return "MainChick_About"
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
             
             VStack(spacing: layoutMetrics.adaptive(24)) {
-                // Emoji icon
-                Text("⭐️")
-                    .font(.system(size: layoutMetrics.adaptive(64)))
+                // Mascot (MainChick_About from assets)
+                Image(ratingMascotAssetName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: layoutMetrics.adaptive(80), height: layoutMetrics.adaptive(80))
+                    .accessibilityLabel("settings_about_mascot_accessibility".localized)
                 
                 // Title
                 Text("rating_prompt_title".localized)
-                    .font(.system(.title2, weight: .bold))
+                    .font(.title2.weight(.bold))
                     .foregroundColor(.primary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, layoutMetrics.adaptive(20))
                 
                 // Message
                 Text("rating_prompt_message".localized)
-                    .font(.system(.body))
+                    .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, layoutMetrics.adaptive(20))
@@ -51,11 +62,11 @@ struct AppRatingPromptView: View {
                         onRateNow()
                     }) {
                         Text("rating_prompt_rate_now".localized)
-                            .font(.system(.headline, weight: .semibold))
+                            .font(.headline.weight(.semibold))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, layoutMetrics.adaptive(16))
-                            .background(Color.accentColor)
+                            .background(Color("AppOrange"))
                             .cornerRadius(layoutMetrics.adaptive(14))
                     }
                     .buttonStyle(.plain)
@@ -66,7 +77,7 @@ struct AppRatingPromptView: View {
                         onAskLater()
                     }) {
                         Text("rating_prompt_ask_later".localized)
-                            .font(.system(.body, weight: .medium))
+                            .font(.body.weight(.medium))
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, layoutMetrics.adaptive(14))

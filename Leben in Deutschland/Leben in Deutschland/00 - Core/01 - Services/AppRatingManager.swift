@@ -30,7 +30,7 @@ final class AppRatingManager: ObservableObject, AppRatingManaging {
     private let userRatedKey = "AppRating_UserRated"
     
     // Thresholds for showing rating prompt
-    private let minimumDaysSinceFirstLaunch = 7
+    private let minimumDaysSinceFirstLaunch = 3
     private let minimumLaunchCount = 10
     private let daysBetweenPrompts = 90 // Don't prompt more than once every 90 days
     
@@ -73,23 +73,15 @@ final class AppRatingManager: ObservableObject, AppRatingManaging {
             }
         }
         
-        // Check if user has been using the app for at least minimumDaysSinceFirstLaunch
+        // Show if user has been using the app for 3+ days OR has launched 10+ times (or both)
         guard let firstLaunchDate = defaults.object(forKey: firstLaunchKey) as? Date else {
             return false
         }
         
         let daysSinceFirstLaunch = Calendar.current.dateComponents([.day], from: firstLaunchDate, to: Date()).day ?? 0
-        if daysSinceFirstLaunch < minimumDaysSinceFirstLaunch {
-            return false
-        }
-        
-        // Check if user has launched the app at least minimumLaunchCount times
         let launchCount = defaults.integer(forKey: launchCountKey)
-        if launchCount < minimumLaunchCount {
-            return false
-        }
         
-        return true
+        return daysSinceFirstLaunch >= minimumDaysSinceFirstLaunch || launchCount >= minimumLaunchCount
     }
     
     /// Requests a review using StoreKit (native iOS rating prompt)
