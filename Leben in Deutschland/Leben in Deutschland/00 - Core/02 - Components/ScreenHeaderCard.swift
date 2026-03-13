@@ -38,7 +38,8 @@ private extension ScreenHeaderCardContent {
 /// Header for mascot + message screens (Home, Progress). When useCard is false, renders content only for flat gradient headers.
 struct ScreenHeaderCard: View {
     let readinessPercentage: Int
-    var onPremiumTap: (() -> Void)?
+    /// When true, shows decorative premium badge (acknowledgement of status). Hidden for free users.
+    var isPremium: Bool = false
     var autoPlayInterval: TimeInterval? = 60
     var content: ScreenHeaderCardContent
     /// When false, renders content only (no rounded card). Use with gradient background for flat header (Home, Progress).
@@ -86,8 +87,8 @@ struct ScreenHeaderCard: View {
                 homeHeaderLayout
             } else {
                 VStack(alignment: .leading, spacing: premiumRowSpacing) {
-                    if onPremiumTap != nil {
-                        PremiumButton(action: { onPremiumTap?() }, color: .white)
+                    if isPremium {
+                        PremiumBadge(color: .white)
                             .scaleEffect(0.8)
                             .frame(maxWidth: .infinity)
                     }
@@ -113,10 +114,10 @@ struct ScreenHeaderCard: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            // Right: premium always row 1, mascot always row 2 — fixed positions
+            // Right: premium badge (row 1) when premium, mascot (row 2) — fixed positions
             VStack(alignment: .trailing, spacing: premiumRowSpacing) {
-                if onPremiumTap != nil {
-                    PremiumButton(action: { onPremiumTap?() }, color: .white)
+                if isPremium {
+                    PremiumBadge(color: .white)
                         .fixedSize(horizontal: true, vertical: false)
                 }
 

@@ -106,12 +106,10 @@ class LearningViewModel: ObservableObject {
         // Mark as answered
         answeredQuestions.insert(question.id)
         
-        // Check if answer is correct and record to spaced repetition statistics
+        // Check if answer is correct (Learn by Topics does not affect readiness score)
         let correctAnswers = ContentService.shared.correctAnswers
         if let correctIndex = correctAnswers[question.id] {
             let isCorrect = answer == correctIndex
-            // Record answer to spaced repetition for readiness score
-            SpacedRepetitionManager.shared.recordAnswer(for: question.id, isCorrect: isCorrect)
             // Intuitive haptics: success for correct, stronger error for wrong
             if isCorrect {
                 correctlyAnswered.insert(question.id)
@@ -132,9 +130,6 @@ class LearningViewModel: ObservableObject {
         
         // Clear answer from persistent storage
         answersService.clearAnswer(for: question.id)
-        
-        // Record reset as negative for readiness score
-        SpacedRepetitionManager.shared.recordReset(for: question.id)
         
         selectedAnswer = nil
         showCorrectAnswer = false

@@ -27,7 +27,7 @@ struct HomeView: View {
             VStack(spacing: 0) {
                 HomeHeader(
                     readinessPercentage: viewModel.statistics.readinessPercentage,
-                    onPremiumTap: { subscriptionManager.presentPaywall() },
+                    isPremium: subscriptionManager.isPremium,
                     useCard: false,
                     mascotAssetBaseName: "MainChickFlipped"
                 )

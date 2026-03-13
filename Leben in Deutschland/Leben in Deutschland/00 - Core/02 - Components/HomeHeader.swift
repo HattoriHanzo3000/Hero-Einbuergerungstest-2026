@@ -4,7 +4,8 @@ import SwiftUI
 /// Home screen header: mascot + state title + slogan (alternating with test date and readiness when mascot animates).
 struct HomeHeader: View {
     let readinessPercentage: Int
-    var onPremiumTap: (() -> Void)?
+    /// When false, readiness score is hidden (premium-only feature).
+    var isPremium: Bool = true
     /// When false, renders content only for flat gradient headers (no rounded card).
     var useCard: Bool = true
     /// Base name for the mascot asset used in this header (e.g. "MainChick" or "MainChickFlipped").
@@ -23,11 +24,15 @@ struct HomeHeader: View {
 
     var body: some View {
         let content: ScreenHeaderCardContent = stateManager.selectedState.map { stateName in
-            .stateWithTestDate(stateName: stateName, testDateMessage: testDateMessage, readinessMessage: readinessMessage)
-        } ?? .readiness
+            .stateWithTestDate(
+                stateName: stateName,
+                testDateMessage: testDateMessage,
+                readinessMessage: isPremium ? readinessMessage : nil
+            )
+        } ?? (isPremium ? .readiness : .message("progress_premium_gate_message".localized))
         return ScreenHeaderCard(
             readinessPercentage: readinessPercentage,
-            onPremiumTap: onPremiumTap,
+            isPremium: isPremium,
             autoPlayInterval: 60,
             content: content,
             useCard: useCard,
@@ -40,9 +45,7 @@ struct HomeHeader: View {
 #Preview {
     HomeHeader(
         readinessPercentage: 72,
-        onPremiumTap: {
-            print("Premium tapped")
-        }
+        isPremium: true
     )
     .environmentObject(LanguageManager())
     .environmentObject(StateManager.shared)

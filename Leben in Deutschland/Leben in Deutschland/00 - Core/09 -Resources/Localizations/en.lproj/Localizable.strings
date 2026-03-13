@@ -106,7 +106,7 @@
 
 // Learn by Topics disclaimer
 "learn_by_topics_disclaimer_title" = "Learn by Topics";
-"learn_by_topics_disclaimer_message" = "Questions are grouped by theme so you can study one topic at a time. Choose a topic, answer the questions, and check your answers. This mode does not affect your readiness score—only Smart Learning does.";
+"learn_by_topics_disclaimer_message" = "Questions are grouped by theme so you can study one topic at a time. Choose a topic, answer the questions, and check your answers. This mode does not affect your readiness score.";
 "no_categories_found" = "No categories found";
 "no_search_results" = "No results found";
 "question_label" = "Question";

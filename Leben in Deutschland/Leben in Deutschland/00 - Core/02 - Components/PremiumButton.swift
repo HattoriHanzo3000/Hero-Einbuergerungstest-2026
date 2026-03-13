@@ -34,9 +34,11 @@ struct ShimmerOverlay: View {
 }
 
 // MARK: - Premium Badge (decorative, non-interactive)
-/// Same visual as PremiumButton but without tap action. Use on paywall where badge is decorative.
+/// Same visual as PremiumButton but without tap action. Use on paywall (with shimmer) or in headers (no shimmer).
 struct PremiumBadge: View {
     var color: Color = .white
+    /// When true, applies shimmer overlay. Use on paywall only; headers use false.
+    var showShimmer: Bool = false
 
     @Environment(\.layoutMetrics) private var layoutMetrics
 
@@ -52,13 +54,18 @@ struct PremiumBadge: View {
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
                     .stroke(color, lineWidth: 0.6)
             )
-            .overlay(
-                ShimmerOverlay(duration: 4)
-                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-                    .blendMode(.plusLighter)
-            )
+            .overlay(shimmerOverlay)
             .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
             .accessibilityHidden(true)
+    }
+
+    @ViewBuilder
+    private var shimmerOverlay: some View {
+        if showShimmer {
+            ShimmerOverlay(duration: 4)
+                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                .blendMode(.plusLighter)
+        }
     }
 }
 

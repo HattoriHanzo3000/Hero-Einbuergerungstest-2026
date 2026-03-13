@@ -70,17 +70,6 @@ struct OnboardingDateView: View {
                     Spacer(minLength: 24)
                 }
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("CANCEL".localized) {
-                            HapticManager.shared.lightImpact()
-                            showDatePicker = false
-                        }
-                        .font(.title3.bold())
-                        .fontDesign(.rounded)
-                        .tint(Color("Fill"))
-                    }
-                }
             }
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)

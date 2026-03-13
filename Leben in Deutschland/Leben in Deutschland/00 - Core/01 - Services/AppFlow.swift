@@ -13,6 +13,12 @@ final class AppFlow: ObservableObject {
         case main
     }
     
-    /// Controls the current top-level navigation stage. Defaults to the main experience.
-    @Published var stage: Stage = .main
+    /// Controls the current top-level navigation stage. Shows onboarding on first launch.
+    @Published var stage: Stage
+
+    init() {
+        _stage = Published(
+            initialValue: UserDefaults.standard.bool(forKey: "hasCompletedOnboarding") ? .main : .startAnimation
+        )
+    }
 }

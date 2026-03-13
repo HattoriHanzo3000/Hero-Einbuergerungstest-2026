@@ -72,7 +72,7 @@ struct OnboardingHeaderComponent: View {
                     // With title: state name + slogan (ScreenHeaderCard style)
                     VStack(alignment: .leading, spacing: titleToSloganSpacing) {
                         Text(getLocalizedStateName(selectedState))
-                            .font(.system(.title, design: .rounded).weight(.bold).width(.condensed))
+                            .font(.system(.title, weight: .bold).width(.condensed))
                             .foregroundColor(.white)
                             .multilineTextAlignment(.leading)
                             .lineLimit(nil)

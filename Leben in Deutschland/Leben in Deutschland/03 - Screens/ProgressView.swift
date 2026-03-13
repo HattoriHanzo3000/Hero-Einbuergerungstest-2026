@@ -68,7 +68,7 @@ private extension ProgressTabView {
     var progressHeaderSection: some View {
         HomeHeader(
             readinessPercentage: viewModel.statistics.readinessPercentage,
-            onPremiumTap: { subscriptionManager.presentPaywall() },
+            isPremium: subscriptionManager.isPremium,
             useCard: false,
             mascotAssetBaseName: "MainChickFlipped"
         )

@@ -105,7 +105,7 @@
 
 // Learn by Topics disclaimer
 "learn_by_topics_disclaimer_title" = "Nach Themen lernen";
-"learn_by_topics_disclaimer_message" = "Die Fragen sind nach Themen gruppiert, damit du ein Thema nach dem anderen lernen kannst. Wähle ein Thema, beantworte die Fragen und prüfe deine Antworten. Dieser Modus beeinflusst nicht deinen Bereitschaftsstand – nur Intelligentes Lernen tut das.";
+"learn_by_topics_disclaimer_message" = "Die Fragen sind nach Themen gruppiert, damit du ein Thema nach dem anderen lernen kannst. Wähle ein Thema, beantworte die Fragen und prüfe deine Antworten. Dieser Modus beeinflusst nicht deinen Bereitschaftsstand.";
 "no_categories_found" = "Keine Kategorien gefunden";
 "no_search_results" = "Keine Ergebnisse gefunden";
 "question_label" = "Aufgabe";

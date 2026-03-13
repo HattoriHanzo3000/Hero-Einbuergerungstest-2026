@@ -18,8 +18,9 @@ struct SettingsAboutView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.sectionSpacing)) {
                     mascotImage
-                    descriptionText
                     versionText
+                    descriptionText
+                    disclaimerSection
                 }
                 .padding(.horizontal, layoutMetrics.adaptive(20))
                 .padding(.top, layoutMetrics.adaptive(8))
@@ -61,11 +62,35 @@ struct SettingsAboutView: View {
 
     private var versionText: some View {
         Text("\("version".localized) \(appVersion)")
-            .font(.subheadline)
+            .font(.system(.subheadline).width(.condensed))
             .foregroundStyle(.white.opacity(0.85))
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityLabel("version".localized)
             .accessibilityValue(appVersion)
+    }
+
+    /// Five learn modes in home view order: All Questions, Learn by Topics, Smart Learning, Favorites, Test.
+    private var disclaimerSection: some View {
+        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.sectionSpacing)) {
+            disclaimerBlock(titleKey: "all_questions_disclaimer_title", messageKey: "all_questions_disclaimer_message")
+            disclaimerBlock(titleKey: "learn_by_topics_disclaimer_title", messageKey: "learn_by_topics_disclaimer_message")
+            disclaimerBlock(titleKey: "sr_disclaimer_title", messageKey: "sr_disclaimer_message")
+            disclaimerBlock(titleKey: "favorites_disclaimer_title", messageKey: "favorites_disclaimer_message")
+            disclaimerBlock(titleKey: "test_simulation_disclaimer_title", messageKey: "test_simulation_disclaimer_message")
+        }
+    }
+
+    private func disclaimerBlock(titleKey: String, messageKey: String) -> some View {
+        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
+            Text(titleKey.localized)
+                .font(.body.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.95))
+            Text(messageKey.localized)
+                .font(.body)
+                .foregroundStyle(.white.opacity(0.95))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

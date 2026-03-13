@@ -24,8 +24,10 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
     /// Question ID for label. When nil, question row is hidden.
     var questionId: String?
     var onReportTapped: (() -> Void)?
-    /// When true, shows premium shield on the same row as back arrow, aligned right.
+    /// When true, shows decorative premium badge. Hidden for free users.
     var showPremiumButton: Bool = false
+    var isPremium: Bool = false
+    /// Legacy: not used when badge is decorative.
     var onPremiumTap: (() -> Void)? = nil
     @ViewBuilder var trailingActions: () -> ActionContent
 
@@ -96,8 +98,8 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
 
             Spacer()
 
-            if showPremiumButton, let onPremiumTap {
-                PremiumButton(action: onPremiumTap, color: .white)
+            if showPremiumButton, isPremium {
+                PremiumBadge(color: .white)
             }
 
             trailingActions()
@@ -201,6 +203,7 @@ extension QuestionCardHeaderCard where ActionContent == EmptyView {
         questionId: String? = nil,
         onReportTapped: (() -> Void)? = nil,
         showPremiumButton: Bool = false,
+        isPremium: Bool = false,
         onPremiumTap: (() -> Void)? = nil
     ) {
         self.onBackTapped = onBackTapped
@@ -211,6 +214,7 @@ extension QuestionCardHeaderCard where ActionContent == EmptyView {
         self.questionId = questionId
         self.onReportTapped = onReportTapped
         self.showPremiumButton = showPremiumButton
+        self.isPremium = isPremium
         self.onPremiumTap = onPremiumTap
         self.trailingActions = { EmptyView() }
     }

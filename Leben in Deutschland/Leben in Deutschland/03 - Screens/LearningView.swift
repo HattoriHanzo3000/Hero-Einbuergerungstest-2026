@@ -195,7 +195,7 @@ struct LearningView: View {
             questionId: viewModel.currentQuestion?.id,
             onReportTapped: { showingFeedbackReport = true },
             showPremiumButton: true,
-            onPremiumTap: { subscriptionManager.presentPaywall() },
+            isPremium: subscriptionManager.isPremium,
             trailingActions: { EmptyView() }
         )
     }

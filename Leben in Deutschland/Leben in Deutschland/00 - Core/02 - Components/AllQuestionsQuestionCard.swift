@@ -64,7 +64,7 @@ private extension AllQuestionsQuestionCard {
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
             showPremiumButton: true,
-            onPremiumTap: { subscriptionManager.presentPaywall() },
+            isPremium: subscriptionManager.isPremium,
             trailingActions: { EmptyView() }
         )
     }
