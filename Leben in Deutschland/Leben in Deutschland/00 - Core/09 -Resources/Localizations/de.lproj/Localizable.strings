@@ -465,7 +465,7 @@
 "premium_feature_favorites" = "Favoriten";
 "premium_subscribe_now" = "Jetzt abonnieren";
 "premium_choose_plan" = "Wähle deinen Plan";
-"premium_plan_monthly" = "Monatliches Abo";
+"premium_plan_monthly" = "Monatlich";
 "premium_plan_lifetime" = "Lebenslang";
 "premium_per_month" = "pro Monat";
 "premium_limited_offer" = "Zeitlich begrenztes Angebot";
@@ -488,24 +488,45 @@
 "premium_favorites_alert_upgrade" = "Upgraden";
 "premium_accessibility_label" = "Premium";
 "premium_accessibility_hint" = "Öffnet Premium-Funktionen und Abonnementoptionen";
-"premium_plan_yearly" = "Jährliches Abo";
+"premium_plan_yearly" = "Jährlich";
 "premium_per_year" = "pro Jahr";
 
-"paywall_title" = "Premium freischalten";
-"paywall_subtitle" = "Voller Zugang zu allen Materialien, Fortschrittsverfolgung und mehr.";
+"paywall_title" = "Unlocke deine Zukunft in Deutschland mit Hero Premium";
+"paywall_trial_line" = "Starte mit 3 Tagen kostenloser Testversion. Jederzeit kündbar.";
+"paywall_subtitle" = "Spaced Repetition, Lernen nach Themen, Favoriten, unbegrenzte Tests und detaillierter Fortschritt — alles, was du zum Bestehen brauchst.";
 "paywall_close" = "Schließen";
 "paywall_close_hint" = "Schließt die Bezahlseite";
 "paywall_restore" = "Käufe wiederherstellen";
 "paywall_restore_hint" = "Bereits gekaufte Abos wiederherstellen";
 "paywall_restore_success" = "Abonnement wiederhergestellt.";
 "paywall_restore_no_subscription" = "Kein aktives Abonnement gefunden.";
-"paywall_terms" = "AGB";
-"paywall_terms_hint" = "Öffnet die AGB";
+"paywall_terms" = "Nutzungsbedingungen";
+"paywall_terms_hint" = "Öffnet die Nutzungsbedingungen";
 "paywall_privacy" = "Datenschutz";
 "paywall_privacy_hint" = "Öffnet die Datenschutzerklärung";
-"paywall_terms_boilerplate" = "Hero Premium ist als Abonnement verfügbar: Monatlich (1 Monat, 1,99 € pro Monat) und Jährlich (12 Monate, 14,99 € pro Jahr). Die Zahlung wird deinem Apple-Konto belastet. Abos verlängern sich automatisch, sofern sie nicht mindestens 24 Stunden vor Ende des aktuellen Zeitraums gekündigt werden. Verwalten und kündigen kannst du dein Abo in den Einstellungen des App Stores.";
+"paywall_terms_boilerplate" = "Das Abonnement verlängert sich automatisch, sofern es nicht mindestens 24 Stunden vor Ablauf des aktuellen Zeitraums gekündigt wird. Du kannst dein Abo in den App Store-Kontoeinstellungen verwalten. Mit dem Fortfahren stimmst du unseren Nutzungsbedingungen und der Datenschutzerklärung zu.";
 "paywall_best_value" = "Bester Preis";
+"paywall_subtitle_monthly" = "Flexibel, jederzeit kündbar";
+"paywall_subtitle_3_months_format" = "Nur %@ pro Monat";
+"paywall_subtitle_lifetime" = "Einmal zahlen, für immer nutzen";
+"paywall_trial_shield" = "3 Tage kostenlos";
+"paywall_slash_month" = "/Mo";
+"paywall_slash_year" = "/Jahr";
+"paywall_slash_3_months" = "/3Mo";
+"paywall_slash_6_months" = "/6Mo";
+"paywall_slash_2_months" = "/2Mo";
+"paywall_slash_week" = "/Wo";
 "paywall_year_savings" = "37 % Ersparnis gegenüber Monat";
+"paywall_redeem" = "Code einlösen";
+"paywall_redeem_hint" = "App-Store-Gutscheincode eingeben";
+"premium_plan_six_month" = "6 Monate";
+"premium_plan_three_month" = "3 Monate";
+"premium_plan_two_month" = "2 Monate";
+"premium_plan_weekly" = "Wöchentlich";
+"premium_per_six_months" = "alle 6 Monate";
+"premium_per_three_months" = "alle 3 Monate";
+"premium_per_two_months" = "alle 2 Monate";
+"premium_per_week" = "pro Woche";
 
 // =============================================================================
 //   FEEDBACK / FRAGE MELDEN

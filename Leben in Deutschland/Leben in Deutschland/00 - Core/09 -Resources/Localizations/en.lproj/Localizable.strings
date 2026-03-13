@@ -479,7 +479,7 @@
 "premium_feature_favorites" = "Favorites";
 "premium_subscribe_now" = "Subscribe Now";
 "premium_choose_plan" = "Choose Your Plan";
-"premium_plan_monthly" = "Monthly subscription";
+"premium_plan_monthly" = "Monthly";
 "premium_plan_lifetime" = "Lifetime";
 "premium_per_month" = "per month";
 "premium_limited_offer" = "Limited Time Offer";
@@ -502,25 +502,46 @@
 "premium_favorites_alert_upgrade" = "Upgrade";
 "premium_accessibility_label" = "Premium";
 "premium_accessibility_hint" = "Opens premium features and subscription options";
-"premium_plan_yearly" = "Yearly subscription";
+"premium_plan_yearly" = "Yearly";
 "premium_per_year" = "per year";
 
 // Paywall (first-run / crown)
-"paywall_title" = "Unlock Hero Premium";
-"paywall_subtitle" = "Full access to all materials, progress tracking, and more.";
+"paywall_title" = "Unlock your future in Germany with Hero Premium";
+"paywall_trial_line" = "Start with a 3-day free trial. Cancel anytime.";
+"paywall_subtitle" = "Spaced repetition, learn by topics, favorites, unlimited test simulations, and detailed progress — everything you need to pass.";
 "paywall_close" = "Close";
 "paywall_close_hint" = "Dismisses the paywall";
 "paywall_restore" = "Restore Purchases";
 "paywall_restore_hint" = "Restore previous subscription";
 "paywall_restore_success" = "Subscription restored.";
 "paywall_restore_no_subscription" = "No active subscription found.";
-"paywall_terms" = "Terms & Conditions";
-"paywall_terms_hint" = "Opens Terms and Conditions";
+"paywall_terms" = "Terms of Use";
+"paywall_terms_hint" = "Opens Terms of Use";
 "paywall_privacy" = "Privacy Policy";
 "paywall_privacy_hint" = "Opens Privacy Policy";
-"paywall_terms_boilerplate" = "Hero Premium is available as a subscription: Monthly (1 month, 1.99 € per month) and Yearly (12 months, 14.99 € per year). Payment will be charged to your Apple ID. Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period. You can manage and cancel your subscription in App Store settings.";
+"paywall_terms_boilerplate" = "Subscription automatically renews unless canceled at least 24 hours before the end of the current period. You can manage your subscription and turn off auto-renewal in your App Store Account Settings. By continuing, you agree to our Terms of Use and Privacy Policy.";
 "paywall_best_value" = "Best value";
+"paywall_subtitle_monthly" = "Flexible, cancel anytime";
+"paywall_subtitle_3_months_format" = "Only %@ per month";
+"paywall_subtitle_lifetime" = "Pay once, own forever";
+"paywall_trial_shield" = "3 days free trial";
+"paywall_slash_month" = "/mo";
+"paywall_slash_year" = "/yr";
+"paywall_slash_3_months" = "/3mo";
+"paywall_slash_6_months" = "/6mo";
+"paywall_slash_2_months" = "/2mo";
+"paywall_slash_week" = "/wk";
 "paywall_year_savings" = "Save 37% vs monthly";
+"paywall_redeem" = "Redeem Code";
+"paywall_redeem_hint" = "Enter an App Store promo or gift card code";
+"premium_plan_six_month" = "6 month";
+"premium_plan_three_month" = "3 Months";
+"premium_plan_two_month" = "2 month";
+"premium_plan_weekly" = "Weekly";
+"premium_per_six_months" = "every 6 months";
+"premium_per_three_months" = "every 3 months";
+"premium_per_two_months" = "every 2 months";
+"premium_per_week" = "per week";
 
 // =============================================================================
 //   FEEDBACK / REPORT QUESTION

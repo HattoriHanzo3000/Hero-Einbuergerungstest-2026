@@ -10,7 +10,7 @@ import Foundation
 
 enum AppConfiguration {
     // MARK: - RevenueCat
-    /// RevenueCat Public API Key. Set in App Store Connect / RevenueCat dashboard.
+    /// RevenueCat Public API Key (Test Store for development).
     static let revenueCatAPIKey = "test_MAziVxFjwMzqPkdjDmnoGubtHVj"
     
     // MARK: - Superwall

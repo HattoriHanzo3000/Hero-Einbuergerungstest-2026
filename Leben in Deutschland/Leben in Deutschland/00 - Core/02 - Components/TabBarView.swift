@@ -4,6 +4,7 @@ import SwiftUI
 /// Root tab navigation that hosts the primary app sections.
 /// HIG-compliant tab bar: bottom placement, translucent, 3–5 tabs with labels.
 struct TabBarView: View {
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @AppStorage("appLanguage") private var appLanguage: String = "en"
     @State private var selectedTab: TabIdentifier = .learn
 
@@ -51,6 +52,11 @@ struct TabBarView: View {
         .compactTabBarSpacing(0)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized(for: appLanguage))
         .task { await SubscriptionManager.shared.refreshPremiumStatus() }
+        .sheet(isPresented: $subscriptionManager.showPaywall, onDismiss: {
+            subscriptionManager.dismissPaywall()
+        }) {
+            PaywallView()
+        }
     }
 
     @ViewBuilder
@@ -83,6 +89,11 @@ struct TabBarView: View {
         .task { await SubscriptionManager.shared.refreshPremiumStatus() }
         .onChange(of: selectedTab) { _, _ in
             HapticManager.shared.selectionChanged()
+        }
+        .sheet(isPresented: $subscriptionManager.showPaywall, onDismiss: {
+            subscriptionManager.dismissPaywall()
+        }) {
+            PaywallView()
         }
     }
 }

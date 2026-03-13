@@ -3,13 +3,13 @@
 //  Leben in Deutschland
 //
 //  Source of truth for premium status. Uses RevenueCat entitlements only.
-//  No manual trial logic — use App Store Connect / RevenueCat for trials.
+//  Presents SwiftUI PaywallView (RevenueCat) instead of Superwall.
 //
 
 import Foundation
 import Combine
 import RevenueCat
-import SuperwallKit
+import SwiftUI
 
 /// Manages premium subscription status. RevenueCat is the sole source of truth.
 @MainActor
@@ -17,6 +17,8 @@ final class SubscriptionManager: ObservableObject {
     static let shared = SubscriptionManager()
 
     @Published private(set) var isPremium: Bool = false
+    /// When true, present PaywallView as a sheet. Set by presentPaywall().
+    @Published var showPaywall: Bool = false
 
     private let entitlementId = AppConfiguration.premiumEntitlementId
     private var customerInfoTask: Task<Void, Never>?
@@ -55,38 +57,23 @@ final class SubscriptionManager: ObservableObject {
         }
     }
 
-    // MARK: - Superwall Placements
-    /// Triggers Superwall placement. Use for crown tap or generic paywall.
+    // MARK: - Paywall Presentation
+    /// Presents the SwiftUI PaywallView (RevenueCat). Callers should observe showPaywall and present a sheet.
     func presentPaywall(placement: String = "paywall_trigger") {
-        let presentationHandler = PaywallPresentationHandler()
-        presentationHandler.onDismiss { [weak self] _, _ in
-            Task { @MainActor in
-                await self?.refreshPremiumStatus()
-            }
-        }
-        Superwall.shared.register(placement: placement, handler: presentationHandler)
+        showPaywall = true
     }
 
-    /// Triggers Superwall placement for a gated feature. Handler runs only when user has access (purchased, restored, or already subscribed).
+    /// Dismisses the paywall sheet. Call when user closes PaywallView.
+    func dismissPaywall() {
+        showPaywall = false
+    }
+
+    /// For gated features: if premium, runs handler; otherwise presents paywall.
     func gateFeature(placement: String, handler: @escaping () -> Void) {
         if isPremium {
             handler()
             return
         }
-        let presentationHandler = PaywallPresentationHandler()
-        presentationHandler.onDismiss { [weak self] _, result in
-            Task { @MainActor in
-                await self?.refreshPremiumStatus()
-                switch result {
-                case .purchased, .restored:
-                    handler()
-                case .declined:
-                    break
-                @unknown default:
-                    break
-                }
-            }
-        }
-        Superwall.shared.register(placement: placement, handler: presentationHandler)
+        presentPaywall(placement: placement)
     }
 }

@@ -2,43 +2,58 @@
 //  PaywallView.swift
 //  Leben in Deutschland
 //
-//  Simple first paywall per Apple's guidelines: clear pricing, Restore,
-//  Terms of Use and Privacy Policy. Opens when user taps the crown.
+//  SwiftUI paywall using RevenueCat for offerings, purchases, restore, and redeem.
+//  Replaces Superwall with native UI per Apple's guidelines.
 //
 
 import SwiftUI
+import RevenueCat
+import StoreKit
 
 // MARK: - Paywall View
-/// First paywall sheet: monthly €1.99, yearly €14.99, with Restore and legal links.
+/// Paywall sheet: fetches RevenueCat offerings, displays packages, handles purchase, restore, and redeem.
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
-    @EnvironmentObject private var storeService: StoreService
-    
-    @State private var selectedPlan: SubscriptionPlanType? = .monthly
+
+    @State private var packages: [Package] = []
+    @State private var selectedPackage: Package?
+    @State private var isLoading = true
     @State private var isPurchasing = false
     @State private var restoreMessage: String?
     @State private var activeLegalURL: URL?
-    
+    @State private var loadError: String?
+    @State private var showRedeemSheet = false
+
     private static let termsURL = AppURLs.termsOfUse
     private static let privacyURL = AppURLs.privacyPolicy
-    
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: layoutMetrics.adaptive(28)) {
                     headerSection
-                    plansSection
-                    subscribeButton
-                    restoreSection
-                    legalSection
+                    if isLoading {
+                        progressView
+                    } else if let error = loadError {
+                        errorView(message: error)
+                    } else {
+                        plansSection
+                        subscribeButton
+                        restoreSection
+                        legalSection
+                    }
                 }
                 .padding(.horizontal, layoutMetrics.adaptive(24))
                 .padding(.top, layoutMetrics.adaptive(16))
                 .padding(.bottom, layoutMetrics.adaptive(40))
             }
-            .background(Color(.systemBackground))
+            .background(
+                Rectangle()
+                    .fill(LiquidGlassGradient.blue.screenBackground)
+                    .ignoresSafeArea()
+            )
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -63,296 +78,287 @@ struct PaywallView: View {
                 SafariSheetView(url: url)
             }
         }
+        .offerCodeRedemption(isPresented: $showRedeemSheet) { _ in
+            Task { await subscriptionManager.refreshPremiumStatus() }
+        }
         .onAppear {
-            if selectedPlan == nil { selectedPlan = .monthly }
-            Task { await storeService.loadProducts() }
+            Task { await fetchOfferings() }
         }
     }
-    
-    // MARK: - Header
+
+    // MARK: - Header (premium badge top right, like Categories)
     private var headerSection: some View {
         VStack(spacing: layoutMetrics.adaptive(12)) {
-            Image(systemName: "crown.fill")
-                .font(.system(size: layoutMetrics.adaptive(52), weight: .semibold))
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [Color("AppOrange"), Color("AppOrange").opacity(0.6)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .accessibilityHidden(true)
-            
+            PremiumBadge(color: .white)
+
             Text("paywall_title".localized)
-                .font(.system(.title2, design: .rounded).weight(.bold).width(.condensed))
-                .foregroundStyle(.primary)
+                .font(.system(.title2, weight: .heavy).italic())
+                .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
-            
+
+            Text("paywall_trial_line".localized)
+                .font(.system(.footnote, weight: .heavy))
+                .foregroundStyle(.white.opacity(0.95))
+                .multilineTextAlignment(.center)
+
+            PaywallMascotImage()
+                .frame(width: layoutMetrics.adaptive(130), height: layoutMetrics.adaptive(130))
+                .accessibilityHidden(true)
+
             Text("paywall_subtitle".localized)
-                .font(.system(.subheadline, design: .rounded))
-                .foregroundStyle(.secondary)
+                .font(.system(.subheadline))
+                .foregroundStyle(.white.opacity(0.9))
                 .multilineTextAlignment(.center)
         }
+        .frame(maxWidth: .infinity)
         .padding(.top, layoutMetrics.adaptive(8))
     }
-    
+
+    private var progressView: some View {
+        VStack(spacing: layoutMetrics.adaptive(16)) {
+            ProgressView()
+                .scaleEffect(1.2)
+                .tint(.white)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, layoutMetrics.adaptive(40))
+    }
+
+    private func errorView(message: String) -> some View {
+        VStack(spacing: layoutMetrics.adaptive(12)) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.system(size: layoutMetrics.adaptive(40)))
+                .foregroundStyle(.white.opacity(0.9))
+            Text(message)
+                .font(.system(.subheadline))
+                .foregroundStyle(.white.opacity(0.9))
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, layoutMetrics.adaptive(40))
+    }
+
     // MARK: - Plans
     private var plansSection: some View {
-        VStack(spacing: layoutMetrics.adaptive(12)) {
-            PaywallPlanRow(
-                plan: .monthlyPlan,
-                isSelected: selectedPlan == .monthly,
-                onSelect: {
-                    HapticManager.shared.lightImpact()
-                    selectedPlan = .monthly
-                }
-            )
-            PaywallPlanRow(
-                plan: .lifetimePlan,
-                isSelected: selectedPlan == .lifetime,
-                onSelect: {
-                    HapticManager.shared.lightImpact()
-                    selectedPlan = .lifetime
-                }
-            )
-            experimentalPlansSection
-        }
-    }
-    
-    /// Additional experimental plans for UI testing only. Not wired to purchases.
-    private var experimentalPlansSection: some View {
-        VStack(spacing: layoutMetrics.adaptive(12)) {
-            experimentalPlanRow(
-                title: "3‑month subscription",
-                price: "4,99 €",
-                period: "every 3 months"
-            )
-            experimentalPlanRow(
-                title: "Weekly subscription",
-                price: "0,99 €",
-                period: "per week"
-            )
-        }
-    }
-    
-    private func experimentalPlanRow(title: String, price: String, period: String) -> some View {
-        HStack(spacing: layoutMetrics.adaptive(16)) {
-            VStack(alignment: .leading, spacing: layoutMetrics.adaptive(4)) {
-                Text(title)
-                    .font(.system(.headline, design: .rounded).weight(.bold))
-                    .foregroundStyle(.primary)
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text(price)
-                        .font(.system(.title3, design: .rounded).weight(.bold))
-                        .foregroundStyle(.primary)
-                    Text(period)
-                        .font(.system(.subheadline, design: .rounded))
-                        .foregroundStyle(.secondary)
-                }
-            }
-            Spacer()
-            Image(systemName: "circle")
-                .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
-                .foregroundStyle(.secondary)
-        }
-        .padding(layoutMetrics.adaptive(16))
-        .background(
-            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
-                .fill(Color(.secondarySystemBackground))
-        )
-    }
-    
-    // MARK: - Subscribe Button
-    private var subscribeButton: some View {
-        Button(action: performPurchase) {
-            Text("premium_continue".localized)
-                .font(.system(.headline, design: .rounded).weight(.bold))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: layoutMetrics.adaptive(56))
-                .background(
-                    LinearGradient(
-                        colors: [
-                            Color("AppOrange"),
-                            Color("AppOrange").opacity(0.6)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
+        VStack(spacing: layoutMetrics.adaptive(18)) {
+            ForEach(packages, id: \.identifier) { package in
+                PaywallPackageRow(
+                    package: package,
+                    isSelected: selectedPackage?.identifier == package.identifier,
+                    onSelect: {
+                        HapticManager.shared.lightImpact()
+                        selectedPackage = package
+                    }
                 )
-                .clipShape(RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous))
-                .shadow(color: Color("AppOrange").opacity(0.3), radius: 10, y: 4)
+                .id(package.identifier)
+            }
         }
-        .disabled(selectedPlan == nil || isPurchasing)
-        .opacity(selectedPlan == nil ? 0.6 : 1)
     }
-    
+
+    // MARK: - Subscribe Button (same shape and style as Finish in test simulation: orange, caps)
+    private var subscribeButton: some View {
+        let isActive = selectedPackage != nil && !isPurchasing
+        let style = QuizActionButton.Style(
+            backgroundColor: Color("AppOrange"),
+            disabledBackgroundColor: Color(.systemGray2),
+            haloPrimaryColor: Color("AppOrange").opacity(0.36),
+            haloSecondaryColor: Color.white.opacity(0.18),
+            suppressGlow: true,
+            gradient: .orange
+        )
+        return QuizActionButton(
+            "premium_continue".localized.uppercased(),
+            style: style,
+            isEnabled: isActive,
+            accessibilityLabel: "premium_continue".localized
+        ) {
+            HapticManager.shared.mediumImpact()
+            performPurchase()
+        }
+        .frame(maxWidth: .infinity)
+    }
+
     // MARK: - Restore
     private var restoreSection: some View {
         VStack(spacing: layoutMetrics.adaptive(8)) {
             Button(action: restorePurchases) {
                 Text("paywall_restore".localized)
-                    .font(.system(.subheadline, design: .rounded).weight(.medium))
-                    .foregroundStyle(.secondary)
+                    .font(.system(.subheadline, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.9))
             }
             .disabled(isPurchasing)
             .accessibilityLabel("paywall_restore".localized)
             .accessibilityHint("paywall_restore_hint".localized)
-            
+
             if let message = restoreMessage {
                 Text(message)
-                    .font(.system(.caption, design: .rounded))
-                    .foregroundStyle(.secondary)
+                    .font(.system(.caption))
+                    .foregroundStyle(.white.opacity(0.85))
                     .multilineTextAlignment(.center)
             }
         }
     }
-    
-    // MARK: - Legal
+
+    // MARK: - Legal (boilerplate + Redeem · Terms · Privacy on one row)
     private var legalSection: some View {
         VStack(spacing: layoutMetrics.adaptive(12)) {
             paywallTermsText
-            
-            HStack(spacing: layoutMetrics.adaptive(20)) {
+
+            HStack(spacing: layoutMetrics.adaptive(8)) {
                 Button(action: { activeLegalURL = PaywallView.termsURL }) {
                     Text("paywall_terms".localized)
-                        .font(.system(.caption, design: .rounded).weight(.medium))
-                        .foregroundStyle(Color("AppOrange"))
+                        .font(.system(.caption2, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.9))
                 }
                 .accessibilityLabel("paywall_terms".localized)
                 .accessibilityHint("paywall_terms_hint".localized)
-                
+
                 Text("·")
-                    .foregroundStyle(.tertiary)
-                
+                    .font(.system(.caption2))
+                    .foregroundStyle(.white.opacity(0.7))
+
                 Button(action: { activeLegalURL = PaywallView.privacyURL }) {
                     Text("paywall_privacy".localized)
-                        .font(.system(.caption, design: .rounded).weight(.medium))
-                        .foregroundStyle(Color("AppOrange"))
+                        .font(.system(.caption2, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.9))
                 }
                 .accessibilityLabel("paywall_privacy".localized)
                 .accessibilityHint("paywall_privacy_hint".localized)
+
+                Text("·")
+                    .font(.system(.caption2))
+                    .foregroundStyle(.white.opacity(0.7))
+
+                Button(action: presentRedeemCodeSheet) {
+                    Text("paywall_redeem".localized)
+                        .font(.system(.caption2, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.9))
+                }
+                .accessibilityLabel("paywall_redeem".localized)
+                .accessibilityHint("paywall_redeem_hint".localized)
             }
         }
     }
-    
+
     private var paywallTermsText: some View {
         Text("paywall_terms_boilerplate".localized)
-            .font(.system(.caption2, design: .rounded))
-            .foregroundStyle(.secondary)
+            .font(.system(.caption2))
+            .foregroundStyle(.white.opacity(0.8))
             .multilineTextAlignment(.center)
     }
-    
+
+    // MARK: - Data Fetching
+    private func fetchOfferings() async {
+        guard Purchases.isConfigured else {
+            await MainActor.run {
+                loadError = "RevenueCat not configured"
+                isLoading = false
+            }
+            return
+        }
+        await MainActor.run { isLoading = true; loadError = nil }
+
+        do {
+            let offerings = try await Purchases.shared.offerings()
+            guard let offering = offerings.current else {
+                await MainActor.run {
+                    loadError = "No offerings available"
+                    isLoading = false
+                }
+                return
+            }
+            let available = offering.availablePackages
+            await MainActor.run {
+                packages = available
+                selectedPackage = available.first { $0.packageType == .threeMonth } ?? available.first
+                isLoading = false
+            }
+        } catch {
+            await MainActor.run {
+                loadError = error.localizedDescription
+                isLoading = false
+            }
+        }
+    }
+
     // MARK: - Actions
     private func performPurchase() {
-        guard let plan = selectedPlan else { return }
+        guard let package = selectedPackage else { return }
         HapticManager.shared.mediumImpact()
         isPurchasing = true
         restoreMessage = nil
         Task {
-            let success = await storeService.purchase(plan)
-            await MainActor.run {
-                isPurchasing = false
-                if success {
-                    dismiss()
-                } else if let error = storeService.purchaseError {
-                    restoreMessage = error
+            do {
+                let result = try await Purchases.shared.purchase(package: package)
+                if !result.userCancelled {
+                    await subscriptionManager.refreshPremiumStatus()
+                }
+                await MainActor.run {
+                    isPurchasing = false
+                    if !result.userCancelled {
+                        dismiss()
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    isPurchasing = false
+                    restoreMessage = error.localizedDescription
                 }
             }
         }
     }
-    
+
     private func restorePurchases() {
         HapticManager.shared.lightImpact()
         isPurchasing = true
         restoreMessage = nil
         Task {
-            let found = await storeService.restorePurchases()
-            await subscriptionManager.refreshPremiumStatus()
-            await MainActor.run {
-                if found && subscriptionManager.isPremium {
-                    restoreMessage = "paywall_restore_success".localized
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        dismiss()
+            do {
+                _ = try await Purchases.shared.restorePurchases()
+                await subscriptionManager.refreshPremiumStatus()
+                await MainActor.run {
+                    isPurchasing = false
+                    if subscriptionManager.isPremium {
+                        restoreMessage = "paywall_restore_success".localized
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            dismiss()
+                        }
+                    } else {
+                        restoreMessage = "paywall_restore_no_subscription".localized
                     }
-                } else {
-                    restoreMessage = "paywall_restore_no_subscription".localized
                 }
-                isPurchasing = false
+            } catch {
+                await MainActor.run {
+                    isPurchasing = false
+                    restoreMessage = error.localizedDescription
+                }
             }
         }
+    }
+
+    private func presentRedeemCodeSheet() {
+        HapticManager.shared.lightImpact()
+        showRedeemSheet = true
     }
 }
 
-// MARK: - Paywall Plan Row
-private struct PaywallPlanRow: View {
-    let plan: SubscriptionPlanModel
-    let isSelected: Bool
-    let onSelect: () -> Void
-    
-    @Environment(\.layoutMetrics) private var layoutMetrics
-    
-    private var planTitleKey: String {
-        switch plan.type {
-        case .monthly: return "premium_plan_monthly"
-        case .yearly: return "premium_plan_yearly"
-        case .lifetime: return "premium_plan_lifetime"
+// MARK: - Paywall Mascot Image
+/// Main chick mascot for paywall header. Uses MainChick_About light asset.
+private struct PaywallMascotImage: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var assetName: String {
+        if colorScheme == .dark, UIImage(named: "MainChick_AboutDark") != nil {
+            return "MainChick_AboutDark"
         }
+        return "MainChick_About"
     }
-    
+
     var body: some View {
-        Button(action: onSelect) {
-            HStack(spacing: layoutMetrics.adaptive(16)) {
-                VStack(alignment: .leading, spacing: layoutMetrics.adaptive(4)) {
-                    HStack(spacing: layoutMetrics.adaptive(8)) {
-                        Text(planTitleKey.localized)
-                            .font(.system(.headline, design: .rounded).weight(.bold))
-                            .foregroundStyle(.primary)
-                        if plan.isLimitedOffer {
-                            Text("paywall_best_value".localized)
-                                .font(.system(.caption2, design: .rounded).weight(.semibold))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(Color("AppOrange"))
-                                .clipShape(Capsule())
-                        }
-                    }
-                    HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text("\(plan.price) €")
-                            .font(.system(.title3, design: .rounded).weight(.bold))
-                            .foregroundStyle(.primary)
-                        if let periodKey = plan.periodKey {
-                            Text(periodKey.localized)
-                                .font(.system(.subheadline, design: .rounded))
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    if let subtitleKey = plan.subtitleKey {
-                        Text(subtitleKey.localized)
-                            .font(.system(.caption2, design: .rounded))
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                Spacer()
-                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
-                    .foregroundStyle(isSelected ? Color("AppOrange") : .secondary)
-            }
-            .padding(layoutMetrics.adaptive(16))
-            .background(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
-                    .fill(Color(.secondarySystemBackground))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
-                            .stroke(
-                                isSelected ? Color("AppOrange") : Color.clear,
-                                lineWidth: 2
-                            )
-                    )
-            )
-        }
-        .buttonStyle(.plain)
+        Image(assetName)
+            .resizable()
+            .scaledToFit()
+            .shadow(color: .black.opacity(0.15), radius: 6, x: 0, y: 3)
     }
 }
 
@@ -360,6 +366,5 @@ private struct PaywallPlanRow: View {
 #Preview("Paywall") {
     PaywallView()
         .environmentObject(SubscriptionManager.shared)
-        .environmentObject(StoreService.shared)
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }

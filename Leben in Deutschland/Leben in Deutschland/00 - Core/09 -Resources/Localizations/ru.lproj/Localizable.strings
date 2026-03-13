@@ -478,7 +478,7 @@
 "premium_feature_favorites" = "Избранное";
 "premium_subscribe_now" = "Подписаться сейчас";
 "premium_choose_plan" = "Выбери свой план";
-"premium_plan_monthly" = "Ежемесячная подписка";
+"premium_plan_monthly" = "Ежемесячно";
 "premium_plan_lifetime" = "Навсегда";
 "premium_per_month" = "в месяц";
 "premium_limited_offer" = "Ограниченное предложение";
@@ -501,11 +501,12 @@
 "premium_favorites_alert_upgrade" = "Обновить";
 "premium_accessibility_label" = "Премиум";
 "premium_accessibility_hint" = "Открывает премиум-функции и варианты подписки";
-"premium_plan_yearly" = "Ежегодная подписка";
+"premium_plan_yearly" = "Ежегодно";
 "premium_per_year" = "в год";
 
-"paywall_title" = "Разблокировать Premium";
-"paywall_subtitle" = "Полный доступ ко всем материалам, прогресс и многое другое.";
+"paywall_title" = "Открой своё будущее в Германии с Hero Premium";
+"paywall_trial_line" = "Начни с 3 дней бесплатного пробного периода. Отмени в любой момент.";
+"paywall_subtitle" = "Интервальное повторение, обучение по темам, избранное, неограниченные симуляции теста и детальный прогресс — всё для успешной сдачи.";
 "paywall_close" = "Закрыть";
 "paywall_close_hint" = "Закрывает экран подписки";
 "paywall_restore" = "Восстановить покупки";
@@ -516,9 +517,29 @@
 "paywall_terms_hint" = "Открыть условия использования";
 "paywall_privacy" = "Политика конфиденциальности";
 "paywall_privacy_hint" = "Открыть политику конфиденциальности";
-"paywall_terms_boilerplate" = "Hero Premium доступен по подписке: Ежемесячная (1 месяц, 1,99 € в месяц) и Ежегодная (12 месяцев, 14,99 € в год). Оплата будет списана с вашего Apple ID. Подписка продлевается автоматически, если не отменить её не менее чем за 24 часа до конца текущего периода. Управлять подпиской и отменять её можно в настройках App Store.";
+"paywall_terms_boilerplate" = "Подписка продлевается автоматически, если она не была отменена как минимум за 24 часа до окончания текущего периода. Управлять подпиской можно в настройках учетной записи App Store. Продолжая, вы соглашаетесь с Условиями использования и Политикой конфиденциальности.";
 "paywall_best_value" = "Выгодно";
+"paywall_subtitle_monthly" = "Гибко, отмена в любой момент";
+"paywall_subtitle_3_months_format" = "Только %@ в месяц";
+"paywall_subtitle_lifetime" = "Оплати один раз — пользуйся всегда";
+"paywall_trial_shield" = "3 дня бесплатно";
+"paywall_slash_month" = "/мес";
+"paywall_slash_year" = "/год";
+"paywall_slash_3_months" = "/3мес";
+"paywall_slash_6_months" = "/6мес";
+"paywall_slash_2_months" = "/2мес";
+"paywall_slash_week" = "/нед";
 "paywall_year_savings" = "Экономия 37 % по сравнению с помесячной";
+"paywall_redeem" = "Ввести код";
+"paywall_redeem_hint" = "Введите промокод или код подарочной карты App Store";
+"premium_plan_six_month" = "6 месяцев";
+"premium_plan_three_month" = "3 месяца";
+"premium_plan_two_month" = "2 месяца";
+"premium_plan_weekly" = "Еженедельно";
+"premium_per_six_months" = "каждые 6 месяцев";
+"premium_per_three_months" = "каждые 3 месяца";
+"premium_per_two_months" = "каждые 2 месяца";
+"premium_per_week" = "в неделю";
 
 // =============================================================================
 //   ОБРАТНАЯ СВЯЗЬ / СООБЩИТЬ О ВОПРОСЕ

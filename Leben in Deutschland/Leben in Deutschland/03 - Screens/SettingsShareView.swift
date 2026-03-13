@@ -25,6 +25,11 @@ struct SettingsShareView: View {
             .padding(.bottom, layoutMetrics.adaptive(40))
             .id(languageManager.currentAppLanguage)
         }
+        .background(
+            Rectangle()
+                .fill(LiquidGlassGradient.blue.screenBackground)
+                .ignoresSafeArea()
+        )
         .navigationTitle("settings_share_button".localized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

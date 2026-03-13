@@ -28,8 +28,8 @@ struct SettingsAboutView: View {
     @ViewBuilder
     private var mascotImage: some View {
         Group {
-            if UIImage(named: "MainChick") != nil {
-                Image("MainChick")
+            if UIImage(named: "MainChick_About") != nil {
+                Image("MainChick_About")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             } else {
