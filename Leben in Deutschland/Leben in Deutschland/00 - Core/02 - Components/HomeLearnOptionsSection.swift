@@ -2,7 +2,7 @@
 //  HomeLearnOptionsSection.swift
 //  Leben in Deutschland
 //
-//  Learn option buttons: All Questions, Spaced Repetition, Learn by Topics, Favorites, Test.
+//  Learn option buttons: All Questions, Learn by Topics, Smart Learning, Favorites, Test.
 //
 
 import SwiftUI
@@ -12,6 +12,14 @@ struct HomeLearnOptionsSection: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     @Environment(AppRouter.self) private var router
+
+    @AppStorage(UserDefaultsKeys.spacedRepetitionDisclaimerDismissed) private var disclaimerDismissed = false
+
+    private func proceedToSpacedRepetition() {
+        subscriptionManager.gateFeature(placement: "spaced_repetition") {
+            router.push(.spacedRepetition)
+        }
+    }
 
     var body: some View {
         VStack(spacing: layoutMetrics.adaptive(16)) {
@@ -30,21 +38,6 @@ struct HomeLearnOptionsSection: View {
 
             Button {
                 HapticManager.shared.lightImpact()
-                subscriptionManager.gateFeature(placement: "spaced_repetition") {
-                    router.push(.spacedRepetition)
-                }
-            } label: {
-                LearnButtonContent(
-                    icon: "arrow.triangle.2.circlepath",
-                    title: "home_learn_spaced_repetition",
-                    subtitle: "home_learn_spaced_repetition_subtitle",
-                    color: Color("AppBlueLagoon")
-                )
-            }
-            .buttonStyle(BouncyScaleButtonStyle())
-
-            Button {
-                HapticManager.shared.lightImpact()
                 subscriptionManager.gateFeature(placement: "learn_by_topics") {
                     router.push(.categories)
                 }
@@ -54,6 +47,20 @@ struct HomeLearnOptionsSection: View {
                     title: "home_learn_by_topics",
                     subtitle: "home_learn_by_topics_subtitle",
                     color: Color("AppCaribean")
+                )
+            }
+            .buttonStyle(BouncyScaleButtonStyle())
+
+            Button {
+                HapticManager.shared.lightImpact()
+                proceedToSpacedRepetition()
+            } label: {
+                LearnButtonContent(
+                    icon: "arrow.triangle.2.circlepath",
+                    title: "home_learn_spaced_repetition",
+                    subtitle: "home_learn_spaced_repetition_subtitle",
+                    color: Color("AppBlueLagoon"),
+                    badgeText: disclaimerDismissed ? nil : "home_learn_recommended_badge"
                 )
             }
             .buttonStyle(BouncyScaleButtonStyle())

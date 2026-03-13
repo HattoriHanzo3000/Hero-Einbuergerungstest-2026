@@ -78,20 +78,34 @@
 
 "home_learn_section_title" = "Lernoptionen";
 "home_learn_spaced_repetition" = "Intelligentes Lernen";
-"home_learn_spaced_repetition_subtitle" = "Wiederhole clever, behalte lang";
+"home_learn_spaced_repetition_subtitle" = "Intervall-Wiederholungssystem";
+"home_learn_recommended_badge" = "Empfohlen";
+
+// Smart Learning disclaimer
+"sr_disclaimer_title" = "Intervall-Wiederholungssystem";
+"sr_disclaimer_message" = "Intervall-Wiederholung ist ein wissenschaftlich fundiertes System: Fragen werden in optimalen Abständen wiederholt – so lernst du schneller und behältst mehr. Dieser Modus beeinflusst deinen Fortschritt und Bereitschaftsstand.";
+"sr_disclaimer_do_not_show" = "Nicht mehr anzeigen";
 "home_learn_by_topics" = "Nach Themen lernen";
-"home_learn_by_topics_subtitle" = "Ein Thema nach dem anderen";
+"home_learn_by_topics_subtitle" = "Fragen nach Themen gruppiert";
 "home_learn_favorites" = "Favoriten";
-"home_learn_favorites_subtitle" = "Für später speichern";
+"home_learn_favorites_subtitle" = "Deine gespeicherten Fragen";
 "home_learn_all_questions" = "Alle Fragen";
 "home_learn_all_questions_subtitle" = "Alle 310 offiziellen Prüfungsfragen";
 "all_questions_empty_title" = "Noch keine Fragen";
 "all_questions_empty_message" = "Die Fragen erscheinen hier, sobald die Inhalte geladen sind. Ziehen zum Aktualisieren oder erneut versuchen.";
+
+// All Questions disclaimer
+"all_questions_disclaimer_title" = "Alle Fragen";
+"all_questions_disclaimer_message" = "Alle 310 offiziellen Prüfungsfragen sind hier in chronologischer Reihenfolge aufgelistet – wie in den offiziellen Prüfungsunterlagen. Dieser Bereich ist nur zum Lesen: Jede Frage wird mit der richtigen Antwort angezeigt.";
 "spaced_repetition_title" = "Lernen starten";
 
 // Learn by Topics
 "learn_by_topics_title" = "Lernen nach Themen";
 "learn_by_topics_header_message" = "Ich habe alle Fragen für dich nach Themen gruppiert — wähle deinen Weg und leg los.";
+
+// Learn by Topics disclaimer
+"learn_by_topics_disclaimer_title" = "Nach Themen lernen";
+"learn_by_topics_disclaimer_message" = "Die Fragen sind nach Themen gruppiert, damit du ein Thema nach dem anderen lernen kannst. Wähle ein Thema, beantworte die Fragen und prüfe deine Antworten. Dieser Modus beeinflusst nicht deinen Bereitschaftsstand – nur Intelligentes Lernen tut das.";
 "no_categories_found" = "Keine Kategorien gefunden";
 "no_search_results" = "Keine Ergebnisse gefunden";
 "question_label" = "Aufgabe";
@@ -128,8 +142,8 @@
 // Carousel
 "learn_option_spaced_repetition_title" = "Intelligentes Lernen";
 "learn_option_topics_title" = "Themenweise lernen";
-"learn_option_test_title" = "Test simulieren";
-"learn_option_test_subtitle" = "Prüfe deine Bereitschaft";
+"learn_option_test_title" = "Test ablegen";
+"learn_option_test_subtitle" = "Offizielle Prüfung simulieren";
 "learn_option_favorites_title" = "Favoriten";
 
 "learn_option_spaced_repetition_description" = "Lerne clever – schwierige Fragen kommen zurück, bis du sie sicher kannst";
@@ -241,6 +255,10 @@
 "spaced_repetition_tutorial_got_it" = "Verstanden!";
 
 // Test Simulation Tutorial
+// Test Simulation disclaimer
+"test_simulation_disclaimer_title" = "Testsimulation";
+"test_simulation_disclaimer_message" = "Dieser Modus simuliert die offizielle Einbürgerungsprüfung: 33 Fragen (30 bundesweit, 3 aus deinem Bundesland), 60 Minuten, ein Versuch. Keine Tipps oder Übersetzungen während des Tests. Zum Bestehen brauchst du mindestens 17 richtige Antworten. Dieser Modus beeinflusst deinen Bereitschaftsstand.";
+
 "test_simulation_tutorial_title" = "Kleiner Tipp";
 "test_simulation_tutorial_description" = "Hier läuft alles wie in der echten Prüfung:";
 "test_simulation_tutorial_questions" = "• 33 Fragen: 30 bundesweit, 3 landesspezifisch";
@@ -266,6 +284,8 @@
 "question_label" = "Aufgabe";
 
 "check_answer_button" = "ÜBERPRÜFEN";
+"check_answer_button_accessibility_label" = "Antwort überprüfen";
+"reset_question" = "Frage zurücksetzen";
 "next_button" = "WEITER";
 
 // =============================================================================
@@ -337,6 +357,10 @@
 
 "favorites_title" = "Favoriten";
 "favorites_empty_title" = "Keine Favoriten";
+
+// Favorites disclaimer
+"favorites_disclaimer_title" = "Favoriten";
+"favorites_disclaimer_message" = "Das sind die Fragen, die du während des Übens gespeichert hast. Tippe in jedem Modus auf das Herz-Symbol, um Fragen hinzuzufügen oder zu entfernen. Dieser Bereich ist zum Wiederholen – jede Frage wird mit der richtigen Antwort angezeigt.";
 "favorites_empty_subtitle" = "Füge Fragen zu deinen Favoriten hinzu, indem du auf das Herz klickst";
 "favorites_empty_message" = "Deine Favoritenliste ist leer. Während du übst, tippe auf das Herz-Symbol, um Fragen zu markieren, zu denen du später zurückkehren möchtest.";
 "back" = "Zurück";

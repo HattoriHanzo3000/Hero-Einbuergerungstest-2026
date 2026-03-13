@@ -18,6 +18,10 @@ struct AllQuestionsView: View {
 
     @StateObject private var viewModel: AllQuestionsViewModel
 
+    @AppStorage(UserDefaultsKeys.allQuestionsDisclaimerDismissed) private var disclaimerDismissed = false
+    @State private var showDisclaimer = false
+    @State private var doNotShowAgain = false
+
     init(stateManager: StateManager) {
         _viewModel = StateObject(wrappedValue: AllQuestionsViewModel(stateManager: stateManager))
     }
@@ -47,6 +51,32 @@ struct AllQuestionsView: View {
         }
         .onDisappear {
             viewModel.saveCurrentPosition()
+        }
+        .onAppear {
+            if !disclaimerDismissed, !viewModel.isLoading, !viewModel.questions.isEmpty {
+                showDisclaimer = true
+            }
+        }
+        .onChange(of: viewModel.questions.isEmpty) { _, isEmpty in
+            if !disclaimerDismissed, !viewModel.isLoading, !isEmpty, !showDisclaimer {
+                showDisclaimer = true
+            }
+        }
+        .sheet(isPresented: $showDisclaimer) {
+            LearnModeDisclaimerSheet(
+                titleKey: "all_questions_disclaimer_title",
+                messageKey: "all_questions_disclaimer_message",
+                accentColor: Color("AppPurple"),
+                doNotShowAgain: $doNotShowAgain,
+                onDismiss: {
+                    if doNotShowAgain {
+                        disclaimerDismissed = true
+                    }
+                    showDisclaimer = false
+                }
+            )
+            .environmentObject(languageManager)
+            .environment(\.layoutMetrics, layoutMetrics)
         }
     }
 

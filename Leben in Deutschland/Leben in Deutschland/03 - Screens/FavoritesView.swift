@@ -15,6 +15,10 @@ struct FavoritesView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     
     @StateObject private var viewModel = FavoritesViewModel()
+
+    @AppStorage(UserDefaultsKeys.favoritesDisclaimerDismissed) private var disclaimerDismissed = false
+    @State private var showDisclaimer = false
+    @State private var doNotShowAgain = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -36,6 +40,27 @@ struct FavoritesView: View {
                 language: languageManager.currentAppLanguage,
                 translationLanguage: languageManager.currentTranslationLanguage
             )
+        }
+        .onAppear {
+            if !disclaimerDismissed {
+                showDisclaimer = true
+            }
+        }
+        .sheet(isPresented: $showDisclaimer) {
+            LearnModeDisclaimerSheet(
+                titleKey: "favorites_disclaimer_title",
+                messageKey: "favorites_disclaimer_message",
+                accentColor: Color("AppPink"),
+                doNotShowAgain: $doNotShowAgain,
+                onDismiss: {
+                    if doNotShowAgain {
+                        disclaimerDismissed = true
+                    }
+                    showDisclaimer = false
+                }
+            )
+            .environmentObject(languageManager)
+            .environment(\.layoutMetrics, layoutMetrics)
         }
     }
     
@@ -88,14 +113,8 @@ struct FavoritesView: View {
                 
                 VStack(spacing: layoutMetrics.adaptive(12)) {
                     Text("favorites_empty_title".localized)
-                        .font(.system(.title2, design: .rounded).weight(.bold).width(.condensed))
-                        .foregroundColor(.primary)
-                    
-                    Text("favorites_empty_message".localized)
-                        .font(.system(.body, design: .rounded))
+                        .font(.system(.title2, weight: .bold))
                         .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, layoutMetrics.adaptive(32))
                 }
                 
                 Spacer()

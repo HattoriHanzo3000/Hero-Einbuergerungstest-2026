@@ -16,20 +16,22 @@ struct SettingsShareView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.sectionSpacing)) {
-                qrSection
-            }
-            .padding(.horizontal, layoutMetrics.adaptive(20))
-            .padding(.top, layoutMetrics.adaptive(20))
-            .padding(.bottom, layoutMetrics.adaptive(40))
-            .id(languageManager.currentAppLanguage)
-        }
-        .background(
+        ZStack {
             Rectangle()
                 .fill(LiquidGlassGradient.blue.screenBackground)
                 .ignoresSafeArea()
-        )
+
+            ScrollView {
+                VStack(spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.sectionSpacing)) {
+                    qrSection
+                }
+                .padding(.horizontal, layoutMetrics.adaptive(20))
+                .padding(.top, layoutMetrics.adaptive(20))
+                .padding(.bottom, layoutMetrics.adaptive(40))
+                .id(languageManager.currentAppLanguage)
+            }
+            .scrollContentBackground(.hidden)
+        }
         .navigationTitle("settings_share_button".localized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -56,7 +58,7 @@ struct SettingsShareView: View {
     private var qrSection: some View {
         VStack(spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.rowSpacing)) {
             Text("settings_share_scan_title".localized)
-                .font(.system(.headline, design: .rounded).weight(.semibold))
+                .font(.system(.headline, weight: .semibold))
                 .foregroundStyle(.primary)
                 .accessibilityAddTraits(.isHeader)
 
@@ -71,7 +73,7 @@ struct SettingsShareView: View {
                 .accessibilityLabel("settings_share_qr_accessibility".localized)
 
             Text("settings_share_scan_subtitle".localized)
-                .font(.system(.subheadline, design: .rounded))
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }

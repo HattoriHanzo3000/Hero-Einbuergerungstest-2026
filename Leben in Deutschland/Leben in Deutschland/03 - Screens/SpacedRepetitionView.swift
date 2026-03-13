@@ -5,8 +5,13 @@ import SwiftUI
 struct SpacedRepetitionView: View {
     @Environment(AppRouter.self) private var router
     @EnvironmentObject private var languageManager: LanguageManager
+    @Environment(\.layoutMetrics) private var layoutMetrics
     @StateObject private var viewModel = SpacedRepetitionViewModel()
-    
+
+    @AppStorage(UserDefaultsKeys.spacedRepetitionDisclaimerDismissed) private var disclaimerDismissed = false
+    @State private var showDisclaimer = false
+    @State private var doNotShowAgain = false
+
     var body: some View {
         SpacedRepetitionQuestionCard(
             question: viewModel.currentQuestion,
@@ -48,6 +53,27 @@ struct SpacedRepetitionView: View {
             if languageManager.currentTranslationLanguage != languageManager.currentAppLanguage {
                 await HintService.shared.loadTranslationHints(for: languageManager.currentTranslationLanguage)
             }
+        }
+        .onAppear {
+            if !disclaimerDismissed {
+                showDisclaimer = true
+            }
+        }
+        .sheet(isPresented: $showDisclaimer) {
+            LearnModeDisclaimerSheet(
+                titleKey: "sr_disclaimer_title",
+                messageKey: "sr_disclaimer_message",
+                accentColor: Color("AppBlueLagoon"),
+                doNotShowAgain: $doNotShowAgain,
+                onDismiss: {
+                    if doNotShowAgain {
+                        disclaimerDismissed = true
+                    }
+                    showDisclaimer = false
+                }
+            )
+            .environmentObject(languageManager)
+            .environment(\.layoutMetrics, layoutMetrics)
         }
     }
 }

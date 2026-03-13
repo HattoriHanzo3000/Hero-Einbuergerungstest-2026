@@ -79,20 +79,34 @@
 
 "home_learn_section_title" = "Learn Options";
 "home_learn_spaced_repetition" = "Smart Learning";
-"home_learn_spaced_repetition_subtitle" = "Repeat smart, remember long";
+"home_learn_spaced_repetition_subtitle" = "Spaced Repetition System";
+"home_learn_recommended_badge" = "Recommended";
+
+// Smart Learning disclaimer
+"sr_disclaimer_title" = "Spaced Repetition System";
+"sr_disclaimer_message" = "Spaced repetition is a science-based system that repeats questions at optimal intervals—helping you learn faster and retain more. This mode affects your progress and readiness score.";
+"sr_disclaimer_do_not_show" = "Don't show again";
 "home_learn_by_topics" = "Learn by Topics";
-"home_learn_by_topics_subtitle" = "One topic at a time";
+"home_learn_by_topics_subtitle" = "Questions grouped by topics";
 "home_learn_favorites" = "Favorites";
-"home_learn_favorites_subtitle" = "Bookmark for later";
+"home_learn_favorites_subtitle" = "Your saved questions";
 "home_learn_all_questions" = "All Questions";
 "home_learn_all_questions_subtitle" = "All 310 official exam questions";
 "all_questions_empty_title" = "No Questions Yet";
 "all_questions_empty_message" = "Questions will appear here once content is loaded. Pull to refresh or try again.";
+
+// All Questions disclaimer
+"all_questions_disclaimer_title" = "All Questions";
+"all_questions_disclaimer_message" = "All 310 official exam questions are listed here in chronological order, as in the official exam materials. This section is for reading only—each question is shown with its correct answer.";
 "spaced_repetition_title" = "Start Learning";
 
 // Learn by Topics
 "learn_by_topics_title" = "Learn by Topics";
 "learn_by_topics_header_message" = "I grouped all questions by themes for you — choose a path and soar.";
+
+// Learn by Topics disclaimer
+"learn_by_topics_disclaimer_title" = "Learn by Topics";
+"learn_by_topics_disclaimer_message" = "Questions are grouped by theme so you can study one topic at a time. Choose a topic, answer the questions, and check your answers. This mode does not affect your readiness score—only Smart Learning does.";
 "no_categories_found" = "No categories found";
 "no_search_results" = "No results found";
 "question_label" = "Question";
@@ -129,8 +143,8 @@
 // Carousel
 "learn_option_spaced_repetition_title" = "Smart Learning";
 "learn_option_topics_title" = "Learn by Topics";
-"learn_option_test_title" = "Simulate a Test";
-"learn_option_test_subtitle" = "Check your readiness";
+"learn_option_test_title" = "Take the Test";
+"learn_option_test_subtitle" = "Simulate an official exam";
 "learn_option_favorites_title" = "Favorites";
 
 "learn_option_spaced_repetition_description" = "Learn smart — tough questions come back until you master them";
@@ -245,6 +259,10 @@
 "spaced_repetition_tutorial_got_it" = "Got it!";
 
 // Test Simulation Tutorial
+// Test Simulation disclaimer
+"test_simulation_disclaimer_title" = "Test Simulation";
+"test_simulation_disclaimer_message" = "This mode simulates the official citizenship exam: 33 questions (30 federal, 3 from your state), 60 minutes, single attempt. No hints or translations during the test. You need at least 17 correct answers to pass. This mode affects your readiness score.";
+
 "test_simulation_tutorial_title" = "Quick Tip";
 "test_simulation_tutorial_description" = "This is just like the real exam:";
 "test_simulation_tutorial_questions" = "• 33 questions: 30 federal + 3 about your state";
@@ -270,7 +288,9 @@
 "question_label" = "Question";
 
 "check_answer_button" = "CHECK";
+"check_answer_button_accessibility_label" = "Check your answer";
 "next_button" = "NEXT";
+"reset_question" = "Reset question";
 
 // =============================================================================
 //   LEARN BY TOPICS
@@ -351,6 +371,10 @@
 // =============================================================================
 "favorites_title" = "Favorites";
 "favorites_empty_title" = "No Favorites";
+
+// Favorites disclaimer
+"favorites_disclaimer_title" = "Favorites";
+"favorites_disclaimer_message" = "These are the questions you've saved during practice. Tap the heart icon in any mode to add or remove questions. This section is for review—each question is shown with its correct answer.";
 "favorites_empty_subtitle" = "Add questions to your favorites by clicking the heart";
 "favorites_empty_message" = "Your favorites list is empty. As you practice, tap the heart icon to bookmark questions you'd like to revisit.";
 "back" = "Back";

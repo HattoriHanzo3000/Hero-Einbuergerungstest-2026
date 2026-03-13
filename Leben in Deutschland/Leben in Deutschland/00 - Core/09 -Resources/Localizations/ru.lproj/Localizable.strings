@@ -78,20 +78,34 @@
 
 "home_learn_section_title" = "Варианты обучения";
 "home_learn_spaced_repetition" = "Умное повторение";
-"home_learn_spaced_repetition_subtitle" = "Повторяй умно, запоминай надолго";
+"home_learn_spaced_repetition_subtitle" = "Система интервального повторения";
+"home_learn_recommended_badge" = "Рекомендуем";
+
+// Smart Learning disclaimer
+"sr_disclaimer_title" = "Система интервального повторения";
+"sr_disclaimer_message" = "Интервальное повторение — это научно обоснованная система: вопросы возвращаются в оптимальные интервалы — так ты учишься быстрее и запоминаешь надолго. Этот режим влияет на твой прогресс и показатель готовности.";
+"sr_disclaimer_do_not_show" = "Больше не показывать";
 "home_learn_by_topics" = "Учить по темам";
-"home_learn_by_topics_subtitle" = "По одной теме за раз";
+"home_learn_by_topics_subtitle" = "Вопросы сгруппированы по темам";
 "home_learn_favorites" = "Избранное";
-"home_learn_favorites_subtitle" = "Сохрани на потом";
+"home_learn_favorites_subtitle" = "Твои сохранённые вопросы";
 "home_learn_all_questions" = "Все вопросы";
 "home_learn_all_questions_subtitle" = "Все 310 официальных экзаменационных вопросов";
 "all_questions_empty_title" = "Пока нет вопросов";
 "all_questions_empty_message" = "Вопросы появятся здесь после загрузки контента. Потяни для обновления или попробуй снова.";
+
+// All Questions disclaimer
+"all_questions_disclaimer_title" = "Все вопросы";
+"all_questions_disclaimer_message" = "Все 310 официальных экзаменационных вопросов представлены здесь в хронологическом порядке, как в официальных экзаменационных материалах. Этот раздел только для чтения — каждый вопрос показан с правильным ответом.";
 "spaced_repetition_title" = "Начать обучение";
 
 // Learn by Topics
 "learn_by_topics_title" = "Изучать по темам";
 "learn_by_topics_header_message" = "Я сгруппировал все вопросы по темам — выбирай маршрут и взлетай.";
+
+// Learn by Topics disclaimer
+"learn_by_topics_disclaimer_title" = "Учить по темам";
+"learn_by_topics_disclaimer_message" = "Вопросы сгруппированы по темам, чтобы ты мог изучать их по одной. Выбери тему, ответь на вопросы и проверь себя. Этот режим не влияет на показатель готовности — только Умное повторение.";
 "no_categories_found" = "Категории не найдены";
 "no_search_results" = "Ничего не найдено";
 "question_label" = "Вопрос";
@@ -128,8 +142,8 @@
 // Carousel
 "learn_option_spaced_repetition_title" = "Умное повторение";
 "learn_option_topics_title" = "Учить по темам";
-"learn_option_test_title" = "Смоделировать тест";
-"learn_option_test_subtitle" = "Проверь готовность";
+"learn_option_test_title" = "Пройти тест";
+"learn_option_test_subtitle" = "Симуляция официального экзамена";
 "learn_option_favorites_title" = "Избранное";
 
 "learn_option_spaced_repetition_description" = "Учись с умом — сложные вопросы возвращаются, пока не запомнишь их";
@@ -242,6 +256,10 @@
 "spaced_repetition_tutorial_got_it" = "Понятно!";
 
 // Test Simulation Tutorial
+// Test Simulation disclaimer
+"test_simulation_disclaimer_title" = "Симуляция теста";
+"test_simulation_disclaimer_message" = "Этот режим симулирует официальный экзамен на гражданство: 33 вопроса (30 федеральных, 3 по твоей земле), 60 минут, одна попытка. Без подсказок и переводов во время теста. Чтобы сдать, нужно минимум 17 правильных ответов. Этот режим влияет на показатель готовности.";
+
 "test_simulation_tutorial_title" = "Подсказка";
 "test_simulation_tutorial_description" = "Здесь всё как на настоящем экзамене:";
 "test_simulation_tutorial_questions" = "• 33 вопроса: 30 федеральных и 3 земельных";
@@ -267,6 +285,8 @@
 "question_label" = "Вопрос";
 
 "check_answer_button" = "ПРОВЕРИТЬ";
+"check_answer_button_accessibility_label" = "Проверить ответ";
+"reset_question" = "Сбросить вопрос";
 "next_button" = "ДАЛЕЕ";
 
 // =============================================================================
@@ -350,6 +370,10 @@
 
 "favorites_title" = "Избранное";
 "favorites_empty_title" = "Нет избранных вопросов";
+
+// Favorites disclaimer
+"favorites_disclaimer_title" = "Избранное";
+"favorites_disclaimer_message" = "Здесь вопросы, которые ты сохранил во время практики. Нажимай на сердечко в любом режиме, чтобы добавить или убрать вопросы. Этот раздел для повторения — каждый вопрос показан с правильным ответом.";
 "favorites_empty_subtitle" = "Добавь вопросы в избранное, нажав на сердечко";
 "favorites_empty_message" = "Твой список избранного пуст. Во время практики нажимай на сердечко, чтобы сохранить вопросы, к которым хочешь вернуться.";
 "back" = "Назад";

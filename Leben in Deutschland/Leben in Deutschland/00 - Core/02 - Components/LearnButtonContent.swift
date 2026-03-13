@@ -22,6 +22,8 @@ struct LearnButtonContent: View {
     var iconForegroundGradient: LinearGradient? = nil
     /// When set, splits icon: left half first color, right half second color (sharp divide, no gradient).
     var iconSplitColors: (left: Color, right: Color)? = nil
+    /// When set, shows a small pill badge above the title (e.g. "Recommended").
+    var badgeText: String? = nil
 
     @Environment(\.layoutMetrics) private var layoutMetrics
 
@@ -35,10 +37,31 @@ struct LearnButtonContent: View {
         return AnyShapeStyle(color)
     }
 
+    private var badgePatchView: some View {
+        Text(badgeText!.localized)
+            .font(.system(.caption2, weight: .semibold))
+            .foregroundColor(.white)
+            .padding(.horizontal, layoutMetrics.adaptive(8))
+            .padding(.vertical, layoutMetrics.adaptive(5))
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(color)
+            )
+            .overlay(
+                ShimmerOverlay(duration: 4)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .blendMode(.plusLighter)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .shadow(color: .black.opacity(0.15), radius: 2, y: 1)
+            .accessibilityLabel(badgeText!.localized)
+    }
+
     var body: some View {
-        HStack(spacing: layoutMetrics.adaptive(16)) {
-            Group {
-                if let split = iconSplitColors {
+        ZStack(alignment: .top) {
+            HStack(spacing: layoutMetrics.adaptive(16)) {
+                Group {
+                    if let split = iconSplitColors {
                     ZStack(alignment: .leading) {
                         Image(systemName: icon)
                             .font(.system(size: layoutMetrics.adaptive(24), weight: .semibold))
@@ -92,11 +115,18 @@ struct LearnButtonContent: View {
                 .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold, design: .rounded))
                 .foregroundColor(.secondary)
         }
-        .padding(layoutMetrics.adaptive(18))
-        .background(
-            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(20), style: .continuous)
-                .fill(Color(.tertiarySystemBackground).opacity(0.9))
-        )
+            .padding(layoutMetrics.adaptive(18))
+            .background(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(20), style: .continuous)
+                    .fill(Color(.tertiarySystemBackground).opacity(0.9))
+            )
+
+            if badgeText != nil {
+                badgePatchView
+                    .offset(y: layoutMetrics.adaptive(-12))
+                    .frame(maxWidth: .infinity)
+            }
+        }
         .contentShape(Rectangle())
     }
 }

@@ -10,16 +10,23 @@ struct SettingsAboutView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.sectionSpacing)) {
-                mascotImage
-                descriptionCard
-                versionText
+        ZStack {
+            Rectangle()
+                .fill(LiquidGlassGradient.blue.screenBackground)
+                .ignoresSafeArea()
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.sectionSpacing)) {
+                    mascotImage
+                    descriptionText
+                    versionText
+                }
+                .padding(.horizontal, layoutMetrics.adaptive(20))
+                .padding(.top, layoutMetrics.adaptive(8))
+                .padding(.bottom, layoutMetrics.adaptive(40))
+                .id(languageManager.currentAppLanguage)
             }
-            .padding(.horizontal, layoutMetrics.adaptive(20))
-            .padding(.top, layoutMetrics.adaptive(8))
-            .padding(.bottom, layoutMetrics.adaptive(40))
-            .id(languageManager.currentAppLanguage)
+            .scrollContentBackground(.hidden)
         }
         .navigationTitle("settings_about_button".localized)
         .navigationBarTitleDisplayMode(.inline)
@@ -35,7 +42,7 @@ struct SettingsAboutView: View {
             } else {
                 Image(systemName: "heart.circle.fill")
                     .font(.system(size: layoutMetrics.adaptive(80)))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.white.opacity(0.8))
             }
         }
         .frame(maxWidth: layoutMetrics.adaptive(200), maxHeight: layoutMetrics.adaptive(200))
@@ -44,32 +51,19 @@ struct SettingsAboutView: View {
         .accessibilityLabel("settings_about_mascot_accessibility".localized)
     }
 
-    private var descriptionCard: some View {
-        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.rowSpacing)) {
-            Text("settings_about_heading".localized)
-                .font(.system(.headline, design: .rounded).weight(.semibold))
-                .foregroundStyle(.primary)
-                .accessibilityAddTraits(.isHeader)
-
-            Text("settings_about_description".localized)
-                .font(.body)
-                .foregroundStyle(.primary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(layoutMetrics.adaptive(16))
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: layoutMetrics.adaptive(SettingsDesignTokens.Layout.cornerRadius), style: .continuous)
-                .fill(Color(.secondarySystemGroupedBackground))
-        )
-        .accessibilityElement(children: .combine)
+    private var descriptionText: some View {
+        Text("settings_about_description".localized)
+            .font(.body)
+            .foregroundStyle(.white.opacity(0.95))
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var versionText: some View {
         Text("\("version".localized) \(appVersion)")
             .font(.subheadline)
-            .foregroundStyle(.secondary)
-            .padding(layoutMetrics.adaptive(16))
+            .foregroundStyle(.white.opacity(0.85))
+            .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityLabel("version".localized)
             .accessibilityValue(appVersion)
     }

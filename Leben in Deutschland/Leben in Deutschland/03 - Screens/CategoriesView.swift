@@ -17,6 +17,11 @@ struct CategoriesView: View {
     @StateObject private var viewModel = CategoriesViewModel()
     @ObservedObject private var answersService = AnswersService.shared
     @State private var expandedCategoryNames: Set<String> = []
+
+    @AppStorage(UserDefaultsKeys.learnByTopicsDisclaimerDismissed) private var disclaimerDismissed = false
+    @State private var showDisclaimer = false
+    @State private var doNotShowAgain = false
+
     private let stateService = CategoriesStateService.shared
     
     var body: some View {
@@ -114,9 +119,33 @@ struct CategoriesView: View {
         }
         .onAppear {
             expandedCategoryNames = stateService.loadExpandedCategories()
+            if !disclaimerDismissed, !viewModel.isLoading, !viewModel.categories.isEmpty {
+                showDisclaimer = true
+            }
+        }
+        .onChange(of: viewModel.categories.isEmpty) { _, isEmpty in
+            if !isEmpty, !disclaimerDismissed, !viewModel.isLoading, !showDisclaimer {
+                showDisclaimer = true
+            }
         }
         .onDisappear {
             stateService.saveExpandedCategories(expandedCategoryNames)
+        }
+        .sheet(isPresented: $showDisclaimer) {
+            LearnModeDisclaimerSheet(
+                titleKey: "learn_by_topics_disclaimer_title",
+                messageKey: "learn_by_topics_disclaimer_message",
+                accentColor: Color("AppCaribean"),
+                doNotShowAgain: $doNotShowAgain,
+                onDismiss: {
+                    if doNotShowAgain {
+                        disclaimerDismissed = true
+                    }
+                    showDisclaimer = false
+                }
+            )
+            .environmentObject(languageManager)
+            .environment(\.layoutMetrics, layoutMetrics)
         }
         .hidesTabBar()
         .tabBarHidden(true)
