@@ -212,7 +212,7 @@
 "settings_about_description" = "Hero – Einbürgerungstest helps you prepare for the citizenship test with 310 official questions, spaced repetition learning, and a full test simulation. Choose your federal state, practice at your own pace, and feel confident on exam day.";
 "settings_share_scan_title" = "Scan to download";
 "settings_share_qr_accessibility" = "QR code to download the app";
-"settings_share_scan_subtitle" = "Share this QR code so friends can find the app in the App Store.";
+"settings_share_scan_subtitle" = "Scan this QR code to download the app from the App Store — or tap the share button to send it to friends.";
 "share_app_hint" = "Share the app with others";
 
 "legal_title" = "Legal";
@@ -396,6 +396,7 @@
 "statistics_card_flip_hint" = "Double tap to flip card";
 "ready" = "ready";
 "progress_readiness_explanation" = "This is your readiness score. The higher the percentage, the closer you are to being ready for the exam; 100%% means full readiness. You can reach that by answering each of the %d questions correctly four times. The four colors show how many questions you've got at each level: once (Familiar), twice (Reinforced), three times (Mastered), or four and more (Expert).";
+"progress_readiness_explanation_full" = "This is your readiness score. The higher the percentage, the closer you are to being ready for the exam; 100%% means full readiness. You can reach that by answering each of the %d questions correctly four times. Each color shows a different stage: Familiar - answered correctly once, Reinforced - answered correctly twice, Mastered - answered correctly three times, Expert - answered correctly four times or more. Only questions from %@ and %@ count toward this score.";
 "progress_readiness_info_accessibility_label" = "Readiness explanation";
 "progress_readiness_info_accessibility_hint" = "Double tap to show how readiness is calculated";
 

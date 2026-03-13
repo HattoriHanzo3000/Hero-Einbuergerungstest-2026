@@ -5,42 +5,59 @@ import SwiftUI
 struct HomeStatisticsSection: View {
     let statistics: HomeStatisticsModel
     @Environment(\.layoutMetrics) private var layoutMetrics
-    @Environment(\.colorScheme) private var colorScheme
-    @State private var showExplanationAlert = false
+    @EnvironmentObject private var languageManager: LanguageManager
+    @State private var showExplanationSheet = false
+
+    private var statisticsContent: some View {
+        VStack(spacing: layoutMetrics.adaptive(20)) {
+            HomeRingChartView(
+                progress: (familiar: statistics.familiar, reinforced: statistics.reinforced, mastered: statistics.mastered, expert: statistics.expert, total: statistics.totalQuestions),
+                readinessPercentage: statistics.readinessPercentage
+            )
+            .frame(maxWidth: .infinity)
+            .frame(height: layoutMetrics.adaptive(320))
+
+            HomeStatisticsGridView(statistics: statistics)
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+    }
+
+    private var titleRow: some View {
+        HStack {
+            Text("home_statistics_title".localized)
+                .font(.system(.title3, weight: .light).width(.compressed))
+                .foregroundColor(.primary)
+            Spacer()
+            Button {
+                showExplanationSheet = true
+            } label: {
+                Image(systemName: "info.circle")
+                    .font(.system(.title3))
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("progress_readiness_info_accessibility_label".localized)
+            .accessibilityHint("progress_readiness_info_accessibility_hint".localized)
+        }
+    }
 
     var body: some View {
-        SectionContainer(title: "home_statistics_title", spacing: 18, trailing: {
-            AnyView(
-                Button {
-                    showExplanationAlert = true
-                } label: {
-                    Image(systemName: "info.circle")
-                        .font(.system(.title3))
-                        .foregroundStyle(.secondary)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("progress_readiness_info_accessibility_label".localized)
-                .accessibilityHint("progress_readiness_info_accessibility_hint".localized)
-            )
-        }) {
-            VStack(spacing: layoutMetrics.adaptive(20)) {
-                HomeRingChartView(
-                    progress: (familiar: statistics.familiar, reinforced: statistics.reinforced, mastered: statistics.mastered, expert: statistics.expert, total: statistics.totalQuestions),
-                    readinessPercentage: statistics.readinessPercentage,
-                    colorScheme: colorScheme
-                )
-                .frame(maxWidth: .infinity)
-                .frame(height: layoutMetrics.adaptive(320))
-
-                HomeStatisticsGridView(statistics: statistics)
-            }
-            .frame(maxWidth: .infinity, alignment: .center)
+        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(18)) {
+            titleRow
+            statisticsContent
         }
-        .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
-        .alert("home_statistics_title".localized, isPresented: $showExplanationAlert) {
-            Button("ok".localized) {}
-        } message: {
-            Text(String(format: "progress_readiness_explanation".localized, statistics.totalQuestions))
+        .sheet(isPresented: $showExplanationSheet) {
+            LearnModeDisclaimerSheet(
+                titleKey: "home_statistics_title",
+                messageKey: "progress_readiness_explanation",
+                messageFormatted: String(format: "progress_readiness_explanation_full".localized, statistics.totalQuestions, "home_learn_spaced_repetition".localized, "learn_option_test_title".localized),
+                accentColor: Color.accentColor,
+                doNotShowAgain: .constant(false),
+                showDoNotShowAgain: false,
+                onDismiss: { showExplanationSheet = false }
+            )
+            .environmentObject(languageManager)
+            .environment(\.layoutMetrics, layoutMetrics)
         }
         .accessibilityElement(children: .contain)
     }
@@ -50,7 +67,6 @@ struct HomeStatisticsSection: View {
 private struct HomeRingChartView: View {
     let progress: (familiar: Int, reinforced: Int, mastered: Int, expert: Int, total: Int)
     let readinessPercentage: Int
-    let colorScheme: ColorScheme
 
     @State private var isPulsing = false
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -60,17 +76,17 @@ private struct HomeRingChartView: View {
     private var baseRadius: CGFloat { layoutMetrics.adaptive(130) }
     private var chartSize: CGFloat { baseRadius * 2 }
 
-    private var rings: [(value: Double, color: Color, title: String, maxValue: Int)] {
+    private var rings: [(value: Double, color: Color, maxValue: Int)] {
         let total = Double(max(progress.total, 1))
-        let backgroundRingColor = colorScheme == .dark ? Color.black : Color(.systemGray4)
-        let backgroundRing = (1.0, backgroundRingColor, "", 0)
+        let backgroundRingColor = Color(.systemGray4)
+        let backgroundRing = (1.0, backgroundRingColor, 0)
         let dataRings = [
-            (Double(progress.expert) / total, Color("AppGreen"), "statistics_expert_title".localized, progress.expert),
-            (Double(progress.mastered) / total, Color("AppBlue"), "statistics_mastered_title".localized, progress.mastered),
-            (Double(progress.reinforced) / total, Color("AppOrange"), "statistics_reinforced_title".localized, progress.reinforced),
-            (Double(progress.familiar) / total, Color("AppPink"), "statistics_familiar_title".localized, progress.familiar)
+            (Double(progress.expert) / total, Color("AppGreen"), progress.expert),
+            (Double(progress.mastered) / total, Color("AppBlue"), progress.mastered),
+            (Double(progress.reinforced) / total, Color("AppOrange"), progress.reinforced),
+            (Double(progress.familiar) / total, Color("AppPink"), progress.familiar)
         ]
-        let sortedDataRings = dataRings.sorted { $0.3 > $1.3 }
+        let sortedDataRings = dataRings.sorted { $0.2 > $1.2 }
         return [backgroundRing] + sortedDataRings
     }
 
@@ -300,7 +316,7 @@ private struct HomeStatisticsGridCard: View {
         }
     }
 
-    /// Front: row 1 = number (data), row 2 = title (Wrong, Familiar, Reinforced, Mastered). Default side shown.
+    /// Front: row 1 = count, row 2 = level title (Familiar, Reinforced, Mastered, Expert).
     private var frontFace: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
             Text("\(count)")
@@ -347,6 +363,7 @@ private struct HomeStatisticsGridCard: View {
             totalQuestions: LayoutMetrics.totalFederalQuestions
         )
     )
+    .environmentObject(LanguageManager())
     .padding()
     .background(Color(.systemBackground))
     .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))

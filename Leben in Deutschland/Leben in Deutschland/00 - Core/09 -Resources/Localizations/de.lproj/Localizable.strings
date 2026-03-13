@@ -209,7 +209,7 @@
 "settings_about_description" = "Hero – Einbürgerungstest hilft dir bei der Vorbereitung auf den Einbürgerungstest mit 310 offiziellen Fragen, Spaced-Repetition-Lernen und vollständiger Testsimulation. Wähle dein Bundesland, übe in deinem eigenen Tempo und fühle dich am Prüfungstag sicher.";
 "settings_share_scan_title" = "Zum Herunterladen scannen";
 "settings_share_qr_accessibility" = "QR-Code zum Herunterladen der App";
-"settings_share_scan_subtitle" = "Teile diesen QR-Code, damit Freunde die App im App Store finden.";
+"settings_share_scan_subtitle" = "Scanne diesen QR-Code, um die App aus dem App Store herunterzuladen — oder tippe auf Teilen, um ihn an Freunde zu senden.";
 "share_app_hint" = "App mit anderen teilen";
 
 "legal_title" = "Rechtliches";
@@ -382,6 +382,7 @@
 "statistics_card_flip_hint" = "Doppelt tippen, um die Karte umzudrehen";
 "ready" = "bereit";
 "progress_readiness_explanation" = "Das ist deine Bereitschaftsbewertung. Je höher der Prozentsatz, desto näher bist du an der Prüfungsbereitschaft; 100%% heißt volle Bereitschaft. Das erreichst du, wenn du jede der %d Fragen viermal richtig beantwortest. Die vier Farben zeigen, wie viele Fragen du pro Stufe hast: einmal (Bekannt), zweimal (Gefestigt), dreimal (Beherrscht) oder viermal bzw. öfter (Experte).";
+"progress_readiness_explanation_full" = "Das ist deine Bereitschaftsbewertung. Je höher der Prozentsatz, desto näher bist du an der Prüfungsbereitschaft; 100%% heißt volle Bereitschaft. Das erreichst du, wenn du jede der %d Fragen viermal richtig beantwortest. Jede Farbe steht für eine Stufe: Bekannt - einmal richtig beantwortet, Gefestigt - zweimal richtig beantwortet, Beherrscht - dreimal richtig beantwortet, Experte - viermal oder öfter richtig beantwortet. Nur Fragen aus %@ und %@ zählen für diesen Stand.";
 "progress_readiness_info_accessibility_label" = "Erklärung zur Bereitschaft";
 "progress_readiness_info_accessibility_hint" = "Doppelt tippen, um die Berechnung anzuzeigen";
 

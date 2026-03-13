@@ -2,8 +2,8 @@
 //  LearnModeDisclaimerSheet.swift
 //  Leben in Deutschland
 //
-//  Reusable disclaimer sheet for learn modes: title, message, "Don't show again" checkbox, OK button.
-//  Used by SpacedRepetitionView and AllQuestionsView.
+//  Reusable disclaimer sheet for learn modes: title, message, optional "Don't show again" checkbox, OK button.
+//  Used by SpacedRepetitionView, AllQuestionsView, and Progress (HomeStatisticsSection).
 //
 
 import SwiftUI
@@ -11,13 +11,23 @@ import SwiftUI
 struct LearnModeDisclaimerSheet: View {
     let titleKey: String
     let messageKey: String
+    /// When provided, used instead of messageKey.localized (e.g. for formatted strings).
+    var messageFormatted: String? = nil
+    /// When provided, used instead of messageText. Use for rich content (e.g. colored level names).
+    var customMessageContent: AnyView? = nil
     let accentColor: Color
     @Binding var doNotShowAgain: Bool
+    /// When false, hides the "Don't show again" checkbox. Use for Progress info.
+    var showDoNotShowAgain: Bool = true
     let onDismiss: () -> Void
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
+
+    private var messageText: String {
+        messageFormatted ?? messageKey.localized
+    }
 
     var body: some View {
         VStack(spacing: layoutMetrics.adaptive(24)) {
@@ -27,31 +37,37 @@ struct LearnModeDisclaimerSheet: View {
                     .foregroundColor(.primary)
                     .multilineTextAlignment(.leading)
 
-                Text(messageKey.localized)
-                    .font(.system(.body, weight: .regular))
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.leading)
+                if let content = customMessageContent {
+                    content
+                } else {
+                    Text(messageText)
+                        .font(.system(.body, weight: .regular))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                }
             }
             .padding(.top, layoutMetrics.adaptive(24))
 
-            Button {
-                HapticManager.shared.lightImpact()
-                doNotShowAgain.toggle()
-            } label: {
-                HStack(spacing: layoutMetrics.adaptive(12)) {
-                    Image(systemName: doNotShowAgain ? "checkmark.circle.fill" : "circle")
-                        .font(.system(size: layoutMetrics.adaptive(22)))
-                        .foregroundColor(doNotShowAgain ? accentColor : .secondary)
-                    Text("sr_disclaimer_do_not_show".localized)
-                        .font(.system(.body, weight: .medium))
-                        .foregroundColor(.primary)
+            if showDoNotShowAgain {
+                Button {
+                    HapticManager.shared.lightImpact()
+                    doNotShowAgain.toggle()
+                } label: {
+                    HStack(spacing: layoutMetrics.adaptive(12)) {
+                        Image(systemName: doNotShowAgain ? "checkmark.circle.fill" : "circle")
+                            .font(.system(size: layoutMetrics.adaptive(22)))
+                            .foregroundColor(doNotShowAgain ? accentColor : .secondary)
+                        Text("sr_disclaimer_do_not_show".localized)
+                            .font(.system(.body, weight: .medium))
+                            .foregroundColor(.primary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .buttonStyle(.plain)
+                .accessibilityLabel("sr_disclaimer_do_not_show".localized)
+                .accessibilityHint(doNotShowAgain ? "Checked" : "Unchecked")
+                .accessibilityAddTraits(doNotShowAgain ? [.isButton, .isSelected] : .isButton)
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel("sr_disclaimer_do_not_show".localized)
-            .accessibilityHint(doNotShowAgain ? "Checked" : "Unchecked")
-            .accessibilityAddTraits(doNotShowAgain ? [.isButton, .isSelected] : .isButton)
 
             Spacer(minLength: 0)
 

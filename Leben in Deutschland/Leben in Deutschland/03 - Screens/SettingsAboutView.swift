@@ -97,6 +97,7 @@ struct SettingsAboutView: View {
 #Preview("About") {
     NavigationStack {
         SettingsAboutView()
+            .environmentObject(LanguageManager())
             .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
     }
 }

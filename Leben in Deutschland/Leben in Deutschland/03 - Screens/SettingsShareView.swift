@@ -56,12 +56,7 @@ struct SettingsShareView: View {
     }
 
     private var qrSection: some View {
-        VStack(spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.rowSpacing)) {
-            Text("settings_share_scan_title".localized)
-                .font(.system(.headline, weight: .semibold))
-                .foregroundStyle(.primary)
-                .accessibilityAddTraits(.isHeader)
-
+        VStack(spacing: layoutMetrics.adaptive(20)) {
             SettingsQRCodeView(url: appStoreURL)
                 .frame(width: layoutMetrics.adaptive(280), height: layoutMetrics.adaptive(280))
                 .padding(layoutMetrics.adaptive(16))
@@ -73,8 +68,8 @@ struct SettingsShareView: View {
                 .accessibilityLabel("settings_share_qr_accessibility".localized)
 
             Text("settings_share_scan_subtitle".localized)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .font(.body)
+                .foregroundStyle(.white.opacity(0.95))
                 .multilineTextAlignment(.center)
         }
         .accessibilityElement(children: .combine)
@@ -133,6 +128,7 @@ struct ShareSheet: UIViewControllerRepresentable {
 #Preview("Share") {
     NavigationStack {
         SettingsShareView()
+            .environmentObject(LanguageManager())
             .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
     }
 }
