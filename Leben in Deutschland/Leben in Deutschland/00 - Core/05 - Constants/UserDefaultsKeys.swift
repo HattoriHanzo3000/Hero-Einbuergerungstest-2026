@@ -9,6 +9,8 @@ import Foundation
 
 enum UserDefaultsKeys {
     // MARK: - Settings & Preferences
+    /// Date of first app launch. Used for 3-day Launch Offer countdown.
+    static let firstLaunchDate = "first_launch_date"
     static let selectedState = "selectedState"
     static let vibrationEnabled = "vibration_enabled"
     static let soundEnabled = "sound_enabled"

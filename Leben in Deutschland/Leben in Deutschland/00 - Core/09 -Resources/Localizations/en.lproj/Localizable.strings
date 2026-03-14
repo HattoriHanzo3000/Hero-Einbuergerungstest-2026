@@ -284,6 +284,7 @@
 "paywall_subtitle_3_months_format" = "Only %@ per month";
 "paywall_subtitle_lifetime" = "Pay once, own forever";
 "paywall_trial_shield" = "3 days free trial";
+"launch_offer_badge" = "LAUNCH OFFER -50%";
 "paywall_slash_month" = "/mo";
 "paywall_slash_year" = "/yr";
 "paywall_slash_3_months" = "/3mo";

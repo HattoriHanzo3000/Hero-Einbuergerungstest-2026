@@ -8,12 +8,30 @@
 import SwiftUI
 import RevenueCat
 
-// MARK: - Trial Shield Badge
-/// Orange "3 days free trial" badge with subtle zoom pulse and rounded corners.
-private struct TrialShieldBadgeView: View {
+// MARK: - Launch Offer Badge
+/// Red badge with "LAUNCH OFFER -50%", same design as TrialShieldBadgeView (rounded corners).
+private struct LaunchOfferBadgeView: View {
     let layoutMetrics: LayoutMetrics
 
-    @State private var scale: CGFloat = 1.0
+    private let cornerRadius: CGFloat = 12
+
+    var body: some View {
+        Text("launch_offer_badge".localized)
+            .font(.system(.caption2, weight: .semibold).italic())
+            .lineLimit(1)
+            .foregroundStyle(.white)
+            .padding(.horizontal, layoutMetrics.adaptive(8))
+            .padding(.vertical, layoutMetrics.adaptive(5))
+            .background(Color.red)
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+            .shadow(color: .black.opacity(0.15), radius: 2, y: 1)
+    }
+}
+
+// MARK: - Trial Shield Badge
+/// Orange "3 days free trial" badge with rounded corners.
+private struct TrialShieldBadgeView: View {
+    let layoutMetrics: LayoutMetrics
 
     private let cornerRadius: CGFloat = 12
 
@@ -25,13 +43,7 @@ private struct TrialShieldBadgeView: View {
             .padding(.vertical, layoutMetrics.adaptive(5))
             .background(Color("AppOrange").opacity(1))
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-            .scaleEffect(scale)
             .shadow(color: .black.opacity(0.15), radius: 2, y: 1)
-            .onAppear {
-                withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
-                    scale = 1.06
-                }
-            }
     }
 }
 
@@ -40,10 +52,19 @@ struct PaywallPackageRow: View {
     let package: Package
     let isSelected: Bool
     let onSelect: () -> Void
+    /// Countdown text for Launch Offer (e.g. "2d 04h 15m 10s"). Nil hides countdown.
+    var countdownText: String? = nil
+    /// When true, shows "LAUNCH OFFER -50%" badge.
+    var showLaunchOfferBadge: Bool = false
+    /// Original price shown crossed out when promo is active (e.g. "€19.99").
+    var strikethroughPrice: String? = nil
 
     @Environment(\.layoutMetrics) private var layoutMetrics
 
     private var planTitle: String {
+        if package.identifier == LaunchOfferService.promoPackageIdentifier {
+            return "premium_plan_lifetime".localized
+        }
         switch package.packageType {
         case .monthly: return "premium_plan_monthly".localized
         case .annual: return "premium_plan_yearly".localized
@@ -70,13 +91,22 @@ struct PaywallPackageRow: View {
         }
     }
 
-    /// Best value badge: annual only (not lifetime).
+    /// Best value badge: annual only (not lifetime). Launch Offer badge takes precedence for promo.
     private var isLimitedOffer: Bool {
-        package.packageType == .annual
+        !showLaunchOfferBadge && package.packageType == .annual
     }
 
-    /// Plan subtitle: Monthly, 3 Months, Lifetime.
+    /// Plan subtitle: Monthly, 3 Months, Lifetime. When promo active, shows countdown under title.
     private var planSubtitle: String? {
+        if showLaunchOfferBadge, let countdown = countdownText, !countdown.isEmpty {
+            return countdown
+        }
+        if showLaunchOfferBadge {
+            return nil
+        }
+        if package.identifier == LaunchOfferService.promoPackageIdentifier {
+            return "paywall_subtitle_lifetime".localized
+        }
         switch package.packageType {
         case .monthly: return "paywall_subtitle_monthly".localized
         case .threeMonth:
@@ -110,7 +140,7 @@ struct PaywallPackageRow: View {
                         Text(planTitle)
                             .font(.system(.headline, weight: .bold))
                             .foregroundStyle(contentForeground)
-                        if isLimitedOffer {
+                        if !showLaunchOfferBadge, isLimitedOffer {
                             Text("paywall_best_value".localized)
                                 .font(.system(.caption2, weight: .semibold))
                                 .foregroundStyle(.white)
@@ -121,18 +151,37 @@ struct PaywallPackageRow: View {
                         }
                     }
                     if let text = planSubtitle {
-                        Text(text)
-                            .font(.system(.caption))
-                            .foregroundStyle(secondaryForeground)
+                        if showLaunchOfferBadge {
+                            Text(text)
+                                .font(.system(.caption))
+                                .monospacedDigit()
+                                .foregroundStyle(secondaryForeground)
+                        } else {
+                            Text(text)
+                                .font(.system(.caption))
+                                .foregroundStyle(secondaryForeground)
+                        }
                     }
                 }
 
                 Spacer(minLength: 8)
 
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text(package.formattedPriceString)
-                        .font(.system(.title3, weight: .bold))
-                        .foregroundStyle(contentForeground)
+                    if let original = strikethroughPrice {
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text(package.formattedPriceString)
+                                .font(.system(.title3, weight: .bold))
+                                .foregroundStyle(contentForeground)
+                            Text(original)
+                                .font(.system(.caption2, weight: .medium))
+                                .strikethrough(color: secondaryForeground)
+                                .foregroundStyle(secondaryForeground)
+                        }
+                    } else {
+                        Text(package.formattedPriceString)
+                            .font(.system(.title3, weight: .bold))
+                            .foregroundStyle(contentForeground)
+                    }
                     if let slash = slashPeriodText {
                         Text(slash)
                             .font(.system(.caption))
@@ -153,7 +202,16 @@ struct PaywallPackageRow: View {
             if package.packageType == .threeMonth {
                 trialShieldBadge
                     .offset(y: layoutMetrics.adaptive(-12))
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .scaleEffect(isSelected ? 1.05 : 1)
+                    .opacity(isSelected ? 1 : 0.55)
+            }
+            if showLaunchOfferBadge {
+                LaunchOfferBadgeView(layoutMetrics: layoutMetrics)
+                    .offset(y: layoutMetrics.adaptive(-12))
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .scaleEffect(isSelected ? 1.05 : 1)
+                    .opacity(isSelected ? 1 : 0.55)
             }
         }
         .animation(.easeInOut(duration: 0.25), value: isSelected)

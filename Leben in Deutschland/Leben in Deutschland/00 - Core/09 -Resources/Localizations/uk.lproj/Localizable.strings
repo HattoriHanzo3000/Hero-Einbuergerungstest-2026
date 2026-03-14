@@ -549,6 +549,7 @@
 "paywall_subtitle_3_months_format" = "Тільки %@ на місяць";
 "paywall_subtitle_lifetime" = "Оплати один раз — користуйся завжди";
 "paywall_trial_shield" = "3 дні безкоштовно";
+"launch_offer_badge" = "LAUNCH OFFER -50%";
 "paywall_slash_month" = "/міс";
 "paywall_slash_year" = "/рік";
 "paywall_slash_3_months" = "/3міс";

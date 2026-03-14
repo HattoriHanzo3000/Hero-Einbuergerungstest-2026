@@ -9,6 +9,7 @@
 import SwiftUI
 import RevenueCat
 import StoreKit
+import Combine
 
 // MARK: - Paywall View
 /// Paywall sheet: fetches RevenueCat offerings, displays packages, handles purchase, restore, and redeem.
@@ -25,6 +26,9 @@ struct PaywallView: View {
     @State private var activeLegalURL: URL?
     @State private var loadError: String?
     @State private var showRedeemSheet = false
+    @State private var countdownString: String = ""
+    @State private var hasRefreshedAfterExpiry = false
+    @State private var standardLifetimePriceString: String?
 
     private static let termsURL = AppURLs.termsOfUse
     private static let privacyURL = AppURLs.privacyPolicy
@@ -82,7 +86,16 @@ struct PaywallView: View {
             Task { await subscriptionManager.refreshPremiumStatus() }
         }
         .onAppear {
+            countdownString = LaunchOfferService.formattedCountdown(from: LaunchOfferService.secondsRemaining)
             Task { await fetchOfferings() }
+        }
+        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
+            let remaining = LaunchOfferService.secondsRemaining
+            countdownString = LaunchOfferService.formattedCountdown(from: remaining)
+            if remaining <= 0, !hasRefreshedAfterExpiry {
+                hasRefreshedAfterExpiry = true
+                Task { await fetchOfferings() }
+            }
         }
     }
 
@@ -148,7 +161,10 @@ struct PaywallView: View {
                     onSelect: {
                         HapticManager.shared.lightImpact()
                         selectedPackage = package
-                    }
+                    },
+                    countdownText: (package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive) ? countdownString : nil,
+                    showLaunchOfferBadge: package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive,
+                    strikethroughPrice: (package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive) ? standardLifetimePriceString : nil
                 )
                 .id(package.identifier)
             }
@@ -268,9 +284,16 @@ struct PaywallView: View {
                 return
             }
             let available = offering.availablePackages
+            let standardLifetime = available.first { $0.storeProduct.productIdentifier == LaunchOfferService.standardLifetimeProductId }
+            let standardPrice = standardLifetime?.formattedPriceString
+            let filtered = filterPackagesForLaunchOffer(available)
             await MainActor.run {
-                packages = available
-                selectedPackage = available.first { $0.packageType == .threeMonth } ?? available.first
+                standardLifetimePriceString = standardPrice
+                packages = filtered
+                selectedPackage = filtered.first { $0.packageType == .threeMonth }
+                    ?? filtered.first { $0.identifier == LaunchOfferService.promoPackageIdentifier }
+                    ?? filtered.first { $0.packageType == .lifetime }
+                    ?? filtered.first
                 isLoading = false
             }
         } catch {
@@ -278,6 +301,24 @@ struct PaywallView: View {
                 loadError = error.localizedDescription
                 isLoading = false
             }
+        }
+    }
+
+    /// Applies Launch Offer logic: within 3 days show promo in place of standard lifetime (3 buttons total).
+    /// After 3 days, show standard lifetime only. Never show both lifetime and promo.
+    private func filterPackagesForLaunchOffer(_ available: [Package]) -> [Package] {
+        let promo = available.first { $0.identifier == LaunchOfferService.promoPackageIdentifier }
+
+        if LaunchOfferService.isLaunchOfferActive, let promoPackage = promo {
+            // Remove both promo and standard lifetime, then add promo → single "Lifetime" slot with strikethrough.
+            var result = available.filter {
+                $0.identifier != LaunchOfferService.promoPackageIdentifier &&
+                $0.storeProduct.productIdentifier != LaunchOfferService.standardLifetimeProductId
+            }
+            result.append(promoPackage)
+            return result
+        } else {
+            return available.filter { $0.identifier != LaunchOfferService.promoPackageIdentifier }
         }
     }
 

@@ -26,6 +26,7 @@ struct Leben_in_DeutschlandApp: App {
             purchaseController: purchaseController
         )
         purchaseController.syncSubscriptionStatus()
+        recordFirstLaunchIfNeeded()
         configureTabBarAppearance()
     }
     
@@ -102,6 +103,13 @@ struct Leben_in_DeutschlandApp: App {
         }
     }
     
+    /// Records first launch date for 3-day Launch Offer. Called once per install.
+    private func recordFirstLaunchIfNeeded() {
+        if UserDefaults.standard.object(forKey: UserDefaultsKeys.firstLaunchDate) == nil {
+            UserDefaults.standard.set(Date(), forKey: UserDefaultsKeys.firstLaunchDate)
+        }
+    }
+
     /// Tab bar: on iOS 18+ only tint (system provides floating style); on iOS 17 use default background.
     private func configureTabBarAppearance() {
         let accentColor = UIColor(named: "AccentColor") ?? .systemBlue
