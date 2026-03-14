@@ -16,9 +16,13 @@ struct HomeLearnOptionsSection: View {
     @AppStorage(UserDefaultsKeys.spacedRepetitionDisclaimerDismissed) private var disclaimerDismissed = false
 
     private func proceedToSpacedRepetition() {
-        subscriptionManager.gateFeature(placement: "spaced_repetition") {
-            router.push(.spacedRepetition)
-        }
+        subscriptionManager.gateFeatureWithPreview(
+            placement: "spaced_repetition",
+            titleKey: "sr_disclaimer_title",
+            messageKey: "sr_disclaimer_message",
+            accentColorName: "AppBlueLagoon",
+            handler: { router.push(.spacedRepetition) }
+        )
     }
 
     var body: some View {
@@ -38,9 +42,13 @@ struct HomeLearnOptionsSection: View {
 
             Button {
                 HapticManager.shared.lightImpact()
-                subscriptionManager.gateFeature(placement: "learn_by_topics") {
-                    router.push(.categories)
-                }
+                subscriptionManager.gateFeatureWithPreview(
+                    placement: "learn_by_topics",
+                    titleKey: "learn_by_topics_disclaimer_title",
+                    messageKey: "learn_by_topics_disclaimer_message",
+                    accentColorName: "AppCaribean",
+                    handler: { router.push(.categories) }
+                )
             } label: {
                 LearnButtonContent(
                     icon: "books.vertical.fill",
@@ -67,9 +75,13 @@ struct HomeLearnOptionsSection: View {
 
             Button {
                 HapticManager.shared.lightImpact()
-                subscriptionManager.gateFeature(placement: "favorites") {
-                    router.push(.favorites)
-                }
+                subscriptionManager.gateFeatureWithPreview(
+                    placement: "favorites",
+                    titleKey: "favorites_disclaimer_title",
+                    messageKey: "favorites_disclaimer_message",
+                    accentColorName: "AppPink",
+                    handler: { router.push(.favorites) }
+                )
             } label: {
                 LearnButtonContent(
                     icon: "heart.fill",
@@ -82,9 +94,13 @@ struct HomeLearnOptionsSection: View {
 
             Button {
                 HapticManager.shared.lightImpact()
-                subscriptionManager.gateFeature(placement: "test_simulation") {
-                    router.push(.testCountdown)
-                }
+                subscriptionManager.gateFeatureWithPreview(
+                    placement: "test_simulation",
+                    titleKey: "test_simulation_disclaimer_title",
+                    messageKey: "test_simulation_disclaimer_message",
+                    accentColorName: "AppOrange",
+                    handler: { router.push(.testCountdown) }
+                )
             } label: {
                 LearnButtonContent(
                     icon: "checkmark.seal",

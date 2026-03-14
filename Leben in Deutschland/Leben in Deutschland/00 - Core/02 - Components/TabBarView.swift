@@ -57,6 +57,17 @@ struct TabBarView: View {
         }) {
             PaywallView()
         }
+        .sheet(isPresented: $subscriptionManager.showFeaturePreviewSheet, onDismiss: {
+            subscriptionManager.dismissFeaturePreviewAndPresentPaywall()
+        }) {
+            if let content = subscriptionManager.featurePreviewContent {
+                FeaturePreviewDisclaimerSheet(
+                    titleKey: content.titleKey,
+                    messageKey: content.messageKey,
+                    accentColorName: content.accentColorName
+                )
+            }
+        }
     }
 
     @ViewBuilder
@@ -94,6 +105,17 @@ struct TabBarView: View {
             subscriptionManager.dismissPaywall()
         }) {
             PaywallView()
+        }
+        .sheet(isPresented: $subscriptionManager.showFeaturePreviewSheet, onDismiss: {
+            subscriptionManager.dismissFeaturePreviewAndPresentPaywall()
+        }) {
+            if let content = subscriptionManager.featurePreviewContent {
+                FeaturePreviewDisclaimerSheet(
+                    titleKey: content.titleKey,
+                    messageKey: content.messageKey,
+                    accentColorName: content.accentColorName
+                )
+            }
         }
     }
 }

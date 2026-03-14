@@ -13,9 +13,10 @@ struct HomeHeader: View {
 
     @EnvironmentObject private var stateManager: StateManager
     @EnvironmentObject private var languageManager: LanguageManager
+    @ObservedObject private var onboardingPreferences = OnboardingPreferences.shared
 
     private var testDateMessage: String {
-        TestDateMessageHelper.message(for: OnboardingPreferences.shared.testDate)
+        TestDateMessageHelper.message(for: onboardingPreferences.testDate)
     }
 
     private var readinessMessage: String {

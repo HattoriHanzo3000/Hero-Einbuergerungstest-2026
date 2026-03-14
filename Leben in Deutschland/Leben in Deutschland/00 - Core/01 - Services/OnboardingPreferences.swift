@@ -1,6 +1,8 @@
 import Foundation
+import Combine
 
-final class OnboardingPreferences {
+/// Shared onboarding and app preferences. ObservableObject so SwiftUI views (e.g. HomeHeader) re-render when testDate changes.
+final class OnboardingPreferences: ObservableObject {
     static let shared = OnboardingPreferences()
     private let defaults: UserDefaults
     
@@ -29,6 +31,7 @@ final class OnboardingPreferences {
     /// Clears onboarding selections when starting a fresh onboarding run.
     /// Call when transitioning from start animation to onboarding language.
     func clearOnboardingSelections() {
+        objectWillChange.send()
         defaults.removeObject(forKey: Keys.selectedState)
         defaults.removeObject(forKey: Keys.testDate)
         defaults.set(false, forKey: Keys.testDateDontKnow)

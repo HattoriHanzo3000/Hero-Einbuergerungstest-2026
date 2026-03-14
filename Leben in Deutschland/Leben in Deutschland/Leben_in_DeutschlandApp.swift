@@ -91,6 +91,7 @@ struct Leben_in_DeutschlandApp: App {
                 .environmentObject(FavoritesManager.shared)
                 .environmentObject(SubscriptionManager.shared)
                 .environmentObject(StoreService.shared)
+                .environmentObject(OnboardingPreferences.shared)
                 // Apply appearance mode - updates immediately when @AppStorage changes
                 .preferredColorScheme(getColorScheme())
             }

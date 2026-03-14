@@ -375,6 +375,7 @@
 // Favorites disclaimer
 "favorites_disclaimer_title" = "Favorites";
 "favorites_disclaimer_message" = "These are the questions you've saved during practice. Tap the heart icon in any mode to add or remove questions. This section is for review—each question is shown with its correct answer.";
+"feature_preview_continue" = "Continue";
 "favorites_empty_subtitle" = "Add questions to your favorites by clicking the heart";
 "favorites_empty_message" = "Your favorites list is empty. As you practice, tap the heart icon to bookmark questions you'd like to revisit.";
 "back" = "Back";

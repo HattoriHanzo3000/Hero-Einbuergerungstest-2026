@@ -361,6 +361,7 @@
 // Favorites disclaimer
 "favorites_disclaimer_title" = "Favoriten";
 "favorites_disclaimer_message" = "Das sind die Fragen, die du während des Übens gespeichert hast. Tippe in jedem Modus auf das Herz-Symbol, um Fragen hinzuzufügen oder zu entfernen. Dieser Bereich ist zum Wiederholen – jede Frage wird mit der richtigen Antwort angezeigt.";
+"feature_preview_continue" = "Weiter";
 "favorites_empty_subtitle" = "Füge Fragen zu deinen Favoriten hinzu, indem du auf das Herz klickst";
 "favorites_empty_message" = "Deine Favoritenliste ist leer. Während du übst, tippe auf das Herz-Symbol, um Fragen zu markieren, zu denen du später zurückkehren möchtest.";
 "back" = "Zurück";
