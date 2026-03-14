@@ -18,20 +18,12 @@ struct LanguageOption: Identifiable {
 
 // MARK: - Available Languages
 extension LanguageOption {
-    /// Set to true to temporarily hide Ukrainian from onboarding and settings
-    private static let isUkrainianDisabled = true
-
     static var availableLanguages: [LanguageOption] {
-        let all: [LanguageOption] = [
-            LanguageOption(name: "English", nativeName: "English", isSelected: false, languageCode: "en"),
+        [
             LanguageOption(name: "Deutsch", nativeName: "Deutsch", isSelected: true, languageCode: "de"),
+            LanguageOption(name: "English", nativeName: "English", isSelected: false, languageCode: "en"),
             LanguageOption(name: "Русский", nativeName: "Русский", isSelected: false, languageCode: "ru"),
-            LanguageOption(name: "Українська", nativeName: "Українська", isSelected: false, languageCode: "uk")
         ]
-        if isUkrainianDisabled {
-            return all.filter { $0.languageCode != "uk" }
-        }
-        return all
     }
     
     // MARK: - Helper Methods

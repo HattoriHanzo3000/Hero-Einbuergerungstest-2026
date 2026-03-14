@@ -531,6 +531,8 @@
 "premium_per_year" = "в год";
 
 "paywall_title" = "Открой своё будущее в Германии с Hero Premium";
+"paywall_onboarding_title" = "Попробуй Hero Premium бесплатно";
+"paywall_onboarding_maybe_later" = "Может, позже";
 "paywall_trial_line" = "Начни с 3 дней бесплатного пробного периода. Отмени в любой момент.";
 "paywall_subtitle" = "Интервальное повторение, обучение по темам, избранное, неограниченные симуляции теста и детальный прогресс — всё для успешной сдачи.";
 "paywall_close" = "Закрыть";

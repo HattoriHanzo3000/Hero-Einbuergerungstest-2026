@@ -9,6 +9,7 @@ final class AppFlow: ObservableObject {
         case onboardingTranslation
         case onboardingState
         case onboardingDate
+        case onboardingPaywall
         case onboardingSplash
         case main
     }

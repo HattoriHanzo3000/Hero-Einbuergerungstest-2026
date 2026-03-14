@@ -16,7 +16,7 @@ struct OnboardingScreenContainer<Content: View>: View {
     let onNext: () -> Void
     let onBack: (() -> Void)?
     let onSetup: () -> Void
-    let languageManager: LanguageManager
+    @ObservedObject var languageManager: LanguageManager
     let contentPadding: EdgeInsets?
     let disableContentAnimation: Bool
     @ViewBuilder let content: Content

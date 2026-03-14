@@ -40,17 +40,16 @@ final class SettingsRegionalViewModel: ObservableObject {
         self.onboardingPreferences = onboardingPreferences ?? OnboardingPreferences.shared
         self.defaults = defaults
 
-        var initialAppLanguage = SettingsAppLanguageOption(rawValue: languageManager.currentAppLanguage) ?? .english
-        // Migrate away from Ukrainian if it's disabled
-        if initialAppLanguage == .ukrainian {
-            initialAppLanguage = .english
-            languageManager.setAppLanguage("en")
+        // Migrate away from Ukrainian (no longer supported)
+        if languageManager.currentAppLanguage == "uk" {
+            languageManager.setAppLanguage(LanguageManager.baseLanguageCode)
         }
-        var initialTranslationLanguage = SettingsTranslationLanguageOption(rawValue: languageManager.currentTranslationLanguage) ?? .german
-        if initialTranslationLanguage == .ukrainian {
-            initialTranslationLanguage = .german
+        if languageManager.currentTranslationLanguage == "uk" {
             languageManager.setTranslationLanguage("de")
         }
+
+        let initialAppLanguage = SettingsAppLanguageOption(rawValue: languageManager.currentAppLanguage) ?? .german
+        var initialTranslationLanguage = SettingsTranslationLanguageOption(rawValue: languageManager.currentTranslationLanguage) ?? .german
         initialTranslationLanguage = Self.resolveTranslationLanguage(
             languageManager: languageManager,
             currentOption: initialTranslationLanguage
@@ -247,7 +246,7 @@ final class SettingsRegionalViewModel: ObservableObject {
         currentOption: SettingsTranslationLanguageOption
     ) -> SettingsTranslationLanguageOption {
         if currentOption.rawValue == languageManager.currentAppLanguage,
-           let fallback = availableTranslationOptions(excluding: SettingsAppLanguageOption(rawValue: languageManager.currentAppLanguage) ?? .english).first {
+           let fallback = availableTranslationOptions(excluding: SettingsAppLanguageOption(rawValue: languageManager.currentAppLanguage) ?? .german).first {
             languageManager.setTranslationLanguage(fallback.rawValue)
             return fallback
         }

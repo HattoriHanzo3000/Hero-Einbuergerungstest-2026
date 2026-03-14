@@ -3,18 +3,26 @@ import SwiftUI
 import Combine
 
 // MARK: - Language Manager
+/// German is the base/default language for "Leben in Deutschland" (matches Xcode project default localization).
 class LanguageManager: ObservableObject {
-    @Published var currentAppLanguage: String = "en"
+    /// Base language: German. Used when user hasn't selected one and as fallback everywhere.
+    static let baseLanguageCode = "de"
+
+    @Published var currentAppLanguage: String = "de"
     @Published var currentTranslationLanguage: String = "de"
     /// Shown when applying language change to hide the view rebuild flash
     @Published var isApplyingLanguageChange: Bool = false
-    
+
     static var currentAppLanguageCode: String {
-        UserDefaults.standard.string(forKey: "appLanguage") ?? "en"
+        UserDefaults.standard.string(forKey: "appLanguage") ?? Self.baseLanguageCode
     }
-    
+
     init() {
         loadSavedLanguages()
+        // Ensure appLanguage is set on first launch so all UI uses German from the start
+        if UserDefaults.standard.string(forKey: "appLanguage") == nil {
+            UserDefaults.standard.set(Self.baseLanguageCode, forKey: "appLanguage")
+        }
     }
     
     // MARK: - Language Management
@@ -25,7 +33,7 @@ class LanguageManager: ObservableObject {
         
         // Ensure translation language is different
         if currentTranslationLanguage == code {
-            let fallback = ["de", "en", "ru", "uk"].first { $0 != code } ?? "en"
+            let fallback = ["de", "en", "ru"].first { $0 != code } ?? "de"
             setTranslationLanguage(fallback)
         }
     }
@@ -43,15 +51,14 @@ class LanguageManager: ObservableObject {
         switch currentAppLanguage {
         case "ru": return Locale(identifier: "ru_RU")
         case "de": return Locale(identifier: "de_DE")
-        case "uk": return Locale(identifier: "uk_UA")
-        default: return Locale(identifier: "en_US")
+        default: return Locale(identifier: "de_DE")
         }
     }
     
     // MARK: - Private Methods
     
     private func loadSavedLanguages() {
-        currentAppLanguage = UserDefaults.standard.string(forKey: "appLanguage") ?? "en"
+        currentAppLanguage = UserDefaults.standard.string(forKey: "appLanguage") ?? Self.baseLanguageCode
         if let saved = UserDefaults.standard.string(forKey: "translationLanguage") {
             currentTranslationLanguage = saved
         } else if let migrated = OnboardingPreferences.shared.translationLanguageCode,

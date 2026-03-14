@@ -31,9 +31,10 @@ class OnboardingLanguageViewModel: ObservableObject {
             let code = languageManager.currentAppLanguage
             switch code {
             case "de": selectedLanguage = "Deutsch"
+            case "en": selectedLanguage = "English"
             case "ru": selectedLanguage = "Русский"
-            case "uk": selectedLanguage = "English"; languageManager.setAppLanguage("en")
-            default: selectedLanguage = "English"
+            case "uk": selectedLanguage = "Deutsch"; languageManager.setAppLanguage("de")
+            default: selectedLanguage = "Deutsch"
             }
             ensureTranslationLanguageDifferent()
         } else {

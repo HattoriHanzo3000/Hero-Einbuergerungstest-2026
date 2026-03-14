@@ -5,7 +5,7 @@ import SwiftUI
 /// HIG-compliant tab bar: bottom placement, translucent, 3–5 tabs with labels.
 struct TabBarView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
-    @AppStorage("appLanguage") private var appLanguage: String = "en"
+    @AppStorage("appLanguage") private var appLanguage: String = LanguageManager.baseLanguageCode
     @State private var selectedTab: TabIdentifier = .learn
 
     // MARK: - Tab Identifier (legacy selection binding)

@@ -1,18 +1,20 @@
 //
-//  PaywallView.swift
+//  PaywallOnboardingView.swift
 //  Leben in Deutschland
 //
-//  SwiftUI paywall using RevenueCat for offerings, purchases, restore, and redeem.
-//  Replaces Superwall with native UI per Apple's guidelines.
+//  Paywall for onboarding flow. Same UI and logic as PaywallView; not wired yet.
 //
 
 import SwiftUI
 import RevenueCat
 import StoreKit
 
-// MARK: - Paywall View
-/// Paywall sheet: fetches RevenueCat offerings, displays packages, handles purchase, restore, and redeem.
-struct PaywallView: View {
+// MARK: - Paywall Onboarding View
+/// Paywall for onboarding: fetches RevenueCat offerings, displays packages, handles purchase, restore, and redeem.
+struct PaywallOnboardingView: View {
+    /// When provided (onboarding flow), called instead of dismiss when user proceeds. When nil, uses dismiss.
+    var onProceedToNext: (() -> Void)? = nil
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
@@ -59,7 +61,7 @@ struct PaywallView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button {
                         HapticManager.shared.lightImpact()
-                        dismiss()
+                        proceedToNext()
                     } label: {
                         Image(systemName: "xmark")
                     }
@@ -86,29 +88,24 @@ struct PaywallView: View {
         }
     }
 
-    // MARK: - Header (premium badge top right, like Categories)
+    // MARK: - Header (premium badge, title, trial line, mascot)
     private var headerSection: some View {
         VStack(spacing: layoutMetrics.adaptive(12)) {
             PremiumBadge(color: .white, showShimmer: true)
 
-            Text("paywall_title".localized)
-                .font(.system(.title2, weight: .heavy).italic())
+            Text("paywall_onboarding_title".localized)
+                .font(.system(.title2, weight: .heavy))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
 
             Text("paywall_trial_line".localized)
-                .font(.system(.footnote, weight: .heavy))
-                .foregroundStyle(.white.opacity(0.95))
-                .multilineTextAlignment(.center)
-
-            PaywallMascotImage()
-                .frame(width: layoutMetrics.adaptive(130), height: layoutMetrics.adaptive(130))
-                .accessibilityHidden(true)
-
-            Text("paywall_subtitle".localized)
-                .font(.system(.subheadline))
+                .font(.system(.title3, weight: .semibold).italic())
                 .foregroundStyle(.white.opacity(0.9))
                 .multilineTextAlignment(.center)
+
+            PaywallOnboardingMascotImage()
+                .frame(width: layoutMetrics.adaptive(130), height: layoutMetrics.adaptive(130))
+                .accessibilityHidden(true)
         }
         .frame(maxWidth: .infinity)
         .padding(.top, layoutMetrics.adaptive(8))
@@ -166,16 +163,29 @@ struct PaywallView: View {
             suppressGlow: true,
             gradient: .orange
         )
-        return QuizActionButton(
-            "premium_continue".localized.uppercased(),
-            style: style,
-            isEnabled: isActive,
-            accessibilityLabel: "premium_continue".localized
-        ) {
-            HapticManager.shared.mediumImpact()
-            performPurchase()
+        return VStack(spacing: layoutMetrics.adaptive(20)) {
+            QuizActionButton(
+                "premium_continue".localized.uppercased(),
+                style: style,
+                isEnabled: isActive,
+                accessibilityLabel: "premium_continue".localized
+            ) {
+                HapticManager.shared.mediumImpact()
+                performPurchase()
+            }
+            .frame(maxWidth: .infinity)
+
+            Button {
+                HapticManager.shared.lightImpact()
+                proceedToNext()
+            } label: {
+                Text("paywall_onboarding_maybe_later".localized)
+                    .font(.body.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.9))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("paywall_onboarding_maybe_later".localized)
         }
-        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Restore
@@ -205,7 +215,7 @@ struct PaywallView: View {
             paywallTermsText
 
             HStack(spacing: layoutMetrics.adaptive(8)) {
-                Button(action: { activeLegalURL = PaywallView.termsURL }) {
+                Button(action: { activeLegalURL = PaywallOnboardingView.termsURL }) {
                     Text("paywall_terms".localized)
                         .font(.system(.caption2, weight: .medium))
                         .foregroundStyle(.white.opacity(0.9))
@@ -217,7 +227,7 @@ struct PaywallView: View {
                     .font(.system(.caption2))
                     .foregroundStyle(.white.opacity(0.7))
 
-                Button(action: { activeLegalURL = PaywallView.privacyURL }) {
+                Button(action: { activeLegalURL = PaywallOnboardingView.privacyURL }) {
                     Text("paywall_privacy".localized)
                         .font(.system(.caption2, weight: .medium))
                         .foregroundStyle(.white.opacity(0.9))
@@ -296,7 +306,7 @@ struct PaywallView: View {
                 await MainActor.run {
                     isPurchasing = false
                     if !result.userCancelled {
-                        dismiss()
+                        proceedToNext()
                     }
                 }
             } catch {
@@ -321,7 +331,7 @@ struct PaywallView: View {
                     if subscriptionManager.isPremium {
                         restoreMessage = "paywall_restore_success".localized
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            dismiss()
+                            proceedToNext()
                         }
                     } else {
                         restoreMessage = "paywall_restore_no_subscription".localized
@@ -340,11 +350,18 @@ struct PaywallView: View {
         HapticManager.shared.lightImpact()
         showRedeemSheet = true
     }
+
+    private func proceedToNext() {
+        if let action = onProceedToNext {
+            action()
+        } else {
+            dismiss()
+        }
+    }
 }
 
-// MARK: - Paywall Mascot Image
-/// Main chick mascot for paywall header. Uses MainChick_About light asset.
-private struct PaywallMascotImage: View {
+// MARK: - Paywall Onboarding Mascot Image
+private struct PaywallOnboardingMascotImage: View {
     @Environment(\.colorScheme) private var colorScheme
 
     private var assetName: String {
@@ -363,8 +380,8 @@ private struct PaywallMascotImage: View {
 }
 
 // MARK: - Preview
-#Preview("Paywall") {
-    PaywallView()
+#Preview("Paywall Onboarding") {
+    PaywallOnboardingView()
         .environmentObject(SubscriptionManager.shared)
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }

@@ -73,10 +73,10 @@ struct OnboardingNextButtonComponent: View {
             }
             
             QuizActionButton(
-                titleKey.localized,
+                titleKey.localized(for: languageManager.currentAppLanguage),
                 style: nextButtonStyle,
                 isEnabled: isEnabled,
-                accessibilityLabel: titleKey.localized
+                accessibilityLabel: titleKey.localized(for: languageManager.currentAppLanguage)
             ) {
                 if isEnabled {
                     HapticManager.shared.mediumImpact()
@@ -89,5 +89,6 @@ struct OnboardingNextButtonComponent: View {
         .padding(.top, layoutMetrics.adaptive(12))
         .padding(.bottom, layoutMetrics.adaptive(24))
         .background(Color(.systemBackground))
+        .id(languageManager.currentAppLanguage)
     }
 }

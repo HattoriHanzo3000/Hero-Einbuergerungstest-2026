@@ -529,6 +529,8 @@
 "premium_per_year" = "на рік";
 
 "paywall_title" = "Відкрийте своє майбутнє в Німеччині з Hero Premium";
+"paywall_onboarding_title" = "Спробуй Hero Premium безкоштовно";
+"paywall_onboarding_maybe_later" = "Можливо, пізніше";
 "paywall_trial_line" = "Почни з 3 днів безкоштовного пробного періоду. Скасуй у будь-який момент.";
 "paywall_subtitle" = "Інтервальне повторення, навчання за темами, обране, необмежені симуляції тесту та детальний прогрес — усе для успішної здачі.";
 "paywall_close" = "Закрити";

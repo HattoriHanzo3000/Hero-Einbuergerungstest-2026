@@ -88,7 +88,7 @@ final class SettingsResetService: SettingsResetServicing {
         onboardingPreferences.testDate = nil
         onboardingPreferences.testDateDontKnow = true
 
-        languageManager.setAppLanguage("en")
+        languageManager.setAppLanguage(LanguageManager.baseLanguageCode)
         languageManager.setTranslationLanguage("de")
         stateManager.clearSelectedState()
     }

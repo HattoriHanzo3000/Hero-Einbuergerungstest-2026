@@ -108,14 +108,13 @@
 				};
 			};
 			buildConfigurationList = E612E8972E8299CD00513716 /* Build configuration list for PBXProject "Leben in Deutschland" */;
-			developmentRegion = en;
+			developmentRegion = de;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 				de,
 				ru,
-				uk,
 			);
 			mainGroup = E612E8932E8299CD00513716;
 			minimizedProjectReferenceProxies = 1;
