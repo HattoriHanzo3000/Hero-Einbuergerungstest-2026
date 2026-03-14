@@ -1,20 +1,8 @@
-
-// =============================================================================
-//   ONBOARDING
-// =============================================================================
-
-// Eagle greeting
+// ONBOARDING
 "eagle_greeting" = "Hello! I'm Hero the eagle, and I'll help you get ready for the test. Let's begin!\nFirst, choose the app language.";
 "language_selected" = "Great! Tap Next to Continue";
-
-// Translation selection
 "translation_selection_title" = "Now choose a language for translating the questions and answers – just in case you need a little help.";
-
-// State selection
-"state_selection_title_general" = "Where will you take the test? I'll add 10 extra questions about your federal state.";
 "choose_federal_state" = "Where will you take the test? I'll add 10 extra questions about your state.";
-
-// Messages when selecting federal states
 "state_baden_württemberg" = "Everything's invented here – even stairwell cleaning!";
 "state_bayern" = "Lederhosen on – test passed!";
 "state_brandenburg" = "More pines than people – pure peace!";
@@ -31,8 +19,6 @@
 "state_sachsen" = "One 'Nu!' – and you've passed the test!";
 "state_schleswig_holstein" = "Two seas, one test – bring it on!";
 "state_thüringen" = "Goethe studied here – and now you do too!";
-
-// States
 "Baden-Württemberg" = "Baden-Württemberg";
 "Bayern" = "Bavaria";
 "Berlin" = "Berlin";
@@ -49,493 +35,25 @@
 "Sachsen-Anhalt" = "Saxony-Anhalt";
 "Schleswig-Holstein" = "Schleswig-Holstein";
 "Thüringen" = "Thuringia";
-
-// Test date selection
 "onboarding_date_prompt" = "When's your test? Set the date and we'll count down together.";
 "SELECT_DATE" = "Select date";
 "SAVE_DATE" = "SAVE DATE";
-"CANCEL" = "CANCEL";
-
-// Eagle dialogues
 "perfect_days_left" = "We've got %d %@ left. I'm with you!";
 "perfect_day_left" = "We've got %d %@ left. I'm with you!";
 "perfect_days_left_2_4" = "We've got %d %@ left. I'm with you!";
 "perfect_test_today" = "The test is today. I'm with you!";
 "dont_know_date" = "I don't know yet";
 "no_problem_later" = "No problem! You can add or change the date later.";
-
 "NEXT" = "NEXT";
 "LET'S GO" = "LET'S GO!";
-
-// =============================================================================
-//   MAIN SCREEN
-// =============================================================================
-
-// Main categories
-"main_category_study" = "Start Learning";
-"main_category_all_questions" = "Learn by Topics";
-"main_category_favorites" = "Favorites";
-"main_category_test_simulation" = "Take a Test";
-
-"home_learn_section_title" = "Learn Options";
-"home_learn_spaced_repetition" = "Smart Learning";
-"home_learn_spaced_repetition_subtitle" = "Spaced Repetition System";
-"home_learn_recommended_badge" = "Recommended";
-
-// Smart Learning disclaimer
-"sr_disclaimer_title" = "Spaced Repetition System";
-"sr_disclaimer_message" = "Spaced repetition is a science-based system that repeats questions at optimal intervals—helping you learn faster and retain more. This mode affects your progress and readiness score.";
-"sr_disclaimer_do_not_show" = "Don't show again";
-"home_learn_by_topics" = "Learn by Topics";
-"home_learn_by_topics_subtitle" = "Questions grouped by topics";
-"home_learn_favorites" = "Favorites";
-"home_learn_favorites_subtitle" = "Your saved questions";
-"home_learn_all_questions" = "All Questions";
-"home_learn_all_questions_subtitle" = "All 310 official exam questions";
-"all_questions_empty_title" = "No Questions Yet";
-"all_questions_empty_message" = "Questions will appear here once content is loaded. Pull to refresh or try again.";
-
-// All Questions disclaimer
-"all_questions_disclaimer_title" = "All Questions";
-"all_questions_disclaimer_message" = "All 310 official exam questions are listed here in chronological order, as in the official exam materials. This section is for reading only—each question is shown with its correct answer.";
-"spaced_repetition_title" = "Start Learning";
-
-// Learn by Topics
-"learn_by_topics_title" = "Learn by Topics";
-"learn_by_topics_header_message" = "I grouped all questions by themes for you — choose a path and soar.";
-
-// Learn by Topics disclaimer
-"learn_by_topics_disclaimer_title" = "Learn by Topics";
-"learn_by_topics_disclaimer_message" = "Questions are grouped by theme so you can study one topic at a time. Choose a topic, answer the questions, and check your answers. This mode does not affect your readiness score.";
-"no_categories_found" = "No categories found";
-"no_search_results" = "No results found";
-"question_label" = "Question";
-
-// Gamification - stage descriptions
-"eagle_desc_egg" = "You're %d%% ready for the test. You've just hatched! Time to learn and grow!";
-"eagle_desc_chick" = "You're %d%% ready. Let's go! You're learning to flap your wings.";
-"eagle_desc_young" = "You're %d%% ready. Your wings are getting stronger — keep going!";
-"eagle_desc_growing" = "You're %d%% ready. You're flying high! Almost there.";
-"eagle_desc_wise" = "You're %d%% ready. Just one more flight — you've got this!";
-"eagle_desc_master" = "You're %d%% ready. You're a true knowledge eagle!";
-
-"main_header_test_today" = "The test is today.";
-"main_header_test_in_days" = "The test is in %d %@.";
-"test_header_set_date_prompt" = "When's your test? Set the date in Settings and we'll count down together.";
-"main_header_state_accessibility_label" = "Federal state";
-"main_header_state_accessibility_hint" = "Current federal state. Change it in Settings.";
-"main_header_state_slogan_accessibility_label" = "State slogan";
-"main_header_test_date_accessibility_label" = "Days until test";
-"home_statistics_title" = "Your progress";
-"home_statistics_description" = "You're %d%% ready for the test. Keep going—small steps count every day.";
-"home_statistics_caption" = "Ready for the test";
-"progress_card_flip_hint" = "Double tap to flip. Card flips back after 10 seconds.";
-"home_statistics_accessibility_label" = "Readiness progress";
-"home_statistics_accessibility_value" = "%d percent prepared";
-"back_button_accessibility_label" = "Back";
-"spaced_translation_button_accessibility_label" = "Toggle translation";
-"spaced_favorite_button_accessibility_label" = "Toggle favorite";
-"hint_button_title" = "Hint";
 "date_too_far_title" = "That's quite far away";
 "date_too_far_message" = "Time travel’s cool, but let’s keep the test within the next year—deal?";
 "ok_button" = "OK";
 
-// Carousel
-"learn_option_spaced_repetition_title" = "Smart Learning";
-"learn_option_topics_title" = "Learn by Topics";
-"learn_option_test_title" = "Take the Test";
-"learn_option_test_subtitle" = "Simulate an official exam";
-"learn_option_favorites_title" = "Favorites";
-
-"learn_option_spaced_repetition_description" = "Learn smart — tough questions come back until you master them";
-"learn_option_topics_description" = "Study by topics — take it easy, step by step";
-"learn_option_test_description" = "Matches the official exam: 33 questions (30 federal, 3 from your state), 60 minutes, single attempt. No hints or corrections. A great way to check your readiness.";
-"learn_option_favorites_description" = "Save your favorite or tricky questions to practice later";
-
-// Language
-"language_title" = "Language";
-"application_title" = "Application Language";
-"settings_translation_language_title" = "Translation Language";
-
-// Federal State
-"federal_states_title" = "Federal States";
-"change_state_confirmation_title" = "Change Federal State?";
-"change_state_confirmation_message" = "Do you really want to change the federal state? All progress will be lost.";
-"change_state_confirmation_cancel" = "Cancel";
-"change_state_confirmation_confirm" = "Change";
-
-"settings_app_language_change_title" = "Change app language?";
-"settings_translation_language_change_title" = "Change translation language?";
-"settings_language_change_message" = "The interface will update. Continue?";
-"settings_language_change_cancel" = "Cancel";
-"settings_language_change_confirm" = "Continue";
-
-// Calendar
-"CLEAR_DATE" = "CLEAR DATE";
-
-// Settings
-"settings_title" = "Settings";
-"tab_settings_title" = "Settings";
-
-"settings_current_version" = "Current Version";
-"settings_update_available" = "Update Available";
-"settings_version_updates" = "• Added interactive tutorials to help users get started.\n• Enhanced support system with FAQ access.\n• Improved app rating experience.\n• Better accessibility and usability.\n• Bug fixes and performance improvements.";
-"settings_version_updates_placeholder" = "A newer version is ready with additional improvements and features.";
-"settings_update_now" = "Update Now";
-"settings_update_button_hint" = "Opens the App Store to install the latest version.";
-"version" = "Version";
-"settings_installed_version" = "Installed version";
-"settings_latest_updates" = "Latest updates";
-
-"settings_personalisation_title" = "Personalisation";
-"settings_info_title" = "About";
-"settings_regional_title" = "Region";
-"settings_danger_title" = "Data";
-"settings_sound_button" = "Sound";
-"settings_vibration_button" = "Vibration";
-"settings_appearance" = "Appearance";
-"settings_appearance_light" = "Light";
-"settings_appearance_dark" = "Dark";
-"settings_appearance_system" = "System";
-
-"on" = "On";
-"off" = "Off";
-
-"settings_support_title" = "Support";
-"settings_faq_button" = "FAQ";
-"settings_contact_button" = "Contact Us";
-"settings_report_bug_button" = "Report a Bug";
-"settings_about_button" = "About";
-"settings_share_button" = "Share";
-"settings_about_heading" = "About this app";
-"settings_about_mascot_accessibility" = "Hero mascot";
-"settings_about_description" = "Hero – Einbürgerungstest helps you prepare for the citizenship test with 310 official questions, spaced repetition learning, and a full test simulation. Choose your federal state, practice at your own pace, and feel confident on exam day.";
-"settings_share_scan_title" = "Scan to download";
-"settings_share_qr_accessibility" = "QR code to download the app";
-"settings_share_scan_subtitle" = "Scan this QR code to download the app from the App Store — or tap the share button to send it to friends.";
-"share_app_hint" = "Share the app with others";
-
-"legal_title" = "Legal";
-"settings_impressum_button" = "Impressum";
-"terms_of_service" = "Terms of Use";
-"privacy_policy" = "Privacy Policy";
-
-"mail_device_info_body" = "Please do not delete the device information below as it helps us provide better support.\n\n--- Device Information ---\nApp Version: %@ (%@)\nDevice: %@\niOS Version: %@ %@\n\n--- Please describe your problem or inquiry below ---";
-"mail_unavailable_title" = "Mail Unavailable";
-"mail_unavailable_message" = "No mail account is configured. You can copy the support email and paste it into your preferred mail app.";
-
-"about_title" = "About";
-"version_description" = "This update provides important improvements and bug fixes, including the following updates:";
-
-// Updates
-"update_1" = "Complete app redesign with modern interface";
-"update_2" = "Added spaced repetition learning system";
-"update_3" = "Improved test simulation mode";
-"update_4" = "Enhanced accessibility features";
-"update_5" = "Performance improvements and bug fixes";
-"rating_popup_title" = "Enjoying the app?";
-"rating_popup_message" = "Leave a rating to help others discover this learning tool";
-"rating_popup_rate_now" = "Rate Now";
-"rating_popup_maybe_later" = "Maybe Later";
-
-"settings_updates_title" = "Updates";
-"settings_check_updates_button" = "Check for Updates";
-"settings_open_app_store_button" = "Open in App Store";
-"update_title" = "Update available";
-"update_message" = "A newer version of the app is available.";
-"update_message_with_version" = "A newer version (%@) of the app is available.";
-"update_required_title" = "Update required";
-"update_required_message" = "Please update to continue using the app.";
-"update_now" = "Update Now";
-"update_later" = "Later";
-"update_latest_title" = "You're up to date";
-"update_latest_message" = "You already have the latest version installed.";
-
-// Spaced Repetition Tutorial
-"spaced_repetition_tutorial_title" = "Quick Tip";
-"spaced_repetition_tutorial_description" = "This learning method is called Spaced Repetition – a science-based technique that helps you remember things for the long term.";
-"spaced_repetition_tutorial_questions" = "Questions will appear in random order. If you answer incorrectly, the question will come back soon. If you're correct, the interval gets longer.";
-"spaced_repetition_tutorial_mastered" = "A question is considered mastered once you've answered it correctly three times or more.";
-"spaced_repetition_tutorial_got_it" = "Got it!";
-
-// Test Simulation Tutorial
-// Test Simulation disclaimer
-"test_simulation_disclaimer_title" = "Test Simulation";
-"test_simulation_disclaimer_message" = "This mode simulates the official citizenship exam: 33 questions (30 federal, 3 from your state), 60 minutes, single attempt. No hints or translations during the test. You need at least 17 correct answers to pass. This mode affects your readiness score.";
-
-"test_simulation_tutorial_title" = "Quick Tip";
-"test_simulation_tutorial_description" = "This is just like the real exam:";
-"test_simulation_tutorial_questions" = "• 33 questions: 30 federal + 3 about your state";
-"test_simulation_tutorial_time" = "• 60 minutes to complete";
-"test_simulation_tutorial_no_help" = "• no translations, no hints";
-"test_simulation_tutorial_passing" = "• to pass, you need at least 17 correct answers";
-"test_simulation_tutorial_good_luck" = " Good luck – Hero's got your back!";
-"test_simulation_tutorial_got_it" = "Got it!";
-
-"spaced_aim_per_day" = "Aim for ~%d questions per day";
-"settings_statistics_title" = "Progress";
-"settings_delete_statistics" = "Reset App";
-"delete_statistics_warning_title" = "Delete All Data & Reset App?";
-"delete_statistics_warning_message" = "This will delete all data and progress. The app will return to default settings. This action cannot be undone.";
-"delete_button" = "Delete";
-"cancel" = "Cancel";
-
-// =============================================================================
-//   START PRACTICING
-// =============================================================================
-
-
-"question_label" = "Question";
-
-"check_answer_button" = "CHECK";
-"check_answer_button_accessibility_label" = "Check your answer";
-"next_button" = "NEXT";
-"reset_question" = "Reset question";
-
-// =============================================================================
-//   LEARN BY TOPICS
-// =============================================================================
-
-"all_questions_title" = "Learn by Topics";
-
-"search" = "Search";
-
-"Law and Constitution" = "Law and Constitution";
-"Family and Education" = "Family and Education";
-"State" = "State";
-"Elections" = "Elections";
-"State Institutions" = "State Institutions";
-"Economy and Work" = "Economy and Work";
-"Society and Culture" = "Society and Culture";
-"History" = "History";
-"Europe" = "Europe";
-"Federal States" = "Federal States";
-// German category names (when content is loaded from content_de.json)
-"Recht und Verfassung" = "Law and Constitution";
-"Staat" = "State";
-"Staatsorgane" = "State Institutions";
-"Wahlen" = "Elections";
-"Familie und Bildung" = "Family and Education";
-"Wirtschaft und Arbeit" = "Economy and Work";
-"Gesellschaft und Kultur" = "Society and Culture";
-"Geschichte" = "History";
-"Europa" = "Europe";
-"Bundesländer" = "Federal States";
-
-// =============================================================================
-//   TEST SIMULATION
-// =============================================================================
-
-"test_simulation_title" = "Test Simulation";
-"back" = "Back";
-"next" = "Next";
-
-"quit_test_title" = "Quit Test?";
-"quit_test_message" = "Do you really want to quit the test? All progress will be lost.";
-"quit_test" = "Quit Test";
-
-"finish_test" = "GET RESULTS";
-"answer_all_questions_title" = "Answer all questions first";
-"answer_all_questions_message" = "You need to answer all questions before you can finish the test.";
-
-"test_passed" = "Hooray, you passed the test!";
-"test_failed" = "Unfortunately, you didn’t pass";
-"test_result_only_prefix" = "Only";
-"of" = "of";
-"questions_correct" = "questions correct";
-"time_used" = "Time Used:";
-"minimum_requirement" = "Minimum Requirement:";
-"your_result" = "Your Result:";
-"accuracy" = "Accuracy:";
-"test_results_your_results" = "Your results";
-"test_results_summary" = "Summary";
-"test_results_weakest_category" = "Weakest category";
-"test_results_strongest_category" = "Strongest category";
-"test_results_correct_in_category" = "%d of %d correct";
-"test_results_correct_in_category_label" = "Correct in this category";
-"test_results_category_breakdown" = "By category";
-"test_results_all_correct" = "All correct";
-"test_results_some_mistakes" = "Some mistakes";
-"test_results_all_wrong" = "All wrong";
-"test_results_x_of_y" = "%d of %d";
-
-"view_answers" = "VIEW ANSWERS";
-"try_again" = "TRY AGAIN";
-"quit_the_test" = "QUIT THE TEST";
-"back_to_main_menu" = "MAIN MENU";
-
-"your_answers" = "Your Answers";
-
-// =============================================================================
-//   FAVORITES
-// =============================================================================
-"favorites_title" = "Favorites";
-"favorites_empty_title" = "No Favorites";
-
-// Favorites disclaimer
-"favorites_disclaimer_title" = "Favorites";
-"favorites_disclaimer_message" = "These are the questions you've saved during practice. Tap the heart icon in any mode to add or remove questions. This section is for review—each question is shown with its correct answer.";
-"feature_preview_continue" = "Continue";
-"favorites_empty_subtitle" = "Add questions to your favorites by clicking the heart";
-"favorites_empty_message" = "Your favorites list is empty. As you practice, tap the heart icon to bookmark questions you'd like to revisit.";
-"back" = "Back";
-"next" = "Next";
-
-// =============================================================================
-//   STATISTICS
-// =============================================================================
-
-"statistics_title" = "Your Progress";
-"statistics_familiar_title" = "Familiar";
-"statistics_reinforced_title" = "Reinforced";
-"statistics_mastered_title" = "Mastered";
-"statistics_expert_title" = "Expert";
-"statistics_familiar_description" = "Answered correctly 1 time";
-"statistics_reinforced_description" = "Answered correctly 2 times";
-"statistics_mastered_description" = "Answered correctly 3 times";
-"statistics_expert_description" = "Answered correctly 4+ times";
-"statistics_card_flip_hint" = "Double tap to flip card";
-"ready" = "ready";
-"progress_readiness_explanation" = "This is your readiness score. The higher the percentage, the closer you are to being ready for the exam; 100%% means full readiness. You can reach that by answering each of the %d questions correctly four times. The four colors show how many questions you've got at each level: once (Familiar), twice (Reinforced), three times (Mastered), or four and more (Expert).";
-"progress_readiness_explanation_full" = "This is your readiness score. The higher the percentage, the closer you are to being ready for the exam; 100%% means full readiness. You can reach that by answering each of the %d questions correctly four times. Each color shows a different stage: Familiar - answered correctly once, Reinforced - answered correctly twice, Mastered - answered correctly three times, Expert - answered correctly four times or more. Only questions from %@ and %@ count toward this score.";
-"progress_readiness_info_accessibility_label" = "Readiness explanation";
-"progress_readiness_info_accessibility_hint" = "Double tap to show how readiness is calculated";
-
-// =============================================================================
-//   GAMIFICATION
-// =============================================================================
-
-"eagle_stage_egg" = "Egg";
-"eagle_stage_chick" = "Chick";
-"eagle_stage_young" = "Young Eagle";
-"eagle_stage_growing" = "Growing Eagle";
-"eagle_stage_wise" = "Wise Eagle";
-"eagle_stage_master" = "Master Eagle";
-
-//////////////////////////////////////////////////////////////
-"ok" = "OK";
-"No questions found" = "No questions found";
-"Loading questions..." = "Loading questions...";
-"LOADING" = "Loading...";
-"Quiz completed!" = "Quiz completed!";
-"Your result" = "Your result";
-"Correct" = "Correct";
-"Incorrect" = "Incorrect";
-"show_explanation_button" = "Show explanation";
-"explanation_title" = "Explanation";
-"explanation_text" = "Here will be an explanation for the current question. This feature will be available in future updates.";
-"delete_button" = "Delete";
-
-
-// Ad Removal
-"ad_removal_title" = "Remove Ads";
-"ad_removal_subtitle" = "Enjoy an ad-free learning experience with unlimited access to all features";
-"ad_removal_benefit_no_ads" = "No Advertisements";
-"ad_removal_benefit_no_ads_desc" = "Learn without interruptions from ads";
-"ad_removal_benefit_unlimited" = "Unlimited Access";
-"ad_removal_benefit_unlimited_desc" = "Access all questions and features without limits";
-"ad_removal_benefit_faster" = "Faster Experience";
-"ad_removal_benefit_faster_desc" = "Faster app performance without ad loading";
-"ad_removal_benefit_support" = "Support Development";
-"ad_removal_benefit_support_desc" = "Help us continue improving the app";
-"ad_removal_choose_plan" = "Choose Your Plan";
-"ad_removal_monthly_plan" = "Monthly";
-"ad_removal_monthly_price" = "$2.99/month";
-"ad_removal_monthly_desc" = "Remove ads for one month";
-"ad_removal_lifetime_plan" = "Lifetime";
-"ad_removal_lifetime_price" = "$9.99 one-time";
-"ad_removal_lifetime_desc" = "Remove ads forever";
-"ad_removal_popular" = "Best Value";
-"ad_removal_purchase_button" = "Remove Ads Now";
-"ad_removal_restore_button" = "Restore Purchases";
-"ad_removal_terms_text" = "By purchasing, you agree to our Terms of Service and Privacy Policy. Monthly subscription automatically renews unless auto-renew is turned off at least 24 hours before the end of the current period.";
-"ad_removal_terms_of_service" = "Terms of Use";
-"ad_removal_privacy_policy" = "Privacy Policy";
-"ad_removal_restore_success" = "Purchases restored successfully!";
-"ad_removal_error" = "Purchase Error";
-
-"tab_home_title" = "Home";
-"tab_learn_title" = "Learn";
-"tab_progress_title" = "Progress";
-"tab_premium_title" = "Premium";
-"tab_settings_title" = "Settings";
-"learn_header_title" = "Learn";
-"learn_header_dialog_message" = "I'm preparing a fresh learning journey for you. We'll unlock it together soon!";
-"tab_settings_beta_title" = "Settings BETA";
-"tab_settings_beta2_title" = "Settings BETA 2";
-"main_tab_bar_accessibility_label" = "Primary navigation";
-"tab_learn_hint" = "Opens the Learn screen";
-"tab_progress_hint" = "Opens your progress and statistics";
-"progress_premium_gate_message" = "Upgrade to Premium to see your progress and statistics.";
-"tab_settings_hint" = "Opens Settings";
-"tab_search_title" = "Search";
-"tab_search_hint" = "Opens search across all questions";
-"settings_beta_title" = "Settings BETA";
-"settings_beta_detail_placeholder" = "We’re shaping this area right now. Your feedback will help us decide what belongs here.";
-"settings_test_alerts_button" = "Test Alerts";
-"settings_app_language" = "App Language";
-"settings_translation_language" = "Translation Language";
-"settings_federal_state" = "Federal State";
-"settings_test_date" = "Test Date";
-"settings_test_date_not_set" = "Set the Date";
-"settings_sound_toggle" = "Sound";
-"settings_language_option_english" = "English";
-"settings_language_option_german" = "German";
-"settings_language_option_russian" = "Russian";
-"settings_language_option_ukrainian" = "Ukrainian";
-"settings_haptics_toggle" = "Haptic Feedback";
-"settings_appearance_title" = "Appearance";
-"settings_premium_title" = "Premium";
-"settings_reset_app" = "Reset App";
-
-"premium_hub_placeholder_title" = "Premium is coming soon";
-"premium_hub_placeholder_message" = "We're preparing fresh boosts, practice packs, and more goodies. Stay tuned!";
-
-"premium_unlock_message" = "Unlock the full Hero experience with Premium";
-"premium_unlock_title" = "Unlock the full Hero experience";
-"premium_unlock_description" = "Premium gives you full access to all study materials, progress tracking, and more.";
-"premium_table_benefits" = "Benefits";
-"premium_table_free" = "Free";
-"premium_table_premium" = "Premium";
-"premium_feature_daily_lessons" = "Daily lessons";
-"premium_feature_unlimited_learning" = "Unlimited learning";
-"premium_feature_no_ads" = "No ads";
-"premium_feature_detailed_progress" = "Detailed progress";
-"premium_feature_hints" = "Hints";
-"premium_feature_favorites" = "Favorites";
-"premium_subscribe_now" = "Subscribe Now";
-"premium_choose_plan" = "Choose Your Plan";
-"premium_plan_monthly" = "Monthly";
-"premium_plan_lifetime" = "Lifetime";
-"premium_per_month" = "per month";
-"premium_limited_offer" = "Limited Time Offer";
-"premium_regular_price" = "Regular price";
-"premium_continue" = "Continue";
-"premium_terms_monthly_part1" = "Upon subscribing, your Apple account will be charged {price}€. Your Hero Premium subscription will automatically renew at the same price at the end of your current subscription period unless cancelled at least 24 hours before the end of the period.";
-"premium_terms_lifetime_part1" = "Upon subscribing, your Apple account will be charged {price}€ for lifetime access. This is a one-time payment with no auto-renewal.";
-"premium_terms_common" = "You can cancel anytime in your App Store settings. View our Terms of Use and Privacy Policy for more details.";
-"premium_terms_lifetime_common" = "View our Terms of Use and Privacy Policy for more details.";
-"premium_trial_active" = "Free Trial Active";
-"premium_trial_days_remaining" = "{days} days remaining";
-"premium_trial_ending_soon" = "Ending soon";
-"premium_trial_offer_title" = "Start with 3 Days Free";
-"premium_trial_offer_description" = "Try Premium features for free, then continue with subscription";
-"premium_trial_badge" = "3 Days Free";
-"premium_start_trial" = "Start Free Trial";
-"premium_favorites_alert_title" = "Upgrade to Premium";
-"premium_favorites_alert_message" = "Upgrade to premium to see your favorites";
-"premium_favorites_alert_cancel" = "Cancel";
-"premium_favorites_alert_upgrade" = "Upgrade";
-"premium_accessibility_label" = "Premium";
-"premium_accessibility_hint" = "Opens premium features and subscription options";
-"premium_plan_yearly" = "Yearly";
-"premium_per_year" = "per year";
-
-// Paywall (first-run / crown)
-"paywall_title" = "Unlock your future in Germany with Hero Premium";
+// PAYWALL
 "paywall_onboarding_title" = "Try Hero Premium for free";
-"paywall_onboarding_maybe_later" = "Maybe later";
 "paywall_trial_line" = "Start with a 3-day free trial. Cancel anytime.";
+"paywall_title" = "Unlock your future in Germany with Hero Premium";
 "paywall_subtitle" = "Spaced repetition, learn by topics, favorites, unlimited test simulations, and detailed progress — everything you need to pass.";
 "paywall_close" = "Close";
 "paywall_close_hint" = "Dismisses the paywall";
@@ -548,6 +66,219 @@
 "paywall_privacy" = "Privacy Policy";
 "paywall_privacy_hint" = "Opens Privacy Policy";
 "paywall_terms_boilerplate" = "Subscription automatically renews unless canceled at least 24 hours before the end of the current period. You can manage your subscription and turn off auto-renewal in your App Store Account Settings. By continuing, you agree to our Terms of Use and Privacy Policy.";
+"paywall_redeem" = "Redeem Code";
+"paywall_redeem_hint" = "Enter an App Store promo or gift card code";
+"paywall_onboarding_maybe_later" = "Maybe later";
+"premium_continue" = "Continue";
+
+// TAB BAR
+"tab_learn_title" = "Learn";
+"tab_progress_title" = "Progress";
+"tab_settings_title" = "Settings";
+"tab_search_title" = "Search";
+"main_tab_bar_accessibility_label" = "Primary navigation";
+"tab_learn_hint" = "Opens the Learn screen";
+"tab_progress_hint" = "Opens your progress and statistics";
+"tab_settings_hint" = "Opens Settings";
+"tab_search_hint" = "Opens search across all questions";
+"progress_premium_gate_message" = "Upgrade to Premium to see your progress and statistics.";
+
+// HOME / LEARN OPTIONS
+"home_learn_spaced_repetition" = "Smart Learning";
+"home_learn_spaced_repetition_subtitle" = "Spaced Repetition System";
+"home_learn_recommended_badge" = "Recommended";
+"sr_disclaimer_title" = "Spaced Repetition System";
+"sr_disclaimer_message" = "Spaced repetition is a science-based system that repeats questions at optimal intervals—helping you learn faster and retain more. This mode affects your progress and readiness score.";
+"sr_disclaimer_do_not_show" = "Don't show again";
+"home_learn_by_topics" = "Learn by Topics";
+"home_learn_by_topics_subtitle" = "Questions grouped by topics";
+"home_learn_favorites" = "Favorites";
+"home_learn_favorites_subtitle" = "Your saved questions";
+"home_learn_all_questions" = "All Questions";
+"home_learn_all_questions_subtitle" = "All 310 official exam questions";
+"all_questions_empty_title" = "No Questions Yet";
+"all_questions_empty_message" = "Questions will appear here once content is loaded. Pull to refresh or try again.";
+"all_questions_disclaimer_title" = "All Questions";
+"all_questions_disclaimer_message" = "All 310 official exam questions are listed here in chronological order, as in the official exam materials. This section is for reading only—each question is shown with its correct answer.";
+"learn_by_topics_header_message" = "I grouped all questions by themes for you — choose a path and soar.";
+"learn_by_topics_disclaimer_title" = "Learn by Topics";
+"learn_by_topics_disclaimer_message" = "Questions are grouped by theme so you can study one topic at a time. Choose a topic, answer the questions, and check your answers. This mode does not affect your readiness score.";
+"no_search_results" = "No results found";
+"question_label" = "Question";
+
+// HEADER / READINESS
+"eagle_desc_egg" = "You're %d%% ready for the test. You've just hatched! Time to learn and grow!";
+"eagle_desc_chick" = "You're %d%% ready. Let's go! You're learning to flap your wings.";
+"eagle_desc_young" = "You're %d%% ready. Your wings are getting stronger — keep going!";
+"eagle_desc_growing" = "You're %d%% ready. You're flying high! Almost there.";
+"eagle_desc_wise" = "You're %d%% ready. Just one more flight — you've got this!";
+"eagle_desc_master" = "You're %d%% ready. You're a true knowledge eagle!";
+"test_header_set_date_prompt" = "When's your test? Set the date in Settings and we'll count down together.";
+"main_header_state_accessibility_label" = "Federal state";
+"main_header_state_accessibility_hint" = "Current federal state. Change it in Settings.";
+"main_header_state_slogan_accessibility_label" = "State slogan";
+"main_header_test_date_accessibility_label" = "Days until test";
+"home_statistics_title" = "Your progress";
+"home_statistics_accessibility_label" = "Readiness progress";
+"home_statistics_accessibility_value" = "%d percent prepared";
+"back_button_accessibility_label" = "Back";
+"spaced_translation_button_accessibility_label" = "Toggle translation";
+"spaced_favorite_button_accessibility_label" = "Toggle favorite";
+"hint_button_title" = "Hint";
+
+// LEARN CAROUSEL
+"learn_option_test_title" = "Take the Test";
+"learn_option_test_subtitle" = "Simulate an official exam";
+"learn_option_test_description" = "Matches the official exam: 33 questions (30 federal, 3 from your state), 60 minutes, single attempt. No hints or corrections. A great way to check your readiness.";
+
+// SETTINGS / REGIONAL
+"change_state_confirmation_title" = "Change Federal State?";
+"change_state_confirmation_message" = "Do you really want to change the federal state? All progress will be lost.";
+"change_state_confirmation_cancel" = "Cancel";
+"change_state_confirmation_confirm" = "Change";
+"settings_app_language_change_title" = "Change app language?";
+"settings_translation_language_change_title" = "Change translation language?";
+"settings_language_change_message" = "The interface will update. Continue?";
+"settings_language_change_cancel" = "Cancel";
+"settings_language_change_confirm" = "Continue";
+
+// SETTINGS
+"settings_title" = "Settings";
+"version" = "Version";
+"settings_personalisation_title" = "Personalisation";
+"settings_info_title" = "About";
+"settings_regional_title" = "Region";
+"settings_danger_title" = "Data";
+"settings_appearance_light" = "Light";
+"settings_appearance_dark" = "Dark";
+"settings_appearance_system" = "System";
+"settings_support_title" = "Support";
+"settings_faq_button" = "FAQ";
+"settings_contact_button" = "Contact Us";
+"settings_about_button" = "About";
+"settings_share_button" = "Share";
+"settings_about_mascot_accessibility" = "Hero mascot";
+"settings_about_description" = "Hero – Einbürgerungstest helps you prepare for the citizenship test with 310 official questions, spaced repetition learning, and a full test simulation. Choose your federal state, practice at your own pace, and feel confident on exam day.";
+"settings_share_qr_accessibility" = "QR code to download the app";
+"settings_share_scan_subtitle" = "Scan this QR code to download the app from the App Store — or tap the share button to send it to friends.";
+"share_app_hint" = "Share the app with others";
+"legal_title" = "Legal";
+"settings_impressum_button" = "Impressum";
+"terms_of_service" = "Terms of Use";
+"privacy_policy" = "Privacy Policy";
+"mail_device_info_body" = "Please do not delete the device information below as it helps us provide better support.\n\n--- Device Information ---\nApp Version: %@ (%@)\nDevice: %@\niOS Version: %@ %@\n\n--- Please describe your problem or inquiry below ---";
+"mail_unavailable_title" = "Mail Unavailable";
+"mail_unavailable_message" = "No mail account is configured. You can copy the support email and paste it into your preferred mail app.";
+
+// RESET / DATA
+"test_simulation_disclaimer_title" = "Test Simulation";
+"test_simulation_disclaimer_message" = "This mode simulates the official citizenship exam: 33 questions (30 federal, 3 from your state), 60 minutes, single attempt. No hints or translations during the test. You need at least 17 correct answers to pass. This mode affects your readiness score.";
+"delete_statistics_warning_title" = "Delete All Data & Reset App?";
+"delete_statistics_warning_message" = "This will delete all data and progress. The app will return to default settings. This action cannot be undone.";
+"delete_button" = "Delete";
+"cancel" = "Cancel";
+
+// PRACTICE
+"check_answer_button" = "CHECK";
+"check_answer_button_accessibility_label" = "Check your answer";
+"next_button" = "NEXT";
+
+// LEARN BY TOPICS
+"search" = "Search";
+"Law and Constitution" = "Law and Constitution";
+"Family and Education" = "Family and Education";
+"State" = "State";
+"Elections" = "Elections";
+"State Institutions" = "State Institutions";
+"Economy and Work" = "Economy and Work";
+"Society and Culture" = "Society and Culture";
+"History" = "History";
+"Europe" = "Europe";
+"Federal States" = "Federal States";
+"Recht und Verfassung" = "Law and Constitution";
+"Staat" = "State";
+"Staatsorgane" = "State Institutions";
+"Wahlen" = "Elections";
+"Familie und Bildung" = "Family and Education";
+"Wirtschaft und Arbeit" = "Economy and Work";
+"Gesellschaft und Kultur" = "Society and Culture";
+"Geschichte" = "History";
+"Europa" = "Europe";
+"Bundesländer" = "Federal States";
+
+// TEST SIMULATION
+"test_simulation_title" = "Test Simulation";
+"back" = "Back";
+"quit_test_title" = "Quit Test?";
+"quit_test_message" = "Do you really want to quit the test? All progress will be lost.";
+"quit_test" = "Quit Test";
+"finish_test" = "GET RESULTS";
+"answer_all_questions_title" = "Answer all questions first";
+"answer_all_questions_message" = "You need to answer all questions before you can finish the test.";
+"test_passed" = "Hooray, you passed the test!";
+"test_failed" = "Unfortunately, you didn’t pass";
+"test_result_only_prefix" = "Only";
+"of" = "of";
+"questions_correct" = "questions correct";
+"time_used" = "Time Used:";
+"minimum_requirement" = "Minimum Requirement:";
+"your_result" = "Your Result:";
+"accuracy" = "Accuracy:";
+"test_results_your_results" = "Your results";
+"test_results_category_breakdown" = "By category";
+"test_results_x_of_y" = "%d of %d";
+"view_answers" = "VIEW ANSWERS";
+"try_again" = "TRY AGAIN";
+"your_answers" = "Your Answers";
+
+// FAVORITES
+"favorites_empty_title" = "No Favorites";
+"favorites_disclaimer_title" = "Favorites";
+"favorites_disclaimer_message" = "These are the questions you've saved during practice. Tap the heart icon in any mode to add or remove questions. This section is for review—each question is shown with its correct answer.";
+"feature_preview_continue" = "Continue";
+
+// STATISTICS
+"statistics_familiar_title" = "Familiar";
+"statistics_reinforced_title" = "Reinforced";
+"statistics_mastered_title" = "Mastered";
+"statistics_expert_title" = "Expert";
+"statistics_familiar_description" = "Answered correctly 1 time";
+"statistics_reinforced_description" = "Answered correctly 2 times";
+"statistics_mastered_description" = "Answered correctly 3 times";
+"statistics_expert_description" = "Answered correctly 4+ times";
+"statistics_card_flip_hint" = "Double tap to flip card";
+"progress_readiness_explanation" = "This is your readiness score. The higher the percentage, the closer you are to being ready for the exam; 100%% means full readiness. You can reach that by answering each of the %d questions correctly four times. The four colors show how many questions you've got at each level: once (Familiar), twice (Reinforced), three times (Mastered), or four and more (Expert).";
+"progress_readiness_explanation_full" = "This is your readiness score. The higher the percentage, the closer you are to being ready for the exam; 100%% means full readiness. You can reach that by answering each of the %d questions correctly four times. Each color shows a different stage: Familiar - answered correctly once, Reinforced - answered correctly twice, Mastered - answered correctly three times, Expert - answered correctly four times or more. Only questions from %@ and %@ count toward this score.";
+"progress_readiness_info_accessibility_label" = "Readiness explanation";
+"progress_readiness_info_accessibility_hint" = "Double tap to show how readiness is calculated";
+
+// COMMON
+"ok" = "OK";
+"Loading questions..." = "Loading questions...";
+"LOADING" = "Loading...";
+
+// SETTINGS REGIONAL (PICKERS)
+"settings_app_language" = "App Language";
+"settings_translation_language" = "Translation Language";
+"settings_federal_state" = "Federal State";
+"settings_test_date" = "Test Date";
+"settings_test_date_not_set" = "Set the Date";
+"settings_language_option_english" = "English";
+"settings_language_option_german" = "German";
+"settings_language_option_russian" = "Russian";
+"settings_haptics_toggle" = "Haptic Feedback";
+"settings_appearance_title" = "Appearance";
+"settings_premium_title" = "Premium";
+"settings_reset_app" = "Reset App";
+
+// PREMIUM / PRICING
+"premium_plan_monthly" = "Monthly";
+"premium_plan_lifetime" = "Lifetime";
+"premium_per_month" = "per month";
+"premium_accessibility_label" = "Premium";
+"premium_accessibility_hint" = "Opens premium features and subscription options";
+"premium_plan_yearly" = "Yearly";
+"premium_per_year" = "per year";
 "paywall_best_value" = "Best value";
 "paywall_subtitle_monthly" = "Flexible, cancel anytime";
 "paywall_subtitle_3_months_format" = "Only %@ per month";
@@ -560,24 +291,14 @@
 "paywall_slash_2_months" = "/2mo";
 "paywall_slash_week" = "/wk";
 "paywall_year_savings" = "Save 37% vs monthly";
-"paywall_redeem" = "Redeem Code";
-"paywall_redeem_hint" = "Enter an App Store promo or gift card code";
 "premium_plan_six_month" = "6 month";
 "premium_plan_three_month" = "3 Months";
 "premium_plan_two_month" = "2 month";
 "premium_plan_weekly" = "Weekly";
-"premium_per_six_months" = "every 6 months";
-"premium_per_three_months" = "every 3 months";
-"premium_per_two_months" = "every 2 months";
-"premium_per_week" = "per week";
 
-// =============================================================================
-//   FEEDBACK / REPORT QUESTION
-// =============================================================================
-
+// FEEDBACK
 "report_question" = "Report Question";
 "question_id" = "Question ID";
-"category" = "Category";
 "question_info" = "Question Information";
 "feedback_type" = "Feedback Type";
 "what_would_you_like_to_report" = "What would you like to report?";
@@ -596,20 +317,15 @@
 "feedback_type_translation_issue" = "Translation Issue";
 "feedback_type_other" = "Other";
 
-// =============================================================================
-//   HINTS
-// =============================================================================
-
+// HINTS
 "hint_title" = "Hint";
 "close" = "Close";
 "no_hint_available" = "No hint is available for this question yet.";
 
-// =============================================================================
-//   APP RATING
-// =============================================================================
-
+// APP RATING
 "rating_prompt_title" = "Loving Hero?";
 "rating_prompt_message" = "If Hero's been helping you ace those questions, we'd love to hear about it! A quick rating helps other learners discover us too.";
 "rating_prompt_rate_now" = "Do it now";
 "rating_prompt_ask_later" = "Ask later";
-
+"update_latest_title" = "You're up to date";
+"update_latest_message" = "You already have the latest version installed.";

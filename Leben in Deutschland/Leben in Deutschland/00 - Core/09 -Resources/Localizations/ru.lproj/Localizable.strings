@@ -1,19 +1,8 @@
-// =============================================================================
-//   ONBOARDING
-// =============================================================================
-
-// Eagle greeting
+// ONBOARDING
 "eagle_greeting" = "Привет! Я орёл Херо, и я помогу тебе подготовиться к тесту. Давай начнём!\nДля начала выбери язык приложения.";
 "language_selected" = "Отлично! Нажми Далее";
-
-// Translation selection
 "translation_selection_title" = "Теперь выбери язык для перевода вопросов и ответов — на случай, если тебе понадобится подсказка.";
-
-// State selection
-"state_selection_title_general" = "Где ты будешь сдавать тест? Я добавлю 10 дополнительных вопросов про твою землю.";
 "choose_federal_state" = "Где ты будешь сдавать тест? Я добавлю 10 дополнительных вопросов про твою землю.";
-
-// Messages when selecting federal states
 "state_baden_württemberg" = "Здесь изобретают всё — даже дежурство по лестнице!";
 "state_bayern" = "Надел кожаные штаны — считай, сдал тест!";
 "state_brandenburg" = "Сосен больше, чем людей — зато тишина и покой!";
@@ -30,8 +19,6 @@
 "state_sachsen" = "Одно «Ну!» — и ты уже сдал!";
 "state_schleswig_holstein" = "Два моря, один тест — мы справимся!";
 "state_thüringen" = "Гёте учился здесь — теперь и ты!";
-
-// States
 "Baden-Württemberg" = "Баден-Вюртемберг";
 "Bayern" = "Бавария";
 "Berlin" = "Берлин";
@@ -48,492 +35,25 @@
 "Sachsen-Anhalt" = "Саксония-Анхальт";
 "Schleswig-Holstein" = "Шлезвиг-Гольштейн";
 "Thüringen" = "Тюрингия";
-
-// Test date selection
 "onboarding_date_prompt" = "Когда твой экзамен? Выбери дату и мы будем вести обратный отсчёт вместе.";
 "SELECT_DATE" = "Выбрать дату";
 "SAVE_DATE" = "СОХРАНИТЬ ДАТУ";
-"CANCEL" = "ОТМЕНА";
-
-// Eagle dialogues
 "perfect_days_left" = "До теста %d %@. Я с тобой!";
 "perfect_day_left" = "До теста %d %@. Я с тобой!";
 "perfect_days_left_2_4" = "До теста %d %@. Я с тобой!";
 "perfect_test_today" = "Тест сегодня. Я с тобой!";
 "dont_know_date" = "Пока не знаю";
 "no_problem_later" = "Не проблема! Ты можешь добавить или изменить дату позже.";
-
 "NEXT" = "ДАЛЕЕ";
 "LET'S GO" = "ПОЕХАЛИ!";
-
-// =============================================================================
-//   MAIN SCREEN
-// =============================================================================
-
-// Main categories
-"main_category_study" = "Начать обучение";
-"main_category_all_questions" = "Изучать по темам";
-"main_category_favorites" = "Избранные";
-"main_category_test_simulation" = "Пройти тест";
-
-"home_learn_section_title" = "Варианты обучения";
-"home_learn_spaced_repetition" = "Умное повторение";
-"home_learn_spaced_repetition_subtitle" = "Система интервального повторения";
-"home_learn_recommended_badge" = "Рекомендуем";
-
-// Smart Learning disclaimer
-"sr_disclaimer_title" = "Система интервального повторения";
-"sr_disclaimer_message" = "Интервальное повторение — это научно обоснованная система: вопросы возвращаются в оптимальные интервалы — так ты учишься быстрее и запоминаешь надолго. Этот режим влияет на твой прогресс и показатель готовности.";
-"sr_disclaimer_do_not_show" = "Больше не показывать";
-"home_learn_by_topics" = "Учить по темам";
-"home_learn_by_topics_subtitle" = "Вопросы сгруппированы по темам";
-"home_learn_favorites" = "Избранное";
-"home_learn_favorites_subtitle" = "Твои сохранённые вопросы";
-"home_learn_all_questions" = "Все вопросы";
-"home_learn_all_questions_subtitle" = "Все 310 официальных экзаменационных вопросов";
-"all_questions_empty_title" = "Пока нет вопросов";
-"all_questions_empty_message" = "Вопросы появятся здесь после загрузки контента. Потяни для обновления или попробуй снова.";
-
-// All Questions disclaimer
-"all_questions_disclaimer_title" = "Все вопросы";
-"all_questions_disclaimer_message" = "Все 310 официальных экзаменационных вопросов представлены здесь в хронологическом порядке, как в официальных экзаменационных материалах. Этот раздел только для чтения — каждый вопрос показан с правильным ответом.";
-"spaced_repetition_title" = "Начать обучение";
-
-// Learn by Topics
-"learn_by_topics_title" = "Изучать по темам";
-"learn_by_topics_header_message" = "Я сгруппировал все вопросы по темам — выбирай маршрут и взлетай.";
-
-// Learn by Topics disclaimer
-"learn_by_topics_disclaimer_title" = "Учить по темам";
-"learn_by_topics_disclaimer_message" = "Вопросы сгруппированы по темам, чтобы ты мог изучать их по одной. Выбери тему, ответь на вопросы и проверь себя. Этот режим не влияет на показатель готовности.";
-"no_categories_found" = "Категории не найдены";
-"no_search_results" = "Ничего не найдено";
-"question_label" = "Вопрос";
-
-// Gamification - stage descriptions
-"eagle_desc_egg" = "Готовность к тесту — %d%%. Первые шаги! Вперёд к знаниям!";
-"eagle_desc_chick" = "Готовность %d%%. Вперёд! Первые взмахи крыльев уже за тобой.";
-"eagle_desc_young" = "Готовность %d%%. Крылья крепнут! Продолжай в том же духе.";
-"eagle_desc_growing" = "Готовность %d%%. Отличный полёт! До вершины — рукой подать.";
-"eagle_desc_wise" = "Готовность %d%%. Осталось совсем чуть-чуть — не сбавляй высоты!";
-"eagle_desc_master" = "Готовность %d%%. Ты — орёл знаний!";
-
-"main_header_test_today" = "Тест уже сегодня.";
-"main_header_test_in_days" = "Тест через %d %@.";
-"test_header_set_date_prompt" = "Когда твой экзамен? Укажи дату в Настройках — и мы будем вести обратный отсчёт вместе.";
-"main_header_state_accessibility_label" = "Федеральная земля";
-"main_header_state_accessibility_hint" = "Текущая земля. Ты можешь изменить её в настройках.";
-"main_header_state_slogan_accessibility_label" = "Слоган земли";
-"main_header_test_date_accessibility_label" = "Дней до экзамена";
-"home_statistics_title" = "Твой прогресс";
-"home_statistics_description" = "Готовность к тесту — %d%%. Продолжай — каждый маленький шаг работает.";
-"home_statistics_caption" = "Готов к тесту";
-"progress_card_flip_hint" = "Двойное нажатие — перевернуть. Карточка вернётся через 10 секунд.";
-"home_statistics_accessibility_label" = "Прогресс готовности";
-"home_statistics_accessibility_value" = "%d процентов готовности";
-"back_button_accessibility_label" = "Назад";
-"spaced_translation_button_accessibility_label" = "Показать перевод";
-"spaced_favorite_button_accessibility_label" = "Добавить в избранное";
-"hint_button_title" = "Подсказка";
 "date_too_far_title" = "Это довольно далеко";
 "date_too_far_message" = "Путешествия во времени — это круто, но давай оставим тест в пределах следующего года, договорились?";
 "ok_button" = "ОК";
 
-// Carousel
-"learn_option_spaced_repetition_title" = "Умное повторение";
-"learn_option_topics_title" = "Учить по темам";
-"learn_option_test_title" = "Пройти тест";
-"learn_option_test_subtitle" = "Симуляция официального экзамена";
-"learn_option_favorites_title" = "Избранное";
-
-"learn_option_spaced_repetition_description" = "Учись с умом — сложные вопросы возвращаются, пока не запомнишь их";
-"learn_option_topics_description" = "Разбирай темы спокойно, шаг за шагом";
-"learn_option_test_description" = "Соответствует официальному экзамену: 33 вопроса (30 общих, 3 по твоей земле), 60 минут, одна попытка. Без подсказок и исправлений. Отличный способ проверить готовность.";
-"learn_option_favorites_description" = "Сохраняй вопросы, которые тебе нравятся или с которыми хочешь потренироваться";
-
-// Language
-"language_title" = "Язык";
-"application_title" = "Язык приложения";
-"settings_translation_language_title" = "Язык перевода";
-
-// Federal State
-"federal_states_title" = "Федеральные земли";
-"change_state_confirmation_title" = "Изменить федеральную землю?";
-"change_state_confirmation_message" = "Ты действительно хочешь изменить федеральную землю? Весь текущий прогресс будет потерян.";
-"change_state_confirmation_cancel" = "Отмена";
-"change_state_confirmation_confirm" = "Изменить";
-
-"settings_app_language_change_title" = "Изменить язык приложения?";
-"settings_translation_language_change_title" = "Изменить язык перевода?";
-"settings_language_change_message" = "Интерфейс обновится. Продолжить?";
-"settings_language_change_cancel" = "Отмена";
-"settings_language_change_confirm" = "Продолжить";
-
-// Calendar
-"CLEAR_DATE" = "ОЧИСТИТЬ ДАТУ";
-
-// Settings
-"settings_title" = "Настройки";
-"tab_settings_title" = "Настройки";
-"settings_current_version" = "Текущая версия";
-"settings_update_available" = "Доступно обновление";
-"settings_version_updates" = "• Добавлены интерактивные обучающие материалы для быстрого старта.\n• Улучшена служба поддержки с доступом к FAQ.\n• Улучшен процесс оценки приложения.\n• Повышена доступность и удобство использования.\n• Исправлены ошибки и улучшена производительность.";
-"settings_version_updates_placeholder" = "Доступна новая версия с дополнительными улучшениями и функциями.";
-"settings_update_now" = "Обновить сейчас";
-"settings_update_button_hint" = "Открывает App Store, чтобы установить последнюю версию.";
-"version" = "Версия";
-"settings_installed_version" = "Установленная версия";
-"settings_latest_updates" = "Последние обновления";
-
-"settings_personalisation_title" = "Персонализация";
-"settings_info_title" = "О приложении";
-"settings_regional_title" = "Регион";
-"settings_danger_title" = "Данные";
-"settings_sound_button" = "Звук";
-"settings_vibration_button" = "Вибрация";
-"settings_appearance" = "Оформление";
-"settings_appearance_light" = "Светлая";
-"settings_appearance_dark" = "Темная";
-"settings_appearance_system" = "Системная";
-
-"on" = "Вкл";
-"off" = "Выкл";
-
-"settings_support_title" = "Поддержка";
-"settings_faq_button" = "FAQ";
-"settings_contact_button" = "Связаться с нами";
-"settings_report_bug_button" = "Сообщить об ошибке";
-"settings_about_button" = "О приложении";
-"settings_share_button" = "Поделиться";
-"settings_about_heading" = "О приложении";
-"settings_about_mascot_accessibility" = "Талисман Hero";
-"settings_about_description" = "Hero – Einbürgerungstest помогает подготовиться к тесту на гражданство: 310 официальных вопросов, интервальное повторение и полная симуляция экзамена. Выбери федеральную землю, занимайся в своём темпе и чувствуй себя уверенно в день экзамена.";
-"settings_share_scan_title" = "Отсканируйте для загрузки";
-"settings_share_qr_accessibility" = "QR-код для загрузки приложения";
-"settings_share_scan_subtitle" = "Отсканируй этот QR-код, чтобы скачать приложение из App Store — или нажми «Поделиться», чтобы отправить его друзьям.";
-"share_app_hint" = "Поделиться приложением с другими";
-
-"legal_title" = "Правовое";
-"settings_impressum_button" = "Impressum";
-"terms_of_service" = "Условия использования";
-"privacy_policy" = "Политика конфиденциальности";
-
-"mail_device_info_body" = "Пожалуйста, не удаляй информацию об устройстве ниже — она помогает нам лучше тебя поддержать.\n\n--- Информация об устройстве ---\nВерсия приложения: %@ (%@)\nУстройство: %@\nВерсия iOS: %@ %@\n\n--- Опиши свою проблему или вопрос ниже ---";
-"mail_unavailable_title" = "Почта недоступна";
-"mail_unavailable_message" = "Почтовый аккаунт не настроен. Можешь скопировать email поддержки и вставить его в приложение почты.";
-
-"about_title" = "О приложении";
-"version_description" = "Это обновление включает важные улучшения и исправления ошибок, включая следующие обновления:";
-
-// Updates
-"update_1" = "Полный редизайн приложения с современным интерфейсом";
-"update_2" = "Добавлена система обучения с интервальным повторением";
-"update_3" = "Улучшен режим симуляции теста";
-"update_4" = "Расширенные функции доступности";
-"update_5" = "Улучшения производительности и исправления ошибок";
-"rating_popup_title" = "Нравится приложение?";
-"rating_popup_message" = "Оставь оценку, чтобы помочь другим открыть для себя этот инструмент обучения";
-"rating_popup_rate_now" = "Оценить сейчас";
-"rating_popup_maybe_later" = "Может быть позже";
-
-// Updates
-"settings_updates_title" = "Обновления";
-"settings_check_updates_button" = "Проверить обновления";
-"settings_open_app_store_button" = "Открыть в App Store";
-"update_title" = "Доступно обновление";
-"update_message" = "Доступна новая версия приложения.";
-"update_message_with_version" = "Доступна новая версия приложения (%@).";
-"update_required_title" = "Требуется обновление";
-"update_required_message" = "Пожалуйста, обнови приложение, чтобы продолжить использование.";
-"update_now" = "Обновить";
-"update_later" = "Позже";
-
-// Spaced Repetition Tutorial
-"spaced_repetition_tutorial_title" = "Подсказка";
-"spaced_repetition_tutorial_description" = "Этот метод обучения называется Spaced Repetition – научно обоснованная техника, которая помогает тебе запоминать вещи надолго.";
-"spaced_repetition_tutorial_questions" = "Вопросы будут появляться в случайном порядке. Если ответишь неправильно, вопрос скоро вернется. Если ответишь правильно, интервал станет длиннее.";
-"spaced_repetition_tutorial_mastered" = "Вопрос считается освоенным, если на него ответили правильно три раза или больше.";
-"spaced_repetition_tutorial_got_it" = "Понятно!";
-
-// Test Simulation Tutorial
-// Test Simulation disclaimer
-"test_simulation_disclaimer_title" = "Симуляция теста";
-"test_simulation_disclaimer_message" = "Этот режим симулирует официальный экзамен на гражданство: 33 вопроса (30 федеральных, 3 по твоей земле), 60 минут, одна попытка. Без подсказок и переводов во время теста. Чтобы сдать, нужно минимум 17 правильных ответов. Этот режим влияет на показатель готовности.";
-
-"test_simulation_tutorial_title" = "Подсказка";
-"test_simulation_tutorial_description" = "Здесь всё как на настоящем экзамене:";
-"test_simulation_tutorial_questions" = "• 33 вопроса: 30 федеральных и 3 земельных";
-"test_simulation_tutorial_time" = "• 60 минут на прохождение";
-"test_simulation_tutorial_no_help" = "• без перевода и подсказок";
-"test_simulation_tutorial_passing" = "• чтобы сдать, нужно ответить правильно минимум на 17";
-"test_simulation_tutorial_good_luck" = "Удачи — Херо с тобой!";
-"test_simulation_tutorial_got_it" = "Понятно!";
-
-"spaced_aim_per_day" = "Цель — ~%d вопросов в день";
-"settings_statistics_title" = "Твой прогресс";
-"settings_delete_statistics" = "Cбросить приложение";
-"delete_statistics_warning_title" = "Удалить все данные и сбросить приложение?";
-"delete_statistics_warning_message" = "Это удалит все данные и прогресс. Приложение вернется к настройкам по умолчанию. Это действие нельзя отменить.";
-"delete_button" = "Удалить";
-"cancel" = "Отменить";
-
-// =============================================================================
-//   START PRACTICING
-// =============================================================================
-
-
-"question_label" = "Вопрос";
-
-"check_answer_button" = "ПРОВЕРИТЬ";
-"check_answer_button_accessibility_label" = "Проверить ответ";
-"reset_question" = "Сбросить вопрос";
-"next_button" = "ДАЛЕЕ";
-
-// =============================================================================
-//   LEARN BY TOPICS
-// =============================================================================
-
-"all_questions_title" = "Изучать по темам";
-
-"search" = "Поиск";
-
-"Law and Constitution" = "Право и Конституция";
-"Family and Education" = "Семья и образование";
-"State" = "Государство";
-"Elections" = "Выборы";
-"State Institutions" = "Государственные органы";
-"Economy and Work" = "Экономика и работа";
-"Society and Culture" = "Общество и Культура";
-"History" = "История";
-"Europe" = "Европа";
-"Federal States" = "Федеральные земли";
-// German category names (when content is loaded from content_de.json)
-"Recht und Verfassung" = "Право и Конституция";
-"Staat" = "Государство";
-"Staatsorgane" = "Государственные органы";
-"Wahlen" = "Выборы";
-"Familie und Bildung" = "Семья и образование";
-"Wirtschaft und Arbeit" = "Экономика и работа";
-"Gesellschaft und Kultur" = "Общество и культура";
-"Geschichte" = "История";
-"Europa" = "Европа";
-"Bundesländer" = "Федеральные земли";
-
-// =============================================================================
-//   TEST SIMULATION
-// =============================================================================
-
-"test_simulation_title" = "Симуляция теста";
-"back" = "Назад";
-"next" = "Далее";
-
-"quit_test_title" = "Выйти из теста?";
-"quit_test_message" = "Ты действительно хочешь выйти из теста? Весь прогресс будет потерян.";
-"cancel" = "Отменить";
-"quit_test" = "Выйти из теста";
-
-"finish_test" = "УЗНАТЬ РЕЗУЛЬТАТ";
-"answer_all_questions_title" = "Сначала ответь на все вопросы";
-"answer_all_questions_message" = "Нужно ответить на все вопросы, чтобы завершить тест.";
-
-"test_passed" = "Ура, тест пройден!";
-"test_failed" = "Увы, тест не пройден";
-"test_result_only_prefix" = "Только";
-"of" = "из";
-"questions_correct" = "вопросов правильно";
-"time_used" = "Затраченное время:";
-"minimum_requirement" = "Минимальное требование:";
-"your_result" = "Ваш результат:";
-"accuracy" = "Точность:";
-"test_results_your_results" = "Твой результат";
-"test_results_summary" = "Сводка";
-"test_results_weakest_category" = "Слабая категория";
-"test_results_strongest_category" = "Сильная категория";
-"test_results_correct_in_category" = "%d из %d правильно";
-"test_results_correct_in_category_label" = "Правильно в этой категории";
-"test_results_category_breakdown" = "По категориям";
-"test_results_all_correct" = "Всё правильно";
-"test_results_some_mistakes" = "Есть ошибки";
-"test_results_all_wrong" = "Всё неправильно";
-"test_results_x_of_y" = "%d из %d";
-
-"view_answers" = "ПОСМОТРЕТЬ ОТВЕТЫ";
-"try_again" = "ПОПРОБОВАТЬ СНОВА";
-"quit_the_test" = "ВЫЙТИ ИЗ ТЕСТА";
-"back_to_main_menu" = "ГЛАВНОЕ МЕНЮ";
-
-"your_answers" = "Твои ответы";
-
-// =============================================================================
-//   FAVORITES
-// =============================================================================
-
-"favorites_title" = "Избранное";
-"favorites_empty_title" = "Нет избранных вопросов";
-
-// Favorites disclaimer
-"favorites_disclaimer_title" = "Избранное";
-"favorites_disclaimer_message" = "Здесь вопросы, которые ты сохранил во время практики. Нажимай на сердечко в любом режиме, чтобы добавить или убрать вопросы. Этот раздел для повторения — каждый вопрос показан с правильным ответом.";
-"feature_preview_continue" = "Продолжить";
-"favorites_empty_subtitle" = "Добавь вопросы в избранное, нажав на сердечко";
-"favorites_empty_message" = "Твой список избранного пуст. Во время практики нажимай на сердечко, чтобы сохранить вопросы, к которым хочешь вернуться.";
-"back" = "Назад";
-"next" = "Далее";
-
-// =============================================================================
-//   STATISTICS
-// =============================================================================
-
-"statistics_title" = "Твой прогресс";
-"statistics_familiar_title" = "Знакомо";
-"statistics_reinforced_title" = "Закреплено";
-"statistics_mastered_title" = "Усвоено";
-"statistics_expert_title" = "Эксперт";
-"statistics_familiar_description" = "Ответил правильно 1 раз";
-"statistics_reinforced_description" = "Ответил правильно 2 раза";
-"statistics_mastered_description" = "Ответил правильно 3 раза";
-"statistics_expert_description" = "Ответил правильно 4+ раза";
-"statistics_card_flip_hint" = "Двойное нажатие переворачивает карточку";
-"ready" = "готов";
-"progress_readiness_explanation" = "Это твоя оценка готовности. Чем выше процент, тем ближе ты к готовности к экзамену; полные 100%% означают полную готовность. Такого результата можно достичь, если ответить правильно на каждый из %d вопросов четыре раза. Четыре цвета показывают количество по уровням: один раз правильно (Знакомо), два (Закреплено), три (Усвоено), четыре и больше (Эксперт).";
-"progress_readiness_explanation_full" = "Это твоя оценка готовности. Чем выше процент, тем ближе ты к готовности к экзамену; полные 100%% означают полную готовность. Такого результата можно достичь, если ответить правильно на каждый из %d вопросов четыре раза. Каждый цвет — свой уровень: Знакомо - ответил правильно один раз, Закреплено - ответил правильно два раза, Усвоено - ответил правильно три раза, Эксперт - ответил правильно четыре раза и больше. Только вопросы из %@ и %@ учитываются в этом показателе.";
-"progress_readiness_info_accessibility_label" = "Как считается готовность";
-"progress_readiness_info_accessibility_hint" = "Двойное нажатие — показать объяснение";
-
-// =============================================================================
-//   GAMIFICATION
-// =============================================================================
-
-"eagle_stage_egg" = "Яйцо";
-"eagle_stage_chick" = "Птенец";
-"eagle_stage_young" = "Юный орёл";
-"eagle_stage_growing" = "Взрослеющий орёл";
-"eagle_stage_wise" = "Мудрый орёл";
-"eagle_stage_master" = "Орёл-мастер";
-
-//////////////////////////////////////////////////////////////
-"ok" = "ОК";
-"No questions found" = "Вопросы не найдены";
-"Loading questions..." = "Загрузка вопросов...";
-"LOADING" = "Загрузка...";
-"Quiz completed!" = "Тест завершен!";
-"Your result" = "Ваш результат";
-"Correct" = "Правильно";
-"Incorrect" = "Неправильно";
-"show_explanation_button" = "Показать пояснение";
-"explanation_title" = "Пояснение";
-"explanation_text" = "Здесь будет пояснение к текущему вопросу. Эта функция будет доступна в будущих обновлениях.";
-"delete_button" = "Удалить";
-
-
-// Ad Removal
-"ad_removal_title" = "Убрать рекламу";
-"ad_removal_subtitle" = "Наслаждайся обучением без рекламы с неограниченным доступом ко всем функциям";
-"ad_removal_benefit_no_ads" = "Без рекламы";
-"ad_removal_benefit_no_ads_desc" = "Учись без перерывов на рекламу";
-"ad_removal_benefit_unlimited" = "Неограниченный доступ";
-"ad_removal_benefit_unlimited_desc" = "Доступ ко всем вопросам и функциям без ограничений";
-"ad_removal_benefit_faster" = "Быстрее";
-"ad_removal_benefit_faster_desc" = "Быстрая работа приложения без загрузки рекламы";
-"ad_removal_benefit_support" = "Поддержать разработку";
-"ad_removal_benefit_support_desc" = "Помоги нам улучшать приложение";
-"ad_removal_choose_plan" = "Выбери свой план";
-"ad_removal_monthly_plan" = "Ежемесячно";
-"ad_removal_monthly_price" = "2,99$/месяц";
-"ad_removal_monthly_desc" = "Убрать рекламу на месяц";
-"ad_removal_lifetime_plan" = "Навсегда";
-"ad_removal_lifetime_price" = "9,99$ один раз";
-"ad_removal_lifetime_desc" = "Убрать рекламу навсегда";
-"ad_removal_popular" = "Лучшая цена";
-"ad_removal_purchase_button" = "Убрать рекламу сейчас";
-"ad_removal_restore_button" = "Восстановить покупки";
-"ad_removal_terms_text" = "Покупая, ты соглашаешься с нашими Условиями использования и Политикой конфиденциальности. Ежемесячная подписка автоматически продлевается, если автопродление не отключено как минимум за 24 часа до окончания текущего периода.";
-"ad_removal_terms_of_service" = "Условия использования";
-"ad_removal_privacy_policy" = "Политика конфиденциальности";
-"ad_removal_restore_success" = "Покупки успешно восстановлены!";
-"ad_removal_error" = "Ошибка покупки";
-
-"tab_home_title" = "Главная";
-"tab_learn_title" = "Учиться";
-"tab_progress_title" = "Прогресс";
-"tab_premium_title" = "Премиум";
-"tab_settings_title" = "Настройки";
-"learn_header_title" = "Учиться";
-"learn_header_dialog_message" = "Я готовлю для тебя новое учебное путешествие. Совсем скоро начнём!";
-"tab_settings_beta_title" = "Settings BETA";
-"tab_settings_beta2_title" = "Settings BETA 2";
-"main_tab_bar_accessibility_label" = "Основная навигация";
-"tab_learn_hint" = "Открывает экран обучения";
-"tab_progress_hint" = "Открывает прогресс и статистику";
-"progress_premium_gate_message" = "Обнови до Premium, чтобы видеть свой прогресс и статистику.";
-"tab_settings_hint" = "Открывает настройки";
-"tab_search_title" = "Поиск";
-"tab_search_hint" = "Открывает поиск по всем вопросам";
-"settings_beta_title" = "Settings BETA";
-"settings_beta_detail_placeholder" = "Мы ещё создаём этот раздел. Твоё мнение поможет понять, что здесь нужно оставить.";
-"settings_test_alerts_button" = "Тестовые уведомления";
-"settings_app_language" = "Язык приложения";
-"settings_translation_language" = "Язык перевода";
-"settings_federal_state" = "Земля";
-"settings_test_date" = "Дата теста";
-"settings_test_date_not_set" = "Укажите дату";
-"settings_sound_toggle" = "Звук";
-"settings_language_option_english" = "Английский";
-"settings_language_option_german" = "Немецкий";
-"settings_language_option_russian" = "Русский";
-"settings_language_option_ukrainian" = "Украинский";
-"settings_haptics_toggle" = "Тактильная отдача";
-"settings_appearance_title" = "Оформление";
-"settings_premium_title" = "Премиум";
-"settings_reset_app" = "Сбросить приложение";
-
-"premium_hub_placeholder_title" = "Премиум скоро появится";
-"premium_hub_placeholder_message" = "Мы готовим новые бусты, тренировки и бонусы для тебя. Следи за новостями!";
-
-"premium_unlock_message" = "Открой полный опыт Hero с Premium";
-"premium_unlock_title" = "Открой полный опыт Hero";
-"premium_unlock_description" = "Premium даёт тебе полный доступ ко всем учебным материалам, отслеживанию прогресса и многому другому.";
-"premium_table_benefits" = "Возможности";
-"premium_table_free" = "Бесплатно";
-"premium_table_premium" = "Premium";
-"premium_feature_daily_lessons" = "Ежедневные уроки";
-"premium_feature_unlimited_learning" = "Неограниченное обучение";
-"premium_feature_no_ads" = "Без рекламы";
-"premium_feature_detailed_progress" = "Детальный прогресс";
-"premium_feature_hints" = "Подсказки";
-"premium_feature_favorites" = "Избранное";
-"premium_subscribe_now" = "Подписаться сейчас";
-"premium_choose_plan" = "Выбери свой план";
-"premium_plan_monthly" = "Ежемесячно";
-"premium_plan_lifetime" = "Навсегда";
-"premium_per_month" = "в месяц";
-"premium_limited_offer" = "Ограниченное предложение";
-"premium_regular_price" = "Обычная цена";
-"premium_continue" = "Продолжить";
-"premium_terms_monthly_part1" = "При подписке с твоего Apple-аккаунта будет списано {price}€. Твоя подписка Hero Premium будет автоматически продлеваться по той же цене в конце текущего периода подписки, если не отменить её не менее чем за 24 часа до окончания периода.";
-"premium_terms_lifetime_part1" = "При подписке с твоего Apple-аккаунта будет списано {price}€ за пожизненный доступ. Это разовый платёж без автоматического продления.";
-"premium_terms_common" = "Ты можешь отменить подписку в любое время в настройках App Store. Подробности смотри в наших Условиях использования и Политике конфиденциальности.";
-"premium_terms_lifetime_common" = "Подробности смотри в наших Условиях использования и Политике конфиденциальности.";
-"premium_trial_active" = "Бесплатный пробный период активен";
-"premium_trial_days_remaining" = "Осталось {days} дней";
-"premium_trial_ending_soon" = "Скоро закончится";
-"premium_trial_offer_title" = "Начни с 3 дней бесплатно";
-"premium_trial_offer_description" = "Попробуй Premium функции бесплатно, затем продолжай с подпиской";
-"premium_trial_badge" = "3 дня бесплатно";
-"premium_start_trial" = "Начать бесплатный пробный период";
-"premium_favorites_alert_title" = "Обнови до Premium";
-"premium_favorites_alert_message" = "Обнови до Premium, чтобы видеть свои избранные";
-"premium_favorites_alert_cancel" = "Отмена";
-"premium_favorites_alert_upgrade" = "Обновить";
-"premium_accessibility_label" = "Премиум";
-"premium_accessibility_hint" = "Открывает премиум-функции и варианты подписки";
-"premium_plan_yearly" = "Ежегодно";
-"premium_per_year" = "в год";
-
-"paywall_title" = "Открой своё будущее в Германии с Hero Premium";
+// PAYWALL
 "paywall_onboarding_title" = "Попробуй Hero Premium бесплатно";
-"paywall_onboarding_maybe_later" = "Может, позже";
 "paywall_trial_line" = "Начни с 3 дней бесплатного пробного периода. Отмени в любой момент.";
+"paywall_title" = "Открой своё будущее в Германии с Hero Premium";
 "paywall_subtitle" = "Интервальное повторение, обучение по темам, избранное, неограниченные симуляции теста и детальный прогресс — всё для успешной сдачи.";
 "paywall_close" = "Закрыть";
 "paywall_close_hint" = "Закрывает экран подписки";
@@ -546,6 +66,219 @@
 "paywall_privacy" = "Политика конфиденциальности";
 "paywall_privacy_hint" = "Открыть политику конфиденциальности";
 "paywall_terms_boilerplate" = "Подписка продлевается автоматически, если она не была отменена как минимум за 24 часа до окончания текущего периода. Управлять подпиской можно в настройках учетной записи App Store. Продолжая, вы соглашаетесь с Условиями использования и Политикой конфиденциальности.";
+"paywall_redeem" = "Ввести код";
+"paywall_redeem_hint" = "Введите промокод или код подарочной карты App Store";
+"paywall_onboarding_maybe_later" = "Может, позже";
+"premium_continue" = "Продолжить";
+
+// TAB BAR
+"tab_learn_title" = "Учиться";
+"tab_progress_title" = "Прогресс";
+"tab_settings_title" = "Настройки";
+"tab_search_title" = "Поиск";
+"main_tab_bar_accessibility_label" = "Основная навигация";
+"tab_learn_hint" = "Открывает экран обучения";
+"tab_progress_hint" = "Открывает прогресс и статистику";
+"tab_settings_hint" = "Открывает настройки";
+"tab_search_hint" = "Открывает поиск по всем вопросам";
+"progress_premium_gate_message" = "Обнови до Premium, чтобы видеть свой прогресс и статистику.";
+
+// HOME / LEARN OPTIONS
+"home_learn_spaced_repetition" = "Умное повторение";
+"home_learn_spaced_repetition_subtitle" = "Система интервального повторения";
+"home_learn_recommended_badge" = "Рекомендуем";
+"sr_disclaimer_title" = "Система интервального повторения";
+"sr_disclaimer_message" = "Интервальное повторение — это научно обоснованная система: вопросы возвращаются в оптимальные интервалы — так ты учишься быстрее и запоминаешь надолго. Этот режим влияет на твой прогресс и показатель готовности.";
+"sr_disclaimer_do_not_show" = "Больше не показывать";
+"home_learn_by_topics" = "Учить по темам";
+"home_learn_by_topics_subtitle" = "Вопросы сгруппированы по темам";
+"home_learn_favorites" = "Избранное";
+"home_learn_favorites_subtitle" = "Твои сохранённые вопросы";
+"home_learn_all_questions" = "Все вопросы";
+"home_learn_all_questions_subtitle" = "Все 310 официальных экзаменационных вопросов";
+"all_questions_empty_title" = "Пока нет вопросов";
+"all_questions_empty_message" = "Вопросы появятся здесь после загрузки контента. Потяни для обновления или попробуй снова.";
+"all_questions_disclaimer_title" = "Все вопросы";
+"all_questions_disclaimer_message" = "Все 310 официальных экзаменационных вопросов представлены здесь в хронологическом порядке, как в официальных экзаменационных материалах. Этот раздел только для чтения — каждый вопрос показан с правильным ответом.";
+"learn_by_topics_header_message" = "Я сгруппировал все вопросы по темам — выбирай маршрут и взлетай.";
+"learn_by_topics_disclaimer_title" = "Учить по темам";
+"learn_by_topics_disclaimer_message" = "Вопросы сгруппированы по темам, чтобы ты мог изучать их по одной. Выбери тему, ответь на вопросы и проверь себя. Этот режим не влияет на показатель готовности.";
+"no_search_results" = "Ничего не найдено";
+"question_label" = "Вопрос";
+
+// HEADER / READINESS
+"eagle_desc_egg" = "Готовность к тесту — %d%%. Первые шаги! Вперёд к знаниям!";
+"eagle_desc_chick" = "Готовность %d%%. Вперёд! Первые взмахи крыльев уже за тобой.";
+"eagle_desc_young" = "Готовность %d%%. Крылья крепнут! Продолжай в том же духе.";
+"eagle_desc_growing" = "Готовность %d%%. Отличный полёт! До вершины — рукой подать.";
+"eagle_desc_wise" = "Готовность %d%%. Осталось совсем чуть-чуть — не сбавляй высоты!";
+"eagle_desc_master" = "Готовность %d%%. Ты — орёл знаний!";
+"test_header_set_date_prompt" = "Когда твой экзамен? Укажи дату в Настройках — и мы будем вести обратный отсчёт вместе.";
+"main_header_state_accessibility_label" = "Федеральная земля";
+"main_header_state_accessibility_hint" = "Текущая земля. Ты можешь изменить её в настройках.";
+"main_header_state_slogan_accessibility_label" = "Слоган земли";
+"main_header_test_date_accessibility_label" = "Дней до экзамена";
+"home_statistics_title" = "Твой прогресс";
+"home_statistics_accessibility_label" = "Прогресс готовности";
+"home_statistics_accessibility_value" = "%d процентов готовности";
+"back_button_accessibility_label" = "Назад";
+"spaced_translation_button_accessibility_label" = "Показать перевод";
+"spaced_favorite_button_accessibility_label" = "Добавить в избранное";
+"hint_button_title" = "Подсказка";
+
+// LEARN CAROUSEL
+"learn_option_test_title" = "Пройти тест";
+"learn_option_test_subtitle" = "Симуляция официального экзамена";
+"learn_option_test_description" = "Соответствует официальному экзамену: 33 вопроса (30 общих, 3 по твоей земле), 60 минут, одна попытка. Без подсказок и исправлений. Отличный способ проверить готовность.";
+
+// SETTINGS / REGIONAL
+"change_state_confirmation_title" = "Изменить федеральную землю?";
+"change_state_confirmation_message" = "Ты действительно хочешь изменить федеральную землю? Весь текущий прогресс будет потерян.";
+"change_state_confirmation_cancel" = "Отмена";
+"change_state_confirmation_confirm" = "Изменить";
+"settings_app_language_change_title" = "Изменить язык приложения?";
+"settings_translation_language_change_title" = "Изменить язык перевода?";
+"settings_language_change_message" = "Интерфейс обновится. Продолжить?";
+"settings_language_change_cancel" = "Отмена";
+"settings_language_change_confirm" = "Продолжить";
+
+// SETTINGS
+"settings_title" = "Настройки";
+"version" = "Версия";
+"settings_personalisation_title" = "Персонализация";
+"settings_info_title" = "О приложении";
+"settings_regional_title" = "Регион";
+"settings_danger_title" = "Данные";
+"settings_appearance_light" = "Светлая";
+"settings_appearance_dark" = "Темная";
+"settings_appearance_system" = "Системная";
+"settings_support_title" = "Поддержка";
+"settings_faq_button" = "FAQ";
+"settings_contact_button" = "Связаться с нами";
+"settings_about_button" = "О приложении";
+"settings_share_button" = "Поделиться";
+"settings_about_mascot_accessibility" = "Талисман Hero";
+"settings_about_description" = "Hero – Einbürgerungstest помогает подготовиться к тесту на гражданство: 310 официальных вопросов, интервальное повторение и полная симуляция экзамена. Выбери федеральную землю, занимайся в своём темпе и чувствуй себя уверенно в день экзамена.";
+"settings_share_qr_accessibility" = "QR-код для загрузки приложения";
+"settings_share_scan_subtitle" = "Отсканируй этот QR-код, чтобы скачать приложение из App Store — или нажми «Поделиться», чтобы отправить его друзьям.";
+"share_app_hint" = "Поделиться приложением с другими";
+"legal_title" = "Правовое";
+"settings_impressum_button" = "Impressum";
+"terms_of_service" = "Условия использования";
+"privacy_policy" = "Политика конфиденциальности";
+"mail_device_info_body" = "Пожалуйста, не удаляй информацию об устройстве ниже — она помогает нам лучше тебя поддержать.\n\n--- Информация об устройстве ---\nВерсия приложения: %@ (%@)\nУстройство: %@\nВерсия iOS: %@ %@\n\n--- Опиши свою проблему или вопрос ниже ---";
+"mail_unavailable_title" = "Почта недоступна";
+"mail_unavailable_message" = "Почтовый аккаунт не настроен. Можешь скопировать email поддержки и вставить его в приложение почты.";
+
+// RESET / DATA
+"test_simulation_disclaimer_title" = "Симуляция теста";
+"test_simulation_disclaimer_message" = "Этот режим симулирует официальный экзамен на гражданство: 33 вопроса (30 федеральных, 3 по твоей земле), 60 минут, одна попытка. Без подсказок и переводов во время теста. Чтобы сдать, нужно минимум 17 правильных ответов. Этот режим влияет на показатель готовности.";
+"delete_statistics_warning_title" = "Удалить все данные и сбросить приложение?";
+"delete_statistics_warning_message" = "Это удалит все данные и прогресс. Приложение вернется к настройкам по умолчанию. Это действие нельзя отменить.";
+"delete_button" = "Удалить";
+"cancel" = "Отменить";
+
+// PRACTICE
+"check_answer_button" = "ПРОВЕРИТЬ";
+"check_answer_button_accessibility_label" = "Проверить ответ";
+"next_button" = "ДАЛЕЕ";
+
+// LEARN BY TOPICS
+"search" = "Поиск";
+"Law and Constitution" = "Право и Конституция";
+"Family and Education" = "Семья и образование";
+"State" = "Государство";
+"Elections" = "Выборы";
+"State Institutions" = "Государственные органы";
+"Economy and Work" = "Экономика и работа";
+"Society and Culture" = "Общество и Культура";
+"History" = "История";
+"Europe" = "Европа";
+"Federal States" = "Федеральные земли";
+"Recht und Verfassung" = "Право и Конституция";
+"Staat" = "Государство";
+"Staatsorgane" = "Государственные органы";
+"Wahlen" = "Выборы";
+"Familie und Bildung" = "Семья и образование";
+"Wirtschaft und Arbeit" = "Экономика и работа";
+"Gesellschaft und Kultur" = "Общество и культура";
+"Geschichte" = "История";
+"Europa" = "Европа";
+"Bundesländer" = "Федеральные земли";
+
+// TEST SIMULATION
+"test_simulation_title" = "Симуляция теста";
+"back" = "Назад";
+"quit_test_title" = "Выйти из теста?";
+"quit_test_message" = "Ты действительно хочешь выйти из теста? Весь прогресс будет потерян.";
+"quit_test" = "Выйти из теста";
+"finish_test" = "УЗНАТЬ РЕЗУЛЬТАТ";
+"answer_all_questions_title" = "Сначала ответь на все вопросы";
+"answer_all_questions_message" = "Нужно ответить на все вопросы, чтобы завершить тест.";
+"test_passed" = "Ура, тест пройден!";
+"test_failed" = "Увы, тест не пройден";
+"test_result_only_prefix" = "Только";
+"of" = "из";
+"questions_correct" = "вопросов правильно";
+"time_used" = "Затраченное время:";
+"minimum_requirement" = "Минимальное требование:";
+"your_result" = "Ваш результат:";
+"accuracy" = "Точность:";
+"test_results_your_results" = "Твой результат";
+"test_results_category_breakdown" = "По категориям";
+"test_results_x_of_y" = "%d из %d";
+"view_answers" = "ПОСМОТРЕТЬ ОТВЕТЫ";
+"try_again" = "ПОПРОБОВАТЬ СНОВА";
+"your_answers" = "Твои ответы";
+
+// FAVORITES
+"favorites_empty_title" = "Нет избранных вопросов";
+"favorites_disclaimer_title" = "Избранное";
+"favorites_disclaimer_message" = "Здесь вопросы, которые ты сохранил во время практики. Нажимай на сердечко в любом режиме, чтобы добавить или убрать вопросы. Этот раздел для повторения — каждый вопрос показан с правильным ответом.";
+"feature_preview_continue" = "Продолжить";
+
+// STATISTICS
+"statistics_familiar_title" = "Знакомо";
+"statistics_reinforced_title" = "Закреплено";
+"statistics_mastered_title" = "Усвоено";
+"statistics_expert_title" = "Эксперт";
+"statistics_familiar_description" = "Ответил правильно 1 раз";
+"statistics_reinforced_description" = "Ответил правильно 2 раза";
+"statistics_mastered_description" = "Ответил правильно 3 раза";
+"statistics_expert_description" = "Ответил правильно 4+ раза";
+"statistics_card_flip_hint" = "Двойное нажатие переворачивает карточку";
+"progress_readiness_explanation" = "Это твоя оценка готовности. Чем выше процент, тем ближе ты к готовности к экзамену; полные 100%% означают полную готовность. Такого результата можно достичь, если ответить правильно на каждый из %d вопросов четыре раза. Четыре цвета показывают количество по уровням: один раз правильно (Знакомо), два (Закреплено), три (Усвоено), четыре и больше (Эксперт).";
+"progress_readiness_explanation_full" = "Это твоя оценка готовности. Чем выше процент, тем ближе ты к готовности к экзамену; полные 100%% означают полную готовность. Такого результата можно достичь, если ответить правильно на каждый из %d вопросов четыре раза. Каждый цвет — свой уровень: Знакомо - ответил правильно один раз, Закреплено - ответил правильно два раза, Усвоено - ответил правильно три раза, Эксперт - ответил правильно четыре раза и больше. Только вопросы из %@ и %@ учитываются в этом показателе.";
+"progress_readiness_info_accessibility_label" = "Как считается готовность";
+"progress_readiness_info_accessibility_hint" = "Двойное нажатие — показать объяснение";
+
+// COMMON
+"ok" = "ОК";
+"Loading questions..." = "Загрузка вопросов...";
+"LOADING" = "Загрузка...";
+
+// SETTINGS REGIONAL (PICKERS)
+"settings_app_language" = "Язык приложения";
+"settings_translation_language" = "Язык перевода";
+"settings_federal_state" = "Земля";
+"settings_test_date" = "Дата теста";
+"settings_test_date_not_set" = "Укажите дату";
+"settings_language_option_english" = "Английский";
+"settings_language_option_german" = "Немецкий";
+"settings_language_option_russian" = "Русский";
+"settings_haptics_toggle" = "Тактильная отдача";
+"settings_appearance_title" = "Оформление";
+"settings_premium_title" = "Премиум";
+"settings_reset_app" = "Сбросить приложение";
+
+// PREMIUM / PRICING
+"premium_plan_monthly" = "Ежемесячно";
+"premium_plan_lifetime" = "Навсегда";
+"premium_per_month" = "в месяц";
+"premium_accessibility_label" = "Премиум";
+"premium_accessibility_hint" = "Открывает премиум-функции и варианты подписки";
+"premium_plan_yearly" = "Ежегодно";
+"premium_per_year" = "в год";
 "paywall_best_value" = "Выгодно";
 "paywall_subtitle_monthly" = "Гибко, отмена в любой момент";
 "paywall_subtitle_3_months_format" = "Только %@ в месяц";
@@ -558,24 +291,14 @@
 "paywall_slash_2_months" = "/2мес";
 "paywall_slash_week" = "/нед";
 "paywall_year_savings" = "Экономия 37 % по сравнению с помесячной";
-"paywall_redeem" = "Ввести код";
-"paywall_redeem_hint" = "Введите промокод или код подарочной карты App Store";
 "premium_plan_six_month" = "6 месяцев";
 "premium_plan_three_month" = "3 месяца";
 "premium_plan_two_month" = "2 месяца";
 "premium_plan_weekly" = "Еженедельно";
-"premium_per_six_months" = "каждые 6 месяцев";
-"premium_per_three_months" = "каждые 3 месяца";
-"premium_per_two_months" = "каждые 2 месяца";
-"premium_per_week" = "в неделю";
 
-// =============================================================================
-//   ОБРАТНАЯ СВЯЗЬ / СООБЩИТЬ О ВОПРОСЕ
-// =============================================================================
-
+// FEEDBACK
 "report_question" = "Сообщить о вопросе";
 "question_id" = "ID вопроса";
-"category" = "Категория";
 "question_info" = "Информация о вопросе";
 "feedback_type" = "Тип обратной связи";
 "what_would_you_like_to_report" = "О чём ты хочешь сообщить?";
@@ -594,20 +317,13 @@
 "feedback_type_translation_issue" = "Проблема с переводом";
 "feedback_type_other" = "Другое";
 
-// =============================================================================
-//   ПОДСКАЗКИ
-// =============================================================================
-
+// HINTS
 "hint_title" = "Подсказка";
 "close" = "Закрыть";
 "no_hint_available" = "Для этого вопроса пока нет подсказки.";
 
-// =============================================================================
-//   ОЦЕНКА ПРИЛОЖЕНИЯ
-// =============================================================================
-
+// APP RATING
 "rating_prompt_title" = "Нравится Hero?";
 "rating_prompt_message" = "Если Hero помогает тебе справляться с вопросами, мы будем рады узнать об этом! Быстрая оценка помогает другим ученикам тоже нас найти.";
 "rating_prompt_rate_now" = "Сделать сейчас";
 "rating_prompt_ask_later" = "Спросить позже";
-
