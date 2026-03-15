@@ -22,7 +22,9 @@ struct FavoritesView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if viewModel.favoriteQuestions.isEmpty {
+            if !viewModel.hasLoadedOnce {
+                loadingView
+            } else if viewModel.favoriteQuestions.isEmpty {
                 emptyStateView
             } else {
                 carouselView
@@ -64,6 +66,25 @@ struct FavoritesView: View {
         }
     }
     
+    // MARK: - Loading View
+    private var loadingView: some View {
+        VStack(spacing: 0) {
+            HStack {
+                AdaptiveIconButton.backButton(action: { router.pop() }, tintColor: .primary)
+                Spacer()
+            }
+            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+            .padding(.top, layoutMetrics.adaptive(LayoutMetrics.headerTopPadding))
+            Spacer()
+            ProgressView()
+                .scaleEffect(1.2)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground))
+        .accessibilityLabel("Loading favorites")
+    }
+
     // MARK: - Carousel View
     @ViewBuilder
     private var carouselView: some View {

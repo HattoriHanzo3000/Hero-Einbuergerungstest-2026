@@ -14,6 +14,8 @@ class FavoritesViewModel: ObservableObject {
     @Published var favoriteQuestions: [QuestionModel] = []
     @Published var currentIndex: Int = 0
     @Published var showTranslation: Bool = false
+    /// True after the first load completes. Used to avoid flashing empty state before data is ready.
+    @Published private(set) var hasLoadedOnce: Bool = false
     
     private let favoritesManager = FavoritesManager.shared
     private let contentService = ContentService.shared
@@ -70,6 +72,7 @@ class FavoritesViewModel: ObservableObject {
         }
         favoriteQuestions = questions
         currentIndex = min(currentIndex, max(0, questions.count - 1))
+        hasLoadedOnce = true
     }
     
     func toggleTranslation() {
