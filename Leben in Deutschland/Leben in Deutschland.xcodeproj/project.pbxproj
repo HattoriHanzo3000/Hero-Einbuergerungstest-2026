@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		74286D012F675FC000E78E95 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74286D002F675FC000E78E95 /* Launch Screen.storyboard */; };
 		749C2CE22F61AA0900B90896 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 749C2CE12F61AA0900B90896 /* RevenueCat */; };
 		749C2CE72F61ACFF00B90896 /* SuperwallKit in Frameworks */ = {isa = PBXBuildFile; productRef = 749C2CE62F61ACFF00B90896 /* SuperwallKit */; };
 		74B1060F2F55E8BB0091BAC0 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 74B1060E2F55E8BB0091BAC0 /* AppIcon.icon */; };
-		E623807F2E82C0E2000C28AB /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E623807E2E82C0E2000C28AB /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		74286D002F675FC000E78E95 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		74B1060E2F55E8BB0091BAC0 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		E612E89C2E8299CD00513716 /* Leben in Deutschland.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Leben in Deutschland.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E619899F2E8836B400A0B582 /* Leben in Deutschland.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Leben in Deutschland.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		E623807E2E82C0E2000C28AB /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -45,7 +45,7 @@
 			isa = PBXGroup;
 			children = (
 				74B1060E2F55E8BB0091BAC0 /* AppIcon.icon */,
-				E623807E2E82C0E2000C28AB /* Launch Screen.storyboard */,
+				74286D002F675FC000E78E95 /* Launch Screen.storyboard */,
 				E612E89E2E8299CD00513716 /* Leben in Deutschland */,
 				E619899F2E8836B400A0B582 /* Leben in Deutschland.xcodeproj */,
 				E612E89D2E8299CD00513716 /* Products */,
@@ -143,8 +143,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E623807F2E82C0E2000C28AB /* Launch Screen.storyboard in Resources */,
 				74B1060F2F55E8BB0091BAC0 /* AppIcon.icon in Resources */,
+				74286D012F675FC000E78E95 /* Launch Screen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,7 +304,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -344,7 +345,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";

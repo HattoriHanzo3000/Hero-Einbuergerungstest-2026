@@ -99,6 +99,7 @@ struct Leben_in_DeutschlandApp: App {
                 .environmentObject(OnboardingPreferences.shared)
                 // Apply appearance mode - updates immediately when @AppStorage changes
                 .preferredColorScheme(getColorScheme())
+                .background(Color("LaunchScreenBackground").ignoresSafeArea())
             }
         }
     }
