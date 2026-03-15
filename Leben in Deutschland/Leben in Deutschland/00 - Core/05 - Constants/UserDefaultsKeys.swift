@@ -46,4 +46,10 @@ enum UserDefaultsKeys {
 
     /// Prefix for Learning mode position keys. Full key: "\(subcategoryPositionPrefix)\(subcategoryName)"
     static let subcategoryPositionPrefix = "subcategory_position_"
+
+    // MARK: - Debug (DEBUG builds only)
+    /// When set, overrides premium status. "true"/"false" or absent = use real.
+    static let debugSimulatePremium = "debug_simulate_premium"
+    /// Overrides readiness percentage. 0 = none, 10/30/50/100 = override.
+    static let debugReadinessPercent = "debug_readiness_percent"
 }

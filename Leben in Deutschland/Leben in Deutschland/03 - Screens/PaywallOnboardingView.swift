@@ -371,7 +371,7 @@ struct PaywallOnboardingView: View {
                 await subscriptionManager.refreshPremiumStatus()
                 await MainActor.run {
                     isPurchasing = false
-                    if subscriptionManager.isPremium {
+                    if subscriptionManager.effectiveIsPremium {
                         restoreMessage = "paywall_restore_success".localized
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             proceedToNext()

@@ -31,11 +31,29 @@ final class SubscriptionManager: ObservableObject {
     @Published var showFeaturePreviewSheet: Bool = false
     @Published var featurePreviewContent: FeaturePreviewContent?
 
+    /// Premium status used by UI. In DEBUG, respects DebugOverrides.simulatePremium; otherwise equals isPremium.
+    var effectiveIsPremium: Bool {
+        #if DEBUG
+        if let override = DebugOverrides.shared.simulatePremium {
+            return override
+        }
+        #endif
+        return isPremium
+    }
+
     private let entitlementId = AppConfiguration.premiumEntitlementId
     private var customerInfoTask: Task<Void, Never>?
+    #if DEBUG
+    private var debugCancellable: AnyCancellable?
+    #endif
 
     private init() {
         startObservingCustomerInfo()
+        #if DEBUG
+        debugCancellable = DebugOverrides.shared.$simulatePremium
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.objectWillChange.send() }
+        #endif
     }
 
     deinit {
@@ -81,7 +99,7 @@ final class SubscriptionManager: ObservableObject {
 
     /// For gated features: if premium, runs handler; otherwise presents paywall.
     func gateFeature(placement: String, handler: @escaping () -> Void) {
-        if isPremium {
+        if effectiveIsPremium {
             handler()
             return
         }
@@ -97,7 +115,7 @@ final class SubscriptionManager: ObservableObject {
         accentColorName: String,
         handler: @escaping () -> Void
     ) {
-        if isPremium {
+        if effectiveIsPremium {
             handler()
             return
         }

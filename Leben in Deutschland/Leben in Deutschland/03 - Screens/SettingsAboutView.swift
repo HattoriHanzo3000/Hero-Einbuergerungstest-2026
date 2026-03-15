@@ -4,6 +4,9 @@ import SwiftUI
 struct SettingsAboutView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
+    #if DEBUG
+    @State private var showDebugMenu = false
+    #endif
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -31,6 +34,11 @@ struct SettingsAboutView: View {
         }
         .navigationTitle("settings_about_button".localized)
         .navigationBarTitleDisplayMode(.inline)
+        #if DEBUG
+        .sheet(isPresented: $showDebugMenu) {
+            DebugMenuSheet()
+        }
+        #endif
     }
 
     @ViewBuilder
@@ -67,6 +75,11 @@ struct SettingsAboutView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityLabel("version".localized)
             .accessibilityValue(appVersion)
+            #if DEBUG
+            .onTapGesture(count: 7) {
+                showDebugMenu = true
+            }
+            #endif
     }
 
     /// Five learn modes in home view order: All Questions, Learn by Topics, Smart Learning, Favorites, Test.

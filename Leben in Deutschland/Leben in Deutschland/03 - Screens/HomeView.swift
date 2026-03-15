@@ -17,7 +17,11 @@ struct HomeView: View {
     
     init(viewModel: HomeViewModel? = nil) {
         _viewModel = StateObject(wrappedValue: viewModel ?? MainActor.assumeIsolated {
+            #if DEBUG
+            HomeViewModel(statisticsProvider: DebugAwareHomeStatisticsProvider(), stateManager: StateManager.shared)
+            #else
             HomeViewModel(statisticsProvider: HomeStatisticsService(), stateManager: StateManager.shared)
+            #endif
         })
     }
     
@@ -27,7 +31,7 @@ struct HomeView: View {
             VStack(spacing: 0) {
                 HomeHeader(
                     readinessPercentage: viewModel.statistics.readinessPercentage,
-                    isPremium: subscriptionManager.isPremium,
+                    isPremium: subscriptionManager.effectiveIsPremium,
                     useCard: false,
                     mascotAssetBaseName: "MainChickFlipped"
                 )

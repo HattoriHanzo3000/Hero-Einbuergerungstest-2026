@@ -7,7 +7,11 @@ struct ProgressTabView: View {
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @StateObject private var viewModel: HomeViewModel = MainActor.assumeIsolated {
+        #if DEBUG
+        HomeViewModel(statisticsProvider: DebugAwareHomeStatisticsProvider(), stateManager: StateManager.shared)
+        #else
         HomeViewModel(statisticsProvider: HomeStatisticsService(), stateManager: StateManager.shared)
+        #endif
     }
 
     private var sectionSpacing: CGFloat { layoutMetrics.adaptive(LayoutMetrics.sectionSpacing) }
@@ -16,7 +20,7 @@ struct ProgressTabView: View {
         VStack(spacing: 0) {
             progressHeaderSection
 
-            if subscriptionManager.isPremium {
+            if subscriptionManager.effectiveIsPremium {
                 ScrollViewReader { proxy in
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(spacing: sectionSpacing) {
@@ -68,7 +72,7 @@ private extension ProgressTabView {
     var progressHeaderSection: some View {
         HomeHeader(
             readinessPercentage: viewModel.statistics.readinessPercentage,
-            isPremium: subscriptionManager.isPremium,
+            isPremium: subscriptionManager.effectiveIsPremium,
             useCard: false,
             mascotAssetBaseName: "MainChickFlipped"
         )
