@@ -10,13 +10,21 @@ import SwiftUI
 import RevenueCat
 import StoreKit
 import Combine
+import UIKit
 
 // MARK: - Paywall View
 /// Paywall sheet: fetches RevenueCat offerings, displays packages, handles purchase, restore, and redeem.
 struct PaywallView: View {
+    /// When true (e.g. in previews), UI shows paywall as after the 3-day launch offer has expired.
+    var previewSimulateOfferExpired: Bool = false
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
+
+    private var isLaunchOfferActive: Bool {
+        previewSimulateOfferExpired ? false : LaunchOfferService.isLaunchOfferActive
+    }
 
     @State private var packages: [Package] = []
     @State private var selectedPackage: Package?
@@ -109,8 +117,8 @@ struct PaywallView: View {
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
 
-            Text("paywall_trial_line".localized)
-                .font(.system(.footnote, weight: .heavy))
+            Text("paywall_plan_pitch".localized)
+                .font(Font(UIFont.systemFont(ofSize: UIFont.preferredFont(forTextStyle: .callout).pointSize, weight: .bold, width: .condensed)))
                 .foregroundStyle(.white.opacity(0.95))
                 .multilineTextAlignment(.center)
 
@@ -162,25 +170,26 @@ struct PaywallView: View {
                         HapticManager.shared.lightImpact()
                         selectedPackage = package
                     },
-                    countdownText: (package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive) ? countdownString : nil,
-                    showLaunchOfferBadge: package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive,
-                    strikethroughPrice: (package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive) ? standardLifetimePriceString : nil
+                    countdownText: (package.identifier == LaunchOfferService.promoPackageIdentifier && isLaunchOfferActive) ? countdownString : nil,
+                    showLaunchOfferBadge: package.identifier == LaunchOfferService.promoPackageIdentifier && isLaunchOfferActive,
+                    showBestValueBadge: package.packageType == .threeMonth && !isLaunchOfferActive,
+                    strikethroughPrice: (package.identifier == LaunchOfferService.promoPackageIdentifier && isLaunchOfferActive) ? standardLifetimePriceString : nil
                 )
                 .id(package.identifier)
             }
         }
     }
 
-    // MARK: - Subscribe Button (same shape and style as Finish in test simulation: orange, caps)
+    // MARK: - Subscribe Button (blue gradient, same as All Questions Next button)
     private var subscribeButton: some View {
         let isActive = selectedPackage != nil && !isPurchasing
         let style = QuizActionButton.Style(
-            backgroundColor: Color("AppOrange"),
+            backgroundColor: Color("AppBlueLagoon"),
             disabledBackgroundColor: Color(.systemGray2),
-            haloPrimaryColor: Color("AppOrange").opacity(0.36),
+            haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
             haloSecondaryColor: Color.white.opacity(0.18),
             suppressGlow: true,
-            gradient: .orange
+            gradient: .blue
         )
         return QuizActionButton(
             "premium_continue".localized.uppercased(),
@@ -290,9 +299,9 @@ struct PaywallView: View {
             await MainActor.run {
                 standardLifetimePriceString = standardPrice
                 packages = filtered
-                selectedPackage = filtered.first { $0.packageType == .threeMonth }
-                    ?? filtered.first { $0.identifier == LaunchOfferService.promoPackageIdentifier }
+                selectedPackage = filtered.first { $0.identifier == LaunchOfferService.promoPackageIdentifier }
                     ?? filtered.first { $0.packageType == .lifetime }
+                    ?? filtered.first { $0.packageType == .threeMonth }
                     ?? filtered.first
                 isLoading = false
             }
@@ -309,7 +318,7 @@ struct PaywallView: View {
     private func filterPackagesForLaunchOffer(_ available: [Package]) -> [Package] {
         let promo = available.first { $0.identifier == LaunchOfferService.promoPackageIdentifier }
 
-        if LaunchOfferService.isLaunchOfferActive, let promoPackage = promo {
+        if isLaunchOfferActive, let promoPackage = promo {
             // Remove both promo and standard lifetime, then add promo → single "Lifetime" slot with strikethrough.
             var result = available.filter {
                 $0.identifier != LaunchOfferService.promoPackageIdentifier &&
@@ -403,9 +412,15 @@ private struct PaywallMascotImage: View {
     }
 }
 
-// MARK: - Preview
+// MARK: - Previews
 #Preview("Paywall") {
     PaywallView()
+        .environmentObject(SubscriptionManager.shared)
+        .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
+}
+
+#Preview("Paywall (after 3 days)") {
+    PaywallView(previewSimulateOfferExpired: true)
         .environmentObject(SubscriptionManager.shared)
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }

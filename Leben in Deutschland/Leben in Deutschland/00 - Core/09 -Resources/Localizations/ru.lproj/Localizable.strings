@@ -53,6 +53,7 @@
 // PAYWALL
 "paywall_onboarding_title" = "Попробуй Hero Premium бесплатно";
 "paywall_trial_line" = "Начни с 3 дней бесплатного пробного периода. Отмени в любой момент.";
+"paywall_plan_pitch" = "Одна цель. Три плана. Выбери то, что подходит тебе.";
 "paywall_title" = "Открой своё будущее в Германии с Hero Premium";
 "paywall_subtitle" = "Интервальное повторение, обучение по темам, избранное, неограниченные симуляции теста и детальный прогресс — всё для успешной сдачи.";
 "paywall_close" = "Закрыть";
@@ -283,8 +284,12 @@
 "paywall_subtitle_monthly" = "Гибко, отмена в любой момент";
 "paywall_subtitle_3_months_format" = "Только %@ в месяц";
 "paywall_subtitle_lifetime" = "Оплати один раз — пользуйся всегда";
+"paywall_subtitle_lifetime_no_fees" = "Без скрытых комиссий. Без автопродлений.";
 "paywall_trial_shield" = "3 дня бесплатно";
-"launch_offer_badge" = "LAUNCH OFFER -50%";
+"launch_offer_badge" = "-50% НА СТАРТЕ";
+"launch_offer_line1" = "Старт";
+"launch_offer_line2" = "Навсегда -50%";
+"launch_offer_expires_in" = "Истекает через";
 "paywall_slash_month" = "/мес";
 "paywall_slash_year" = "/год";
 "paywall_slash_3_months" = "/3мес";

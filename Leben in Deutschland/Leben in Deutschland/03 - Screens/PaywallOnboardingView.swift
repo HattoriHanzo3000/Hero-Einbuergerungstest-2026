@@ -9,6 +9,7 @@ import SwiftUI
 import RevenueCat
 import StoreKit
 import Combine
+import UIKit
 
 // MARK: - Paywall Onboarding View
 /// Paywall for onboarding: fetches RevenueCat offerings, displays packages, handles purchase, restore, and redeem.
@@ -107,12 +108,12 @@ struct PaywallOnboardingView: View {
             PremiumBadge(color: .white, showShimmer: true)
 
             Text("paywall_onboarding_title".localized)
-                .font(.system(.title2, weight: .heavy))
+                .font(.system(.title3, weight: .heavy).italic())
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
 
             Text("paywall_trial_line".localized)
-                .font(.system(.title3, weight: .semibold).italic())
+                .font(Font(UIFont.systemFont(ofSize: UIFont.preferredFont(forTextStyle: .headline).pointSize, weight: .medium, width: .condensed)))
                 .foregroundStyle(.white.opacity(0.9))
                 .multilineTextAlignment(.center)
 
@@ -161,6 +162,7 @@ struct PaywallOnboardingView: View {
                     },
                     countdownText: (package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive) ? countdownString : nil,
                     showLaunchOfferBadge: package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive,
+                    showBestValueBadge: package.packageType == .threeMonth && !LaunchOfferService.isLaunchOfferActive,
                     strikethroughPrice: (package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive) ? standardLifetimePriceString : nil
                 )
                 .id(package.identifier)
@@ -168,16 +170,16 @@ struct PaywallOnboardingView: View {
         }
     }
 
-    // MARK: - Subscribe Button (same shape and style as Finish in test simulation: orange, caps)
+    // MARK: - Subscribe Button (blue gradient, same as All Questions Next button)
     private var subscribeButton: some View {
         let isActive = selectedPackage != nil && !isPurchasing
         let style = QuizActionButton.Style(
-            backgroundColor: Color("AppOrange"),
+            backgroundColor: Color("AppBlueLagoon"),
             disabledBackgroundColor: Color(.systemGray2),
-            haloPrimaryColor: Color("AppOrange").opacity(0.36),
+            haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
             haloSecondaryColor: Color.white.opacity(0.18),
             suppressGlow: true,
-            gradient: .orange
+            gradient: .blue
         )
         return VStack(spacing: layoutMetrics.adaptive(20)) {
             QuizActionButton(
