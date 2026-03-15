@@ -10,9 +10,7 @@ Resources/Localizations/
 │   └── Localizable.strings
 ├── en.lproj/          # English
 │   └── Localizable.strings
-├── ru.lproj/          # Russian (Русский)
-│   └── Localizable.strings
-└── uk.lproj/          # Ukrainian (Українська)
+└── ru.lproj/          # Russian (Русский)
     └── Localizable.strings
 ```
 
@@ -21,7 +19,6 @@ Resources/Localizations/
 - **German (de)** - Primary language
 - **English (en)** - International support
 - **Russian (ru)** - Eastern European support
-- **Ukrainian (uk)** - Eastern European support
 
 ## Usage in Code
 
