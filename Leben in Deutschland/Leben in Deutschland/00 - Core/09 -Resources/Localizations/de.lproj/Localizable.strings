@@ -160,6 +160,7 @@
 "settings_share_button" = "Teilen";
 "settings_about_mascot_accessibility" = "Hero-Maskottchen";
 "settings_about_description" = "Hero – Einbürgerungstest hilft dir bei der Vorbereitung auf den Einbürgerungstest mit 310 offiziellen Fragen, Spaced-Repetition-Lernen und vollständiger Testsimulation. Wähle dein Bundesland, übe in deinem eigenen Tempo und fühle dich am Prüfungstag sicher.";
+"settings_about_learning_options_title" = "Lernoptionen";
 "settings_share_qr_accessibility" = "QR-Code zum Herunterladen der App";
 "settings_share_scan_subtitle" = "Scanne diesen QR-Code, um die App aus dem App Store herunterzuladen — oder tippe auf Teilen, um ihn an Freunde zu senden.";
 "share_app_hint" = "App mit anderen teilen";

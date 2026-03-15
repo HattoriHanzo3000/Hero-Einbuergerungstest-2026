@@ -39,7 +39,8 @@ struct LearnButtonContent: View {
 
     private var badgePatchView: some View {
         Text(badgeText!.localized)
-            .font(.system(.caption2, weight: .semibold))
+            .font(.system(.caption2, weight: .semibold).italic())
+            .textCase(.uppercase)
             .foregroundColor(.white)
             .padding(.horizontal, layoutMetrics.adaptive(8))
             .padding(.vertical, layoutMetrics.adaptive(5))

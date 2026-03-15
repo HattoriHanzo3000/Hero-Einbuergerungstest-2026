@@ -23,6 +23,8 @@ struct SettingsAboutView: View {
                     mascotImage
                     versionText
                     descriptionText
+                        .padding(.bottom, layoutMetrics.adaptive(20))
+                    learningOptionsTitle
                     disclaimerSection
                 }
                 .padding(.horizontal, layoutMetrics.adaptive(20))
@@ -82,13 +84,19 @@ struct SettingsAboutView: View {
             #endif
     }
 
-    /// Five learn modes in home view order: All Questions, Learn by Topics, Smart Learning, Favorites, Test.
+    private var learningOptionsTitle: some View {
+        Text("settings_about_learning_options_title".localized)
+            .font(.title2)
+            .foregroundStyle(.white.opacity(0.95))
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// Learning options in home order. Titles match Home buttons (and gate sheet) except Test, which keeps disclaimer title.
     private var disclaimerSection: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.sectionSpacing)) {
-            disclaimerBlock(titleKey: "all_questions_disclaimer_title", messageKey: "all_questions_disclaimer_message")
-            disclaimerBlock(titleKey: "learn_by_topics_disclaimer_title", messageKey: "learn_by_topics_disclaimer_message")
-            disclaimerBlock(titleKey: "sr_disclaimer_title", messageKey: "sr_disclaimer_message")
-            disclaimerBlock(titleKey: "favorites_disclaimer_title", messageKey: "favorites_disclaimer_message")
+            disclaimerBlock(titleKey: "home_learn_all_questions", messageKey: "all_questions_disclaimer_message")
+            disclaimerBlock(titleKey: "home_learn_by_topics", messageKey: "learn_by_topics_disclaimer_message")
+            disclaimerBlock(titleKey: "home_learn_spaced_repetition", messageKey: "sr_disclaimer_message")
             disclaimerBlock(titleKey: "test_simulation_disclaimer_title", messageKey: "test_simulation_disclaimer_message")
         }
     }
@@ -96,11 +104,11 @@ struct SettingsAboutView: View {
     private func disclaimerBlock(titleKey: String, messageKey: String) -> some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
             Text(titleKey.localized)
-                .font(.body.weight(.semibold))
+                .font(.headline.weight(.semibold))
                 .foregroundStyle(.white.opacity(0.95))
             Text(messageKey.localized)
-                .font(.body)
-                .foregroundStyle(.white.opacity(0.95))
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.8))
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)

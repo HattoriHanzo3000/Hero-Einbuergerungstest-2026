@@ -160,6 +160,7 @@
 "settings_share_button" = "Share";
 "settings_about_mascot_accessibility" = "Hero mascot";
 "settings_about_description" = "Hero – Einbürgerungstest helps you prepare for the citizenship test with 310 official questions, spaced repetition learning, and a full test simulation. Choose your federal state, practice at your own pace, and feel confident on exam day.";
+"settings_about_learning_options_title" = "Learning Options";
 "settings_share_qr_accessibility" = "QR code to download the app";
 "settings_share_scan_subtitle" = "Scan this QR code to download the app from the App Store — or tap the share button to send it to friends.";
 "share_app_hint" = "Share the app with others";

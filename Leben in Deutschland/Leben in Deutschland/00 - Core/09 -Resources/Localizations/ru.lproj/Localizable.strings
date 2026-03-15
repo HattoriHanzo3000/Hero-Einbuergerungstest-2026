@@ -160,6 +160,7 @@
 "settings_share_button" = "Поделиться";
 "settings_about_mascot_accessibility" = "Талисман Hero";
 "settings_about_description" = "Hero – Einbürgerungstest помогает подготовиться к тесту на гражданство: 310 официальных вопросов, интервальное повторение и полная симуляция экзамена. Выбери федеральную землю, занимайся в своём темпе и чувствуй себя уверенно в день экзамена.";
+"settings_about_learning_options_title" = "Варианты обучения";
 "settings_share_qr_accessibility" = "QR-код для загрузки приложения";
 "settings_share_scan_subtitle" = "Отсканируй этот QR-код, чтобы скачать приложение из App Store — или нажми «Поделиться», чтобы отправить его друзьям.";
 "share_app_hint" = "Поделиться приложением с другими";
