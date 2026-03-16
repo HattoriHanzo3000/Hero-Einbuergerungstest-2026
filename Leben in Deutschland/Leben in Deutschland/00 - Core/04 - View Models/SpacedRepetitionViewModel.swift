@@ -10,7 +10,9 @@ final class SpacedRepetitionViewModel: ObservableObject {
     @Published var showCorrectAnswer = false
     @Published var showTranslation = false
     @Published private(set) var answeredCount: Int = 0
-    
+    /// When non-nil, show eagle level-up splash. Cleared when user dismisses.
+    @Published var pendingEagleLevelUp: EagleStage? = nil
+
     private var totalQuestions: Int
     private let manager: SpacedRepetitionManaging
     private let contentService: ContentService
@@ -132,6 +134,11 @@ private extension SpacedRepetitionViewModel {
         // Intuitive haptics: success for correct, stronger error for wrong
         if isCorrect {
             HapticManager.shared.success()
+            // Check for eagle level-up (only on correct answer)
+            let newReadiness = manager.readinessPercentage(totalQuestions: LayoutMetrics.totalFederalQuestions)
+            if let stage = EagleLevelUpService.checkForLevelUp(newReadinessPercentage: newReadiness) {
+                pendingEagleLevelUp = stage
+            }
         } else {
             HapticManager.shared.errorStrong()
         }

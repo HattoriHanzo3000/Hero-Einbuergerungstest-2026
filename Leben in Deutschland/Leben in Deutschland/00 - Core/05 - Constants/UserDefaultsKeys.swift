@@ -41,6 +41,9 @@ enum UserDefaultsKeys {
     /// When true, the Test Simulation disclaimer is not shown again.
     static let testSimulationDisclaimerDismissed = "test_simulation_disclaimer_dismissed"
 
+    /// Highest eagle stage the user has seen (raw Int). Used for level-up splash.
+    static let eagleLastSeenStage = "eagle_last_seen_stage"
+
     // MARK: - Categories View
     static let categoriesExpanded = "categories_expanded_categories"
 

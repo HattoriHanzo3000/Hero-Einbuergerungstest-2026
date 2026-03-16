@@ -59,6 +59,20 @@ struct SpacedRepetitionView: View {
                 showDisclaimer = true
             }
         }
+        .overlay {
+            if let stage = viewModel.pendingEagleLevelUp {
+                EagleLevelUpView(
+                    stage: stage,
+                    readinessPercentage: viewModel.progressState.answeredCount,
+                    onDismiss: { withAnimation(.easeInOut(duration: 0.25)) { viewModel.pendingEagleLevelUp = nil } }
+                )
+                .environmentObject(languageManager)
+                .environment(\.layoutMetrics, layoutMetrics)
+                .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                .zIndex(1000)
+            }
+        }
+        .animation(.easeInOut(duration: 0.25), value: viewModel.pendingEagleLevelUp != nil)
         .sheet(isPresented: $showDisclaimer) {
             LearnModeDisclaimerSheet(
                 titleKey: "sr_disclaimer_title",

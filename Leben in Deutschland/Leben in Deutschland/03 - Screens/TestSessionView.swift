@@ -18,6 +18,7 @@ struct TestSessionView: View {
     @Environment(AppRouter.self) private var router
     
     @State private var showingResults = false
+    @State private var showingLevelUp: EagleStage? = nil
     @State private var showingConfirmation = false
     @State private var showingTimerPopup = false
     @State private var isLoading = true
@@ -36,7 +37,12 @@ struct TestSessionView: View {
                     zoomedAsset: $zoomedAsset,
                     onFinish: {
                         viewModel.finishTest()
-                        showingResults = true
+                        let readiness = SpacedRepetitionManager.shared.readinessPercentage(totalQuestions: LayoutMetrics.totalFederalQuestions)
+                        if let stage = EagleLevelUpService.checkForLevelUp(newReadinessPercentage: readiness) {
+                            showingLevelUp = stage
+                        } else {
+                            showingResults = true
+                        }
                     },
                     onDismiss: {
                         // Pop twice to skip countdown and return to Home
@@ -71,6 +77,18 @@ struct TestSessionView: View {
             viewModel.stopTimer()
             // Restore tab bar when leaving test session
             restoreTabBar()
+        }
+        .fullScreenCover(item: $showingLevelUp) { stage in
+            EagleLevelUpView(
+                stage: stage,
+                readinessPercentage: SpacedRepetitionManager.shared.readinessPercentage(totalQuestions: LayoutMetrics.totalFederalQuestions),
+                onDismiss: {
+                    showingLevelUp = nil
+                    showingResults = true
+                }
+            )
+            .environmentObject(languageManager)
+            .environment(\.layoutMetrics, layoutMetrics)
         }
         .fullScreenCover(isPresented: $showingResults) {
             TestResultsView(

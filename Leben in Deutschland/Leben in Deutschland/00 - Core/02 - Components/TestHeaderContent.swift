@@ -20,8 +20,8 @@ enum ReadinessMessageHelper {
 
     private static func eagleDescKey(for percentage: Int) -> String {
         switch percentage {
-        case 0: return "eagle_desc_egg"
-        case 1..<17: return "eagle_desc_chick"
+        case 0..<5: return "eagle_desc_egg"
+        case 5..<17: return "eagle_desc_chick"
         case 17..<34: return "eagle_desc_young"
         case 34..<51: return "eagle_desc_growing"
         case 51..<84: return "eagle_desc_wise"

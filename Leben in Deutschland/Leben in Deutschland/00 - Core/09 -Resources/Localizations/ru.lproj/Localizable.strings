@@ -114,6 +114,8 @@
 "eagle_desc_growing" = "Готовность %d%%. Отличный полёт! До вершины — рукой подать.";
 "eagle_desc_wise" = "Готовность %d%%. Осталось совсем чуть-чуть — не сбавляй высоты!";
 "eagle_desc_master" = "Готовность %d%%. Ты — орёл знаний!";
+"eagle_level_up_title" = "Новый уровень";
+"eagle_level_up_continue" = "Продолжить обучение";
 "test_header_set_date_prompt" = "Когда твой экзамен? Укажи дату в Настройках — и мы будем вести обратный отсчёт вместе.";
 "main_header_state_accessibility_label" = "Федеральная земля";
 "main_header_state_accessibility_hint" = "Текущая земля. Ты можешь изменить её в настройках.";

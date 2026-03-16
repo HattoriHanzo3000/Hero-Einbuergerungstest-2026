@@ -114,6 +114,8 @@
 "eagle_desc_growing" = "Du bist zu %d%% bereit. Du fliegst richtig gut! Fast geschafft!";
 "eagle_desc_wise" = "Du bist zu %d%% bereit. Nur noch ein kleiner Flug – du schaffst das!";
 "eagle_desc_master" = "Du bist zu %d%% bereit. Du bist ein echter Wissens-Adler!";
+"eagle_level_up_title" = "Neues Level";
+"eagle_level_up_continue" = "Weiter lernen";
 "test_header_set_date_prompt" = "Wann ist dein Test? Trag das Datum in den Einstellungen ein, dann zählen wir gemeinsam die Tage.";
 "main_header_state_accessibility_label" = "Bundesland";
 "main_header_state_accessibility_hint" = "Aktuelles Bundesland. Du kannst es in den Einstellungen ändern.";

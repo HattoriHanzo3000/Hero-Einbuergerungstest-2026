@@ -114,6 +114,8 @@
 "eagle_desc_growing" = "You're %d%% ready. You're flying high! Almost there.";
 "eagle_desc_wise" = "You're %d%% ready. Just one more flight — you've got this!";
 "eagle_desc_master" = "You're %d%% ready. You're a true knowledge eagle!";
+"eagle_level_up_title" = "New Level Up";
+"eagle_level_up_continue" = "Continue learning";
 "test_header_set_date_prompt" = "When's your test? Set the date in Settings and we'll count down together.";
 "main_header_state_accessibility_label" = "Federal state";
 "main_header_state_accessibility_hint" = "Current federal state. Change it in Settings.";
