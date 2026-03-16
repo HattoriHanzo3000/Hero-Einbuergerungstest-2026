@@ -1,9 +1,9 @@
 import SwiftUI
 
-/// Splash screen: app name and icon, then auto-advances.
+/// Splash screen: app name and icon, then auto-advances after mascot GIF plays once.
 struct OnboardingStartView: View {
     let onComplete: () -> Void
-    @State private var glowPhase: Bool = false
+    @State private var playSignal: UUID?
 
     var body: some View {
         ZStack {
@@ -14,20 +14,9 @@ struct OnboardingStartView: View {
 
             VStack(spacing: 24) {
                 VStack(spacing: 4) {
-                    Text("HERO")
-                        .font(
-                            .system(size: 90, weight: .heavy)
-                                .width(.expanded)
-                        )
-                        .kerning(2)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.6)
-                        .allowsTightening(true)
-                        .truncationMode(.tail)
-                        .foregroundColor(.white)
+                    heroTitleView
                         .padding(.bottom, -4)
-                    Text("Einbürgerungtest")
+                    Text("Einbürgerungstest")
                         .font(.system(size: 40, weight: .heavy))
                         .kerning(0.5)
                         .multilineTextAlignment(.center)
@@ -50,27 +39,44 @@ struct OnboardingStartView: View {
 
                 HStack {
                     Spacer()
-                    MascotView(autoPlayInterval: 4)
-                        .fixedSize()
-                        .scaleEffect(glowPhase ? 1.04 : 1.0)
-                        .shadow(
-                            color: .black.opacity(glowPhase ? 0.2 : 0.08),
-                            radius: glowPhase ? 16 : 6,
-                            x: 0,
-                            y: glowPhase ? 10 : 4
-                        )
+                    MascotView(
+                        assetBaseName: "MainChick",
+                        autoPlayInterval: nil,
+                        playSignal: playSignal,
+                        onPlayCompleted: onComplete
+                    )
+                    .environment(\.colorScheme, .light)
+                    .fixedSize()
+                    .shadow(color: .black.opacity(0.1), radius: 6, x: 0, y: 4)
                     Spacer()
                 }
             }
         }
         .onAppear {
-            withAnimation(.easeInOut(duration: 1.6).repeatForever(autoreverses: true)) {
-                glowPhase = true
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                onComplete()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                playSignal = UUID()
             }
         }
+    }
+
+    private var heroTitleView: some View {
+        let title = "HERO"
+        let font = Font.system(size: 90, weight: .heavy).width(.expanded)
+        let styledText = Text(title)
+            .font(font)
+            .kerning(2)
+            .multilineTextAlignment(.center)
+            .lineLimit(1)
+            .minimumScaleFactor(0.6)
+            .allowsTightening(true)
+            .truncationMode(.tail)
+        return styledText
+            .foregroundColor(Color("AppAmber"))
+            .overlay(
+                ShimmerOverlay(duration: 3)
+                    .mask(styledText)
+                    .blendMode(.plusLighter)
+            )
     }
 }
 

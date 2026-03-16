@@ -8,6 +8,8 @@ struct MascotView: View {
     /// Base name for the mascot asset, e.g. "MainChick" or "MainChickFlipped".
     /// Dark variants use the "Dark" suffix when available (e.g. "MainChickDark").
     let assetBaseName: String
+    /// When the primary asset has no GIF, use this for animation (e.g. "MainChick" for MainChick_About).
+    let gifAssetFallback: String?
     let autoPlayInterval: TimeInterval?
     let playSignal: UUID?
     let onPlayCompleted: (() -> Void)?
@@ -23,12 +25,14 @@ struct MascotView: View {
 
     init(
         assetBaseName: String = "MainChick",
+        gifAssetFallback: String? = nil,
         autoPlayInterval: TimeInterval? = nil,
         playSignal: UUID? = nil,
         onPlayCompleted: (() -> Void)? = nil,
         onAnimationStart: (() -> Void)? = nil
     ) {
         self.assetBaseName = assetBaseName
+        self.gifAssetFallback = gifAssetFallback
         self.autoPlayInterval = autoPlayInterval
         self.playSignal = playSignal
         self.onPlayCompleted = onPlayCompleted
@@ -95,10 +99,12 @@ private extension MascotView {
     }
 
     var gifMascotAssetName: String {
-        if colorScheme == .dark, gifExists(named: "\(assetBaseName)Dark") {
-            return "\(assetBaseName)Dark"
-        }
-        return assetBaseName
+        let primary = colorScheme == .dark && gifExists(named: "\(assetBaseName)Dark")
+            ? "\(assetBaseName)Dark"
+            : assetBaseName
+        if gifExists(named: primary) { return primary }
+        if let fallback = gifAssetFallback, gifExists(named: fallback) { return fallback }
+        return primary
     }
 
     var mascotView: some View {
