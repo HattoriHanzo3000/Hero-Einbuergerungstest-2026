@@ -36,7 +36,7 @@ struct HomeView: View {
                     mascotAssetBaseName: "MainChickFlipped"
                 )
                 .padding(.horizontal, layoutMetrics.adaptive(16))
-                .padding(.bottom, layoutMetrics.adaptive(12))
+                // Vertical spacing below header is controlled by the learn options section top padding
                 .background(
                     Rectangle()
                         .fill(LiquidGlassGradient.blue.screenBackground)
@@ -46,7 +46,8 @@ struct HomeView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     HomeLearnOptionsSection()
                         .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
-                        .padding(.top, layoutMetrics.adaptive(12))
+                        // Match spacing between header and first button to spacing between buttons (16)
+                        .padding(.top, layoutMetrics.adaptive(16))
                         .padding(.bottom, footerPadding + geometry.safeAreaInsets.bottom)
                         .frame(maxWidth: .infinity, alignment: .top)
                         .id(languageManager.currentAppLanguage)
