@@ -11,10 +11,12 @@ import SwiftUI
 // MARK: - Screen Header Card Content
 /// Defines the trailing content type beside the mascot.
 enum ScreenHeaderCardContent: Equatable {
-    /// State title + slogan (Home).
+    /// State title + slogan (Home). No alternating when mascot animates.
     case state(stateName: String)
     /// State title + slogan alternating with test date and optional readiness when mascot animates.
     case stateWithTestDate(stateName: String, testDateMessage: String, readinessMessage: String? = nil)
+    /// Alternating readiness + test date only (Progress). No state title or slogan.
+    case readinessWithTestDate(readinessMessage: String, testDateMessage: String)
     /// Single message text (Test date, etc.).
     case message(String)
     /// Mascot + progress text in separate containers (Progress).
@@ -22,15 +24,19 @@ enum ScreenHeaderCardContent: Equatable {
 }
 
 private extension ScreenHeaderCardContent {
-    var isStateWithTestDate: Bool {
+    var isAlternatingOnMascotAnimation: Bool {
         if case .stateWithTestDate = self { return true }
+        if case .readinessWithTestDate = self { return true }
         return false
     }
 
-    /// Number of messages to cycle through (slogan + test date + optional readiness).
+    /// Number of messages to cycle through (slogan + test date + optional readiness, or readiness + test date).
     var messageCountForAlternating: Int {
-        guard case .stateWithTestDate(_, _, let readiness) = self else { return 2 }
-        return readiness != nil ? 3 : 2
+        switch self {
+        case .stateWithTestDate(_, _, let readiness): return readiness != nil ? 3 : 2
+        case .readinessWithTestDate: return 2
+        default: return 2
+        }
     }
 }
 
@@ -61,7 +67,7 @@ struct ScreenHeaderCard: View {
 
     private var useHomeHeaderLayout: Bool {
         switch content {
-        case .state, .stateWithTestDate, .readiness: return true
+        case .state, .stateWithTestDate, .readinessWithTestDate, .readiness: return true
         case .message: return false
         }
     }
@@ -126,7 +132,7 @@ struct ScreenHeaderCard: View {
                 MascotView(
                     assetBaseName: mascotAssetBaseName,
                     autoPlayInterval: autoPlayInterval,
-                    onAnimationStart: content.isStateWithTestDate ? {
+                    onAnimationStart: content.isAlternatingOnMascotAnimation ? {
                         withAnimation(.easeInOut(duration: 0.35)) { advanceMessageIndex() }
                     } : nil
                 )
@@ -143,7 +149,7 @@ struct ScreenHeaderCard: View {
             stateTitleText(stateName: stateName)
         case .stateWithTestDate(let stateName, _, _):
             stateTitleText(stateName: stateName)
-        case .readiness:
+        case .readinessWithTestDate, .readiness:
             EmptyView()
         default:
             EmptyView()
@@ -173,10 +179,12 @@ struct ScreenHeaderCard: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         case .stateWithTestDate(let stateName, let testDateMessage, let readinessMessage):
             stateContentWithAlternatingMessage(stateName: stateName, testDateMessage: testDateMessage, readinessMessage: readinessMessage)
+        case .readinessWithTestDate(let readinessMessage, let testDateMessage):
+            readinessWithTestDateAlternatingMessage(readinessMessage: readinessMessage, testDateMessage: testDateMessage)
         case .readiness:
             messageContent(text: formattedReadinessMessage)
-        default:
-            EmptyView()
+        case .message(let text):
+            messageContent(text: text)
         }
     }
 
@@ -185,7 +193,7 @@ struct ScreenHeaderCard: View {
             MascotView(
                 assetBaseName: mascotAssetBaseName,
                 autoPlayInterval: content == .readiness ? nil : autoPlayInterval,
-                onAnimationStart: content.isStateWithTestDate ? {
+                onAnimationStart: content.isAlternatingOnMascotAnimation ? {
                     withAnimation(.easeInOut(duration: 0.35)) { advanceMessageIndex() }
                 } : nil
             )
@@ -205,6 +213,8 @@ struct ScreenHeaderCard: View {
             stateContent(stateName: stateName)
         case .stateWithTestDate(let stateName, let testDateMessage, let readinessMessage):
             stateContentWithAlternating(stateName: stateName, testDateMessage: testDateMessage, readinessMessage: readinessMessage)
+        case .readinessWithTestDate(let readinessMessage, let testDateMessage):
+            readinessWithTestDateAlternatingMessage(readinessMessage: readinessMessage, testDateMessage: testDateMessage)
         case .message(let text):
             messageContent(text: text)
         }
@@ -284,6 +294,35 @@ struct ScreenHeaderCard: View {
 
             stateContentWithAlternatingMessage(stateName: stateName, testDateMessage: testDateMessage, readinessMessage: readinessMessage)
         }
+    }
+
+    @ViewBuilder
+    private func readinessWithTestDateAlternatingMessage(readinessMessage: String, testDateMessage: String) -> some View {
+        let idx = messageIndex % 2
+
+        ZStack(alignment: .leading) {
+            if idx == 0 {
+                Text(readinessMessage)
+                    .font(.system(.body, weight: .semibold))
+                    .italic()
+                    .lineSpacing(4)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .transition(.opacity)
+            } else {
+                Text(testDateMessage)
+                    .font(.system(.body, weight: .semibold))
+                    .italic()
+                    .lineSpacing(4)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.25), value: messageIndex)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func messageContent(text: String) -> some View {

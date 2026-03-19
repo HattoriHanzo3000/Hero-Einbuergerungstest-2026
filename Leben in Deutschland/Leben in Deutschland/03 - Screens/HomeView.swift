@@ -33,7 +33,8 @@ struct HomeView: View {
                     readinessPercentage: viewModel.statistics.readinessPercentage,
                     isPremium: subscriptionManager.effectiveIsPremium,
                     useCard: false,
-                    mascotAssetBaseName: "MainChickFlipped"
+                    mascotAssetBaseName: "MainChickFlipped",
+                    alternatingEnabled: false
                 )
                 .padding(.horizontal, layoutMetrics.adaptive(16))
                 // Vertical spacing below header is controlled by the learn options section top padding

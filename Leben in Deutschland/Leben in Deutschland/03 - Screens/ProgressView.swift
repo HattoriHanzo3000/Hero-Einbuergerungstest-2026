@@ -74,7 +74,8 @@ private extension ProgressTabView {
             readinessPercentage: viewModel.statistics.readinessPercentage,
             isPremium: subscriptionManager.effectiveIsPremium,
             useCard: false,
-            mascotAssetBaseName: "MainChickFlipped"
+            mascotAssetBaseName: "MainChickFlipped",
+            alternatingEnabled: true
         )
         .padding(.horizontal, layoutMetrics.adaptive(16))
         .padding(.bottom, layoutMetrics.adaptive(12))

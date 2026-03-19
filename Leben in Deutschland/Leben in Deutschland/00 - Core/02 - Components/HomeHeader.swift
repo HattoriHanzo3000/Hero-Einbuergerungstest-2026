@@ -1,7 +1,7 @@
 import SwiftUI
 
 // MARK: - Home Header
-/// Home screen header: mascot + state title + slogan (alternating with test date and readiness when mascot animates).
+/// Home screen header: mascot + state title + slogan. When alternatingEnabled, Progress shows alternating readiness + test date.
 struct HomeHeader: View {
     let readinessPercentage: Int
     /// When false, readiness score is hidden (premium-only feature).
@@ -10,6 +10,8 @@ struct HomeHeader: View {
     var useCard: Bool = true
     /// Base name for the mascot asset used in this header (e.g. "MainChick" or "MainChickFlipped").
     var mascotAssetBaseName: String = "MainChick"
+    /// When false (Home), shows only state + slogan. When true (Progress), shows alternating readiness + test date.
+    var alternatingEnabled: Bool = true
 
     @EnvironmentObject private var stateManager: StateManager
     @EnvironmentObject private var languageManager: LanguageManager
@@ -25,11 +27,11 @@ struct HomeHeader: View {
 
     var body: some View {
         let content: ScreenHeaderCardContent = stateManager.selectedState.map { stateName in
-            .stateWithTestDate(
-                stateName: stateName,
-                testDateMessage: testDateMessage,
-                readinessMessage: isPremium ? readinessMessage : nil
-            )
+            if alternatingEnabled {
+                .readinessWithTestDate(readinessMessage: readinessMessage, testDateMessage: testDateMessage)
+            } else {
+                .state(stateName: stateName)
+            }
         } ?? (isPremium ? .readiness : .message("progress_premium_gate_message".localized))
         return ScreenHeaderCard(
             readinessPercentage: readinessPercentage,
