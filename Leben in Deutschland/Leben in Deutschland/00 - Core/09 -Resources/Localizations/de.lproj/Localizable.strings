@@ -214,11 +214,11 @@
 "test_result_only_prefix" = "Nur";
 "of" = "von";
 "questions_correct" = "Fragen richtig";
-"time_used" = "Benötigte Zeit:";
-"minimum_requirement" = "Mindestanforderung:";
-"your_result" = "Ihr Ergebnis:";
-"accuracy" = "Genauigkeit:";
-"test_results_your_results" = "Dein Ergebnis";
+"time_used" = "Benötigte Zeit";
+"minimum_requirement" = "Zum Bestehen nötig";
+"accuracy" = "Genauigkeit";
+"test_results_your_results" = "Kurzüberblick";
+"test_results_correct_answers_label" = "Richtige Antworten";
 "test_results_category_breakdown" = "Nach Kategorie";
 "test_results_x_of_y" = "%d von %d";
 "view_answers" = "ANTWORTEN ANZEIGEN";

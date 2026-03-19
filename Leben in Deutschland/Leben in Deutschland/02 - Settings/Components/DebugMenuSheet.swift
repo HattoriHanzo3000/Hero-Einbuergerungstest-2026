@@ -18,6 +18,7 @@ struct DebugMenuSheet: View {
 
     @State private var showTestResultPassed = false
     @State private var showTestResultFailed = false
+    @State private var showEagleLevelUp = false
 
     var body: some View {
         NavigationStack {
@@ -84,6 +85,16 @@ struct DebugMenuSheet: View {
                         overrides.clearAll()
                     }
                 }
+
+                Section {
+                    Button("Preview Eagle Level Up (100%)") {
+                        showEagleLevelUp = true
+                    }
+                } header: {
+                    Text("Eagle Level Up")
+                } footer: {
+                    Text("Directly previews the 100% (master) splash screen for UI testing.")
+                }
             }
             .navigationTitle("Developer Menu")
             .navigationBarTitleDisplayMode(.inline)
@@ -94,11 +105,20 @@ struct DebugMenuSheet: View {
                     }
                 }
             }
-            .sheet(isPresented: $showTestResultPassed) {
+            .fullScreenCover(isPresented: $showTestResultPassed) {
                 testResultSheet(passed: true) { showTestResultPassed = false }
             }
-            .sheet(isPresented: $showTestResultFailed) {
+            .fullScreenCover(isPresented: $showTestResultFailed) {
                 testResultSheet(passed: false) { showTestResultFailed = false }
+            }
+            .fullScreenCover(isPresented: $showEagleLevelUp) {
+                EagleLevelUpView(
+                    stage: .master,
+                    readinessPercentage: 100,
+                    onDismiss: { showEagleLevelUp = false }
+                )
+                .environmentObject(languageManager)
+                .layoutMetrics(layoutMetrics)
             }
         }
     }
@@ -114,11 +134,6 @@ struct DebugMenuSheet: View {
             .environmentObject(favoritesManager)
             .environment(AppRouter())
             .layoutMetrics(layoutMetrics)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Close", action: onDismiss)
-                }
-            }
         }
     }
 }

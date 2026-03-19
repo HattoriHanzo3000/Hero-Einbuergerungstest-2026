@@ -209,7 +209,7 @@ private extension TestResultsView {
                                     .monospacedDigit()
                             }
                             HStack {
-                                Text("your_result".localized.withTrailingColon)
+                                Text("test_results_correct_answers_label".localized.withTrailingColon)
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                 Spacer()
@@ -290,50 +290,11 @@ private extension TestResultsView {
     }
 }
 
-// MARK: - Previews (real category names so breakdown matches app design)
-private let previewCategoryNames = [
-    "Law and Constitution",
-    "History",
-    "Federal States",
-    "Elections",
-    "Family and Education"
-]
-
-private func makePreviewResultsViewModel(passed: Bool) -> TestSessionViewModel {
-    // 33 questions across categories to match real test; correctCount >= 17 when passed.
-    let sampleQuestions: [TestQuestion] = (0..<33).map { i in
-        TestQuestion(
-            id: i,
-            originalId: "\(100 + i)",
-            text: "Sample question \(i + 1) text?",
-            options: ["Option A", "Option B", "Option C", "Option D"],
-            correctIndex: 0,
-            isRegional: false,
-            category: previewCategoryNames[i % previewCategoryNames.count]
-        )
-    }
-    let vm = TestSessionViewModel()
-    vm.initializeTest(generalQuestions: sampleQuestions, regionalQuestions: [])
-    for i in 0..<vm.questions.count {
-        vm.goToQuestion(i)
-        let q = vm.questions[i]
-        let chosen: Int
-        if passed {
-            chosen = q.correctIndex
-        } else {
-            // Vary by category index so breakdown differs across categories
-            let catIndex = i % previewCategoryNames.count
-            chosen = (catIndex % 3 == 0) ? q.correctIndex : (q.correctIndex + 1) % max(1, q.options.count)
-        }
-        vm.answerQuestion(selectedIndex: chosen)
-    }
-    vm.finishTest()
-    return vm
-}
-
+// MARK: - Previews (same mock as DEBUG developer menu when available)
+#if DEBUG
 #Preview("Test Results – Passed") {
     TestResultsView(
-        viewModel: makePreviewResultsViewModel(passed: true),
+        viewModel: DebugTestResultsHelper.makeMockResultsViewModel(passed: true),
         onBackToMainMenu: {},
         onTryAgain: {}
     )
@@ -345,7 +306,7 @@ private func makePreviewResultsViewModel(passed: Bool) -> TestSessionViewModel {
 
 #Preview("Test Results – Failed") {
     TestResultsView(
-        viewModel: makePreviewResultsViewModel(passed: false),
+        viewModel: DebugTestResultsHelper.makeMockResultsViewModel(passed: false),
         onBackToMainMenu: {},
         onTryAgain: {}
     )
@@ -354,3 +315,4 @@ private func makePreviewResultsViewModel(passed: Bool) -> TestSessionViewModel {
     .environment(AppRouter())
     .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
+#endif

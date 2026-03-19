@@ -113,6 +113,8 @@ struct ScreenHeaderCard: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.bottom, layoutMetrics.adaptive(12))
+            .animation(.easeInOut(duration: 0.35), value: messageIndex)
 
             // Right: premium badge (row 1) when premium, mascot (row 2) — fixed positions
             VStack(alignment: .trailing, spacing: premiumRowSpacing) {
@@ -124,7 +126,9 @@ struct ScreenHeaderCard: View {
                 MascotView(
                     assetBaseName: mascotAssetBaseName,
                     autoPlayInterval: autoPlayInterval,
-                    onAnimationStart: content.isStateWithTestDate ? { advanceMessageIndex() } : nil
+                    onAnimationStart: content.isStateWithTestDate ? {
+                        withAnimation(.easeInOut(duration: 0.35)) { advanceMessageIndex() }
+                    } : nil
                 )
                 .frame(width: mascotSize, height: mascotSize)
             }
@@ -181,7 +185,9 @@ struct ScreenHeaderCard: View {
             MascotView(
                 assetBaseName: mascotAssetBaseName,
                 autoPlayInterval: content == .readiness ? nil : autoPlayInterval,
-                onAnimationStart: content.isStateWithTestDate ? { advanceMessageIndex() } : nil
+                onAnimationStart: content.isStateWithTestDate ? {
+                    withAnimation(.easeInOut(duration: 0.35)) { advanceMessageIndex() }
+                } : nil
             )
             .frame(width: mascotSize, height: mascotSize)
 
@@ -256,7 +262,7 @@ struct ScreenHeaderCard: View {
                     .transition(.opacity)
             }
         }
-        .animation(.easeInOut(duration: 0.35), value: messageIndex)
+        .animation(.easeInOut(duration: 0.25), value: messageIndex)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 

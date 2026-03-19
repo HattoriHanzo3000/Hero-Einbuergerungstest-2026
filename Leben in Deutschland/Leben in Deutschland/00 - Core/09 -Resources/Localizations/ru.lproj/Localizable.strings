@@ -224,11 +224,11 @@
 "test_result_only_prefix" = "Только";
 "of" = "из";
 "questions_correct" = "вопросов правильно";
-"time_used" = "Затраченное время:";
-"minimum_requirement" = "Минимальное требование:";
-"your_result" = "Ваш результат:";
-"accuracy" = "Точность:";
-"test_results_your_results" = "Твой результат";
+"time_used" = "Потраченное время";
+"minimum_requirement" = "Минимум для зачёта";
+"accuracy" = "Точность";
+"test_results_your_results" = "Кратко";
+"test_results_correct_answers_label" = "Правильные ответы";
 "test_results_category_breakdown" = "По категориям";
 "test_results_x_of_y" = "%d из %d";
 "view_answers" = "ПОСМОТРЕТЬ ОТВЕТЫ";

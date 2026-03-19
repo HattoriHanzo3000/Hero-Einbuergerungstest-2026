@@ -224,11 +224,11 @@
 "test_result_only_prefix" = "Only";
 "of" = "of";
 "questions_correct" = "questions correct";
-"time_used" = "Time Used:";
-"minimum_requirement" = "Minimum Requirement:";
-"your_result" = "Your Result:";
-"accuracy" = "Accuracy:";
-"test_results_your_results" = "Your results";
+"time_used" = "Time used";
+"minimum_requirement" = "Minimum to pass";
+"accuracy" = "Accuracy";
+"test_results_your_results" = "Quick overview";
+"test_results_correct_answers_label" = "Correct answers";
 "test_results_category_breakdown" = "By category";
 "test_results_x_of_y" = "%d of %d";
 "view_answers" = "VIEW ANSWERS";

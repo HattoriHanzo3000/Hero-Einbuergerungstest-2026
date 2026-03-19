@@ -160,6 +160,16 @@ class TestSessionViewModel: ObservableObject {
         stopTimer()
         saveTestResultsToStatistics()
     }
+
+    #if DEBUG
+    /// Adjusts `startTime` so `timeUsed` matches a fixed duration (for mock results / screenshots).
+    /// Call only after `finishTest()`.
+    func debug_setTimeUsedForPreview(seconds: TimeInterval) {
+        guard let end = finishTime else { return }
+        let clamped = max(0, min(seconds, maxTime - 0.001))
+        startTime = end.addingTimeInterval(-clamped)
+    }
+    #endif
     
     // MARK: - Statistics Integration
     
