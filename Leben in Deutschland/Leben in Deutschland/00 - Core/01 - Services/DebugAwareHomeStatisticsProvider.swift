@@ -18,6 +18,7 @@ private enum DebugReadinessPreset {
         case 10: return (28, 4, 2, 0)   // ~10%, early learner
         case 30: return (80, 60, 30, 20)  // ~30%, building up
         case 50: return (60, 50, 50, 90)   // ~50%, halfway
+        case 76: return (24, 36, 153, 97) // ~76%, non-round buckets for ring variety
         case 80: return (30, 40, 80, 120)  // ~80%, almost ready
         case 100: return (0, 0, 0, 310)    // 100%, all expert
         default: return nil

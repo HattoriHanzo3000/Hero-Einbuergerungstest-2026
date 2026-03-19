@@ -34,6 +34,7 @@ final class SubscriptionManager: ObservableObject {
     /// Premium status used by UI. In DEBUG, respects DebugOverrides.simulatePremium; otherwise equals isPremium.
     var effectiveIsPremium: Bool {
         #if DEBUG
+        return true // TEMPORARY: Bypass for screenshot capture. Revert after.
         if let override = DebugOverrides.shared.simulatePremium {
             return override
         }

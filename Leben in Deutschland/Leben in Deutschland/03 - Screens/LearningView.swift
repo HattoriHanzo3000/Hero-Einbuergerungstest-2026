@@ -285,7 +285,13 @@ struct LearningView: View {
                     questionCount: viewModel.questions.count,
                     currentIndex: viewModel.currentIndex,
                     circleColor: circleColor(for:),
-                    circleTextColor: { _ in .white },
+                    // Ensure contrast: answered circles (green/red) and selected circle use white numbers.
+                    // Unanswered (gray) circles follow system contrast (`.primary`).
+                    circleTextColor: { index in
+                        if index == viewModel.currentIndex { return .white }
+                        if viewModel.isCorrect(at: index) || viewModel.isIncorrect(at: index) { return .white }
+                        return .primary
+                    },
                     onPrevious: { viewModel.goToQuestion(at: viewModel.currentIndex - 1) },
                     onNext: { viewModel.goToQuestion(at: viewModel.currentIndex + 1) },
                     onSelectIndex: { viewModel.goToQuestion(at: $0) },
@@ -346,6 +352,9 @@ struct LearningView: View {
 
     /// Green gradient for correct, red for wrong, nil for unanswered (uses circleColor).
     private func circleGradient(for index: Int) -> LiquidGlassGradient? {
+        // In Learning mode, visually highlight the currently selected question like
+        // All Questions: the active circle uses the "selected" gradient (blue).
+        if index == viewModel.currentIndex { return .blue }
         if viewModel.isCorrect(at: index) { return .green }
         if viewModel.isIncorrect(at: index) { return .red }
         return nil

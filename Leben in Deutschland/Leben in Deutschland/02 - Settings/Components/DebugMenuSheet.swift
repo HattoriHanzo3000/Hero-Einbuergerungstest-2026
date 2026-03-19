@@ -55,6 +55,7 @@ struct DebugMenuSheet: View {
                         Text("10%").tag(10)
                         Text("30%").tag(30)
                         Text("50%").tag(50)
+                        Text("76%").tag(76)
                         Text("80%").tag(80)
                         Text("100%").tag(100)
                     }
