@@ -1,0 +1,328 @@
+// ONBOARDING
+"eagle_greeting" = "Merhaba! Ben Kartal Hero, sınava hazırlanmana yardım edeceğim. Hadi başlayalım!\nÖncelikle uygulamanın dilini seç.";
+"language_selected" = "Harika! İleri'ye dokun";
+"translation_selection_title" = "Şimdi soru ve cevapların çevirisi için bir dil seç – yardıma ihtiyacın olursa diye.";
+"choose_federal_state" = "Sınava nerede gireceksin? Eyaletine özel 10 ekstra soru ekleyeceğim.";
+"state_baden_württemberg" = "Her şey burada icat edildi – Kehrwoche (temizlik haftası) bile!";
+"state_bayern" = "Lederhose giyildi, sınav geçildi!";
+"state_brandenburg" = "İnsandan çok çam ağacı var – ama tam bir huzur!";
+"state_bremen" = "Küçük ama Mızıkacıların gücüne sahip!";
+"state_hamburg" = "Moin! Ve her zaman rüzgara karşı!";
+"state_rheinland_pfalz" = "Şarabın yetiştiği yerde bilgi de yetişir!";
+"state_sachsen_anhalt" = "Sınava çalış ve hemen ardından kaleleri say!";
+"state_berlin" = "Sınav sorularının bile havalı olduğu yer!";
+"state_hessen" = "Bankalar ve borsanın yanında en iyi yatırım senin beynin!";
+"state_mecklenburg_vorpommern" = "Cevabı kum tepeleri ve dalgalar arasında bulacaksın!";
+"state_niedersachsen" = "Burada her şey düz – zekan hariç!";
+"state_nordrhein_westfalen" = "Helau, Alaaf! Ve doğruca sınava!";
+"state_saarland" = "Önemli olan iyi yemek (Hauptsach gudd gess) – ve soruları doğru cevaplamak!";
+"state_sachsen" = "Bir 'Nu' (Evet) ile sınav başarısına!";
+"state_schleswig_holstein" = "İki deniz, tek sınav – bunu başaracağız!";
+"state_thüringen" = "Goethe burada öğrenmişti – şimdi sıra sende!";
+"Baden-Württemberg" = "Baden-Württemberg";
+"Bayern" = "Bayern";
+"Berlin" = "Berlin";
+"Brandenburg" = "Brandenburg";
+"Bremen" = "Bremen";
+"Hamburg" = "Hamburg";
+"Hessen" = "Hessen";
+"Mecklenburg-Vorpommern" = "Mecklenburg-Vorpommern";
+"Niedersachsen" = "Niedersachsen";
+"Nordrhein-Westfalen" = "Nordrhein-Westfalen";
+"Rheinland-Pfalz" = "Rheinland-Pfalz";
+"Saarland" = "Saarland";
+"Sachsen" = "Sachsen";
+"Sachsen-Anhalt" = "Sachsen-Anhalt";
+"Schleswig-Holstein" = "Schleswig-Holstein";
+"Thüringen" = "Thüringen";
+"onboarding_date_prompt" = "Sınavın ne zaman? Tarihi seç, günleri birlikte sayalım.";
+"SELECT_DATE" = "Tarih seç";
+"SAVE_DATE" = "TARİHİ KAYDET";
+"perfect_days_left" = "Önümüzde %d %@ var. Seninleyim!";
+"perfect_day_left" = "Önümüzde %d %@ var. Seninleyim!";
+"perfect_days_left_2_4" = "Önümüzde %d %@ var. Seninleyim!";
+"perfect_test_today" = "Sınav bugün. Seninleyim!";
+"dont_know_date" = "Henüz bilmiyorum";
+"no_problem_later" = "Sorun değil! Tarihi daha sonra ekleyebilir veya değiştirebilirsin.";
+"NEXT" = "İLERİ";
+"LET'S GO" = "HADİ BAŞLAYALIM!";
+"date_too_far_title" = "Bu oldukça uzak bir tarih";
+"date_too_far_message" = "Zaman yolculuğu havalı ama hadi sınavı önümüzdeki bir yıl içinde tutalım, tamam mı?";
+"ok_button" = "TAMAM";
+
+// PAYWALL
+"paywall_onboarding_title" = "Hero Premium'u ücretsiz dene";
+"paywall_trial_line" = "3 günlük ücretsiz deneme ile başla. İstediğin zaman iptal et.";
+"paywall_plan_pitch" = "Tek hedef. Üç plan. Sana uygun olanı seç.";
+"paywall_title" = "Hero Premium ile Almanya'daki geleceğinin kilidini aç";
+"paywall_subtitle" = "Aralıklı Tekrar, Konulara Göre Öğrenme, Favoriler, sınırsız testler ve detaylı ilerleme — başarmak için ihtiyacın olan her şey.";
+"paywall_close" = "Kapat";
+"paywall_close_hint" = "Ödeme sayfasını kapatır";
+"paywall_restore" = "Satın almaları geri yükle";
+"paywall_restore_hint" = "Önceden satın alınan abonelikleri geri yükler";
+"paywall_restore_success" = "Abonelik geri yüklendi.";
+"paywall_restore_no_subscription" = "Aktif bir abonelik bulunamadı.";
+"paywall_terms" = "Kullanım Koşulları";
+"paywall_terms_hint" = "Kullanım Koşullarını açar";
+"paywall_privacy" = "Gizlilik";
+"paywall_privacy_hint" = "Gizlilik Politikasını açar";
+"paywall_terms_boilerplate" = "Mevcut dönemin bitimine en az 24 saat kala iptal edilmediği sürece abonelik otomatik olarak yenilenir. Aboneliğini App Store hesap ayarlarından yönetebilirsin. Devam ederek Kullanım Koşullarımızı ve Gizlilik Politikamızı kabul etmiş olursun.";
+"paywall_redeem" = "Kodu kullan";
+"paywall_redeem_hint" = "App Store hediye kodunu gir";
+"paywall_onboarding_maybe_later" = "Belki daha sonra";
+"premium_continue" = "Devam";
+
+// TAB BAR
+"tab_learn_title" = "Öğren";
+"tab_progress_title" = "İlerleme";
+"tab_settings_title" = "Ayarlar";
+"tab_search_title" = "Arama";
+"main_tab_bar_accessibility_label" = "Ana Navigasyon";
+"tab_learn_hint" = "Öğrenme bölümünü açar";
+"tab_progress_hint" = "İlerlemeni ve istatistiklerini açar";
+"tab_settings_hint" = "Ayarları açar";
+"tab_search_hint" = "Tüm sorularda aramayı açar";
+"progress_premium_gate_message" = "İlerlemeni ve istatistiklerini görmek için Premium'a yükselt.";
+
+// HOME / LEARN OPTIONS
+"home_learn_spaced_repetition" = "Akıllı Öğrenme";
+"home_learn_spaced_repetition_subtitle" = "Aralıklı Tekrar Sistemi";
+"home_learn_recommended_badge" = "Önerilen";
+"sr_disclaimer_title" = "Aralıklı Tekrar Sistemi";
+"sr_disclaimer_message" = "Aralıklı tekrar, bilimsel olarak kanıtlanmış bir sistemdir: Sorular en uygun aralıklarla tekrarlanır, böylece daha hızlı öğrenir ve daha fazlasını aklında tutarsın. Bu mod ilerlemeni ve sınava hazır olma durumunu etkiler.";
+"sr_disclaimer_do_not_show" = "Bir daha gösterme";
+"home_learn_by_topics" = "Konulara Göre Öğren";
+"home_learn_by_topics_subtitle" = "Konulara göre gruplandırılmış sorular";
+"home_learn_favorites" = "Favoriler";
+"home_learn_favorites_subtitle" = "Kaydettiğin sorular";
+"home_learn_all_questions" = "Tüm Sorular";
+"home_learn_all_questions_subtitle" = "310 resmi sınav sorusunun tamamı";
+"all_questions_empty_title" = "Henüz soru yok";
+"all_questions_empty_message" = "İçerikler yüklendiğinde sorular burada görünecek. Yenilemek için aşağı çek veya tekrar dene.";
+"all_questions_disclaimer_title" = "Tüm Sorular";
+"all_questions_disclaimer_message" = "310 resmi sınav sorusunun tamamı, resmi sınav belgelerinde olduğu gibi burada kronolojik sırayla listelenmiştir. Bu bölüm sadece okumak içindir: Her soru doğru cevabıyla birlikte gösterilir.";
+"learn_by_topics_header_message" = "Senin için tüm soruları konulara göre gruplandırdım — kendi yolunu seç ve başla.";
+"learn_by_topics_disclaimer_title" = "Konulara Göre Öğrenme";
+"learn_by_topics_disclaimer_message" = "Sorular, konuları sırayla öğrenebilmen için konulara göre gruplandırılmıştır. Bir konu seç, soruları cevapla ve cevaplarını kontrol et. Bu mod sınava hazır olma durumunu etkilemez.";
+"no_search_results" = "Sonuç bulunamadı";
+"question_label" = "Soru";
+
+// HEADER / READINESS
+"eagle_desc_egg" = "Sınava %d%% hazırsın. Daha yeni yumurtadan çıktın! Yeni bilgilere doğru!";
+"eagle_desc_chick" = "%d%% hazırsın. Hadi bakalım! Yavaş yavaş havalanıyorsun.";
+"eagle_desc_young" = "%d%% hazırsın. Kanatların güçleniyor – böyle devam et!";
+"eagle_desc_growing" = "%d%% hazırsın. Gerçekten iyi uçuyorsun! Neredeyse başardın!";
+"eagle_desc_wise" = "%d%% hazırsın. Sadece küçük bir uçuş kaldı – bunu başarabilirsin!";
+"eagle_desc_master" = "%d%% hazırsın. Sen gerçek bir bilgi kartalısın!";
+"eagle_level_up_title" = "Yeni Seviye";
+"eagle_level_up_continue" = "Öğrenmeye devam et";
+"test_header_set_date_prompt" = "Sınavın ne zaman? Tarihi ayarlara gir, günleri birlikte sayalım.";
+"main_header_state_accessibility_label" = "Eyalet";
+"main_header_state_accessibility_hint" = "Mevcut eyalet. Ayarlardan değiştirebilirsin.";
+"main_header_state_slogan_accessibility_label" = "Eyalet Sloganı";
+"main_header_test_date_accessibility_label" = "Sınava kalan gün";
+"home_statistics_title" = "İlerlemen";
+"home_statistics_accessibility_label" = "Hazırlık ilerlemesi";
+"home_statistics_accessibility_value" = "Yüzde %d hazır";
+"back_button_accessibility_label" = "Geri";
+"spaced_translation_button_accessibility_label" = "Çeviriyi göster";
+"spaced_favorite_button_accessibility_label" = "Favori olarak kaydet";
+"hint_button_title" = "İpucu";
+
+// LEARN CAROUSEL
+"learn_option_test_title" = "Deneme Sınavı Çöz";
+"learn_option_test_subtitle" = "Resmi sınavı simüle et";
+"learn_option_test_description" = "Resmi sınavla birebir aynı: 33 soru (30 genel, 3 kendi eyaletinden), 60 dakika, tek hak. İpucu veya düzeltme yok. Hazır olup olmadığını görmek için ideal.";
+
+// SETTINGS / REGIONAL
+"change_state_confirmation_title" = "Eyalet değiştirilsin mi?";
+"change_state_confirmation_message" = "Eyaleti gerçekten değiştirmek istiyor musun? Tüm ilerlemen kaybolacak.";
+"change_state_confirmation_cancel" = "İptal";
+"change_state_confirmation_confirm" = "Değiştir";
+"settings_app_language_change_title" = "Uygulama dili değiştirilsin mi?";
+"settings_translation_language_change_title" = "Çeviri dili değiştirilsin mi?";
+"settings_language_change_message" = "Arayüz güncellenecek. Devam edilsin mi?";
+"settings_language_change_cancel" = "İptal";
+"settings_language_change_confirm" = "Devam";
+
+// SETTINGS
+"settings_title" = "Ayarlar";
+"version" = "Sürüm";
+"settings_personalisation_title" = "Kişiselleştirme";
+"settings_info_title" = "Hakkında";
+"settings_regional_title" = "Bölge";
+"settings_danger_title" = "Veriler";
+"settings_appearance_light" = "Açık";
+"settings_appearance_dark" = "Koyu";
+"settings_appearance_system" = "Sistem";
+"settings_support_title" = "Destek";
+"settings_faq_button" = "SSS";
+"settings_contact_button" = "Bize Ulaşın";
+"settings_about_button" = "Hakkında";
+"settings_share_button" = "Paylaş";
+"settings_about_mascot_accessibility" = "Hero Maskotu";
+"settings_about_description" = "Hero – Vatandaşlık Testi, 310 resmi soru, Aralıklı Tekrar öğrenimi ve tam test simülasyonu ile vatandaşlık sınavına hazırlanmana yardımcı olur. Eyaletini seç, kendi hızında çalış ve sınav günü kendini güvende hisset.";
+"settings_about_learning_options_title" = "Öğrenme Seçenekleri";
+"settings_share_qr_accessibility" = "Uygulamayı indirmek için QR Kodu";
+"settings_share_scan_subtitle" = "Uygulamayı App Store'dan indirmek için bu QR kodunu tara — veya arkadaşlarına göndermek için Paylaş'a dokun.";
+"share_app_hint" = "Uygulamayı başkalarıyla paylaş";
+"legal_title" = "Yasal";
+"settings_impressum_button" = "Künye";
+"terms_of_service" = "Kullanım Koşulları";
+"privacy_policy" = "Gizlilik Politikası";
+"mail_device_info_body" = "Sana daha iyi destek olabilmemiz için lütfen aşağıdaki cihaz bilgilerini silme.\n\n--- Cihaz Bilgileri ---\nUygulama Sürümü: %@ (%@)\nCihaz: %@\niOS Sürümü: %@ %@\n\n--- Lütfen sorununu veya talebini aşağıda açıkla ---";
+"mail_unavailable_title" = "E-posta kullanılamıyor";
+"mail_unavailable_message" = "Kurulu bir e-posta hesabı yok. Destek e-posta adresini kopyalayıp tercih ettiğin e-posta uygulamasına yapıştırabilirsin.";
+
+// RESET / DATA
+"test_simulation_disclaimer_title" = "Test Simülasyonu";
+"test_simulation_disclaimer_message" = "Bu mod resmi vatandaşlık sınavını simüle eder: 33 soru (30 genel, 3 kendi eyaletinden), 60 dakika, tek hak. Test sırasında ipucu veya çeviri yoktur. Geçmek için en az 17 doğru cevap vermelisin. Bu mod sınava hazır olma durumunu etkiler.";
+"delete_statistics_warning_title" = "Tüm veriler silinip uygulama sıfırlansın mı?";
+"delete_statistics_warning_message" = "Bu işlem tüm verileri ve ilerlemeyi siler. Uygulama varsayılan ayarlara döner. Bu işlem geri alınamaz.";
+"delete_button" = "Sil";
+"cancel" = "İptal";
+
+// PRACTICE
+"check_answer_button" = "KONTROL ET";
+"check_answer_button_accessibility_label" = "Cevabı kontrol et";
+"next_button" = "İLERİ";
+
+// LEARN BY TOPICS
+"search" = "Arama";
+"Law and Constitution" = "Hukuk ve Anayasa";
+"Family and Education" = "Aile ve Eğitim";
+"State" = "Devlet";
+"Elections" = "Seçimler";
+"State Institutions" = "Devlet Organları";
+"Economy and Work" = "Ekonomi ve Çalışma Hayatı";
+"Society and Culture" = "Toplum ve Kültür";
+"History" = "Tarih";
+"Europe" = "Avrupa";
+"Federal States" = "Eyaletler";
+
+// TEST SIMULATION
+"test_simulation_title" = "Test Simülasyonu";
+"back" = "Geri";
+"quit_test_title" = "Testten çıkılsın mı?";
+"quit_test_message" = "Testi gerçekten bitirmek istiyor musun? Tüm ilerleme kaybolacak.";
+"quit_test" = "Testi Bitir";
+"finish_test" = "SONUCU GÖR";
+"answer_all_questions_title" = "Önce tüm soruları cevapla";
+"answer_all_questions_message" = "Testi bitirmeden önce tüm soruları cevaplamalısın.";
+"test_passed" = "Tebrikler, testi geçtin!";
+"test_failed" = "Maalesef geçemedin";
+"test_result_only_prefix" = "Sadece";
+"of" = "üzerinden";
+"questions_correct" = "Soru doğru";
+"time_used" = "Kullanılan süre";
+"minimum_requirement" = "Geçmek için gereken";
+"accuracy" = "Doğruluk oranı";
+"test_results_your_results" = "Kısa Özet";
+"test_results_correct_answers_label" = "Doğru Cevaplar";
+"test_results_category_breakdown" = "Kategoriye Göre";
+"test_results_x_of_y" = "%d / %d";
+"view_answers" = "CEVAPLARI GÖSTER";
+"try_again" = "TEKRAR DENE";
+"your_answers" = "Senin Cevapların";
+
+// FAVORITES
+"favorites_empty_title" = "Favori Yok";
+"favorites_disclaimer_title" = "Favoriler";
+"favorites_disclaimer_message" = "Bunlar pratik yaparken kaydettiğin sorular. Soruları eklemek veya çıkarmak için herhangi bir modda kalp simgesine dokun. Bu alan tekrar içindir – her soru doğru cevabıyla birlikte gösterilir.";
+"feature_preview_continue" = "Devam";
+
+// STATISTICS
+"statistics_familiar_title" = "Tanıdık";
+"statistics_reinforced_title" = "Pekiştirilmiş";
+"statistics_mastered_title" = "Kavranmış";
+"statistics_expert_title" = "Uzman";
+"statistics_familiar_description" = "1 kez doğru cevaplandı";
+"statistics_reinforced_description" = "2 kez doğru cevaplandı";
+"statistics_mastered_description" = "3 kez doğru cevaplandı";
+"statistics_expert_description" = "4 veya daha fazla kez doğru cevaplandı";
+"statistics_card_flip_hint" = "Kartı çevirmek için çift dokun";
+"progress_readiness_explanation" = "Bu senin sınava hazır olma puanın. Yüzde ne kadar yüksekse, sınava o kadar hazırsın demektir; 100%% tam hazır olduğunu gösterir. Buna, %d sorunun her birini dört kez doğru cevapladığında ulaşırsın. Dört renk, her seviyede kaç sorunuz olduğunu gösterir: bir kez (Tanıdık), iki kez (Pekiştirilmiş), üç kez (Kavranmış) veya dört kez ve üzeri (Uzman).";
+"progress_readiness_explanation_full" = "Bu senin sınava hazır olma puanın. Yüzde ne kadar yüksekse, sınava o kadar hazırsın demektir; 100%% tam hazır olduğunu gösterir. Buna, %d sorunun her birini dört kez doğru cevapladığında ulaşırsın. Her renk bir seviyeyi temsil eder: Tanıdık - bir kez doğru cevaplandı, Pekiştirilmiş - iki kez doğru cevaplandı, Kavranmış - üç kez doğru cevaplandı, Uzman - dört veya daha fazla kez doğru cevaplandı. Sadece %@ ve %@ kategorilerindeki sorular bu duruma etki eder.";
+"progress_readiness_info_accessibility_label" = "Hazır olma durumu açıklaması";
+"progress_readiness_info_accessibility_hint" = "Hesaplamayı görmek için çift dokun";
+
+// COMMON
+"ok" = "TAMAM";
+"Loading questions..." = "Sorular yükleniyor...";
+"LOADING" = "YÜKLENİYOR...";
+
+// SETTINGS REGIONAL (PICKERS)
+"settings_app_language" = "Uygulama Dili";
+"settings_translation_language" = "Çeviri Dili";
+"settings_federal_state" = "Eyalet";
+"settings_test_date" = "Sınav Tarihi";
+"settings_test_date_not_set" = "Tarih Belirle";
+"settings_language_option_english" = "İngilizce";
+"settings_language_option_german" = "Almanca";
+"settings_language_option_russian" = "Rusça";
+"settings_haptics_toggle" = "Dokunsal Geri Bildirim";
+"settings_appearance_title" = "Görünüm";
+"settings_premium_title" = "Premium";
+"settings_reset_app" = "Uygulamayı Sıfırla";
+
+// PREMIUM / PRICING
+"premium_plan_monthly" = "Aylık";
+"premium_plan_lifetime" = "Ömür Boyu";
+"premium_per_month" = "aylık";
+"premium_accessibility_label" = "Premium";
+"premium_accessibility_hint" = "Premium özellikleri ve abonelik seçeneklerini açar";
+"premium_plan_yearly" = "Yıllık";
+"premium_per_year" = "yıllık";
+"paywall_best_value" = "En İyi Fiyat";
+"paywall_subtitle_monthly" = "Esnek, istediğin zaman iptal et";
+"paywall_subtitle_3_months_format" = "Ayda sadece %@";
+"paywall_subtitle_lifetime" = "Bir kere öde, ömür boyu kullan";
+"paywall_subtitle_lifetime_no_fees" = "Gizli ücret yok. Otomatik yenileme yok.";
+"paywall_trial_shield" = "3 Gün Ücretsiz";
+"launch_offer_badge" = "LANSMAN FIRSATI -%50";
+"launch_offer_line1" = "Lansman Fırsatı";
+"launch_offer_line2" = "Kalıcı Olarak -%50";
+"launch_offer_expires_in" = "Sona erme süresi:";
+"paywall_slash_month" = "/Ay";
+"paywall_slash_year" = "/Yıl";
+"paywall_slash_3_months" = "/3Ay";
+"paywall_slash_6_months" = "/6Ay";
+"paywall_slash_2_months" = "/2Ay";
+"paywall_slash_week" = "/Hf";
+"paywall_year_savings" = "Aylığa göre %37 tasarruf";
+"premium_plan_six_month" = "6 Aylık";
+"premium_plan_three_month" = "3 Aylık";
+"premium_plan_two_month" = "2 Aylık";
+"premium_plan_weekly" = "Haftalık";
+
+// FEEDBACK
+"report_question" = "Soruyu bildir";
+"question_id" = "Soru ID";
+"question_info" = "Soru Bilgileri";
+"feedback_type" = "Geri Bildirim Türü";
+"what_would_you_like_to_report" = "Neyi bildirmek istersin?";
+"additional_details" = "Ek Detaylar";
+"feedback_details_hint" = "Lütfen sorunu ayrıntılı olarak açıkla. Bu, daha hızlı çözmemize yardımcı olur.";
+"email_optional" = "E-posta (isteğe bağlı)";
+"contact_info" = "İletişim Bilgileri";
+"feedback_email_hint" = "E-postanı girersen, geri bildirimine yanıt verebiliriz.";
+"submit" = "Gönder";
+"feedback_submitted" = "Geri bildirim gönderildi";
+"feedback_submitted_message" = "Geri bildirimin için teşekkürler! İnceleyeceğiz ve iyileştirmeler yapacağız.";
+"error" = "Hata";
+"feedback_type_question_error" = "Soru hatası";
+"feedback_type_question_unclear" = "Soru belirsiz";
+"feedback_type_answer_incorrect" = "Yanlış cevap";
+"feedback_type_translation_issue" = "Çeviri sorunu";
+"feedback_type_other" = "Diğer";
+
+// HINTS
+"hint_title" = "İpucu";
+"close" = "Kapat";
+"no_hint_available" = "Bu soru için henüz bir ipucu bulunmuyor.";
+
+// APP RATING
+"rating_prompt_title" = "Hero hoşuna gitti mi?";
+"rating_prompt_message" = "Eğer Hero soruları kavramana yardımcı oluyorsa, bunu duymak isteriz! Kısa bir değerlendirme, diğer öğrenenlerin de bizi keşfetmesine yardımcı olur.";
+"rating_prompt_rate_now" = "Şimdi değerlendir";
+"rating_prompt_ask_later" = "Daha sonra sor";
