@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		74286D012F675FC000E78E95 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74286D002F675FC000E78E95 /* Launch Screen.storyboard */; };
 		749C2CE22F61AA0900B90896 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 749C2CE12F61AA0900B90896 /* RevenueCat */; };
-		749C2CE72F61ACFF00B90896 /* SuperwallKit in Frameworks */ = {isa = PBXBuildFile; productRef = 749C2CE62F61ACFF00B90896 /* SuperwallKit */; };
 		74B1060F2F55E8BB0091BAC0 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 74B1060E2F55E8BB0091BAC0 /* AppIcon.icon */; };
 /* End PBXBuildFile section */
 
@@ -34,7 +33,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				749C2CE22F61AA0900B90896 /* RevenueCat in Frameworks */,
-				749C2CE72F61ACFF00B90896 /* SuperwallKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,7 +84,6 @@
 			name = "Leben in Deutschland";
 			packageProductDependencies = (
 				749C2CE12F61AA0900B90896 /* RevenueCat */,
-				749C2CE62F61ACFF00B90896 /* SuperwallKit */,
 			);
 			productName = "Leben in Deutschland";
 			productReference = E612E89C2E8299CD00513716 /* Leben in Deutschland.app */;
@@ -121,7 +118,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				749C2CE02F61AA0900B90896 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
-				749C2CE52F61ACFF00B90896 /* XCRemoteSwiftPackageReference "Superwall-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E612E89D2E8299CD00513716 /* Products */;
@@ -315,7 +311,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.gizatech.Leben-in-Deutschland";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -356,7 +352,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.gizatech.Leben-in-Deutschland";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -403,14 +399,6 @@
 				minimumVersion = 5.61.0;
 			};
 		};
-		749C2CE52F61ACFF00B90896 /* XCRemoteSwiftPackageReference "Superwall-iOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/superwall/Superwall-iOS";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.14.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -418,11 +406,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 749C2CE02F61AA0900B90896 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
 			productName = RevenueCat;
-		};
-		749C2CE62F61ACFF00B90896 /* SuperwallKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 749C2CE52F61ACFF00B90896 /* XCRemoteSwiftPackageReference "Superwall-iOS" */;
-			productName = SuperwallKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

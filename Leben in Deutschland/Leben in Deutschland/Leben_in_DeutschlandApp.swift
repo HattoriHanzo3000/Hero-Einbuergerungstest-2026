@@ -8,7 +8,6 @@
 import SwiftUI
 import UIKit
 import RevenueCat
-import SuperwallKit
 
 @main
 struct Leben_in_DeutschlandApp: App {
@@ -20,12 +19,6 @@ struct Leben_in_DeutschlandApp: App {
     
     init() {
         Purchases.configure(withAPIKey: AppConfiguration.revenueCatAPIKey)
-        let purchaseController = RevenueCatPurchaseController()
-        Superwall.configure(
-            apiKey: AppConfiguration.superwallAPIKey,
-            purchaseController: purchaseController
-        )
-        purchaseController.syncSubscriptionStatus()
         recordFirstLaunchIfNeeded()
         configureTabBarAppearance()
     }

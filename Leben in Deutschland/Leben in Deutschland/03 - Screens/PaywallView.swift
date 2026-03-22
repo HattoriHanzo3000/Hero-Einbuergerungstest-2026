@@ -3,7 +3,6 @@
 //  Leben in Deutschland
 //
 //  SwiftUI paywall using RevenueCat for offerings, purchases, restore, and redeem.
-//  Replaces Superwall with native UI per Apple's guidelines.
 //
 
 import SwiftUI

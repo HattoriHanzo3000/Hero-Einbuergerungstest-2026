@@ -3,7 +3,7 @@
 //  Leben in Deutschland
 //
 //  Source of truth for premium status. Uses RevenueCat entitlements only.
-//  Presents SwiftUI PaywallView (RevenueCat) instead of Superwall.
+//  Presents SwiftUI PaywallView (RevenueCat offerings / StoreKit).
 //
 
 import Foundation
