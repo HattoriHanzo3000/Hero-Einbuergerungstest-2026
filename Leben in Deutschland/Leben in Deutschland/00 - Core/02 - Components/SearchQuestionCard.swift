@@ -14,10 +14,10 @@ struct SearchQuestionCard: View {
     let subcategoryName: String
     let categoryName: String
     let matchedByTranslation: Bool
+    let onNavigateToLearning: () -> Void
     @EnvironmentObject var languageManager: LanguageManager
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @State private var isPressed = false
-    @State private var navigateToLearning = false
 
     private var translatedQuestion: QuestionModel? {
         guard matchedByTranslation else { return nil }
@@ -33,7 +33,7 @@ struct SearchQuestionCard: View {
         Button {
             HapticManager.shared.lightImpact()
             if canStudyTopic {
-                navigateToLearning = true
+                onNavigateToLearning()
             } else {
                 subscriptionManager.presentPremiumLimitSheet(
                     titleKey: "limit_topic_premium_title",
@@ -82,15 +82,5 @@ struct SearchQuestionCard: View {
         .buttonStyle(.plain)
         .scaleEffect(isPressed ? 0.98 : 1.0)
         .buttonPressAnimation(isPressed: $isPressed)
-        .background(
-            NavigationLink(
-                destination: LearningView(subcategory: SubcategoryModel(
-                    name: subcategoryName,
-                    categoryName: categoryName,
-                    questions: [question]
-                ), usesRouterNavigation: false).environmentObject(languageManager),
-                isActive: $navigateToLearning
-            ) { EmptyView() }
-        )
     }
 }

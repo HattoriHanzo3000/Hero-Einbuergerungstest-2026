@@ -7,6 +7,18 @@
 
 import SwiftUI
 
+// MARK: - Search navigation target (value-based, avoids deprecated NavigationLink)
+private struct SearchLearningTarget: Identifiable, Hashable {
+    let id: String
+    let subcategory: SubcategoryModel
+
+    init(subcategory: SubcategoryModel) {
+        self.subcategory = subcategory
+        let qid = subcategory.questions.first?.id ?? ""
+        self.id = "\(subcategory.id)-\(qid)"
+    }
+}
+
 // MARK: - Search View
 struct SearchView: View {
     @Binding var searchText: String
@@ -14,6 +26,7 @@ struct SearchView: View {
 
     @FocusState private var isSearchFocused: Bool
     @EnvironmentObject var languageManager: LanguageManager
+    @State private var learningTarget: SearchLearningTarget?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -67,7 +80,14 @@ struct SearchView: View {
                                     question: result.question,
                                     subcategoryName: result.subcategory,
                                     categoryName: result.categoryName,
-                                    matchedByTranslation: result.matchedByTranslation
+                                    matchedByTranslation: result.matchedByTranslation,
+                                    onNavigateToLearning: {
+                                        learningTarget = SearchLearningTarget(subcategory: SubcategoryModel(
+                                            name: result.subcategory,
+                                            categoryName: result.categoryName,
+                                            questions: [result.question]
+                                        ))
+                                    }
                                 )
                                 .environmentObject(languageManager)
                             }
@@ -96,6 +116,10 @@ struct SearchView: View {
             } else {
                 Spacer()
             }
+        }
+        .navigationDestination(item: $learningTarget) { target in
+            LearningView(subcategory: target.subcategory, usesRouterNavigation: false)
+                .environmentObject(languageManager)
         }
     }
 }
