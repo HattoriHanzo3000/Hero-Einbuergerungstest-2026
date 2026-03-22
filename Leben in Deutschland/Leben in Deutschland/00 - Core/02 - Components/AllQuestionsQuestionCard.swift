@@ -122,7 +122,7 @@ private extension AllQuestionsQuestionCard {
             // Next button above navigation circles
             if totalCount >= 1 {
                 QuizActionButton(
-                    "next_button".localized,
+                    "next_button".localizedUppercased(),
                     style: nextButtonStyle,
                     isEnabled: currentIndex < totalCount - 1,
                     accessibilityLabel: "next_button".localized

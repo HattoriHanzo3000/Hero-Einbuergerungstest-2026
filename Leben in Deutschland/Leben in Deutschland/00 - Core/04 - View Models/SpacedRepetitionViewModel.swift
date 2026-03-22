@@ -94,12 +94,14 @@ final class SpacedRepetitionViewModel: ObservableObject {
             showTranslation.toggle()
     }
     
-    func handlePrimaryAction() {
+    /// Returns false when free user has reached the 30-question limit and cannot reveal answer.
+    @discardableResult
+    func handlePrimaryAction(isPremium: Bool) -> Bool {
         if showCorrectAnswer {
             advanceToNextQuestion()
-        } else {
-            revealAnswer()
+            return true
         }
+        return revealAnswer(isPremium: isPremium)
     }
     
     func refreshSessionIfNeeded() {
@@ -126,11 +128,16 @@ final class SpacedRepetitionViewModel: ObservableObject {
 }
 
 private extension SpacedRepetitionViewModel {
-    func revealAnswer() {
-        guard showCorrectAnswer == false else { return }
+    /// Returns false when free user has reached the 30-question limit.
+    func revealAnswer(isPremium: Bool) -> Bool {
+        guard showCorrectAnswer == false else { return true }
+        guard FreemiumUsageService.shared.canRecordSmartLearningAnswer(isPremium: isPremium) else {
+            return false
+        }
         let correctIndex = contentService.correctAnswers[currentQuestion.id]
         let isCorrect = selectedAnswer != nil && selectedAnswer == correctIndex
         manager.recordAnswer(for: currentQuestion.id, isCorrect: isCorrect)
+        FreemiumUsageService.shared.recordSmartLearningAnswer()
         // Intuitive haptics: success for correct, stronger error for wrong
         if isCorrect {
             HapticManager.shared.success()
@@ -146,6 +153,7 @@ private extension SpacedRepetitionViewModel {
         showCorrectAnswer = true
         // Trigger view update to refresh progress bar with new readiness percentage
         objectWillChange.send()
+        return true
     }
     
     func advanceToNextQuestion() {

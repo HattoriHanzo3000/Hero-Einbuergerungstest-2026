@@ -112,6 +112,7 @@ struct HomeView: View {
         case .spacedRepetition:
             SpacedRepetitionView()
                 .environmentObject(languageManager)
+                .environmentObject(subscriptionManager)
         case .testCountdown:
             TestCountdownView {
                 router.push(.testSimulation)

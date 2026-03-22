@@ -106,7 +106,7 @@ struct SpacedRepetitionQuestionCard: View {
 // MARK: - Private Behaviour
 private extension SpacedRepetitionQuestionCard {
     var buttonTitle: String {
-        showCorrectAnswer ? "next_button".localized : "check_answer_button".localized
+        (showCorrectAnswer ? "next_button" : "check_answer_button").localizedUppercased()
     }
     
     var checkButtonAccessibilityLabel: String {

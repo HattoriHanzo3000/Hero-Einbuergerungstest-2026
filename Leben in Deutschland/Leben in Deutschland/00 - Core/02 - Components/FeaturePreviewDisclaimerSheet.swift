@@ -46,7 +46,7 @@ struct FeaturePreviewDisclaimerSheet: View {
                 HapticManager.shared.lightImpact()
                 dismiss()
             } label: {
-                Text("feature_preview_continue".localized)
+                Text("feature_preview_continue".localizedUppercased())
                     .font(.headline.weight(.semibold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)

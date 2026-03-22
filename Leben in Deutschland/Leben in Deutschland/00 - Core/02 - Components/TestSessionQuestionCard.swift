@@ -159,7 +159,7 @@ struct TestSessionQuestionCard: View {
         
         let showFinishButton = isLastQuestion || allAnswered
         let nextEnabled = isCurrentQuestionAnswered
-        let buttonTitle = showFinishButton ? "finish_test".localized : "next_button".localized
+        let buttonTitle = (showFinishButton ? "finish_test" : "next_button").localizedUppercased()
         let nextStyle = QuizActionButton.Style(
             backgroundColor: Color("AppBlueLagoon"),
             disabledBackgroundColor: Color(.systemGray2),

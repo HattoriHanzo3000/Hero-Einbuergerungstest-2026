@@ -312,7 +312,7 @@ struct LearningView: View {
     }
     
     private var buttonTitle: String {
-        viewModel.showCorrectAnswer ? "next_button".localized : "check_answer_button".localized
+        (viewModel.showCorrectAnswer ? "next_button" : "check_answer_button").localizedUppercased()
     }
     
     private var checkButtonAccessibilityLabel: String {

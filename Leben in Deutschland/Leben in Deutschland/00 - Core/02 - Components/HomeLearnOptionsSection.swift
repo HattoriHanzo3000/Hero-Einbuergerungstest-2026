@@ -15,16 +15,6 @@ struct HomeLearnOptionsSection: View {
 
     @AppStorage(UserDefaultsKeys.spacedRepetitionDisclaimerDismissed) private var disclaimerDismissed = false
 
-    private func proceedToSpacedRepetition() {
-        subscriptionManager.gateFeatureWithPreview(
-            placement: "spaced_repetition",
-            titleKey: "sr_disclaimer_title",
-            messageKey: "sr_disclaimer_message",
-            accentColorName: "AppBlueLagoon",
-            handler: { router.push(.spacedRepetition) }
-        )
-    }
-
     var body: some View {
         VStack(spacing: layoutMetrics.adaptive(16)) {
             Button {
@@ -55,7 +45,7 @@ struct HomeLearnOptionsSection: View {
 
             Button {
                 HapticManager.shared.lightImpact()
-                proceedToSpacedRepetition()
+                router.push(.spacedRepetition)
             } label: {
                 LearnButtonContent(
                     icon: "arrow.triangle.2.circlepath",

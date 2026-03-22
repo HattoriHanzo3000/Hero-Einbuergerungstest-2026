@@ -76,7 +76,7 @@ struct LearnModeDisclaimerSheet: View {
                 onDismiss()
                 dismiss()
             } label: {
-                Text("ok_button".localized)
+                Text("ok_button".localizedUppercased())
                     .font(.system(.headline, weight: .semibold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)

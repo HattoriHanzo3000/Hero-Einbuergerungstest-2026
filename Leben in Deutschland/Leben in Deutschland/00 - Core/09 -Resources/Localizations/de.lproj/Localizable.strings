@@ -105,6 +105,8 @@
 "learn_by_topics_disclaimer_message" = "Die Fragen sind nach Themen gruppiert, damit du ein Thema nach dem anderen lernen kannst. Wähle ein Thema, beantworte die Fragen und prüfe deine Antworten. Dieser Modus beeinflusst nicht deinen Bereitschaftsstand.";
 "limit_topic_premium_title" = "Premium-Bereich";
 "limit_topic_premium_message" = "Dieses Thema gehört zum Premium-Bereich. Erwäge ein Premium-Abo, um alle Themen freizuschalten.";
+"limit_smart_learning_title" = "Limit erreicht";
+"limit_smart_learning_message" = "Du hast das Limit von 30 kostenlosen Smart-Learning-Fragen erreicht. Erwäge ein Premium-Abo für unbegrenzte Übung.";
 "no_search_results" = "Keine Ergebnisse gefunden";
 "question_label" = "Aufgabe";
 

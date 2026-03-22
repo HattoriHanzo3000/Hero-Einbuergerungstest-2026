@@ -5,6 +5,7 @@ import SwiftUI
 struct SpacedRepetitionView: View {
     @Environment(AppRouter.self) private var router
     @EnvironmentObject private var languageManager: LanguageManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     @StateObject private var viewModel = SpacedRepetitionViewModel()
 
@@ -34,7 +35,13 @@ struct SpacedRepetitionView: View {
             },
             isFavorite: viewModel.isFavorite(questionId: viewModel.currentQuestion.id),
             onCheckTapped: {
-                viewModel.handlePrimaryAction()
+                if !viewModel.handlePrimaryAction(isPremium: subscriptionManager.effectiveIsPremium) {
+                    subscriptionManager.presentPremiumLimitSheet(
+                        titleKey: "limit_smart_learning_title",
+                        messageKey: "limit_smart_learning_message",
+                        accentColorName: "AppBlueLagoon"
+                    )
+                }
             },
             isCheckEnabled: viewModel.isPrimaryButtonEnabled
         )
@@ -96,6 +103,7 @@ struct SpacedRepetitionView: View {
 #Preview("Spaced Repetition") {
     SpacedRepetitionView()
         .environmentObject(LanguageManager())
+        .environmentObject(SubscriptionManager.shared)
         .environment(AppRouter())
 }
 

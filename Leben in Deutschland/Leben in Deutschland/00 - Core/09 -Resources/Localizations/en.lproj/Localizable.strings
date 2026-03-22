@@ -105,6 +105,8 @@
 "learn_by_topics_disclaimer_message" = "Questions are grouped by theme so you can study one topic at a time. Choose a topic, answer the questions, and check your answers. This mode does not affect your readiness score.";
 "limit_topic_premium_title" = "Premium Area";
 "limit_topic_premium_message" = "This topic is part of the premium area. Consider upgrading to Premium to unlock all topics.";
+"limit_smart_learning_title" = "Limit Reached";
+"limit_smart_learning_message" = "You've reached the limit of 30 free Smart Learning questions. Consider Premium for unlimited practice.";
 "no_search_results" = "No results found";
 "question_label" = "Question";
 
