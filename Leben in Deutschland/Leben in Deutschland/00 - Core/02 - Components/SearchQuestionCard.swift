@@ -12,21 +12,36 @@ import SwiftUI
 struct SearchQuestionCard: View {
     let question: QuestionModel
     let subcategoryName: String
+    let categoryName: String
     let matchedByTranslation: Bool
     @EnvironmentObject var languageManager: LanguageManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @State private var isPressed = false
+    @State private var navigateToLearning = false
 
     private var translatedQuestion: QuestionModel? {
         guard matchedByTranslation else { return nil }
         return ContentService.shared.getTranslatedQuestion(id: question.id)
     }
 
+    private var canStudyTopic: Bool {
+        TopicAccessPolicy.isFreeCategory(categoryName: categoryName, categories: ContentService.shared.categories)
+            || subscriptionManager.effectiveIsPremium
+    }
+
     var body: some View {
-        NavigationLink(destination: LearningView(subcategory: SubcategoryModel(
-            name: subcategoryName,
-            categoryName: "",
-            questions: [question]
-        ), usesRouterNavigation: false).environmentObject(languageManager)) {
+        Button {
+            HapticManager.shared.lightImpact()
+            if canStudyTopic {
+                navigateToLearning = true
+            } else {
+                subscriptionManager.presentPremiumLimitSheet(
+                    titleKey: "limit_topic_premium_title",
+                    messageKey: "limit_topic_premium_message",
+                    accentColorName: "AppCaribean"
+                )
+            }
+        } label: {
             VStack(alignment: .leading, spacing: 8) {
                 Text(question.text)
                     .font(.callout.weight(.semibold))
@@ -67,5 +82,15 @@ struct SearchQuestionCard: View {
         .buttonStyle(.plain)
         .scaleEffect(isPressed ? 0.98 : 1.0)
         .buttonPressAnimation(isPressed: $isPressed)
+        .background(
+            NavigationLink(
+                destination: LearningView(subcategory: SubcategoryModel(
+                    name: subcategoryName,
+                    categoryName: categoryName,
+                    questions: [question]
+                ), usesRouterNavigation: false).environmentObject(languageManager),
+                isActive: $navigateToLearning
+            ) { EmptyView() }
+        )
     }
 }

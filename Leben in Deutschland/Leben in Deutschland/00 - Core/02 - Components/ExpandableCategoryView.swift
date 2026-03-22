@@ -12,6 +12,7 @@ import SwiftUI
 struct ExpandableCategoryView: View {
     let category: CategoryModel
     let isExpanded: Bool
+    let isFreeTopicBlock: Bool
     let onToggle: () -> Void
     @ObservedObject var answersService: AnswersService
     @State private var isPressed = false
@@ -150,6 +151,7 @@ struct ExpandableCategoryView: View {
                     ForEach(category.subcategories) { subcategory in
                         SubcategoryButton(
                             subcategory: subcategory,
+                            isFreeTopicBlock: isFreeTopicBlock,
                             answersService: answersService
                         )
                     }

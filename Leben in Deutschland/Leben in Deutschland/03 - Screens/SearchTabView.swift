@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - Search Tab View
 struct SearchTabView: View {
     @EnvironmentObject var languageManager: LanguageManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @StateObject private var viewModel = CategoriesViewModel()
     @State private var searchText = ""
     @State private var router = AppRouter()
@@ -25,6 +26,7 @@ struct SearchTabView: View {
                     searchResults: viewModel.searchResults(for: searchText)
                 )
                 .environmentObject(languageManager)
+                .environmentObject(subscriptionManager)
             }
         }
         .environment(router)

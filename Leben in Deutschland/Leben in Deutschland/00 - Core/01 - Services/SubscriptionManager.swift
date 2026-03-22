@@ -139,4 +139,15 @@ final class SubscriptionManager: ObservableObject {
         showFeaturePreviewSheet = false
         featurePreviewContent = nil
     }
+
+    /// Shows the feature preview sheet for a limit-reached scenario (e.g. 30 SR questions, 5 favorites). On dismiss, presents paywall.
+    func presentPremiumLimitSheet(titleKey: String, messageKey: String, accentColorName: String) {
+        guard !effectiveIsPremium else { return }
+        featurePreviewContent = FeaturePreviewContent(
+            titleKey: titleKey,
+            messageKey: messageKey,
+            accentColorName: accentColorName
+        )
+        showFeaturePreviewSheet = true
+    }
 }

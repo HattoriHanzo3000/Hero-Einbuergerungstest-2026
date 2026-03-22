@@ -42,13 +42,7 @@ struct HomeLearnOptionsSection: View {
 
             Button {
                 HapticManager.shared.lightImpact()
-                subscriptionManager.gateFeatureWithPreview(
-                    placement: "learn_by_topics",
-                    titleKey: "learn_by_topics_disclaimer_title",
-                    messageKey: "learn_by_topics_disclaimer_message",
-                    accentColorName: "AppCaribean",
-                    handler: { router.push(.categories) }
-                )
+                router.push(.categories)
             } label: {
                 LearnButtonContent(
                     icon: "books.vertical.fill",

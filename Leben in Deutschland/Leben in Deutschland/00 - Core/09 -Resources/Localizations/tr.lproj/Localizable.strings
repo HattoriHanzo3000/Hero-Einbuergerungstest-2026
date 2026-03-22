@@ -103,6 +103,8 @@
 "learn_by_topics_header_message" = "Senin için tüm soruları konulara göre gruplandırdım — kendi yolunu seç ve başla.";
 "learn_by_topics_disclaimer_title" = "Konulara Göre Öğrenme";
 "learn_by_topics_disclaimer_message" = "Sorular, konuları sırayla öğrenebilmen için konulara göre gruplandırılmıştır. Bir konu seç, soruları cevapla ve cevaplarını kontrol et. Bu mod sınava hazır olma durumunu etkilemez.";
+"limit_topic_premium_title" = "Premium Alan";
+"limit_topic_premium_message" = "Bu konu premium alanındadır. Tüm konuların kilidini açmak için Premium'a geçmeyi düşün.";
 "no_search_results" = "Sonuç bulunamadı";
 "question_label" = "Soru";
 

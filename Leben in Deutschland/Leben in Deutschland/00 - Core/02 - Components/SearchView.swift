@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - Search View
 struct SearchView: View {
     @Binding var searchText: String
-    let searchResults: [(question: QuestionModel, subcategory: String, matchedByTranslation: Bool)]
+    let searchResults: [(question: QuestionModel, subcategory: String, categoryName: String, matchedByTranslation: Bool)]
 
     @FocusState private var isSearchFocused: Bool
     @EnvironmentObject var languageManager: LanguageManager
@@ -66,6 +66,7 @@ struct SearchView: View {
                                 SearchQuestionCard(
                                     question: result.question,
                                     subcategoryName: result.subcategory,
+                                    categoryName: result.categoryName,
                                     matchedByTranslation: result.matchedByTranslation
                                 )
                                 .environmentObject(languageManager)

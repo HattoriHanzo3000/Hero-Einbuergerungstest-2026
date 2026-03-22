@@ -50,6 +50,10 @@ enum UserDefaultsKeys {
     /// Prefix for Learning mode position keys. Full key: "\(subcategoryPositionPrefix)\(subcategoryName)"
     static let subcategoryPositionPrefix = "subcategory_position_"
 
+    // MARK: - Freemium Usage
+    static let freemiumSmartLearningAnswerCount = "freemium_smart_learning_answer_count"
+    static let freemiumTestSimulationsStartedCount = "freemium_test_simulations_started_count"
+
     // MARK: - Debug (DEBUG builds only)
     /// When set, overrides premium status. "true"/"false" or absent = use real.
     static let debugSimulatePremium = "debug_simulate_premium"

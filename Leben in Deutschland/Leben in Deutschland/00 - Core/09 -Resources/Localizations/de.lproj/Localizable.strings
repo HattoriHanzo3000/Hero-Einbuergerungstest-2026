@@ -103,6 +103,8 @@
 "learn_by_topics_header_message" = "Ich habe alle Fragen für dich nach Themen gruppiert — wähle deinen Weg und leg los.";
 "learn_by_topics_disclaimer_title" = "Nach Themen lernen";
 "learn_by_topics_disclaimer_message" = "Die Fragen sind nach Themen gruppiert, damit du ein Thema nach dem anderen lernen kannst. Wähle ein Thema, beantworte die Fragen und prüfe deine Antworten. Dieser Modus beeinflusst nicht deinen Bereitschaftsstand.";
+"limit_topic_premium_title" = "Premium-Bereich";
+"limit_topic_premium_message" = "Dieses Thema gehört zum Premium-Bereich. Erwäge ein Premium-Abo, um alle Themen freizuschalten.";
 "no_search_results" = "Keine Ergebnisse gefunden";
 "question_label" = "Aufgabe";
 

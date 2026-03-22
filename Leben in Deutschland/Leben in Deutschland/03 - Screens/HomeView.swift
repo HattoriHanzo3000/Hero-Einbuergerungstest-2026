@@ -105,6 +105,7 @@ struct HomeView: View {
                 categoryName: categoryName
             )
             .environmentObject(languageManager)
+            .environmentObject(subscriptionManager)
         case .favorites:
             FavoritesView()
                 .environmentObject(languageManager)

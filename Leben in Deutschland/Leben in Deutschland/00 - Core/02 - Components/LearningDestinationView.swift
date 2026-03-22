@@ -12,11 +12,12 @@ struct LearningDestinationView: View {
     let subcategoryName: String
     let categoryName: String
     @EnvironmentObject var languageManager: LanguageManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(AppRouter.self) private var router
     @State private var subcategory: SubcategoryModel?
     @State private var isLoading = true
     private let contentService = ContentService.shared
-    
+
     var body: some View {
         Group {
             if let subcategory = subcategory, !subcategory.questions.isEmpty {
@@ -59,6 +60,17 @@ struct LearningDestinationView: View {
         .toolbar(.hidden, for: .navigationBar)
         .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
             await loadSubcategory()
+            if let sub = subcategory, !sub.questions.isEmpty,
+               !TopicAccessPolicy.isFreeCategory(categoryName: categoryName, categories: contentService.categories),
+               !subscriptionManager.effectiveIsPremium {
+                subscriptionManager.presentPremiumLimitSheet(
+                    titleKey: "limit_topic_premium_title",
+                    messageKey: "limit_topic_premium_message",
+                    accentColorName: "AppCaribean"
+                )
+                subcategory = nil
+                router.pop()
+            }
         }
     }
     

@@ -76,6 +76,7 @@ struct CategoriesView: View {
                                     ExpandableCategoryView(
                                         category: category,
                                         isExpanded: expandedCategoryNames.contains(category.name),
+                                        isFreeTopicBlock: viewModel.categories.first?.name == category.name,
                                         onToggle: {
                                             withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                                                 if expandedCategoryNames.contains(category.name) {

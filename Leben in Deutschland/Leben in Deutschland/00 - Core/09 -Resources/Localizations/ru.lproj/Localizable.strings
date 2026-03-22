@@ -103,6 +103,8 @@
 "learn_by_topics_header_message" = "Я сгруппировал все вопросы по темам — выбирай маршрут и взлетай.";
 "learn_by_topics_disclaimer_title" = "Учить по темам";
 "learn_by_topics_disclaimer_message" = "Вопросы сгруппированы по темам, чтобы ты мог изучать их по одной. Выбери тему, ответь на вопросы и проверь себя. Этот режим не влияет на показатель готовности.";
+"limit_topic_premium_title" = "Премиум-раздел";
+"limit_topic_premium_message" = "Эта тема входит в премиум-раздел. Оформи подписку Premium, чтобы открыть все темы.";
 "no_search_results" = "Ничего не найдено";
 "question_label" = "Вопрос";
 

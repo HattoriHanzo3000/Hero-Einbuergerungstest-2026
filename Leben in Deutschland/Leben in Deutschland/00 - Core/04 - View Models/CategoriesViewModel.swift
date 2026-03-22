@@ -51,11 +51,11 @@ class CategoriesViewModel: ObservableObject {
     static let searchResultLimit = 50
     
     /// Search questions across categories in app and translation languages.
-    func searchResults(for query: String) -> [(question: QuestionModel, subcategory: String, matchedByTranslation: Bool)] {
+    func searchResults(for query: String) -> [(question: QuestionModel, subcategory: String, categoryName: String, matchedByTranslation: Bool)] {
         let trimmed = query.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return [] }
         
-        var results: [(question: QuestionModel, subcategory: String, matchedByTranslation: Bool)] = []
+        var results: [(question: QuestionModel, subcategory: String, categoryName: String, matchedByTranslation: Bool)] = []
         var seenQuestionIds = Set<String>()
         
         for category in categories {
@@ -86,7 +86,7 @@ class CategoriesViewModel: ObservableObject {
                     }
                     
                     if matches {
-                        results.append((question, subcategory.name, matchedByTranslation))
+                        results.append((question, subcategory.name, category.name, matchedByTranslation))
                         seenQuestionIds.insert(question.id)
                     }
                 }

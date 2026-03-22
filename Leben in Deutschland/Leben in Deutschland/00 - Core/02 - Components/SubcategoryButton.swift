@@ -11,8 +11,10 @@ import SwiftUI
 // MARK: - Subcategory Button
 struct SubcategoryButton: View {
     let subcategory: SubcategoryModel
+    let isFreeTopicBlock: Bool
     @ObservedObject var answersService: AnswersService
     @Environment(AppRouter.self) private var router
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @State private var isPressed = false
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -24,10 +26,18 @@ struct SubcategoryButton: View {
 
         Button {
             HapticManager.shared.lightImpact()
-            router.push(.learning(
-                subcategoryName: subcategory.name,
-                categoryName: subcategory.categoryName
-            ))
+            if isFreeTopicBlock || subscriptionManager.effectiveIsPremium {
+                router.push(.learning(
+                    subcategoryName: subcategory.name,
+                    categoryName: subcategory.categoryName
+                ))
+            } else {
+                subscriptionManager.presentPremiumLimitSheet(
+                    titleKey: "limit_topic_premium_title",
+                    messageKey: "limit_topic_premium_message",
+                    accentColorName: "AppCaribean"
+                )
+            }
         } label: {
             HStack(alignment: .bottom, spacing: 12) {
                 Text(subcategory.name)

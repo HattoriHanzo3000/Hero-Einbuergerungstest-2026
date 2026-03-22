@@ -103,6 +103,8 @@
 "learn_by_topics_header_message" = "I grouped all questions by themes for you — choose a path and soar.";
 "learn_by_topics_disclaimer_title" = "Learn by Topics";
 "learn_by_topics_disclaimer_message" = "Questions are grouped by theme so you can study one topic at a time. Choose a topic, answer the questions, and check your answers. This mode does not affect your readiness score.";
+"limit_topic_premium_title" = "Premium Area";
+"limit_topic_premium_message" = "This topic is part of the premium area. Consider upgrading to Premium to unlock all topics.";
 "no_search_results" = "No results found";
 "question_label" = "Question";
 
