@@ -20,6 +20,7 @@ struct TestSessionQuestionCard: View {
     
     @EnvironmentObject var languageManager: LanguageManager
     @EnvironmentObject var favoritesManager: FavoritesManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     
     private let contentService = ContentService.shared
@@ -212,7 +213,13 @@ struct TestSessionQuestionCard: View {
             if let currentQuestion = viewModel.currentQuestion {
                 Button(action: {
                     HapticManager.shared.lightImpact()
-                    favoritesManager.toggleFavorite(for: currentQuestion.originalId)
+                    if !favoritesManager.toggleFavorite(for: currentQuestion.originalId, isPremium: subscriptionManager.effectiveIsPremium) {
+                        subscriptionManager.presentPremiumLimitSheet(
+                            titleKey: "limit_favorites_title",
+                            messageKey: "limit_favorites_message",
+                            accentColorName: "AppPink"
+                        )
+                    }
                 }) {
                     footerIconCircle {
                         Image(systemName: favoritesManager.isFavorite(currentQuestion.originalId) ? "heart.fill" : "heart")

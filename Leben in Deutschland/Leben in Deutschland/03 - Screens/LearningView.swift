@@ -166,7 +166,13 @@ struct LearningView: View {
                 let isFavorite = viewModel.isFavorite(questionId: currentQuestion.id)
                 Button(action: {
                     HapticManager.shared.lightImpact()
-                    viewModel.toggleFavorite(for: currentQuestion.id)
+                    if !viewModel.toggleFavorite(for: currentQuestion.id, isPremium: subscriptionManager.effectiveIsPremium) {
+                        subscriptionManager.presentPremiumLimitSheet(
+                            titleKey: "limit_favorites_title",
+                            messageKey: "limit_favorites_message",
+                            accentColorName: "AppPink"
+                        )
+                    }
                 }) {
                     footerIconCircle {
                         Image(systemName: isFavorite ? "heart.fill" : "heart")

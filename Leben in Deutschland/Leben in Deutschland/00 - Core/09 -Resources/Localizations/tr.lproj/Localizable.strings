@@ -107,6 +107,8 @@
 "limit_topic_premium_message" = "Bu konu premium alanındadır. Tüm konuların kilidini açmak için Premium'a geçmeyi düşün.";
 "limit_smart_learning_title" = "Limit Aşıldı";
 "limit_smart_learning_message" = "30 ücretsiz Smart Learning sorusu limitine ulaştın. Sınırsız pratik için Premium'a geçmeyi düşün.";
+"limit_favorites_title" = "Limit Aşıldı";
+"limit_favorites_message" = "5 ücretsiz favori limitine ulaştın. Sınırsız favoriler için Premium'a geçmeyi düşün.";
 "no_search_results" = "Sonuç bulunamadı";
 "question_label" = "Soru";
 

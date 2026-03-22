@@ -4,7 +4,8 @@ import Combine
 // MARK: - Favorites Managing
 protocol FavoritesManaging: AnyObject {
     func isFavorite(_ questionId: String) -> Bool
-    func toggleFavorite(for questionId: String)
+    @discardableResult
+    func toggleFavorite(for questionId: String, isPremium: Bool) -> Bool
 }
 
 // MARK: - Favorites Manager
@@ -27,13 +28,19 @@ final class FavoritesManager: ObservableObject, FavoritesManaging {
         favoriteQuestionIds.contains(questionId)
     }
     
-    func toggleFavorite(for questionId: String) {
+    @discardableResult
+    func toggleFavorite(for questionId: String, isPremium: Bool) -> Bool {
         if let index = favoriteQuestionIds.firstIndex(of: questionId) {
             favoriteQuestionIds.remove(at: index)
-        } else {
-            favoriteQuestionIds.append(questionId)
+            saveFavorites()
+            return true
         }
+        if !isPremium && favoriteQuestionIds.count >= FreemiumLimits.freeFavoritesMax {
+            return false
+        }
+        favoriteQuestionIds.append(questionId)
         saveFavorites()
+        return true
     }
 
     /// Reloads favorites from persistence (e.g. after app reset). Replaces in-memory state with stored state.

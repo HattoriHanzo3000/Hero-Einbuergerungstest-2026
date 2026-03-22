@@ -12,6 +12,7 @@ struct TestSessionView: View {
     @StateObject private var viewModel = TestSessionViewModel()
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var favoritesManager: FavoritesManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @EnvironmentObject private var stateManager: StateManager
     @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -52,6 +53,7 @@ struct TestSessionView: View {
                 )
                 .environmentObject(languageManager)
                 .environmentObject(favoritesManager)
+                .environmentObject(subscriptionManager)
             } else if isLoading {
                 // Loading screen
                 VStack {
@@ -115,6 +117,7 @@ struct TestSessionView: View {
             )
                 .environmentObject(languageManager)
                 .environmentObject(favoritesManager)
+                .environmentObject(subscriptionManager)
                 .environment(router)
                 .interactiveDismissDisabled(true)
         }

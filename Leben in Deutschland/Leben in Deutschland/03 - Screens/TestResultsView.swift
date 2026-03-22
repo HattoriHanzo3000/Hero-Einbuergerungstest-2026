@@ -22,6 +22,7 @@ struct TestResultsView: View {
     @Environment(AppRouter.self) private var router
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var favoritesManager: FavoritesManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     
     @State private var showingAnswers = false
     @State private var showingRetryCountdown = false
@@ -93,6 +94,7 @@ struct TestResultsView: View {
             TestAnswersView(viewModel: viewModel)
                 .environmentObject(languageManager)
                 .environmentObject(favoritesManager)
+                .environmentObject(subscriptionManager)
                 .interactiveDismissDisabled(true) // Prevent swipe-down dismissal; use header button instead
         }
         .fullScreenCover(isPresented: $showingRetryCountdown) {

@@ -101,7 +101,15 @@ struct FavoritesView: View {
                 onBackTapped: { router.pop() },
                 onToggleTranslation: { viewModel.toggleTranslation() },
                 isTranslationActive: viewModel.showTranslation,
-                onToggleFavorite: { viewModel.toggleFavorite(for: question.id) },
+                onToggleFavorite: {
+                    if !viewModel.toggleFavorite(for: question.id, isPremium: subscriptionManager.effectiveIsPremium) {
+                        subscriptionManager.presentPremiumLimitSheet(
+                            titleKey: "limit_favorites_title",
+                            messageKey: "limit_favorites_message",
+                            accentColorName: "AppPink"
+                        )
+                    }
+                },
                 isFavorite: viewModel.isFavorite(questionId: question.id),
                 onGoToQuestion: { viewModel.currentIndex = $0 }
             )

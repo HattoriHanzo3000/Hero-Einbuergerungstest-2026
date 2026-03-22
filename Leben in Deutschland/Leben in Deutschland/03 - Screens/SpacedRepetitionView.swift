@@ -31,7 +31,13 @@ struct SpacedRepetitionView: View {
             },
             isTranslationActive: viewModel.showTranslation,
             onToggleFavorite: {
-                viewModel.toggleFavorite(for: viewModel.currentQuestion.id)
+                if !viewModel.toggleFavorite(for: viewModel.currentQuestion.id, isPremium: subscriptionManager.effectiveIsPremium) {
+                    subscriptionManager.presentPremiumLimitSheet(
+                        titleKey: "limit_favorites_title",
+                        messageKey: "limit_favorites_message",
+                        accentColorName: "AppPink"
+                    )
+                }
             },
             isFavorite: viewModel.isFavorite(questionId: viewModel.currentQuestion.id),
             onCheckTapped: {

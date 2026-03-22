@@ -59,13 +59,7 @@ struct HomeLearnOptionsSection: View {
 
             Button {
                 HapticManager.shared.lightImpact()
-                subscriptionManager.gateFeatureWithPreview(
-                    placement: "favorites",
-                    titleKey: "favorites_disclaimer_title",
-                    messageKey: "favorites_disclaimer_message",
-                    accentColorName: "AppPink",
-                    handler: { router.push(.favorites) }
-                )
+                router.push(.favorites)
             } label: {
                 LearnButtonContent(
                     icon: "heart.fill",

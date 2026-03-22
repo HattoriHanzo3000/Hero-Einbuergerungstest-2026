@@ -13,6 +13,7 @@ struct TestAnswersView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var favoritesManager: FavoritesManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     
     @State private var currentQuestionIndex: Int = 0
     @State private var showingFeedbackReport = false
@@ -216,7 +217,13 @@ struct TestAnswersView: View {
                 let isFavorite = favoritesManager.isFavorite(q.originalId)
                 Button(action: {
                     HapticManager.shared.lightImpact()
-                    favoritesManager.toggleFavorite(for: q.originalId)
+                    if !favoritesManager.toggleFavorite(for: q.originalId, isPremium: subscriptionManager.effectiveIsPremium) {
+                        subscriptionManager.presentPremiumLimitSheet(
+                            titleKey: "limit_favorites_title",
+                            messageKey: "limit_favorites_message",
+                            accentColorName: "AppPink"
+                        )
+                    }
                 }) {
                     footerIconCircle {
                         Image(systemName: isFavorite ? "heart.fill" : "heart")
