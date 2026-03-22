@@ -81,8 +81,6 @@
 "tab_progress_hint" = "Öffnet deinen Fortschritt und Statistiken";
 "tab_settings_hint" = "Öffnet die Einstellungen";
 "tab_search_hint" = "Öffnet die Suche über alle Fragen";
-"progress_premium_gate_message" = "Upgrade auf Premium, um deinen Fortschritt und deine Statistiken zu sehen.";
-
 // HOME / LEARN OPTIONS
 "home_learn_spaced_repetition" = "Intelligentes Lernen";
 "home_learn_spaced_repetition_subtitle" = "Intervall-Wiederholungssystem";

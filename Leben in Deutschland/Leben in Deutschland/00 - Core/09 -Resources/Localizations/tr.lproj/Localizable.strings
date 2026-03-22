@@ -81,8 +81,6 @@
 "tab_progress_hint" = "İlerlemeni ve istatistiklerini açar";
 "tab_settings_hint" = "Ayarları açar";
 "tab_search_hint" = "Tüm sorularda aramayı açar";
-"progress_premium_gate_message" = "İlerlemeni ve istatistiklerini görmek için Premium'a yükselt.";
-
 // HOME / LEARN OPTIONS
 "home_learn_spaced_repetition" = "Akıllı Öğrenme";
 "home_learn_spaced_repetition_subtitle" = "Aralıklı Tekrar Sistemi";

@@ -81,8 +81,6 @@
 "tab_progress_hint" = "Открывает прогресс и статистику";
 "tab_settings_hint" = "Открывает настройки";
 "tab_search_hint" = "Открывает поиск по всем вопросам";
-"progress_premium_gate_message" = "Перейди на Премиум, чтобы видеть свой прогресс и статистику.";
-
 // HOME / LEARN OPTIONS
 "home_learn_spaced_repetition" = "Умное повторение";
 "home_learn_spaced_repetition_subtitle" = "Система интервального повторения";

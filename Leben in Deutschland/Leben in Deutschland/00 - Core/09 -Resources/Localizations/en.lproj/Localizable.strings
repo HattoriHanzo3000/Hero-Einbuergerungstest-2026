@@ -81,8 +81,6 @@
 "tab_progress_hint" = "Opens your progress and statistics";
 "tab_settings_hint" = "Opens Settings";
 "tab_search_hint" = "Opens search across all questions";
-"progress_premium_gate_message" = "Upgrade to Premium to see your progress and statistics.";
-
 // HOME / LEARN OPTIONS
 "home_learn_spaced_repetition" = "Smart Learning";
 "home_learn_spaced_repetition_subtitle" = "Spaced Repetition System";
