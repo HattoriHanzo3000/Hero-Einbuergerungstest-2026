@@ -72,13 +72,15 @@ struct HomeLearnOptionsSection: View {
 
             Button {
                 HapticManager.shared.lightImpact()
-                subscriptionManager.gateFeatureWithPreview(
-                    placement: "test_simulation",
-                    titleKey: "test_simulation_disclaimer_title",
-                    messageKey: "test_simulation_disclaimer_message",
-                    accentColorName: "AppOrange",
-                    handler: { router.push(.testCountdown) }
-                )
+                if subscriptionManager.effectiveIsPremium || FreemiumUsageService.shared.canStartTestSimulation(isPremium: false) {
+                    router.push(.testCountdown)
+                } else {
+                    subscriptionManager.presentPremiumLimitSheet(
+                        titleKey: "limit_test_simulation_title",
+                        messageKey: "limit_test_simulation_message",
+                        accentColorName: "AppOrange"
+                    )
+                }
             } label: {
                 LearnButtonContent(
                     icon: "checkmark.seal",

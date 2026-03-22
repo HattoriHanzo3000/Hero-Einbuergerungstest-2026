@@ -104,6 +104,7 @@ struct TestResultsView: View {
             }
             .environmentObject(languageManager)
             .environmentObject(StateManager.shared)
+            .environmentObject(subscriptionManager)
             .interactiveDismissDisabled(true)
         }
     }

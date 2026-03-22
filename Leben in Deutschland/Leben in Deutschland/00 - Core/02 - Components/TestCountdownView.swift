@@ -16,6 +16,7 @@ struct TestCountdownView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var stateManager: StateManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
 
     @AppStorage(UserDefaultsKeys.testSimulationDisclaimerDismissed) private var disclaimerDismissed = false
     @State private var showDisclaimer = false
@@ -47,6 +48,15 @@ struct TestCountdownView: View {
         .hidesTabBar()
         .tabBarHidden(true)
         .onAppear {
+            if !subscriptionManager.effectiveIsPremium && !FreemiumUsageService.shared.canStartTestSimulation(isPremium: false) {
+                subscriptionManager.presentPremiumLimitSheet(
+                    titleKey: "limit_test_simulation_title",
+                    messageKey: "limit_test_simulation_message",
+                    accentColorName: "AppOrange"
+                )
+                DispatchQueue.main.async { dismiss() }
+                return
+            }
             preloadTestContent()
             if disclaimerDismissed {
                 startCountdown()
@@ -78,6 +88,9 @@ struct TestCountdownView: View {
         .onChange(of: count) { _, newCount in
             guard newCount > 0 else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    if !subscriptionManager.effectiveIsPremium {
+                        FreemiumUsageService.shared.recordTestSimulationStarted()
+                    }
                     onComplete()
                 }
                 return

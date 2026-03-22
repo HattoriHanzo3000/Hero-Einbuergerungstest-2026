@@ -104,11 +104,13 @@
 "learn_by_topics_disclaimer_title" = "Learn by Topics";
 "learn_by_topics_disclaimer_message" = "Questions are grouped by theme so you can study one topic at a time. Choose a topic, answer the questions, and check your answers. This mode does not affect your readiness score.";
 "limit_topic_premium_title" = "Premium Area";
-"limit_topic_premium_message" = "This topic is part of the premium area. Consider upgrading to Premium to unlock all topics.";
+"limit_topic_premium_message" = "This topic is part of the premium area. Consider upgrading to Premium to study without limits.";
 "limit_smart_learning_title" = "Limit Reached";
-"limit_smart_learning_message" = "You've reached the limit of 30 free Smart Learning questions. Consider Premium for unlimited practice.";
+"limit_smart_learning_message" = "You've reached the limit of 30 free Smart Learning questions. Consider upgrading to Premium to study without limits.";
 "limit_favorites_title" = "Limit Reached";
-"limit_favorites_message" = "You've reached the limit of 5 free favorites. Consider Premium for unlimited favorites.";
+"limit_favorites_message" = "You've reached the limit of 5 free favorites. Consider upgrading to Premium to study without limits.";
+"limit_test_simulation_title" = "Limit Reached";
+"limit_test_simulation_message" = "You've reached the limit of 3 free test simulations. Consider upgrading to Premium to study without limits.";
 "no_search_results" = "No results found";
 "question_label" = "Question";
 

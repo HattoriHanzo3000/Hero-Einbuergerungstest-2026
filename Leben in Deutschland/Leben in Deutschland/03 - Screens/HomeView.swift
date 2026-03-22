@@ -119,6 +119,7 @@ struct HomeView: View {
             }
             .environmentObject(languageManager)
             .environmentObject(stateManager)
+            .environmentObject(subscriptionManager)
         case .testSimulation:
             TestSessionView()
                 .environmentObject(languageManager)
