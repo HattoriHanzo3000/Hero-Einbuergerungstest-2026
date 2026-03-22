@@ -33,7 +33,7 @@ class LanguageManager: ObservableObject {
         
         // Ensure translation language is different
         if currentTranslationLanguage == code {
-            let fallback = ["de", "en", "ru"].first { $0 != code } ?? "de"
+            let fallback = ["de", "en", "ru", "tr"].first { $0 != code } ?? "de"
             setTranslationLanguage(fallback)
         }
     }
@@ -50,6 +50,7 @@ class LanguageManager: ObservableObject {
     var currentLocale: Locale {
         switch currentAppLanguage {
         case "ru": return Locale(identifier: "ru_RU")
+        case "tr": return Locale(identifier: "tr_TR")
         case "de": return Locale(identifier: "de_DE")
         default: return Locale(identifier: "de_DE")
         }

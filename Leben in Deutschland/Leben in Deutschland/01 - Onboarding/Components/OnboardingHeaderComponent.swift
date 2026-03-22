@@ -116,8 +116,8 @@ struct OnboardingHeaderComponent: View {
     }
     
     private var formattedMessage: String {
-        // Eagle greeting (first message) is always in German — shown before user selects language
-        let languageCode = messageKey == "eagle_greeting" ? LanguageManager.baseLanguageCode : languageManager.currentAppLanguage
+        // Onboarding copy follows the current app language (updates when user picks a language on step 1).
+        let languageCode = languageManager.currentAppLanguage
         let localizedString = messageKey.localized(for: languageCode)
         guard let parameters = messageParameters, !parameters.isEmpty else { return localizedString }
         let locale = Locale(identifier: languageManager.currentAppLanguage)

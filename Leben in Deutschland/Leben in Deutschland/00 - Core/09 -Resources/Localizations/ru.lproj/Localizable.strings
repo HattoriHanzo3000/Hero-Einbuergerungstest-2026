@@ -1,6 +1,5 @@
 // ONBOARDING
-"eagle_greeting" = "Привет! Я орёл Херо, и я помогу тебе подготовиться к тесту. Давай начнём!\nДля начала выбери язык приложения.";
-"language_selected" = "Отлично! Нажми Далее";
+"eagle_greeting" = "Привет! Я орёл Херо, и я помогу тебе подготовиться к тесту. Давай начнём!\nСначала выбери язык приложения, затем нажми «Далее».";
 "translation_selection_title" = "Теперь выбери язык для перевода вопросов и ответов — на случай, если тебе понадобится подсказка.";
 "choose_federal_state" = "Где ты будешь сдавать тест? Я добавлю 10 дополнительных вопросов про твою землю.";
 "state_baden_württemberg" = "Здесь изобретают всё — даже дежурство по лестнице!";
@@ -270,6 +269,7 @@
 "settings_language_option_english" = "Английский";
 "settings_language_option_german" = "Немецкий";
 "settings_language_option_russian" = "Русский";
+"settings_language_option_turkish" = "Турецкий";
 "settings_haptics_toggle" = "Тактильная отдача";
 "settings_appearance_title" = "Оформление";
 "settings_premium_title" = "Премиум";

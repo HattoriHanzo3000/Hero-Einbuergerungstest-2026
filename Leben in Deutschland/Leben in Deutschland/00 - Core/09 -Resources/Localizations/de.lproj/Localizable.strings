@@ -1,6 +1,5 @@
 // ONBOARDING
-"eagle_greeting" = "Hallo! Ich bin Hero, der Adler, und ich helfe dir bei der Vorbereitung auf den Test. Lass uns anfangen!\nWähle zuerst die Sprache der App.";
-"language_selected" = "Super! Tippe auf Weiter";
+"eagle_greeting" = "Hallo! Ich bin Hero, der Adler, und ich helfe dir bei der Vorbereitung auf den Test. Lass uns anfangen!\nWähle zuerst die Sprache der App und tippe dann auf „Weiter“.";
 "translation_selection_title" = "Jetzt wähle eine Sprache für die Übersetzung der Fragen und Antworten – falls du mal eine Hilfe brauchst.";
 "choose_federal_state" = "Wo wirst du den Test ablegen? Ich füge 10 zusätzliche Fragen zu deinem Bundesland hinzu.";
 "state_baden_württemberg" = "Hier wird alles erfunden – sogar die Kehrwoche!";
@@ -260,6 +259,7 @@
 "settings_language_option_english" = "Englisch";
 "settings_language_option_german" = "Deutsch";
 "settings_language_option_russian" = "Russisch";
+"settings_language_option_turkish" = "Türkisch";
 "settings_haptics_toggle" = "Haptisches Feedback";
 "settings_appearance_title" = "Darstellung";
 "settings_premium_title" = "Premium";

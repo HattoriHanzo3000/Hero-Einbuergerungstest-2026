@@ -1,6 +1,5 @@
 // ONBOARDING
-"eagle_greeting" = "Merhaba! Ben Kartal Hero, sınava hazırlanmana yardım edeceğim. Hadi başlayalım!\nÖncelikle uygulamanın dilini seç.";
-"language_selected" = "Harika! İleri'ye dokun";
+"eagle_greeting" = "Merhaba! Ben kartal Hero, sınava hazırlanmana yardım edeceğim. Hadi başlayalım!\nÖnce uygulama dilini seç, ardından İleri'ye dokun.";
 "translation_selection_title" = "Şimdi soru ve cevapların çevirisi için bir dil seç – yardıma ihtiyacın olursa diye.";
 "choose_federal_state" = "Sınava nerede gireceksin? Eyaletine özel 10 ekstra soru ekleyeceğim.";
 "state_baden_württemberg" = "Her şey burada icat edildi – Kehrwoche (temizlik haftası) bile!";
@@ -241,7 +240,7 @@
 "statistics_mastered_description" = "3 kez doğru cevaplandı";
 "statistics_expert_description" = "4 veya daha fazla kez doğru cevaplandı";
 "statistics_card_flip_hint" = "Kartı çevirmek için çift dokun";
-"progress_readiness_explanation" = "Bu senin sınava hazır olma puanın. Yüzde ne kadar yüksekse, sınava o kadar hazırsın demektir; 100%% tam hazır olduğunu gösterir. Buna, %d sorunun her birini dört kez doğru cevapladığında ulaşırsın. Dört renk, her seviyede kaç sorunuz olduğunu gösterir: bir kez (Tanıdık), iki kez (Pekiştirilmiş), üç kez (Kavranmış) veya dört kez ve üzeri (Uzman).";
+"progress_readiness_explanation" = "Bu senin sınava hazır olma puanın. Yüzde ne kadar yüksekse, sınava o kadar hazırsın demektir; 100%% tam hazır olduğunu gösterir. Buna, %d sorunun her birini dört kez doğru cevapladığında ulaşırsın. Dört renk, her seviyede kaç sorunun olduğunu gösterir: bir kez (Tanıdık), iki kez (Pekiştirilmiş), üç kez (Kavranmış) veya dört kez ve üzeri (Uzman).";
 "progress_readiness_explanation_full" = "Bu senin sınava hazır olma puanın. Yüzde ne kadar yüksekse, sınava o kadar hazırsın demektir; 100%% tam hazır olduğunu gösterir. Buna, %d sorunun her birini dört kez doğru cevapladığında ulaşırsın. Her renk bir seviyeyi temsil eder: Tanıdık - bir kez doğru cevaplandı, Pekiştirilmiş - iki kez doğru cevaplandı, Kavranmış - üç kez doğru cevaplandı, Uzman - dört veya daha fazla kez doğru cevaplandı. Sadece %@ ve %@ kategorilerindeki sorular bu duruma etki eder.";
 "progress_readiness_info_accessibility_label" = "Hazır olma durumu açıklaması";
 "progress_readiness_info_accessibility_hint" = "Hesaplamayı görmek için çift dokun";
@@ -260,6 +259,7 @@
 "settings_language_option_english" = "İngilizce";
 "settings_language_option_german" = "Almanca";
 "settings_language_option_russian" = "Rusça";
+"settings_language_option_turkish" = "Türkçe";
 "settings_haptics_toggle" = "Dokunsal Geri Bildirim";
 "settings_appearance_title" = "Görünüm";
 "settings_premium_title" = "Premium";

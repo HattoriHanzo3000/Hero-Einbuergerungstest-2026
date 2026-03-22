@@ -4,6 +4,7 @@ enum SettingsAppLanguageOption: String, CaseIterable, Identifiable {
     case english = "en"
     case german = "de"
     case russian = "ru"
+    case turkish = "tr"
 
     var id: String { rawValue }
 
@@ -12,6 +13,7 @@ enum SettingsAppLanguageOption: String, CaseIterable, Identifiable {
         case .english: return "settings_language_option_english".localized
         case .german: return "settings_language_option_german".localized
         case .russian: return "settings_language_option_russian".localized
+        case .turkish: return "settings_language_option_turkish".localized
         }
     }
 
@@ -22,6 +24,7 @@ enum SettingsTranslationLanguageOption: String, CaseIterable, Identifiable {
     case english = "en"
     case german = "de"
     case russian = "ru"
+    case turkish = "tr"
 
     var id: String { rawValue }
 
@@ -30,6 +33,7 @@ enum SettingsTranslationLanguageOption: String, CaseIterable, Identifiable {
         case .english: return "settings_language_option_english".localized
         case .german: return "settings_language_option_german".localized
         case .russian: return "settings_language_option_russian".localized
+        case .turkish: return "settings_language_option_turkish".localized
         }
     }
 

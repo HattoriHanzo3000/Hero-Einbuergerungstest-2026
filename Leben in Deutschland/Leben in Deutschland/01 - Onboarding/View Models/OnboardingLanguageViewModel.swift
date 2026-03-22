@@ -8,10 +8,8 @@ class OnboardingLanguageViewModel: ObservableObject {
     @Published var selectedLanguage: String?
     @Published var showDialog: Bool = false
     
-    /// Header message: no-selection prompt vs confirmation when selected
-    var dialogMessageKey: String {
-        selectedLanguage != nil ? "language_selected" : "eagle_greeting"
-    }
+    /// Single combined greeting (choose language + tap Next); updates when `currentAppLanguage` changes.
+    var dialogMessageKey: String { "eagle_greeting" }
     
     let languageManager: LanguageManager
     private let preferences: OnboardingPreferences
@@ -33,6 +31,7 @@ class OnboardingLanguageViewModel: ObservableObject {
             case "de": selectedLanguage = "Deutsch"
             case "en": selectedLanguage = "English"
             case "ru": selectedLanguage = "Русский"
+            case "tr": selectedLanguage = "Türkçe"
             case "uk": selectedLanguage = "Deutsch"; languageManager.setAppLanguage("de")
             default: selectedLanguage = "Deutsch"
             }

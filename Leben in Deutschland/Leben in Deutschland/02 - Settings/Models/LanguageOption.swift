@@ -23,6 +23,7 @@ extension LanguageOption {
             LanguageOption(name: "Deutsch", nativeName: "Deutsch", isSelected: true, languageCode: "de"),
             LanguageOption(name: "English", nativeName: "English", isSelected: false, languageCode: "en"),
             LanguageOption(name: "Русский", nativeName: "Русский", isSelected: false, languageCode: "ru"),
+            LanguageOption(name: "Türkçe", nativeName: "Türkçe", isSelected: false, languageCode: "tr"),
         ]
     }
     

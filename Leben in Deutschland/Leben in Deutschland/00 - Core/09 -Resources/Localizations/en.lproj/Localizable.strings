@@ -1,6 +1,5 @@
 // ONBOARDING
-"eagle_greeting" = "Hello! I'm Hero the eagle, and I'll help you get ready for the test. Let's begin!\nFirst, choose the app language.";
-"language_selected" = "Great! Tap Next to Continue";
+"eagle_greeting" = "Hello! I'm Hero the eagle, and I'll help you get ready for the test. Let's begin!\nFirst, choose the app language, then tap Next.";
 "translation_selection_title" = "Now choose a language for translating the questions and answers – just in case you need a little help.";
 "choose_federal_state" = "Where will you take the test? I'll add 10 extra questions about your state.";
 "state_baden_württemberg" = "Everything's invented here – even stairwell cleaning!";
@@ -270,6 +269,7 @@
 "settings_language_option_english" = "English";
 "settings_language_option_german" = "German";
 "settings_language_option_russian" = "Russian";
+"settings_language_option_turkish" = "Turkish";
 "settings_haptics_toggle" = "Haptic Feedback";
 "settings_appearance_title" = "Appearance";
 "settings_premium_title" = "Premium";
