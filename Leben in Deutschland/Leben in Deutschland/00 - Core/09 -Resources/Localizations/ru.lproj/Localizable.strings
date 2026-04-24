@@ -81,6 +81,9 @@
 "tab_progress_hint" = "Открывает прогресс и статистику";
 "tab_settings_hint" = "Открывает настройки";
 "tab_search_hint" = "Открывает поиск по всем вопросам";
+"cockpit_progress_title" = "Прогресс";
+"cockpit_more_from_hero_subtitle" = "Больше от Hero";
+"cockpit_more_from_hero_body" = "Твой путь к успеху в Германии продолжается. Открой больше от Hero.";
 // HOME / LEARN OPTIONS
 "home_learn_spaced_repetition" = "Умное повторение";
 "home_learn_spaced_repetition_subtitle" = "Система интервального повторения";

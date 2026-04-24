@@ -24,8 +24,8 @@ struct CockpitView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: sectionSpacing) {
                         Color.clear.frame(height: 0).id("scrollTop")
-                        HomeStatisticsSection(statistics: viewModel.statistics)
-                            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
+                        CockpitProgressSection(statistics: viewModel.statistics)
+                        CockpitMoreFromHeroSection()
                     }
                     .padding(.top, layoutMetrics.adaptive(12))
                     .padding(.bottom, layoutMetrics.adaptive(LayoutMetrics.footerPadding))

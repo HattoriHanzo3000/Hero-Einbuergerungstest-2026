@@ -4,6 +4,7 @@ import SwiftUI
 /// Displays the learner's readiness using the B2 Beruf–style multi-ring chart and gradient stat cards.
 struct HomeStatisticsSection: View {
     let statistics: HomeStatisticsModel
+    var showTitleRow: Bool = true
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
     @State private var showExplanationSheet = false
@@ -43,7 +44,9 @@ struct HomeStatisticsSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(18)) {
-            titleRow
+            if showTitleRow {
+                titleRow
+            }
             statisticsContent
         }
         .sheet(isPresented: $showExplanationSheet) {
@@ -316,20 +319,22 @@ private struct HomeStatisticsGridCard: View {
         }
     }
 
-    /// Front: row 1 = count, row 2 = level title (Familiar, Reinforced, Mastered, Expert).
+    /// Front matches B2 order: row 1 = level title, row 2 = count.
     private var frontFace: some View {
-        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
-            Text("\(count)")
-                .font(.system(.title3, design: .default).weight(.regular).width(.expanded))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(6)) {
             Text(titleKey.localized)
-                .font(.system(.subheadline, design: .default).weight(.medium).width(.condensed))
+                .font(.system(size: layoutMetrics.adaptive(17), weight: .medium, design: .default))
                 .foregroundColor(.white.opacity(0.95))
                 .lineLimit(nil)
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)
+
+            Text("\(count)")
+                .font(.system(size: layoutMetrics.adaptive(18), weight: .semibold, design: .default).width(.expanded))
+                .monospacedDigit()
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(layoutMetrics.adaptive(16))
         .frame(maxWidth: .infinity, minHeight: layoutMetrics.adaptive(100), alignment: .leading)
@@ -339,7 +344,7 @@ private struct HomeStatisticsGridCard: View {
     private var backFace: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(8)) {
             Text(descriptionKey.localized)
-                .font(.system(.footnote, design: .default).weight(.medium).width(.condensed))
+                .font(.system(size: layoutMetrics.adaptive(15), weight: .regular, design: .default))
                 .foregroundColor(.white)
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)

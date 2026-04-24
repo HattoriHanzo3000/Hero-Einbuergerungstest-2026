@@ -81,6 +81,9 @@
 "tab_progress_hint" = "İlerlemeni ve istatistiklerini açar";
 "tab_settings_hint" = "Ayarları açar";
 "tab_search_hint" = "Tüm sorularda aramayı açar";
+"cockpit_progress_title" = "İlerleme";
+"cockpit_more_from_hero_subtitle" = "Hero'dan daha fazlası";
+"cockpit_more_from_hero_body" = "Almanya'da başarı yolculuğun devam ediyor. Hero'dan daha fazlasını keşfet.";
 // HOME / LEARN OPTIONS
 "home_learn_spaced_repetition" = "Akıllı Öğrenme";
 "home_learn_spaced_repetition_subtitle" = "Aralıklı Tekrar Sistemi";

@@ -81,6 +81,9 @@
 "tab_progress_hint" = "Opens your progress and statistics";
 "tab_settings_hint" = "Opens Settings";
 "tab_search_hint" = "Opens search across all questions";
+"cockpit_progress_title" = "Progress";
+"cockpit_more_from_hero_subtitle" = "More from Hero";
+"cockpit_more_from_hero_body" = "Your journey to success in Germany continues. Explore more from Hero.";
 // HOME / LEARN OPTIONS
 "home_learn_spaced_repetition" = "Smart Learning";
 "home_learn_spaced_repetition_subtitle" = "Spaced Repetition System";

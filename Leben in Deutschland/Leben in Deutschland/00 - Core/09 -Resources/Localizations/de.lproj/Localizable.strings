@@ -81,6 +81,9 @@
 "tab_progress_hint" = "Öffnet deinen Fortschritt und Statistiken";
 "tab_settings_hint" = "Öffnet die Einstellungen";
 "tab_search_hint" = "Öffnet die Suche über alle Fragen";
+"cockpit_progress_title" = "Fortschritt";
+"cockpit_more_from_hero_subtitle" = "Mehr von Hero";
+"cockpit_more_from_hero_body" = "Dein Weg zum Erfolg in Deutschland geht weiter. Entdecke mehr von Hero.";
 // HOME / LEARN OPTIONS
 "home_learn_spaced_repetition" = "Intelligentes Lernen";
 "home_learn_spaced_repetition_subtitle" = "Intervall-Wiederholungssystem";
