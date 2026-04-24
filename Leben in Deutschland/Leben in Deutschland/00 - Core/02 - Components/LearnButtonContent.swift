@@ -96,7 +96,7 @@ struct LearnButtonContent: View {
             }
             .frame(width: layoutMetrics.adaptive(52), height: layoutMetrics.adaptive(52))
             .background(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(16), style: .continuous)
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(14), style: .continuous)
                     .fill(resolvedIconBackground)
             )
 
@@ -114,13 +114,18 @@ struct LearnButtonContent: View {
 
             Image(systemName: "chevron.right")
                 .font(.system(size: layoutMetrics.adaptive(14), weight: .semibold, design: .rounded))
-                .foregroundColor(.secondary)
+                .foregroundColor(Color(.tertiaryLabel))
         }
             .padding(layoutMetrics.adaptive(18))
             .background(
                 RoundedRectangle(cornerRadius: layoutMetrics.adaptive(20), style: .continuous)
-                    .fill(Color(.tertiarySystemBackground).opacity(0.9))
+                    .fill(Color(.secondarySystemGroupedBackground))
             )
+            .overlay(
+                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(20), style: .continuous)
+                    .stroke(Color(.separator).opacity(0.45), lineWidth: 1)
+            )
+            .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 3)
 
             if badgeText != nil {
                 badgePatchView

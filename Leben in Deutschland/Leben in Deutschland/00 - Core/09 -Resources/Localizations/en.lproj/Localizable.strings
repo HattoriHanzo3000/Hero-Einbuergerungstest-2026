@@ -73,7 +73,7 @@
 
 // TAB BAR
 "tab_learn_title" = "Learn";
-"tab_progress_title" = "Progress";
+"tab_progress_title" = "Cockpit";
 "tab_settings_title" = "Settings";
 "tab_search_title" = "Search";
 "main_tab_bar_accessibility_label" = "Primary navigation";

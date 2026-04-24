@@ -31,7 +31,7 @@ struct MainView: View {
             }
             .accessibilityHint("tab_learn_hint".localized(for: appLanguage))
 
-            Tab("tab_progress_title".localized(for: appLanguage), systemImage: "chart.bar.fill") {
+            Tab("tab_progress_title".localized(for: appLanguage), systemImage: "gauge.with.dots.needle.bottom.50percent") {
                 ProgressTabView()
             }
             .accessibilityHint("tab_progress_hint".localized(for: appLanguage))
@@ -78,7 +78,7 @@ struct MainView: View {
                 .tag(TabIdentifier.learn)
             ProgressTabView()
                 .tabItem {
-                    Label("tab_progress_title".localized(for: appLanguage), systemImage: "chart.bar.fill")
+                    Label("tab_progress_title".localized(for: appLanguage), systemImage: "gauge.with.dots.needle.bottom.50percent")
                 }
                 .tag(TabIdentifier.progress)
             SettingsDashboardView()
