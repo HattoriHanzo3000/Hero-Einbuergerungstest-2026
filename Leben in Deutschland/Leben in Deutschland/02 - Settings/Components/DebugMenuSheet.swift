@@ -24,7 +24,7 @@ struct DebugMenuSheet: View {
         NavigationStack {
             List {
                 Section {
-                    Picker("Simulate Premium", selection: Binding(
+                    Picker("Simulate Pro", selection: Binding(
                         get: {
                             switch overrides.simulatePremium {
                             case nil: return "real"
@@ -42,12 +42,12 @@ struct DebugMenuSheet: View {
                         }
                     )) {
                         Text("Use real").tag("real")
-                        Text("Premium").tag("premium")
+                        Text("Pro").tag("premium")
                         Text("Free").tag("free")
                     }
                     .pickerStyle(.segmented)
                 } header: {
-                    Text("Premium Status")
+                    Text("Pro Status")
                 }
 
                 Section {

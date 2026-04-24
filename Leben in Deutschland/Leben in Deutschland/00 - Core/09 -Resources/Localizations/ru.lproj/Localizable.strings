@@ -50,10 +50,10 @@
 "ok_button" = "ОК";
 
 // PAYWALL
-"paywall_onboarding_title" = "Попробуй Hero Premium бесплатно";
+"paywall_onboarding_title" = "Попробуй Hero Pro бесплатно";
 "paywall_trial_line" = "Начни с 3 дней бесплатного пробного периода. Отмени в любой момент.";
 "paywall_plan_pitch" = "Одна цель. Три плана. Выбери то, что подходит тебе.";
-"paywall_title" = "Открой своё будущее в Германии с Hero Premium";
+"paywall_title" = "Открой своё будущее в Германии с Hero Pro";
 "paywall_subtitle" = "Интервальное повторение, обучение по темам, избранное, неограниченные симуляции теста и детальный прогресс — всё для успешной сдачи.";
 "paywall_close" = "Закрыть";
 "paywall_close_hint" = "Закрывает экран подписки";
@@ -101,14 +101,14 @@
 "learn_by_topics_header_message" = "Я сгруппировал все вопросы по темам — выбирай маршрут и взлетай.";
 "learn_by_topics_disclaimer_title" = "Учить по темам";
 "learn_by_topics_disclaimer_message" = "Вопросы сгруппированы по темам, чтобы ты мог изучать их по одной. Выбери тему, ответь на вопросы и проверь себя. Этот режим не влияет на показатель готовности.";
-"limit_topic_premium_title" = "Премиум-раздел";
-"limit_topic_premium_message" = "Эта тема входит в премиум-раздел. Оформи Премиум, чтобы учиться без ограничений.";
+"limit_topic_premium_title" = "Pro-раздел";
+"limit_topic_premium_message" = "Эта тема входит в Pro-раздел. Оформи Pro, чтобы учиться без ограничений.";
 "limit_smart_learning_title" = "Лимит достигнут";
-"limit_smart_learning_message" = "Ты достиг лимита в 30 бесплатных вопросов интервального повторения. Оформи Премиум, чтобы учиться без ограничений.";
+"limit_smart_learning_message" = "Ты достиг лимита в 30 бесплатных вопросов интервального повторения. Оформи Pro, чтобы учиться без ограничений.";
 "limit_favorites_title" = "Лимит достигнут";
-"limit_favorites_message" = "Ты достиг лимита в 5 бесплатных избранных. Оформи Премиум, чтобы учиться без ограничений.";
+"limit_favorites_message" = "Ты достиг лимита в 5 бесплатных избранных. Оформи Pro, чтобы учиться без ограничений.";
 "limit_test_simulation_title" = "Лимит достигнут";
-"limit_test_simulation_message" = "Ты достиг лимита в 3 бесплатные тестовые симуляции. Оформи Премиум, чтобы учиться без ограничений.";
+"limit_test_simulation_message" = "Ты достиг лимита в 3 бесплатные тестовые симуляции. Оформи Pro, чтобы учиться без ограничений.";
 "no_search_results" = "Ничего не найдено";
 "question_label" = "Вопрос";
 
@@ -278,15 +278,16 @@
 "settings_language_option_turkish" = "Турецкий";
 "settings_haptics_toggle" = "Тактильная отдача";
 "settings_appearance_title" = "Оформление";
-"settings_premium_title" = "Премиум";
+"settings_premium_title" = "Pro";
 "settings_reset_app" = "Сбросить приложение";
 
 // PREMIUM / PRICING
 "premium_plan_monthly" = "Ежемесячно";
 "premium_plan_lifetime" = "Навсегда";
 "premium_per_month" = "в месяц";
-"premium_accessibility_label" = "Премиум";
-"premium_accessibility_hint" = "Открывает премиум-функции и варианты подписки";
+"premium_accessibility_label" = "Pro";
+"premium_accessibility_hint" = "Открывает функции Pro и варианты подписки";
+"header_test_now_for_free" = "Протестировать бесплатно";
 "premium_plan_yearly" = "Ежегодно";
 "premium_per_year" = "в год";
 "paywall_best_value" = "Выгодно";

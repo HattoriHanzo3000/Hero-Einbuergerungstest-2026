@@ -4,7 +4,7 @@ import SwiftUI
 /// Coordinates data and actions for `SettingsDashboardView`.
 @MainActor
 final class SettingsDashboardViewModel: ObservableObject {
-    let premiumViewModel: SettingsPremiumViewModel
+    let proViewModel: SettingsProViewModel
     let supportViewModel: SettingsSupportViewModel
     let legalViewModel: SettingsLegalViewModel
     @Published private(set) var regionalViewModel: SettingsRegionalViewModel?
@@ -15,13 +15,13 @@ final class SettingsDashboardViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
 
     init(
-        premiumViewModel: SettingsPremiumViewModel? = nil,
+        proViewModel: SettingsProViewModel? = nil,
         supportViewModel: SettingsSupportViewModel? = nil,
         legalViewModel: SettingsLegalViewModel? = nil,
         regionalViewModel: SettingsRegionalViewModel? = nil,
         personalisationViewModel: SettingsPersonalisationViewModel? = nil
     ) {
-        self.premiumViewModel = premiumViewModel ?? SettingsPremiumViewModel()
+        self.proViewModel = proViewModel ?? SettingsProViewModel()
         self.supportViewModel = supportViewModel ?? SettingsSupportViewModel()
         self.legalViewModel = legalViewModel ?? SettingsLegalViewModel()
         self.regionalViewModel = regionalViewModel

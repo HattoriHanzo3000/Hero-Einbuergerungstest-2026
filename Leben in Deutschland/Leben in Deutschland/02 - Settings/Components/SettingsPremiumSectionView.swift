@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct SettingsPremiumSectionView: View {
-    @ObservedObject var viewModel: SettingsPremiumViewModel
+struct SettingsProSectionView: View {
+    @ObservedObject var viewModel: SettingsProViewModel
 
     var body: some View {
         Section("settings_premium_title".localized) {
@@ -23,12 +23,14 @@ struct SettingsPremiumSectionView: View {
     }
 }
 
-#Preview("Premium Section") {
+#Preview("Pro Section") {
     NavigationStack {
         List {
-            SettingsPremiumSectionView(viewModel: SettingsPremiumViewModel())
+            SettingsProSectionView(viewModel: SettingsProViewModel())
         }
         .listStyle(.insetGrouped)
     }
 }
+
+typealias SettingsPremiumSectionView = SettingsProSectionView
 

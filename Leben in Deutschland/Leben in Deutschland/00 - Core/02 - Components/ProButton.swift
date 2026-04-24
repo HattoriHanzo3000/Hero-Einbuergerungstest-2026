@@ -1,24 +1,22 @@
 //
-//  PremiumButton.swift
+//  ProButton.swift
 //  Leben in Deutschland
 //
-//  Reusable premium button. Shows "PREMIUM" badge in a rounded rect.
-//  Use in headers and anywhere the user can open the paywall.
-//  Tappable area meets 44pt minimum.
+//  Reusable Pro button/badge components for headers and paywall surfaces.
 //
 
 import SwiftUI
 
 // MARK: - Shimmer Overlay (reusable for badges)
 struct ShimmerOverlay: View {
-    var duration: Double = 3
+    var duration: Double = 4
 
     @State private var phase: CGFloat = 0
 
     var body: some View {
         GeometryReader { geo in
             LinearGradient(
-                colors: [.clear, .white.opacity(0.5), .clear],
+                colors: [.clear, .white.opacity(0.62), .clear],
                 startPoint: .leading,
                 endPoint: .trailing
             )
@@ -33,23 +31,21 @@ struct ShimmerOverlay: View {
     }
 }
 
-// MARK: - Premium Badge (decorative, non-interactive)
-/// Same visual as PremiumButton but without tap action. Use on paywall (with shimmer) or in headers (no shimmer).
-struct PremiumBadge: View {
+// MARK: - Pro Badge (decorative, non-interactive)
+/// Reusable "PRO" shield used in headers/paywall. Optional shimmer for promo surfaces.
+struct ProBadge: View {
     var color: Color = .white
     /// When true, applies shimmer overlay. Use on paywall only; headers use false.
     var showShimmer: Bool = false
 
-    @Environment(\.layoutMetrics) private var layoutMetrics
-
     var body: some View {
-        Text("settings_premium_title".localized.uppercased())
-            .font(.system(.footnote, weight: .regular).width(.expanded))
+        Text("PRO")
+            .font(.system(.caption2, weight: .medium).width(.expanded))
             .foregroundColor(color)
             .lineLimit(1)
             .fixedSize(horizontal: true, vertical: false)
-            .padding(.horizontal, layoutMetrics.adaptive(8))
-            .padding(.vertical, layoutMetrics.adaptive(4))
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
             .overlay(
                 RoundedRectangle(cornerRadius: 6, style: .continuous)
                     .stroke(color, lineWidth: 0.6)
@@ -69,9 +65,65 @@ struct PremiumBadge: View {
     }
 }
 
-// MARK: - Premium Button
-/// Premium badge that opens paywall. Reusable across the app.
-struct PremiumButton: View {
+// MARK: - Free Upsell Chip
+/// Free-mode CTA chip shown beside PRO in headers. Optionally tappable to open paywall.
+struct TestNowForFreeChip: View {
+    var color: Color = .white
+    var onTap: (() -> Void)?
+
+    @Environment(\.layoutMetrics) private var layoutMetrics
+
+    var body: some View {
+        Group {
+            if let onTap {
+                Button {
+                    HapticManager.shared.lightImpact()
+                    onTap()
+                } label: {
+                    label
+                }
+                .buttonStyle(.plain)
+            } else {
+                label
+            }
+        }
+    }
+
+    private var label: some View {
+        Text("header_test_now_for_free".localized)
+            .font(.system(.caption2, weight: .medium).width(.expanded))
+            .foregroundColor(color)
+            .lineLimit(1)
+            .minimumScaleFactor(0.75)
+            .padding(.horizontal, layoutMetrics.adaptive(8))
+            .padding(.vertical, layoutMetrics.adaptive(4))
+            .background(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(Color("PromoBadge"))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .stroke(color, lineWidth: 0.6)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+            .contentShape(Rectangle())
+    }
+}
+
+// MARK: - Backward-compatible Premium Badge alias
+/// Temporary compatibility shim while call sites migrate to Pro naming.
+struct PremiumBadge: View {
+    var color: Color = .white
+    var showShimmer: Bool = false
+
+    var body: some View {
+        ProBadge(color: color, showShimmer: showShimmer)
+    }
+}
+
+// MARK: - Pro Button
+/// Pro badge button that opens paywall. Reusable across the app.
+struct ProButton: View {
     let action: () -> Void
 
     /// Foreground color (e.g. .white on dark headers, .primary on light).
@@ -105,9 +157,13 @@ struct PremiumButton: View {
 }
 
 // MARK: - Preview
-#Preview("Premium button") {
-    PremiumButton(action: {}, color: .white)
+#Preview("Pro button") {
+    ProButton(action: {}, color: .white)
         .padding()
         .background(Color.blue)
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
+
+// MARK: - Backward-compatible Premium Button alias
+/// Temporary compatibility shim while call sites migrate to Pro naming.
+typealias PremiumButton = ProButton

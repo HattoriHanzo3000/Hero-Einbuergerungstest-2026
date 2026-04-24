@@ -1,16 +1,18 @@
 import SwiftUI
 
 // MARK: - Home Header
-/// Home screen header: mascot + state title + slogan. When alternatingEnabled, Progress shows alternating readiness + test date.
+/// Shared top header for Home and Progress.
+/// Uses alternating copy mode to rotate slogan, test date, and readiness.
 struct HomeHeader: View {
     let readinessPercentage: Int
-    /// When true, shows premium badge in header. Progress/readiness are always visible.
-    var isPremium: Bool = true
+    /// When true, user is Pro; header hides free upsell chip.
+    var isProUser: Bool = true
     /// When false, renders content only for flat gradient headers (no rounded card).
     var useCard: Bool = true
-    /// Base name for the mascot asset used in this header (e.g. "MainChick" or "MainChickFlipped").
-    var mascotAssetBaseName: String = "MainChick"
-    /// When false (Home), shows only state + slogan. When true (Progress), shows alternating readiness + test date.
+    /// B2-style horizontal mirror for the header mascot (Main + Progress).
+    var mascotHorizontallyFlipped: Bool = false
+    /// When true, rotates through slogan + test date + readiness.
+    /// Both Home and Progress should keep this enabled for unified behavior.
     var alternatingEnabled: Bool = true
 
     @EnvironmentObject private var stateManager: StateManager
@@ -28,19 +30,26 @@ struct HomeHeader: View {
     var body: some View {
         let content: ScreenHeaderCardContent = stateManager.selectedState.map { stateName in
             if alternatingEnabled {
-                .readinessWithTestDate(readinessMessage: readinessMessage, testDateMessage: testDateMessage)
+                .stateWithTestDate(
+                    stateName: stateName,
+                    testDateMessage: testDateMessage,
+                    readinessMessage: readinessMessage
+                )
             } else {
                 .state(stateName: stateName)
             }
         } ?? .readinessWithTestDate(readinessMessage: readinessMessage, testDateMessage: testDateMessage)
+
         return ScreenHeaderCard(
             readinessPercentage: readinessPercentage,
-            isPremium: isPremium,
+            isProUser: isProUser,
             autoPlayInterval: 60,
             content: content,
             useCard: useCard,
-            mascotAssetBaseName: mascotAssetBaseName
+            mascotHorizontallyFlipped: mascotHorizontallyFlipped
         )
+        // Keep header typography fixed (no Dynamic Type scaling).
+        .dynamicTypeSize(.large ... .large)
     }
 }
 
@@ -48,7 +57,7 @@ struct HomeHeader: View {
 #Preview {
     HomeHeader(
         readinessPercentage: 72,
-        isPremium: true
+        isProUser: true
     )
     .environmentObject(LanguageManager())
     .environmentObject(StateManager.shared)

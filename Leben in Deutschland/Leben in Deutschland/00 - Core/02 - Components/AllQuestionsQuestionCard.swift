@@ -63,8 +63,8 @@ private extension AllQuestionsQuestionCard {
             progress: (currentIndex + 1, totalCount),
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
-            showPremiumButton: true,
-            isPremium: subscriptionManager.effectiveIsPremium,
+            showProBadge: true,
+            isProUser: subscriptionManager.effectiveIsPremium,
             trailingActions: { EmptyView() }
         )
     }

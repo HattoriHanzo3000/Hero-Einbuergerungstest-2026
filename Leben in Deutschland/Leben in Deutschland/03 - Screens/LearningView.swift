@@ -200,8 +200,8 @@ struct LearningView: View {
             progress: viewModel.questions.count > 1 ? (viewModel.answeredCount, viewModel.questions.count) : nil,
             questionId: viewModel.currentQuestion?.id,
             onReportTapped: { showingFeedbackReport = true },
-            showPremiumButton: true,
-            isPremium: subscriptionManager.effectiveIsPremium,
+            showProBadge: true,
+            isProUser: subscriptionManager.effectiveIsPremium,
             trailingActions: { EmptyView() }
         )
     }

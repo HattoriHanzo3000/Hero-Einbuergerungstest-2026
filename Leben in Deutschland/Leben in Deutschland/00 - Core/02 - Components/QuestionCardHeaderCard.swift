@@ -24,17 +24,75 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
     /// Question ID for label. When nil, question row is hidden.
     var questionId: String?
     var onReportTapped: (() -> Void)?
-    /// When true, shows decorative premium badge. Hidden for free users.
-    var showPremiumButton: Bool = false
-    var isPremium: Bool = false
+    /// When true, shows decorative Pro badge. Hidden for free users.
+    var showProBadge: Bool = false
+    var isProUser: Bool = false
     /// Legacy: not used when badge is decorative.
-    var onPremiumTap: (() -> Void)? = nil
+    var onProTap: (() -> Void)? = nil
     @ViewBuilder var trailingActions: () -> ActionContent
 
     @Environment(\.layoutMetrics) private var layoutMetrics
 
     private var contentSpacing: CGFloat { layoutMetrics.adaptive(16) }
     private var progressBarHeight: CGFloat { layoutMetrics.adaptive(8) }
+
+    init(
+        onBackTapped: (() -> Void)? = nil,
+        backIcon: QuestionCardBackIcon = .backward,
+        gradient: LiquidGlassGradient = .blue,
+        title: String? = nil,
+        titleInBackRow: Bool = false,
+        progress: (answered: Int, total: Int)? = nil,
+        questionId: String? = nil,
+        onReportTapped: (() -> Void)? = nil,
+        showProBadge: Bool = false,
+        isProUser: Bool = false,
+        onProTap: (() -> Void)? = nil,
+        @ViewBuilder trailingActions: @escaping () -> ActionContent
+    ) {
+        self.onBackTapped = onBackTapped
+        self.backIcon = backIcon
+        self.gradient = gradient
+        self.title = title
+        self.titleInBackRow = titleInBackRow
+        self.progress = progress
+        self.questionId = questionId
+        self.onReportTapped = onReportTapped
+        self.showProBadge = showProBadge
+        self.isProUser = isProUser
+        self.onProTap = onProTap
+        self.trailingActions = trailingActions
+    }
+
+    init(
+        onBackTapped: (() -> Void)? = nil,
+        backIcon: QuestionCardBackIcon = .backward,
+        gradient: LiquidGlassGradient = .blue,
+        title: String? = nil,
+        titleInBackRow: Bool = false,
+        progress: (answered: Int, total: Int)? = nil,
+        questionId: String? = nil,
+        onReportTapped: (() -> Void)? = nil,
+        showProBadge: Bool = false,
+        isPremium: Bool,
+        onProTap: (() -> Void)? = nil,
+        @ViewBuilder trailingActions: @escaping () -> ActionContent
+    ) {
+        self.init(
+            onBackTapped: onBackTapped,
+            backIcon: backIcon,
+            gradient: gradient,
+            title: title,
+            titleInBackRow: titleInBackRow,
+            progress: progress,
+            questionId: questionId,
+            onReportTapped: onReportTapped,
+            showProBadge: showProBadge,
+            isProUser: isPremium,
+            onProTap: onProTap,
+            trailingActions: trailingActions
+        )
+    }
 
     var body: some View {
         headerCardContent
@@ -98,8 +156,8 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
 
             Spacer()
 
-            if showPremiumButton, isPremium {
-                PremiumBadge(color: .white)
+            if showProBadge, isProUser {
+                ProBadge(color: .white)
             }
 
             trailingActions()
@@ -202,9 +260,9 @@ extension QuestionCardHeaderCard where ActionContent == EmptyView {
         progress: (answered: Int, total: Int)? = nil,
         questionId: String? = nil,
         onReportTapped: (() -> Void)? = nil,
-        showPremiumButton: Bool = false,
-        isPremium: Bool = false,
-        onPremiumTap: (() -> Void)? = nil
+        showProBadge: Bool = false,
+        isProUser: Bool = false,
+        onProTap: (() -> Void)? = nil
     ) {
         self.onBackTapped = onBackTapped
         self.backIcon = backIcon
@@ -213,10 +271,36 @@ extension QuestionCardHeaderCard where ActionContent == EmptyView {
         self.progress = progress
         self.questionId = questionId
         self.onReportTapped = onReportTapped
-        self.showPremiumButton = showPremiumButton
-        self.isPremium = isPremium
-        self.onPremiumTap = onPremiumTap
+        self.showProBadge = showProBadge
+        self.isProUser = isProUser
+        self.onProTap = onProTap
         self.trailingActions = { EmptyView() }
+    }
+
+    init(
+        onBackTapped: (() -> Void)? = nil,
+        backIcon: QuestionCardBackIcon = .backward,
+        gradient: LiquidGlassGradient = .blue,
+        title: String? = nil,
+        progress: (answered: Int, total: Int)? = nil,
+        questionId: String? = nil,
+        onReportTapped: (() -> Void)? = nil,
+        showPremiumButton: Bool = false,
+        isPremium: Bool = false,
+        onPremiumTap: (() -> Void)? = nil
+    ) {
+        self.init(
+            onBackTapped: onBackTapped,
+            backIcon: backIcon,
+            gradient: gradient,
+            title: title,
+            progress: progress,
+            questionId: questionId,
+            onReportTapped: onReportTapped,
+            showProBadge: showPremiumButton,
+            isProUser: isPremium,
+            onProTap: onPremiumTap
+        )
     }
 }
 

@@ -11,8 +11,8 @@ import SwiftUI
 // MARK: - Categories Tab Header Card
 struct CategoriesTabHeaderCard: View {
     var onBackTapped: () -> Void
-    /// When true, shows decorative premium badge. Hidden for free users.
-    var isPremium: Bool = false
+    /// When true, shows decorative Pro badge. Hidden for free users.
+    var isProUser: Bool = false
     /// When false, renders content only for flat gradient headers (no rounded card).
     var useCard: Bool = true
 
@@ -26,8 +26,8 @@ struct CategoriesTabHeaderCard: View {
             HStack {
                 AdaptiveIconButton.backButton(action: onBackTapped, tintColor: .white)
                 Spacer()
-                if isPremium {
-                    PremiumBadge(color: .white)
+                if isProUser {
+                    ProBadge(color: .white)
                 }
             }
             .transaction { $0.animation = nil }
@@ -52,7 +52,7 @@ struct CategoriesTabHeaderCard: View {
     var body: some View {
         Group {
             if useCard {
-                HeaderCard(gradient: .blue, showPremiumButton: false) {
+                HeaderCard(gradient: .blue, showProButton: false) {
                     headerContent
                 }
             } else {

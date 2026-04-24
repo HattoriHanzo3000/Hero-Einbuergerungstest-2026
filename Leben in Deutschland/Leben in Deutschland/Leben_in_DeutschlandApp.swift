@@ -77,7 +77,7 @@ struct Leben_in_DeutschlandApp: App {
                             appFlow.stage = .main
                         }
                     case .main:
-                        TabBarView()
+                        MainView()
                     }
                 }
                 .layoutMetrics(LayoutMetrics.make(for: proxy.size))

@@ -58,7 +58,7 @@ struct EagleLevelUpView: View {
                     .fixedSize(horizontal: false, vertical: true)
 
                 // Mascot
-                MascotView(assetBaseName: "MainChick", autoPlayInterval: 4)
+                MascotView(autoPlayInterval: 4)
                     .frame(width: layoutMetrics.adaptive(140), height: layoutMetrics.adaptive(140))
 
                 Spacer()

@@ -50,9 +50,9 @@ private extension ProgressTabView {
     var progressHeaderSection: some View {
         HomeHeader(
             readinessPercentage: viewModel.statistics.readinessPercentage,
-            isPremium: subscriptionManager.effectiveIsPremium,
+            isProUser: subscriptionManager.effectiveIsPremium,
             useCard: false,
-            mascotAssetBaseName: "MainChickFlipped",
+            mascotHorizontallyFlipped: true,
             alternatingEnabled: true
         )
         .padding(.horizontal, layoutMetrics.adaptive(16))

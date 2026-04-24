@@ -170,7 +170,7 @@ private extension TestResultsView {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 // Right: mascot (flipped variant)
-                MascotView(assetBaseName: "MainChickFlipped", autoPlayInterval: nil)
+                MascotView(autoPlayInterval: nil)
                     .frame(width: mascotSize, height: mascotSize)
             }
             .frame(maxWidth: .infinity, alignment: .leading)

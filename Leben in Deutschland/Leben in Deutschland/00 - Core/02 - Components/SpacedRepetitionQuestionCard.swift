@@ -291,8 +291,8 @@ private extension SpacedRepetitionQuestionCard {
             progress: progress.map { ($0.answeredCount, $0.totalCount) },
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
-            showPremiumButton: true,
-            isPremium: subscriptionManager.effectiveIsPremium,
+            showProBadge: true,
+            isProUser: subscriptionManager.effectiveIsPremium,
             trailingActions: { EmptyView() }
         )
     }

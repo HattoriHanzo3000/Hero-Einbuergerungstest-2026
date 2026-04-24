@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 
 // MARK: - Onboarding Header Card (Liquid Glass, matches ScreenHeaderCard style)
 struct OnboardingHeaderComponent: View {
@@ -16,8 +15,6 @@ struct OnboardingHeaderComponent: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorScheme) private var colorScheme
-    
-    fileprivate static let mascotAssetName = "MainChick"
     
     init(
         currentStep: Int,
@@ -62,7 +59,8 @@ struct OnboardingHeaderComponent: View {
             
             // Mascot + content row (same layout as ScreenHeaderCard)
             HStack(alignment: .center, spacing: mascotToContentSpacing) {
-                OnboardingMascotView(
+                MascotView(
+                    autoPlayInterval: nil,
                     playSignal: playSignal,
                     onPlayCompleted: onPlayCompleted
                 )
@@ -110,7 +108,7 @@ struct OnboardingHeaderComponent: View {
             if reduceMotion {
                 onPlayCompleted?()
             } else {
-                // Signal is handled by OnboardingMascotView
+                // Signal is handled by MascotView
             }
         }
     }
@@ -166,92 +164,5 @@ private struct OnboardingSloganBlock: View {
             return "state_\(normalized)".localized
         }
         return localizedValue
-    }
-}
-
-// MARK: - Onboarding Mascot View (tap to play GIF, matches MascotView layout)
-private struct OnboardingMascotView: View {
-    let playSignal: UUID?
-    let onPlayCompleted: (() -> Void)?
-    
-    @State private var showMascotGif = false
-    @State private var gifPlayToken: UUID = UUID()
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.layoutMetrics) private var layoutMetrics
-    
-    private var mascotSize: CGFloat { layoutMetrics.adaptive(120) }
-    
-    private var staticMascotAssetName: String {
-        if colorScheme == .dark, UIImage(named: "MainChickDark") != nil {
-            return "MainChickDark"
-        }
-        return OnboardingHeaderComponent.mascotAssetName
-    }
-    
-    private var gifMascotAssetName: String {
-        colorScheme == .dark ? "MainChickDark" : OnboardingHeaderComponent.mascotAssetName
-    }
-    
-    var body: some View {
-        ZStack {
-            if UIImage(named: staticMascotAssetName) != nil {
-                Image(staticMascotAssetName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: mascotSize, height: mascotSize)
-                    .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-                    .accessibilityLabel("Mascot")
-                    .opacity((showMascotGif && !reduceMotion) ? 0 : 1)
-            } else {
-                Color.clear
-                    .frame(width: mascotSize, height: mascotSize)
-                    .accessibilityHidden(true)
-            }
-            
-            AnimatedGIFView(
-                gifName: gifMascotAssetName,
-                contentMode: .scaleAspectFit,
-                shouldAnimate: showMascotGif && !reduceMotion
-            )
-            .id(gifPlayToken)
-            .frame(width: mascotSize, height: mascotSize)
-            .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-            .accessibilityLabel("Mascot")
-            .opacity((showMascotGif && !reduceMotion) ? 1 : 0)
-            .allowsHitTesting(false)
-        }
-        .frame(width: mascotSize, height: mascotSize)
-        .contentShape(Rectangle())
-        .onTapGesture {
-            HapticManager.shared.lightImpact()
-            if reduceMotion {
-                onPlayCompleted?()
-            } else {
-                playGifOnly()
-            }
-        }
-        .onChange(of: playSignal) { _, _ in
-            if reduceMotion {
-                onPlayCompleted?()
-            } else {
-                playGifThenComplete()
-            }
-        }
-    }
-    
-    private func playGifOnly() {
-        gifPlayToken = UUID()
-        showMascotGif = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.gifAnimationDuration) {
-            showMascotGif = false
-        }
-    }
-    
-    private func playGifThenComplete() {
-        playGifOnly()
-        DispatchQueue.main.asyncAfter(deadline: .now() + OnboardingConstants.gifAnimationDuration) {
-            onPlayCompleted?()
-        }
     }
 }

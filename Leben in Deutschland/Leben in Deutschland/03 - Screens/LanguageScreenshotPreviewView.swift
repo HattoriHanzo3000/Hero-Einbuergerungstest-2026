@@ -34,7 +34,7 @@ struct LanguageScreenshotPreviewView: View {
                 VStack(spacing: layoutMetrics.adaptive(8)) {
                     HStack {
                         Spacer(minLength: 0)
-                        MascotView(assetBaseName: "MainChick", autoPlayInterval: nil)
+                        MascotView(autoPlayInterval: nil)
                             .fixedSize(horizontal: true, vertical: true)
                         Spacer(minLength: 0)
                     }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Splash screen: app name and icon, then auto-advances after mascot GIF plays once.
+/// Splash screen: app name and icon, then auto-advances after mascot animation plays once.
 struct OnboardingStartView: View {
     let onComplete: () -> Void
     @State private var playSignal: UUID?
@@ -40,7 +40,6 @@ struct OnboardingStartView: View {
                 HStack {
                     Spacer()
                     MascotView(
-                        assetBaseName: "MainChick",
                         autoPlayInterval: nil,
                         playSignal: playSignal,
                         onPlayCompleted: onComplete

@@ -105,7 +105,7 @@ struct PaywallOnboardingView: View {
     // MARK: - Header (premium badge, title, trial line, mascot)
     private var headerSection: some View {
         VStack(spacing: layoutMetrics.adaptive(12)) {
-            PremiumBadge(color: .white, showShimmer: true)
+            ProBadge(color: .white, showShimmer: true)
 
             Text("paywall_onboarding_title".localized)
                 .font(.system(.title3, weight: .heavy).italic())

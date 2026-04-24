@@ -7,6 +7,15 @@
 //
 
 import SwiftUI
+import Combine
+
+@MainActor
+final class SharedHeaderRotationState: ObservableObject {
+    static let shared = SharedHeaderRotationState()
+    @Published var messageIndex: Int = 0
+
+    private init() {}
+}
 
 // MARK: - Screen Header Card Content
 /// Defines the trailing content type beside the mascot.
@@ -44,19 +53,20 @@ private extension ScreenHeaderCardContent {
 /// Header for mascot + message screens (Home, Progress). When useCard is false, renders content only for flat gradient headers.
 struct ScreenHeaderCard: View {
     let readinessPercentage: Int
-    /// When true, shows decorative premium badge (acknowledgement of status). Hidden for free users.
-    var isPremium: Bool = false
+    /// Subscription state used for free/pro header variants.
+    var isProUser: Bool = false
     var autoPlayInterval: TimeInterval? = 60
     var content: ScreenHeaderCardContent
     /// When false, renders content only (no rounded card). Use with gradient background for flat header (Home, Progress).
     var useCard: Bool = true
-    /// Base name for the mascot asset used in this header (e.g. "MainChick" or "MainChickFlipped").
-    var mascotAssetBaseName: String = "MainChick"
+    /// When `true`, mirrors the mascot horizontally (Home + Progress headers). Other headers use `false`.
+    var mascotHorizontallyFlipped: Bool = false
 
-    /// 0 = slogan, 1 = test date, 2 = readiness (when provided). Cycles on mascot animation.
-    @State private var messageIndex = 0
+    /// Shared across Home + Progress so tab switching keeps the same header rotation state.
+    @ObservedObject private var rotationState = SharedHeaderRotationState.shared
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var stateManager: StateManager
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(\.layoutMetrics) private var layoutMetrics
 
     private var mascotToContentSpacing: CGFloat { layoutMetrics.adaptive(16) }
@@ -75,7 +85,7 @@ struct ScreenHeaderCard: View {
     var body: some View {
         Group {
             if useCard {
-                HeaderCard(showPremiumButton: false) {
+                HeaderCard(showProButton: false) {
                     headerContent
                 }
             } else {
@@ -93,11 +103,7 @@ struct ScreenHeaderCard: View {
                 homeHeaderLayout
             } else {
                 VStack(alignment: .leading, spacing: premiumRowSpacing) {
-                    if isPremium {
-                        PremiumBadge(color: .white)
-                            .scaleEffect(0.8)
-                            .frame(maxWidth: .infinity)
-                    }
+                    headerProRow
                     mascotWithContentLayout
                 }
             }
@@ -109,37 +115,54 @@ struct ScreenHeaderCard: View {
     /// Home layout: left = state + message (flexible); right = premium (row 1) + mascot (row 2), fixed positions.
     @ViewBuilder
     private var homeHeaderLayout: some View {
-        HStack(alignment: .top, spacing: mascotToContentSpacing) {
-            // Left: state + mascot message (wraps as needed)
-            VStack(alignment: .leading, spacing: premiumRowSpacing) {
-                stateTitleRow
-                    .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading, spacing: 0) {
+            headerProRow
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-                mascotMessageRow
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.bottom, layoutMetrics.adaptive(12))
-            .animation(.easeInOut(duration: 0.35), value: messageIndex)
+            HStack(alignment: .top, spacing: mascotToContentSpacing) {
+                // Left: state + mascot message (wraps as needed)
+                VStack(alignment: .leading, spacing: premiumRowSpacing) {
+                    stateTitleRow
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
-            // Right: premium badge (row 1) when premium, mascot (row 2) — fixed positions
-            VStack(alignment: .trailing, spacing: premiumRowSpacing) {
-                if isPremium {
-                    PremiumBadge(color: .white)
-                        .fixedSize(horizontal: true, vertical: false)
+                    mascotMessageRow
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .animation(.easeInOut(duration: 0.35), value: rotationState.messageIndex)
 
-                MascotView(
-                    assetBaseName: mascotAssetBaseName,
-                    autoPlayInterval: autoPlayInterval,
-                    onAnimationStart: content.isAlternatingOnMascotAnimation ? {
-                        withAnimation(.easeInOut(duration: 0.35)) { advanceMessageIndex() }
-                    } : nil
-                )
-                .frame(width: mascotSize, height: mascotSize)
+                // Right: mascot (fixed position)
+                VStack(alignment: .trailing, spacing: premiumRowSpacing) {
+                    MascotView(
+                        horizontalMirror: mascotHorizontallyFlipped,
+                        autoPlayInterval: autoPlayInterval,
+                        onAnimationStart: content.isAlternatingOnMascotAnimation ? {
+                            withAnimation(.easeInOut(duration: 0.35)) { advanceMessageIndex() }
+                        } : nil
+                    )
+                    .frame(width: mascotSize, height: mascotSize)
+                }
+                .fixedSize(horizontal: true, vertical: false)
             }
-            .fixedSize(horizontal: true, vertical: false)
+            .padding(.top, layoutMetrics.adaptive(8))
+            .padding(.bottom, layoutMetrics.adaptive(12))
         }
+    }
+
+    @ViewBuilder
+    private var headerProRow: some View {
+        HStack(spacing: layoutMetrics.adaptive(8)) {
+            ProBadge(color: .white, showShimmer: true)
+                .fixedSize(horizontal: true, vertical: false)
+
+            if !isProUser {
+                TestNowForFreeChip(color: .white) {
+                    subscriptionManager.presentPaywall(placement: "home_header_free_chip")
+                }
+                .fixedSize(horizontal: true, vertical: false)
+            }
+        }
+        .animation(.easeInOut(duration: 0.3), value: isProUser)
     }
 
     @ViewBuilder
@@ -191,7 +214,7 @@ struct ScreenHeaderCard: View {
     private var mascotWithContentLayout: some View {
         HStack(alignment: .center, spacing: mascotToContentSpacing) {
             MascotView(
-                assetBaseName: mascotAssetBaseName,
+                horizontalMirror: mascotHorizontallyFlipped,
                 autoPlayInterval: content == .readiness ? nil : autoPlayInterval,
                 onAnimationStart: content.isAlternatingOnMascotAnimation ? {
                     withAnimation(.easeInOut(duration: 0.35)) { advanceMessageIndex() }
@@ -226,7 +249,7 @@ struct ScreenHeaderCard: View {
 
     private func advanceMessageIndex() {
         let count = content.messageCountForAlternating
-        messageIndex = (messageIndex + 1) % count
+        rotationState.messageIndex = (rotationState.messageIndex + 1) % count
     }
 
     @ViewBuilder
@@ -253,7 +276,7 @@ struct ScreenHeaderCard: View {
     @ViewBuilder
     private func stateContentWithAlternatingMessage(stateName: String, testDateMessage: String, readinessMessage: String?) -> some View {
         let count = readinessMessage != nil ? 3 : 2
-        let idx = messageIndex % count
+        let idx = rotationState.messageIndex % count
         let textMessage = idx == 1 ? testDateMessage : (readinessMessage ?? testDateMessage)
 
         ZStack(alignment: .leading) {
@@ -272,7 +295,7 @@ struct ScreenHeaderCard: View {
                     .transition(.opacity)
             }
         }
-        .animation(.easeInOut(duration: 0.25), value: messageIndex)
+        .animation(.easeInOut(duration: 0.25), value: rotationState.messageIndex)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -298,7 +321,7 @@ struct ScreenHeaderCard: View {
 
     @ViewBuilder
     private func readinessWithTestDateAlternatingMessage(readinessMessage: String, testDateMessage: String) -> some View {
-        let idx = messageIndex % 2
+        let idx = rotationState.messageIndex % 2
 
         ZStack(alignment: .leading) {
             if idx == 0 {
@@ -321,7 +344,7 @@ struct ScreenHeaderCard: View {
                     .transition(.opacity)
             }
         }
-        .animation(.easeInOut(duration: 0.25), value: messageIndex)
+        .animation(.easeInOut(duration: 0.25), value: rotationState.messageIndex)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 

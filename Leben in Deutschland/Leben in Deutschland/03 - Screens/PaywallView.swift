@@ -109,7 +109,7 @@ struct PaywallView: View {
     // MARK: - Header (premium badge top right, like Categories)
     private var headerSection: some View {
         VStack(spacing: layoutMetrics.adaptive(12)) {
-            PremiumBadge(color: .white, showShimmer: true)
+            ProBadge(color: .white, showShimmer: true)
 
             Text("paywall_title".localized)
                 .font(.system(.title2, weight: .heavy).italic())

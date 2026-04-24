@@ -31,12 +31,13 @@ struct HomeView: View {
             VStack(spacing: 0) {
                 HomeHeader(
                     readinessPercentage: viewModel.statistics.readinessPercentage,
-                    isPremium: subscriptionManager.effectiveIsPremium,
+                    isProUser: subscriptionManager.effectiveIsPremium,
                     useCard: false,
-                    mascotAssetBaseName: "MainChickFlipped",
-                    alternatingEnabled: false
+                    mascotHorizontallyFlipped: true,
+                    alternatingEnabled: true
                 )
                 .padding(.horizontal, layoutMetrics.adaptive(16))
+                .padding(.bottom, layoutMetrics.adaptive(12))
                 // Vertical spacing below header is controlled by the learn options section top padding
                 .background(
                     Rectangle()

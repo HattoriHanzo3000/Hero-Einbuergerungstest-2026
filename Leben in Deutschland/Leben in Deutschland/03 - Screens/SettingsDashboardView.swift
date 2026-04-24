@@ -21,7 +21,7 @@ struct SettingsDashboardView: View {
                     onAboutTapped: { viewModel.navigationPath.append(.about) },
                     onShareTapped: { viewModel.navigationPath.append(.share) }
                 )
-                SettingsPremiumSectionView(viewModel: viewModel.premiumViewModel)
+                SettingsProSectionView(viewModel: viewModel.proViewModel)
                 if let regionalViewModel = viewModel.regionalViewModel {
                     SettingsRegionalSectionView(viewModel: regionalViewModel)
                 }

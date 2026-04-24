@@ -50,10 +50,10 @@
 "ok_button" = "OK";
 
 // PAYWALL
-"paywall_onboarding_title" = "Try Hero Premium for free";
+"paywall_onboarding_title" = "Try Hero Pro for free";
 "paywall_trial_line" = "Start with a 3-day free trial. Cancel anytime.";
 "paywall_plan_pitch" = "One goal. Three plans. Choose what works for you.";
-"paywall_title" = "Unlock your future in Germany with Hero Premium";
+"paywall_title" = "Unlock your future in Germany with Hero Pro";
 "paywall_subtitle" = "Spaced repetition, learn by topics, favorites, unlimited test simulations, and detailed progress — everything you need to pass.";
 "paywall_close" = "Close";
 "paywall_close_hint" = "Dismisses the paywall";
@@ -101,14 +101,14 @@
 "learn_by_topics_header_message" = "I grouped all questions by themes for you — choose a path and soar.";
 "learn_by_topics_disclaimer_title" = "Learn by Topics";
 "learn_by_topics_disclaimer_message" = "Questions are grouped by theme so you can study one topic at a time. Choose a topic, answer the questions, and check your answers. This mode does not affect your readiness score.";
-"limit_topic_premium_title" = "Premium Area";
-"limit_topic_premium_message" = "This topic is part of the premium area. Consider upgrading to Premium to study without limits.";
+"limit_topic_premium_title" = "Pro Area";
+"limit_topic_premium_message" = "This topic is part of the pro area. Consider upgrading to Pro to study without limits.";
 "limit_smart_learning_title" = "Limit Reached";
-"limit_smart_learning_message" = "You've reached the limit of 30 free Smart Learning questions. Consider upgrading to Premium to study without limits.";
+"limit_smart_learning_message" = "You've reached the limit of 30 free Smart Learning questions. Consider upgrading to Pro to study without limits.";
 "limit_favorites_title" = "Limit Reached";
-"limit_favorites_message" = "You've reached the limit of 5 free favorites. Consider upgrading to Premium to study without limits.";
+"limit_favorites_message" = "You've reached the limit of 5 free favorites. Consider upgrading to Pro to study without limits.";
 "limit_test_simulation_title" = "Limit Reached";
-"limit_test_simulation_message" = "You've reached the limit of 3 free test simulations. Consider upgrading to Premium to study without limits.";
+"limit_test_simulation_message" = "You've reached the limit of 3 free test simulations. Consider upgrading to Pro to study without limits.";
 "no_search_results" = "No results found";
 "question_label" = "Question";
 
@@ -278,15 +278,16 @@
 "settings_language_option_turkish" = "Turkish";
 "settings_haptics_toggle" = "Haptic Feedback";
 "settings_appearance_title" = "Appearance";
-"settings_premium_title" = "Premium";
+"settings_premium_title" = "Pro";
 "settings_reset_app" = "Reset App";
 
 // PREMIUM / PRICING
 "premium_plan_monthly" = "Monthly";
 "premium_plan_lifetime" = "Lifetime";
 "premium_per_month" = "per month";
-"premium_accessibility_label" = "Premium";
-"premium_accessibility_hint" = "Opens premium features and subscription options";
+"premium_accessibility_label" = "Pro";
+"premium_accessibility_hint" = "Opens Pro features and subscription options";
+"header_test_now_for_free" = "Test now for free";
 "premium_plan_yearly" = "Yearly";
 "premium_per_year" = "per year";
 "paywall_best_value" = "Best value";

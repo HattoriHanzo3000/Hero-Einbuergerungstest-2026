@@ -50,10 +50,10 @@
 "ok_button" = "TAMAM";
 
 // PAYWALL
-"paywall_onboarding_title" = "Hero Premium'u ücretsiz dene";
+"paywall_onboarding_title" = "Hero Pro'yu ücretsiz dene";
 "paywall_trial_line" = "3 günlük ücretsiz deneme ile başla. İstediğin zaman iptal et.";
 "paywall_plan_pitch" = "Tek hedef. Üç plan. Sana uygun olanı seç.";
-"paywall_title" = "Hero Premium ile Almanya'daki geleceğinin kilidini aç";
+"paywall_title" = "Hero Pro ile Almanya'daki geleceğinin kilidini aç";
 "paywall_subtitle" = "Aralıklı Tekrar, Konulara Göre Öğrenme, Favoriler, sınırsız testler ve detaylı ilerleme — başarmak için ihtiyacın olan her şey.";
 "paywall_close" = "Kapat";
 "paywall_close_hint" = "Ödeme sayfasını kapatır";
@@ -101,14 +101,14 @@
 "learn_by_topics_header_message" = "Senin için tüm soruları konulara göre gruplandırdım — kendi yolunu seç ve başla.";
 "learn_by_topics_disclaimer_title" = "Konulara Göre Öğrenme";
 "learn_by_topics_disclaimer_message" = "Sorular, konuları sırayla öğrenebilmen için konulara göre gruplandırılmıştır. Bir konu seç, soruları cevapla ve cevaplarını kontrol et. Bu mod sınava hazır olma durumunu etkilemez.";
-"limit_topic_premium_title" = "Premium Alan";
-"limit_topic_premium_message" = "Bu konu premium alanındadır. Limitsiz çalışmak için Premium'a geçmeyi düşün.";
+"limit_topic_premium_title" = "Pro Alan";
+"limit_topic_premium_message" = "Bu konu pro alanındadır. Limitsiz çalışmak için Pro'ya geçmeyi düşün.";
 "limit_smart_learning_title" = "Limit Aşıldı";
-"limit_smart_learning_message" = "30 ücretsiz Smart Learning sorusu limitine ulaştın. Limitsiz çalışmak için Premium'a geçmeyi düşün.";
+"limit_smart_learning_message" = "30 ücretsiz Smart Learning sorusu limitine ulaştın. Limitsiz çalışmak için Pro'ya geçmeyi düşün.";
 "limit_favorites_title" = "Limit Aşıldı";
-"limit_favorites_message" = "5 ücretsiz favori limitine ulaştın. Limitsiz çalışmak için Premium'a geçmeyi düşün.";
+"limit_favorites_message" = "5 ücretsiz favori limitine ulaştın. Limitsiz çalışmak için Pro'ya geçmeyi düşün.";
 "limit_test_simulation_title" = "Limit Aşıldı";
-"limit_test_simulation_message" = "3 ücretsiz test simülasyonu limitine ulaştın. Limitsiz çalışmak için Premium'a geçmeyi düşün.";
+"limit_test_simulation_message" = "3 ücretsiz test simülasyonu limitine ulaştın. Limitsiz çalışmak için Pro'ya geçmeyi düşün.";
 "no_search_results" = "Sonuç bulunamadı";
 "question_label" = "Soru";
 
@@ -268,15 +268,16 @@
 "settings_language_option_turkish" = "Türkçe";
 "settings_haptics_toggle" = "Dokunsal Geri Bildirim";
 "settings_appearance_title" = "Görünüm";
-"settings_premium_title" = "Premium";
+"settings_premium_title" = "Pro";
 "settings_reset_app" = "Uygulamayı Sıfırla";
 
 // PREMIUM / PRICING
 "premium_plan_monthly" = "Aylık";
 "premium_plan_lifetime" = "Ömür Boyu";
 "premium_per_month" = "aylık";
-"premium_accessibility_label" = "Premium";
-"premium_accessibility_hint" = "Premium özellikleri ve abonelik seçeneklerini açar";
+"premium_accessibility_label" = "Pro";
+"premium_accessibility_hint" = "Pro özellikleri ve abonelik seçeneklerini açar";
+"header_test_now_for_free" = "Şimdi ücretsiz dene";
 "premium_plan_yearly" = "Yıllık";
 "premium_per_year" = "yıllık";
 "paywall_best_value" = "En İyi Fiyat";
