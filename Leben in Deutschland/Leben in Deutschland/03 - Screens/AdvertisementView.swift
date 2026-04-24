@@ -4,7 +4,6 @@ import SwiftUI
 // MARK: - Screen
 struct AdvertisementView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.openURL) private var openURL
     @State private var b2ArtworkURL: URL?
     @State private var artworkLookupFinished = false
     @State private var b2TrackName: String?
@@ -101,8 +100,7 @@ struct AdvertisementView: View {
 
     private var b2AppRow: some View {
         Button {
-            HapticManager.shared.lightImpact()
-            openURL(AdvertisementDestination.b2AppStoreURL)
+            HeroB2StorePresentation.present()
         } label: {
             HStack(alignment: .top, spacing: 14) {
                 B2AppIconView(
@@ -234,7 +232,6 @@ struct AdvertisementView: View {
 // MARK: - Destination
 private enum AdvertisementDestination {
     static let b2AppStoreID = 6755700752
-    static let b2AppStoreURL = URL(string: "https://apps.apple.com/us/app/hero-b2-beruf-vokabeln/id6755700752")!
 }
 
 // MARK: - App Icon View
