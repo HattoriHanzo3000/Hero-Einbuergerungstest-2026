@@ -3,6 +3,7 @@ import SwiftUI
 /// Standard row layout for tappable Settings actions.
 struct SettingsRowButtonLabel: View {
     let title: String
+    let subtitle: String?
     let iconSystemName: String?
     let tint: Color
     let trailingText: String?
@@ -12,6 +13,7 @@ struct SettingsRowButtonLabel: View {
 
     init(
         title: String,
+        subtitle: String? = nil,
         iconSystemName: String? = nil,
         tint: Color,
         trailingText: String? = nil,
@@ -20,6 +22,7 @@ struct SettingsRowButtonLabel: View {
         showsChevron: Bool = true
     ) {
         self.title = title
+        self.subtitle = subtitle
         self.iconSystemName = iconSystemName
         self.tint = tint
         self.trailingText = trailingText
@@ -34,9 +37,16 @@ struct SettingsRowButtonLabel: View {
                 SettingsIconView(systemName: iconSystemName, tint: tint)
             }
 
-            Text(title)
-                .font(.body)
-                .foregroundStyle(.primary)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.body)
+                    .foregroundStyle(.primary)
+                if let subtitle, subtitle.isEmpty == false {
+                    Text(subtitle)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+            }
 
             Spacer(minLength: 0)
 

@@ -12,7 +12,7 @@ struct SettingsLegalSectionView: View {
                 SettingsRowButtonLabel(
                     title: "settings_impressum_button".localized,
                     iconSystemName: "building.2.fill",
-                    tint: SettingsDesignTokens.Palette.legal,
+                    tint: .gray,
                     showsChevron: false
                 )
             }
@@ -24,7 +24,7 @@ struct SettingsLegalSectionView: View {
                 SettingsRowButtonLabel(
                     title: "terms_of_service".localized,
                     iconSystemName: "doc.text.fill",
-                    tint: SettingsDesignTokens.Palette.legal,
+                    tint: .gray,
                     showsChevron: false
                 )
             }
@@ -35,8 +35,8 @@ struct SettingsLegalSectionView: View {
             } label: {
                 SettingsRowButtonLabel(
                     title: "privacy_policy".localized,
-                    iconSystemName: "lock.fill",
-                    tint: SettingsDesignTokens.Palette.legal,
+                    iconSystemName: "lock.shield.fill",
+                    tint: .gray,
                     showsChevron: false
                 )
             }

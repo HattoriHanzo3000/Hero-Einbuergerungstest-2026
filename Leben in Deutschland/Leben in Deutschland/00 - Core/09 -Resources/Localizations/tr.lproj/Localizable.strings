@@ -81,9 +81,15 @@
 "tab_progress_hint" = "İlerlemeni ve istatistiklerini açar";
 "tab_settings_hint" = "Ayarları açar";
 "tab_search_hint" = "Tüm sorularda aramayı açar";
+
+// COCKPIT
 "cockpit_progress_title" = "İlerleme";
 "cockpit_more_from_hero_subtitle" = "Hero'dan daha fazlası";
 "cockpit_more_from_hero_body" = "Almanya'da başarı yolculuğun devam ediyor. Hero'dan daha fazlasını keşfet.";
+
+// ADVERTISEMENT VIEW
+"advertisement_hero_lead_title" = "Hero sadece bir uygulama değil. Almanya'da başarılı bir yaşam için yol arkadaşın.";
+"advertisement_hero_lead_subtitle" = "Diğer Hero uygulamalarımızı da keşfet - hedeflerine ulaşmana yardımcı olurlar.";
 // HOME / LEARN OPTIONS
 "home_learn_spaced_repetition" = "Akıllı Öğrenme";
 "home_learn_spaced_repetition_subtitle" = "Aralıklı Tekrar Sistemi";
@@ -171,6 +177,8 @@
 "settings_about_mascot_accessibility" = "Hero Maskotu";
 "settings_about_description" = "Hero – Vatandaşlık Testi, 310 resmi soru, Aralıklı Tekrar öğrenimi ve tam test simülasyonu ile vatandaşlık sınavına hazırlanmana yardımcı olur. Eyaletini seç, kendi hızında çalış ve sınav günü kendini güvende hisset.";
 "settings_about_learning_options_title" = "Öğrenme Seçenekleri";
+"disclaimer_title" = "Sorumluluk Reddi";
+"about_disclaimer" = "Hero – Einbürgerungstest bağımsız bir öğrenme uygulamasıdır ve Bundesamt für Migration und Flüchtlinge (BAMF) ile bağlantılı değildir; BAMF tarafından yetkilendirilmez, sponsorlanmaz veya onaylanmaz. Resmi sınav ve soru kataloğu BAMF tarafından yönetilir ve yayımlanır. Tüm ticari markalar, ürün adları ve haklar ilgili sahiplerine aittir.";
 "settings_share_qr_accessibility" = "Uygulamayı indirmek için QR Kodu";
 "settings_share_scan_subtitle" = "Uygulamayı App Store'dan indirmek için bu QR kodunu tara — veya arkadaşlarına göndermek için Paylaş'a dokun.";
 "share_app_hint" = "Uygulamayı başkalarıyla paylaş";
@@ -271,8 +279,34 @@
 "settings_language_option_turkish" = "Türkçe";
 "settings_haptics_toggle" = "Dokunsal Geri Bildirim";
 "settings_appearance_title" = "Görünüm";
-"settings_premium_title" = "Pro";
+"settings_premium_title" = "Hero Pro";
+"settings_premium_accessibility_hint" = "Mevcut planını ve abonelik seçeneklerini açar";
 "settings_reset_app" = "Uygulamayı Sıfırla";
+"hero_pro_nav_title" = "Planın";
+"hero_pro_section_title" = "Hero Pro";
+"hero_pro_actions_title" = "İşlemler";
+"hero_pro_tariff_label" = "Tarife";
+"hero_pro_tariff_free" = "Ücretsiz";
+"hero_pro_tariff_trial" = "Deneme";
+"hero_pro_tariff_subscription" = "Abonelik";
+"hero_pro_tariff_lifetime" = "Ömür boyu";
+"hero_pro_status_free" = "Ücretsiz";
+"hero_pro_status_trial" = "Deneme";
+"hero_pro_status_subscription" = "Hero Pro";
+"hero_pro_status_lifetime" = "Ömür boyu";
+"hero_pro_detail_free_body" = "Tüm öğrenme özelliklerini açmak için Hero Pro'ya geç.";
+"hero_pro_detail_trial_body" = "Tam Hero Pro erişimiyle ücretsiz denemedesin.";
+"hero_pro_detail_subscription_body" = "Şu anda aktif bir Hero Pro aboneliğin var.";
+"hero_pro_detail_lifetime_body" = "Hero Pro'ya ömür boyu sahip oldun, tekrar eden ödeme yok.";
+"hero_pro_detail_lifetime_thanks" = "Ömür boyu erişimle Hero'yu desteklediğin için teşekkürler.";
+"hero_pro_trial_ends_format" = "Deneme bitiş: %@";
+"hero_pro_renews_format" = "Yenileme: %@";
+"hero_pro_manage_subscription" = "Aboneliği Yönet";
+"hero_pro_view_plans" = "PRO PLANLARINI GÖSTER";
+"hero_pro_restore_caption" = "Zaten abone misin?";
+"hero_pro_redeem_caption" = "Kodun mu var?";
+"hero_pro_manage_subscription_failed_title" = "Abonelik ayarları açılamadı";
+"hero_pro_manage_subscription_failed_message" = "Lütfen biraz sonra tekrar dene.";
 
 // PREMIUM / PRICING
 "premium_plan_monthly" = "Aylık";

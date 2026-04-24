@@ -1,16 +1,9 @@
 import SwiftUI
 
-/// About screen with mascot, description, and version info. Matches Hero B2 style.
+/// About screen with mascot and description. Matches Hero B2 style.
 struct SettingsAboutView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
-    #if DEBUG
-    @State private var showDebugMenu = false
-    #endif
-
-    private var appVersion: String {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
-    }
 
     var body: some View {
         ZStack {
@@ -21,11 +14,12 @@ struct SettingsAboutView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: layoutMetrics.adaptive(SettingsDesignTokens.Layout.sectionSpacing)) {
                     mascotImage
-                    versionText
                     descriptionText
                         .padding(.bottom, layoutMetrics.adaptive(20))
                     learningOptionsTitle
                     disclaimerSection
+                    legalDisclaimerSection
+                        .padding(.top, layoutMetrics.adaptive(8))
                 }
                 .padding(.horizontal, layoutMetrics.adaptive(20))
                 .padding(.top, layoutMetrics.adaptive(8))
@@ -36,11 +30,6 @@ struct SettingsAboutView: View {
         }
         .navigationTitle("settings_about_button".localized)
         .navigationBarTitleDisplayMode(.inline)
-        #if DEBUG
-        .sheet(isPresented: $showDebugMenu) {
-            DebugMenuSheet()
-        }
-        #endif
     }
 
     @ViewBuilder
@@ -70,20 +59,6 @@ struct SettingsAboutView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private var versionText: some View {
-        Text("\("version".localized) \(appVersion)")
-            .font(.system(.subheadline).width(.condensed))
-            .foregroundStyle(.white.opacity(0.85))
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityLabel("version".localized)
-            .accessibilityValue(appVersion)
-            #if DEBUG
-            .onTapGesture(count: 7) {
-                showDebugMenu = true
-            }
-            #endif
-    }
-
     private var learningOptionsTitle: some View {
         Text("settings_about_learning_options_title".localized)
             .font(.title2)
@@ -109,6 +84,23 @@ struct SettingsAboutView: View {
             Text(messageKey.localized)
                 .font(.subheadline)
                 .foregroundStyle(.white.opacity(0.8))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var legalDisclaimerSection: some View {
+        VStack(alignment: .leading, spacing: layoutMetrics.adaptive(10)) {
+            Divider()
+                .overlay(.white.opacity(0.25))
+
+            Text("disclaimer_title".localized)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.95))
+
+            Text("about_disclaimer".localized)
+                .font(.footnote)
+                .foregroundStyle(.white.opacity(0.9))
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)

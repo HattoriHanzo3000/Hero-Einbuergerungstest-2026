@@ -26,6 +26,9 @@ final class SettingsDashboardViewModel: ObservableObject {
         self.legalViewModel = legalViewModel ?? SettingsLegalViewModel()
         self.regionalViewModel = regionalViewModel
         self.personalisationViewModel = personalisationViewModel
+        self.proViewModel.setTapHandler { [weak self] in
+            self?.navigationPath.append(.heroProPlan)
+        }
 
         regionalViewModel?.objectWillChange
             .receive(on: DispatchQueue.main)

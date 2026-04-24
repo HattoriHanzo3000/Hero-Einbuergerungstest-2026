@@ -81,9 +81,15 @@
 "tab_progress_hint" = "Öffnet deinen Fortschritt und Statistiken";
 "tab_settings_hint" = "Öffnet die Einstellungen";
 "tab_search_hint" = "Öffnet die Suche über alle Fragen";
+
+// COCKPIT
 "cockpit_progress_title" = "Fortschritt";
 "cockpit_more_from_hero_subtitle" = "Mehr von Hero";
 "cockpit_more_from_hero_body" = "Dein Weg zum Erfolg in Deutschland geht weiter. Entdecke mehr von Hero.";
+
+// ADVERTISEMENT VIEW
+"advertisement_hero_lead_title" = "Hero ist mehr als nur eine App. Es ist dein Begleiter für ein erfolgreiches Leben in Deutschland";
+"advertisement_hero_lead_subtitle" = "Entdecke auch unsere anderen Hero-Apps - sie unterstützen dich dabei, deine Ziele zu erreichen.";
 // HOME / LEARN OPTIONS
 "home_learn_spaced_repetition" = "Intelligentes Lernen";
 "home_learn_spaced_repetition_subtitle" = "Intervall-Wiederholungssystem";
@@ -171,6 +177,8 @@
 "settings_about_mascot_accessibility" = "Hero-Maskottchen";
 "settings_about_description" = "Hero – Einbürgerungstest hilft dir bei der Vorbereitung auf den Einbürgerungstest mit 310 offiziellen Fragen, Spaced-Repetition-Lernen und vollständiger Testsimulation. Wähle dein Bundesland, übe in deinem eigenen Tempo und fühle dich am Prüfungstag sicher.";
 "settings_about_learning_options_title" = "Lernoptionen";
+"disclaimer_title" = "Haftungsausschluss";
+"about_disclaimer" = "Hero – Einbürgerungstest ist eine unabhängige Lern-App und steht in keiner Verbindung zum Bundesamt für Migration und Flüchtlinge (BAMF). Die App ist weder autorisiert, gesponsert noch empfohlen. Der offizielle Test und der Fragenkatalog werden vom BAMF bereitgestellt und veröffentlicht. Alle Marken, Produktnamen und Rechte gehören ihren jeweiligen Inhabern.";
 "settings_share_qr_accessibility" = "QR-Code zum Herunterladen der App";
 "settings_share_scan_subtitle" = "Scanne diesen QR-Code, um die App aus dem App Store herunterzuladen — oder tippe auf Teilen, um ihn an Freunde zu senden.";
 "share_app_hint" = "App mit anderen teilen";
@@ -271,8 +279,34 @@
 "settings_language_option_turkish" = "Türkisch";
 "settings_haptics_toggle" = "Haptisches Feedback";
 "settings_appearance_title" = "Darstellung";
-"settings_premium_title" = "Pro";
+"settings_premium_title" = "Hero Pro";
+"settings_premium_accessibility_hint" = "Öffnet deinen aktuellen Tarif und Abo-Optionen";
 "settings_reset_app" = "App zurücksetzen";
+"hero_pro_nav_title" = "Dein Tarif";
+"hero_pro_section_title" = "Hero Pro";
+"hero_pro_actions_title" = "Aktionen";
+"hero_pro_tariff_label" = "Tarif";
+"hero_pro_tariff_free" = "Kostenlos";
+"hero_pro_tariff_trial" = "Probephase";
+"hero_pro_tariff_subscription" = "Abonnement";
+"hero_pro_tariff_lifetime" = "Lebenslang";
+"hero_pro_status_free" = "Kostenlos";
+"hero_pro_status_trial" = "Testphase";
+"hero_pro_status_subscription" = "Hero Pro";
+"hero_pro_status_lifetime" = "Lebenslang";
+"hero_pro_detail_free_body" = "Upgrade auf Hero Pro, um alle Lernfunktionen freizuschalten.";
+"hero_pro_detail_trial_body" = "Du nutzt eine Probephase mit vollem Hero Pro-Zugriff.";
+"hero_pro_detail_subscription_body" = "Du hast derzeit ein aktives Hero Pro-Abonnement.";
+"hero_pro_detail_lifetime_body" = "Du besitzt Hero Pro dauerhaft ohne wiederkehrende Zahlungen.";
+"hero_pro_detail_lifetime_thanks" = "Danke, dass du Hero mit lebenslangem Zugriff unterstützt.";
+"hero_pro_trial_ends_format" = "Probephase endet am %@";
+"hero_pro_renews_format" = "Verlängert sich am %@";
+"hero_pro_manage_subscription" = "Abo verwalten";
+"hero_pro_view_plans" = "PRO-PLÄNE ANZEIGEN";
+"hero_pro_restore_caption" = "Schon abonniert?";
+"hero_pro_redeem_caption" = "Hast du einen Code?";
+"hero_pro_manage_subscription_failed_title" = "Abo-Einstellungen konnten nicht geöffnet werden";
+"hero_pro_manage_subscription_failed_message" = "Bitte versuche es in einem Moment erneut.";
 
 // PREMIUM / PRICING
 "premium_plan_monthly" = "Monatlich";

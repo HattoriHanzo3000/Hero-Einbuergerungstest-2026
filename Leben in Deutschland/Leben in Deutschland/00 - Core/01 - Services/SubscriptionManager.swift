@@ -9,7 +9,15 @@
 import Foundation
 import Combine
 import RevenueCat
+import StoreKit
 import SwiftUI
+
+enum SubscriptionTariffState: Equatable {
+    case free
+    case trial
+    case subscription
+    case lifetime
+}
 
 /// Content for the feature preview disclaimer shown to free users before the paywall.
 struct FeaturePreviewContent {
@@ -24,6 +32,12 @@ final class SubscriptionManager: ObservableObject {
     static let shared = SubscriptionManager()
 
     @Published private(set) var isPremium: Bool = false
+    @Published private(set) var tariffState: SubscriptionTariffState = .free
+    @Published private(set) var tariffRenewalDate: Date?
+    @Published private(set) var activeProductIdentifier: String?
+    @Published private(set) var appStorePlanDisplayName: String?
+    @Published var showRestoreFeedbackAlert: Bool = false
+    @Published var restoreFeedbackMessage: String?
     /// When true, present PaywallView as a sheet. Set by presentPaywall().
     @Published var showPaywall: Bool = false
 
@@ -39,6 +53,89 @@ final class SubscriptionManager: ObservableObject {
         }
         #endif
         return isPremium
+    }
+
+    var hasLifetimeSubscription: Bool {
+        tariffState == .lifetime
+    }
+
+    var hasActiveSubscription: Bool {
+        tariffState == .subscription || tariffState == .trial
+    }
+
+    var localizedTariffName: String {
+        switch tariffState {
+        case .free:
+            return "hero_pro_tariff_free".localized
+        case .trial:
+            return "hero_pro_tariff_trial".localized
+        case .subscription:
+            return "hero_pro_tariff_subscription".localized
+        case .lifetime:
+            return "hero_pro_tariff_lifetime".localized
+        }
+    }
+
+    var localizedPlanStatusLine: String {
+        if let appStorePlanDisplayName, !appStorePlanDisplayName.isEmpty {
+            return appStorePlanDisplayName
+        }
+        switch tariffState {
+        case .free:
+            return "hero_pro_status_free".localized
+        case .trial:
+            return "hero_pro_status_trial".localized
+        case .subscription:
+            return "hero_pro_status_subscription".localized
+        case .lifetime:
+            return "hero_pro_status_lifetime".localized
+        }
+    }
+
+    var localizedPlanDetailBody: String {
+        switch tariffState {
+        case .free:
+            return "hero_pro_detail_free_body".localized
+        case .trial:
+            return "hero_pro_detail_trial_body".localized
+        case .subscription:
+            return "hero_pro_detail_subscription_body".localized
+        case .lifetime:
+            return "hero_pro_detail_lifetime_body".localized
+        }
+    }
+
+    var localizedPlanLifetimeThanks: String? {
+        hasLifetimeSubscription ? "hero_pro_detail_lifetime_thanks".localized : nil
+    }
+
+    var localizedPlanDateLine: String? {
+        guard let renewalDate = tariffRenewalDate else { return nil }
+        let formattedDate = DateFormatter.localizedString(from: renewalDate, dateStyle: .medium, timeStyle: .none)
+        switch tariffState {
+        case .trial:
+            return String(format: "hero_pro_trial_ends_format".localized, formattedDate)
+        case .subscription:
+            return String(format: "hero_pro_renews_format".localized, formattedDate)
+        case .free, .lifetime:
+            return nil
+        }
+    }
+
+    var showsManageSubscriptionAction: Bool {
+        tariffState == .subscription || tariffState == .trial
+    }
+
+    var showsViewPlansAction: Bool {
+        tariffState != .lifetime
+    }
+
+    var showsRestoreAction: Bool {
+        tariffState == .free
+    }
+
+    var showsRedeemAction: Bool {
+        tariffState != .lifetime
     }
 
     private let entitlementId = AppConfiguration.premiumEntitlementId
@@ -69,7 +166,7 @@ final class SubscriptionManager: ObservableObject {
                 guard !Task.isCancelled else { return }
                 let active = customerInfo.entitlements.all[entitlementId]?.isActive == true
                 await MainActor.run {
-                    self.isPremium = active
+                    self.applyCustomerInfo(customerInfo, activeOverride: active)
                 }
             }
         }
@@ -80,10 +177,28 @@ final class SubscriptionManager: ObservableObject {
         guard Purchases.isConfigured else { return }
         do {
             let customerInfo = try await Purchases.shared.customerInfo()
-            isPremium = customerInfo.entitlements.all[entitlementId]?.isActive == true
+            applyCustomerInfo(customerInfo)
         } catch {
             print("SubscriptionManager: Failed to refresh — \(error)")
         }
+    }
+
+    func restorePurchases() async {
+        do {
+            _ = try await Purchases.shared.restorePurchases()
+            await refreshPremiumStatus()
+            restoreFeedbackMessage = effectiveIsPremium
+                ? "paywall_restore_success".localized
+                : "paywall_restore_no_subscription".localized
+        } catch {
+            restoreFeedbackMessage = error.localizedDescription
+        }
+        showRestoreFeedbackAlert = true
+    }
+
+    func dismissRestoreFeedbackAlert() {
+        showRestoreFeedbackAlert = false
+        restoreFeedbackMessage = nil
     }
 
     // MARK: - Paywall Presentation
@@ -149,5 +264,47 @@ final class SubscriptionManager: ObservableObject {
             accentColorName: accentColorName
         )
         showFeaturePreviewSheet = true
+    }
+
+    private func applyCustomerInfo(_ customerInfo: CustomerInfo, activeOverride: Bool? = nil) {
+        let entitlement = customerInfo.entitlements.all[entitlementId]
+        let isActive = activeOverride ?? (entitlement?.isActive == true)
+        isPremium = isActive
+        guard isActive, let entitlement else {
+            tariffState = .free
+            tariffRenewalDate = nil
+            activeProductIdentifier = nil
+            appStorePlanDisplayName = nil
+            return
+        }
+
+        let productIdentifier = entitlement.productIdentifier
+        let loweredProductIdentifier = productIdentifier.lowercased()
+        activeProductIdentifier = productIdentifier
+        tariffRenewalDate = entitlement.expirationDate
+        Task {
+            await refreshAppStorePlanDisplayName(for: productIdentifier)
+        }
+
+        if loweredProductIdentifier.contains("lifetime") {
+            tariffState = .lifetime
+        } else if entitlement.periodType == .trial {
+            tariffState = .trial
+        } else {
+            tariffState = .subscription
+        }
+    }
+
+    private func refreshAppStorePlanDisplayName(for productIdentifier: String?) async {
+        guard let productIdentifier, !productIdentifier.isEmpty else {
+            appStorePlanDisplayName = nil
+            return
+        }
+        do {
+            let products = try await Product.products(for: [productIdentifier])
+            appStorePlanDisplayName = products.first?.displayName
+        } catch {
+            appStorePlanDisplayName = nil
+        }
     }
 }

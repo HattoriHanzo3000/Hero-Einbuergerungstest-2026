@@ -9,6 +9,17 @@ struct SettingsDashboardView: View {
     @EnvironmentObject private var soundManager: SoundManager
     @EnvironmentObject private var appFlow: AppFlow
     @StateObject private var viewModel: SettingsDashboardViewModel
+    #if DEBUG
+    @State private var showDebugMenu = false
+    #endif
+
+    private var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+    }
+
+    private var buildNumber: String {
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+    }
 
     init(viewModel: SettingsDashboardViewModel? = nil) {
         _viewModel = StateObject(wrappedValue: viewModel ?? SettingsDashboardViewModel())
@@ -33,6 +44,25 @@ struct SettingsDashboardView: View {
                 if let dangerViewModel = viewModel.dangerViewModel {
                     SettingsDangerSectionView(viewModel: dangerViewModel)
                 }
+                Section {
+                    HStack {
+                        Spacer()
+                        Text("\("version".localized) \(appVersion) (\(buildNumber))")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            .accessibilityLabel("version".localized)
+                            .accessibilityValue("\(appVersion) (\(buildNumber))")
+                            #if DEBUG
+                            .onTapGesture(count: 7) {
+                                showDebugMenu = true
+                            }
+                            #endif
+                        Spacer()
+                    }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                }
             }
             .id(languageManager.currentAppLanguage)
             .navigationTitle("settings_title".localized)
@@ -46,6 +76,8 @@ struct SettingsDashboardView: View {
                     SettingsAboutView()
                 case .share:
                     SettingsShareView()
+                case .heroProPlan:
+                    SettingsHeroProPlanView()
                 }
             }
         }
@@ -96,6 +128,11 @@ struct SettingsDashboardView: View {
         } message: {
             Text("mail_unavailable_message".localized)
         }
+        #if DEBUG
+        .sheet(isPresented: $showDebugMenu) {
+            DebugMenuSheet()
+        }
+        #endif
         .overlay {
             if languageManager.isApplyingLanguageChange || (viewModel.regionalViewModel?.isApplyingStateChange ?? false) {
                 Color(.systemBackground)

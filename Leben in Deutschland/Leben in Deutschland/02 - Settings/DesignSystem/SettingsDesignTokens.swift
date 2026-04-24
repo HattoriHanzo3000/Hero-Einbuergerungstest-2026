@@ -20,7 +20,7 @@ enum SettingsDesignTokens {
         static let rowSpacing: CGFloat = 8
         static let sectionSpacing: CGFloat = 20
         static let cornerRadius: CGFloat = 12
-        static let iconCornerRadius: CGFloat = 8
+        static let iconCornerRadius: CGFloat = 6
         static let iconStrokeWidth: CGFloat = 0.6
         /// Extra vertical padding inside custom HStack rows (most vertical sizing comes from List itself).
         /// Set to 0 to keep rows visually closer to system defaults.
@@ -28,7 +28,7 @@ enum SettingsDesignTokens {
     }
 
     enum Icon {
-        static let containerSize: CGFloat = 32
+        static let containerSize: CGFloat = 28
         static let symbolSize: CGFloat = 16
         static let trailingChevronSize: CGFloat = 14
         static let trailingChevronWeight: Font.Weight = .semibold

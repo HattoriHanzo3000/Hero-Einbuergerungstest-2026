@@ -13,6 +13,7 @@ struct CockpitView: View {
         HomeViewModel(statisticsProvider: HomeStatisticsService(), stateManager: StateManager.shared)
         #endif
     }
+    @State private var showMoreFromHeroSheet = false
 
     private var sectionSpacing: CGFloat { layoutMetrics.adaptive(LayoutMetrics.sectionSpacing) }
 
@@ -25,7 +26,7 @@ struct CockpitView: View {
                     VStack(spacing: sectionSpacing) {
                         Color.clear.frame(height: 0).id("scrollTop")
                         CockpitProgressSection(statistics: viewModel.statistics)
-                        CockpitMoreFromHeroSection()
+                        CockpitMoreFromHeroSection(showSheet: $showMoreFromHeroSheet)
                     }
                     .padding(.top, layoutMetrics.adaptive(12))
                     .padding(.bottom, layoutMetrics.adaptive(LayoutMetrics.footerPadding))
@@ -40,6 +41,9 @@ struct CockpitView: View {
         .toolbar(.visible, for: .tabBar)
         .onAppear {
             viewModel.refreshStatistics()
+        }
+        .sheet(isPresented: $showMoreFromHeroSheet) {
+            AdvertisementView()
         }
         .tabBarHidden(false)
     }

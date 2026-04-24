@@ -8,8 +8,8 @@ struct SettingsPersonalisationSectionView: View {
             Toggle(isOn: hapticsBinding.animation(.easeInOut(duration: 0.15))) {
                 SettingsToggleRowLabel(
                     title: "settings_haptics_toggle".localized,
-                    iconSystemName: "iphone.radiowaves.left.and.right",
-                    tint: SettingsDesignTokens.Palette.personalisation
+                    iconSystemName: "hand.tap.fill",
+                    tint: .purple
                 )
             }
             .toggleStyle(.switch)
@@ -42,8 +42,8 @@ private struct SettingsAppearanceRow: View {
     var body: some View {
         HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
             SettingsIconView(
-                systemName: "sun.min",
-                tint: SettingsDesignTokens.Palette.personalisation
+                systemName: "paintbrush.fill",
+                tint: .pink
             )
             Text("settings_appearance_title".localized)
                 .font(.body)

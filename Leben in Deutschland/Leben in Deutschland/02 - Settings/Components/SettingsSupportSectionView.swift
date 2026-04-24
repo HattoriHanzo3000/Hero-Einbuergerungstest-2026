@@ -12,7 +12,7 @@ struct SettingsSupportSectionView: View {
                 SettingsRowButtonLabel(
                     title: "settings_faq_button".localized,
                     iconSystemName: "questionmark.circle.fill",
-                    tint: SettingsDesignTokens.Palette.support,
+                    tint: .blue,
                     showsChevron: false
                 )
             }
@@ -24,7 +24,7 @@ struct SettingsSupportSectionView: View {
                 SettingsRowButtonLabel(
                     title: "settings_contact_button".localized,
                     iconSystemName: "envelope.fill",
-                    tint: SettingsDesignTokens.Palette.support,
+                    tint: .blue,
                     showsChevron: false
                 )
             }

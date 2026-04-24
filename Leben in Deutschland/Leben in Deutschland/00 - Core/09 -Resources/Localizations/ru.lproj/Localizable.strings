@@ -81,9 +81,15 @@
 "tab_progress_hint" = "Открывает прогресс и статистику";
 "tab_settings_hint" = "Открывает настройки";
 "tab_search_hint" = "Открывает поиск по всем вопросам";
+
+// COCKPIT
 "cockpit_progress_title" = "Прогресс";
 "cockpit_more_from_hero_subtitle" = "Больше от Hero";
 "cockpit_more_from_hero_body" = "Твой путь к успеху в Германии продолжается. Открой больше от Hero.";
+
+// ADVERTISEMENT VIEW
+"advertisement_hero_lead_title" = "Hero — это больше, чем просто приложение. Это твой спутник для успешной жизни в Германии";
+"advertisement_hero_lead_subtitle" = "Открой и другие приложения Hero — они помогут тебе достичь целей.";
 // HOME / LEARN OPTIONS
 "home_learn_spaced_repetition" = "Умное повторение";
 "home_learn_spaced_repetition_subtitle" = "Система интервального повторения";
@@ -171,6 +177,8 @@
 "settings_about_mascot_accessibility" = "Талисман Hero";
 "settings_about_description" = "Hero – Einbürgerungstest помогает подготовиться к тесту на гражданство: 310 официальных вопросов, интервальное повторение и полная симуляция экзамена. Выбери федеральную землю, занимайся в своём темпе и чувствуй себя уверенно в день экзамена.";
 "settings_about_learning_options_title" = "Варианты обучения";
+"disclaimer_title" = "Отказ от ответственности";
+"about_disclaimer" = "Hero – Einbürgerungstest — независимое учебное приложение и не связано с Федеральным ведомством по делам миграции и беженцев Германии (BAMF), не авторизовано, не спонсируется и не одобряется им. Официальный тест и каталог вопросов администрируются и публикуются BAMF. Все товарные знаки, названия продуктов и права принадлежат их соответствующим владельцам.";
 "settings_share_qr_accessibility" = "QR-код для загрузки приложения";
 "settings_share_scan_subtitle" = "Отсканируй этот QR-код, чтобы скачать приложение из App Store — или нажми «Поделиться», чтобы отправить его друзьям.";
 "share_app_hint" = "Поделиться приложением с другими";
@@ -281,8 +289,34 @@
 "settings_language_option_turkish" = "Турецкий";
 "settings_haptics_toggle" = "Тактильная отдача";
 "settings_appearance_title" = "Оформление";
-"settings_premium_title" = "Pro";
+"settings_premium_title" = "Hero Pro";
+"settings_premium_accessibility_hint" = "Открывает ваш текущий тариф и варианты подписки";
 "settings_reset_app" = "Сбросить приложение";
+"hero_pro_nav_title" = "Ваш тариф";
+"hero_pro_section_title" = "Hero Pro";
+"hero_pro_actions_title" = "Действия";
+"hero_pro_tariff_label" = "Тариф";
+"hero_pro_tariff_free" = "Бесплатный";
+"hero_pro_tariff_trial" = "Пробный";
+"hero_pro_tariff_subscription" = "Подписка";
+"hero_pro_tariff_lifetime" = "Навсегда";
+"hero_pro_status_free" = "Бесплатно";
+"hero_pro_status_trial" = "Пробный";
+"hero_pro_status_subscription" = "Hero Pro";
+"hero_pro_status_lifetime" = "Навсегда";
+"hero_pro_detail_free_body" = "Перейдите на Hero Pro, чтобы открыть все возможности обучения.";
+"hero_pro_detail_trial_body" = "У вас активен пробный период с полным доступом Hero Pro.";
+"hero_pro_detail_subscription_body" = "Сейчас у вас активная подписка Hero Pro.";
+"hero_pro_detail_lifetime_body" = "Hero Pro у вас навсегда без регулярных платежей.";
+"hero_pro_detail_lifetime_thanks" = "Спасибо за поддержку Hero с пожизненным доступом.";
+"hero_pro_trial_ends_format" = "Пробный период закончится %@";
+"hero_pro_renews_format" = "Продление %@";
+"hero_pro_manage_subscription" = "Управлять подпиской";
+"hero_pro_view_plans" = "ПОКАЗАТЬ PRO-ПЛАНЫ";
+"hero_pro_restore_caption" = "Уже есть подписка?";
+"hero_pro_redeem_caption" = "Есть код?";
+"hero_pro_manage_subscription_failed_title" = "Не удалось открыть настройки подписки";
+"hero_pro_manage_subscription_failed_message" = "Пожалуйста, попробуйте еще раз через минуту.";
 
 // PREMIUM / PRICING
 "premium_plan_monthly" = "Ежемесячно";
@@ -290,7 +324,7 @@
 "premium_per_month" = "в месяц";
 "premium_accessibility_label" = "Pro";
 "premium_accessibility_hint" = "Открывает функции Pro и варианты подписки";
-"header_test_now_for_free" = "Протестировать бесплатно";
+"header_test_now_for_free" = "Протестируй бесплатно";
 "premium_plan_yearly" = "Ежегодно";
 "premium_per_year" = "в год";
 "paywall_best_value" = "Выгодно";

@@ -42,6 +42,7 @@ struct SettingsShareView: View {
                 } label: {
                     Image(systemName: "square.and.arrow.up")
                 }
+                .tint(.primary)
                 .accessibilityLabel("settings_share_button".localized)
                 .accessibilityHint("share_app_hint".localized)
             }

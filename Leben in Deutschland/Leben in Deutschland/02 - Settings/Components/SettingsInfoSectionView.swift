@@ -1,11 +1,9 @@
 import SwiftUI
 
-/// Top Settings section with About and Share rows. Uses app-blue icon tint.
+/// Top Settings section with About and Share rows.
 struct SettingsInfoSectionView: View {
     var onAboutTapped: () -> Void
     var onShareTapped: () -> Void
-
-    private static let appBlue = Color.accentColor
 
     var body: some View {
         Section("settings_info_title".localized) {
@@ -15,7 +13,7 @@ struct SettingsInfoSectionView: View {
                 SettingsRowButtonLabel(
                     title: "settings_about_button".localized,
                     iconSystemName: "info.circle.fill",
-                    tint: Self.appBlue,
+                    tint: .gray,
                     showsChevron: true
                 )
             }
@@ -27,7 +25,7 @@ struct SettingsInfoSectionView: View {
                 SettingsRowButtonLabel(
                     title: "settings_share_button".localized,
                     iconSystemName: "square.and.arrow.up",
-                    tint: Self.appBlue,
+                    tint: .blue,
                     showsChevron: true
                 )
             }

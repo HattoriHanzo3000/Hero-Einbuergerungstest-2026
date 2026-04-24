@@ -20,7 +20,7 @@ private struct SettingsAppLanguageRow: View {
 
     var body: some View {
         HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
-            SettingsIconView(systemName: "globe", tint: SettingsDesignTokens.Palette.regional)
+            SettingsIconView(systemName: "globe", tint: .blue)
             Text("settings_app_language".localized)
                 .font(.body)
                 .foregroundStyle(.primary)
@@ -67,7 +67,7 @@ private struct SettingsTranslationLanguageRow: View {
 
     var body: some View {
         HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
-            SettingsIconView(systemName: "translate", tint: SettingsDesignTokens.Palette.regional)
+            SettingsIconView(systemName: "translate", tint: .indigo)
             Text("settings_translation_language".localized)
                 .font(.body)
                 .foregroundStyle(.primary)
@@ -114,7 +114,7 @@ private struct SettingsFederalStateRow: View {
 
     var body: some View {
         HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
-            SettingsIconView(systemName: "map.fill", tint: SettingsDesignTokens.Palette.regional)
+            SettingsIconView(systemName: "map.fill", tint: .green)
             Text("settings_federal_state".localized)
                 .font(.body)
                 .foregroundStyle(.primary)
@@ -166,7 +166,7 @@ private struct SettingsTestDateRow: View {
         VStack(alignment: .leading, spacing: 12) {
             Toggle(isOn: toggleBinding.animation(.easeInOut(duration: 0.2))) {
                 HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
-                    SettingsIconView(systemName: "calendar.badge.clock", tint: SettingsDesignTokens.Palette.regional)
+                    SettingsIconView(systemName: "calendar.badge.clock", tint: .orange)
                     Text("settings_test_date".localized)
                         .font(.body)
                         .foregroundStyle(.primary)
@@ -185,7 +185,7 @@ private struct SettingsTestDateRow: View {
                     )
 
                 HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
-                    SettingsIconView(systemName: "1.calendar", tint: SettingsDesignTokens.Palette.regional)
+                    SettingsIconView(systemName: "1.calendar", tint: .orange)
                     Text("settings_test_date_not_set".localized)
                         .font(.body)
                         .foregroundStyle(.primary)

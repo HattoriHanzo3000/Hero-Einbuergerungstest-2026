@@ -10,7 +10,7 @@ struct SettingsDangerSectionView: View {
                 viewModel.requestConfirmation()
             } label: {
                 HStack(spacing: SettingsDesignTokens.Layout.rowSpacing) {
-                    SettingsIconView(systemName: "arrow.counterclockwise.circle.fill", tint: SettingsDesignTokens.Palette.danger)
+                    SettingsIconView(systemName: "arrow.counterclockwise", tint: SettingsDesignTokens.Palette.danger)
                     Text("settings_reset_app".localized)
                         .font(.body)
                     Spacer()

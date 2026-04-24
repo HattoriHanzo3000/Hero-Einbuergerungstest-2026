@@ -6,23 +6,21 @@ struct SettingsIconView: View {
     let tint: Color
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(
-                cornerRadius: SettingsDesignTokens.Layout.iconCornerRadius,
-                style: .continuous
+        Image(systemName: systemName)
+            .font(.body)
+            .fontWeight(.medium)
+            .foregroundStyle(.white)
+            .frame(
+                width: SettingsDesignTokens.Icon.containerSize,
+                height: SettingsDesignTokens.Icon.containerSize
             )
-            .fill(tint.opacity(0.2))
-
-            RoundedRectangle(
-                cornerRadius: SettingsDesignTokens.Layout.iconCornerRadius,
-                style: .continuous
+            .background(
+                RoundedRectangle(
+                    cornerRadius: SettingsDesignTokens.Layout.iconCornerRadius,
+                    style: .continuous
+                )
+                .fill(tint)
             )
-            .stroke(tint.opacity(0.35), lineWidth: SettingsDesignTokens.Layout.iconStrokeWidth)
-
-            Image(systemName: systemName)
-                .font(.system(size: SettingsDesignTokens.Icon.symbolSize, weight: .semibold))
-                .foregroundStyle(tint)
-        }
         .frame(
             width: SettingsDesignTokens.Icon.containerSize,
             height: SettingsDesignTokens.Icon.containerSize
