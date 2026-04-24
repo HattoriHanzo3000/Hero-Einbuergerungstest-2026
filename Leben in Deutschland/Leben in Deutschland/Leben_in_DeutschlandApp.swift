@@ -29,8 +29,8 @@ struct Leben_in_DeutschlandApp: App {
                 Group {
                     switch appFlow.stage {
                     case .startAnimation:
-                        OnboardingStartView {
-                            // After the intro video, start onboarding — clear both storage layers
+                        WelcomeVideoView {
+                            // After welcome video, start onboarding — clear both storage layers
                             OnboardingPreferences.shared.clearOnboardingSelections()
                             stateManager.clearSelectedState()
                             appFlow.stage = .onboardingLanguage
@@ -72,7 +72,7 @@ struct Leben_in_DeutschlandApp: App {
                             appFlow.stage = .onboardingSplash
                         })
                     case .onboardingSplash:
-                        OnboardingStartView {
+                        WelcomeVideoView {
                             UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
                             appFlow.stage = .main
                         }

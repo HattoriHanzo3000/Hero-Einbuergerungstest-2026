@@ -32,7 +32,7 @@ struct MainView: View {
             .accessibilityHint("tab_learn_hint".localized(for: appLanguage))
 
             Tab("tab_progress_title".localized(for: appLanguage), systemImage: "gauge.with.dots.needle.bottom.50percent") {
-                ProgressTabView()
+                CockpitView()
             }
             .accessibilityHint("tab_progress_hint".localized(for: appLanguage))
 
@@ -76,7 +76,7 @@ struct MainView: View {
                     Label("tab_learn_title".localized(for: appLanguage), systemImage: "book.fill")
                 }
                 .tag(TabIdentifier.learn)
-            ProgressTabView()
+            CockpitView()
                 .tabItem {
                     Label("tab_progress_title".localized(for: appLanguage), systemImage: "gauge.with.dots.needle.bottom.50percent")
                 }

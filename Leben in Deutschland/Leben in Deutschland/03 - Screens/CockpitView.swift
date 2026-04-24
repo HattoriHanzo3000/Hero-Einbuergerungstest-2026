@@ -1,8 +1,8 @@
 import SwiftUI
 
-// MARK: - Progress Tab View
-/// Progress tab: rounded header with mascot, then progress section (ring chart and stat cards) from main page.
-struct ProgressTabView: View {
+// MARK: - Cockpit View
+/// Cockpit tab: rounded header with mascot, then progress section (ring chart and stat cards) from main page.
+struct CockpitView: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
@@ -46,7 +46,7 @@ struct ProgressTabView: View {
 }
 
 // MARK: - Header Section (flat gradient, same as Home)
-private extension ProgressTabView {
+private extension CockpitView {
     var progressHeaderSection: some View {
         HomeHeader(
             readinessPercentage: viewModel.statistics.readinessPercentage,
@@ -67,7 +67,7 @@ private extension ProgressTabView {
 
 // MARK: - Preview
 #Preview {
-    ProgressTabView()
+    CockpitView()
         .environmentObject(LanguageManager())
         .environmentObject(SubscriptionManager.shared)
         .environmentObject(StateManager.shared)
