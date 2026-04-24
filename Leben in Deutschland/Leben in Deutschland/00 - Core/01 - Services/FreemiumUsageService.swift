@@ -2,7 +2,7 @@
 //  FreemiumUsageService.swift
 //  Leben in Deutschland
 //
-//  Tracks freemium usage (Smart Learning questions, test simulations). Premium users bypass all checks.
+//  Tracks freemium usage (Smart Learning questions, test simulations). Pro users bypass all checks.
 //
 
 import Foundation
@@ -23,8 +23,8 @@ final class FreemiumUsageService {
         defaults.integer(forKey: UserDefaultsKeys.freemiumSmartLearningAnswerCount)
     }
 
-    func canRecordSmartLearningAnswer(isPremium: Bool) -> Bool {
-        isPremium || smartLearningAnswersRecorded < FreemiumLimits.freeSmartLearningQuestions
+    func canRecordSmartLearningAnswer(isPro: Bool) -> Bool {
+        isPro || smartLearningAnswersRecorded < FreemiumLimits.freeSmartLearningQuestions
     }
 
     func recordSmartLearningAnswer() {
@@ -38,8 +38,8 @@ final class FreemiumUsageService {
         defaults.integer(forKey: UserDefaultsKeys.freemiumTestSimulationsStartedCount)
     }
 
-    func canStartTestSimulation(isPremium: Bool) -> Bool {
-        isPremium || testSimulationsStartedCount < FreemiumLimits.freeTestSimulations
+    func canStartTestSimulation(isPro: Bool) -> Bool {
+        isPro || testSimulationsStartedCount < FreemiumLimits.freeTestSimulations
     }
 
     func recordTestSimulationStarted() {

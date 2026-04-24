@@ -69,7 +69,7 @@
 "paywall_redeem" = "Kodu kullan";
 "paywall_redeem_hint" = "App Store hediye kodunu gir";
 "paywall_onboarding_maybe_later" = "Belki daha sonra";
-"premium_continue" = "Devam";
+"pro_continue" = "Devam";
 
 // TAB BAR
 "tab_learn_title" = "Öğren";
@@ -110,8 +110,8 @@
 "learn_by_topics_header_message" = "Senin için tüm soruları konulara göre gruplandırdım — kendi yolunu seç ve başla.";
 "learn_by_topics_disclaimer_title" = "Konulara Göre Öğrenme";
 "learn_by_topics_disclaimer_message" = "Sorular, konuları sırayla öğrenebilmen için konulara göre gruplandırılmıştır. Bir konu seç, soruları cevapla ve cevaplarını kontrol et. Bu mod sınava hazır olma durumunu etkilemez.";
-"limit_topic_premium_title" = "Pro Alan";
-"limit_topic_premium_message" = "Bu konu pro alanındadır. Limitsiz çalışmak için Pro'ya geçmeyi düşün.";
+"limit_topic_pro_title" = "Pro Alan";
+"limit_topic_pro_message" = "Bu konu pro alanındadır. Limitsiz çalışmak için Pro'ya geçmeyi düşün.";
 "limit_smart_learning_title" = "Limit Aşıldı";
 "limit_smart_learning_message" = "30 ücretsiz Smart Learning sorusu limitine ulaştın. Limitsiz çalışmak için Pro'ya geçmeyi düşün.";
 "limit_favorites_title" = "Limit Aşıldı";
@@ -279,8 +279,8 @@
 "settings_language_option_turkish" = "Türkçe";
 "settings_haptics_toggle" = "Dokunsal Geri Bildirim";
 "settings_appearance_title" = "Görünüm";
-"settings_premium_title" = "Hero Pro";
-"settings_premium_accessibility_hint" = "Mevcut planını ve abonelik seçeneklerini açar";
+"settings_pro_title" = "Hero Pro";
+"settings_pro_accessibility_hint" = "Mevcut planını ve abonelik seçeneklerini açar";
 "settings_reset_app" = "Uygulamayı Sıfırla";
 "hero_pro_nav_title" = "Planın";
 "hero_pro_section_title" = "Hero Pro";
@@ -309,14 +309,14 @@
 "hero_pro_manage_subscription_failed_message" = "Lütfen biraz sonra tekrar dene.";
 
 // PREMIUM / PRICING
-"premium_plan_monthly" = "Aylık";
-"premium_plan_lifetime" = "Ömür Boyu";
-"premium_per_month" = "aylık";
-"premium_accessibility_label" = "Pro";
-"premium_accessibility_hint" = "Pro özellikleri ve abonelik seçeneklerini açar";
+"pro_plan_monthly" = "Aylık";
+"pro_plan_lifetime" = "Ömür Boyu";
+"pro_per_month" = "aylık";
+"pro_accessibility_label" = "Pro";
+"pro_accessibility_hint" = "Pro özellikleri ve abonelik seçeneklerini açar";
 "header_test_now_for_free" = "Şimdi ücretsiz dene";
-"premium_plan_yearly" = "Yıllık";
-"premium_per_year" = "yıllık";
+"pro_plan_yearly" = "Yıllık";
+"pro_per_year" = "yıllık";
 "paywall_best_value" = "En İyi Fiyat";
 "paywall_subtitle_monthly" = "Esnek, istediğin zaman iptal et";
 "paywall_subtitle_3_months_format" = "Ayda sadece %@";
@@ -334,10 +334,10 @@
 "paywall_slash_2_months" = "/2Ay";
 "paywall_slash_week" = "/Hf";
 "paywall_year_savings" = "Aylığa göre %37 tasarruf";
-"premium_plan_six_month" = "6 Aylık";
-"premium_plan_three_month" = "3 Aylık";
-"premium_plan_two_month" = "2 Aylık";
-"premium_plan_weekly" = "Haftalık";
+"pro_plan_six_month" = "6 Aylık";
+"pro_plan_three_month" = "3 Aylık";
+"pro_plan_two_month" = "2 Aylık";
+"pro_plan_weekly" = "Haftalık";
 
 // FEEDBACK
 "report_question" = "Soruyu bildir";

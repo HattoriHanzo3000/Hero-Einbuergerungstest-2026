@@ -49,7 +49,7 @@ struct MainView: View {
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized(for: appLanguage))
-        .task { await SubscriptionManager.shared.refreshPremiumStatus() }
+        .task { await SubscriptionManager.shared.refreshProStatus() }
         .sheet(isPresented: $subscriptionManager.showPaywall, onDismiss: {
             subscriptionManager.dismissPaywall()
         }) {
@@ -95,7 +95,7 @@ struct MainView: View {
         }
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
-        .task { await SubscriptionManager.shared.refreshPremiumStatus() }
+        .task { await SubscriptionManager.shared.refreshProStatus() }
         .onChange(of: selectedTab) { _, _ in
             HapticManager.shared.selectionChanged()
         }

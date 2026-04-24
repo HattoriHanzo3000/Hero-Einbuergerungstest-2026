@@ -2,7 +2,7 @@
 //  CategoriesTabHeaderCard.swift
 //  Leben in Deutschland
 //
-//  Header for Categories tab. Layout: back | premium (top row), mascot + message (bottom row).
+//  Header for Categories tab. Layout: back | pro (top row), mascot + message (bottom row).
 //  When useCard is false, renders content only for flat gradient headers (same as Home).
 //
 

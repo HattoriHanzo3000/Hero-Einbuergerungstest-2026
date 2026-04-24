@@ -33,7 +33,7 @@ struct CategoriesView: View {
             VStack(spacing: 0) {
                 CategoriesTabHeaderCard(
                     onBackTapped: { dismiss() },
-                    isProUser: subscriptionManager.effectiveIsPremium,
+                    isProUser: subscriptionManager.effectiveIsPro,
                     useCard: false
                 )
                 .padding(.horizontal, layoutMetrics.adaptive(16))

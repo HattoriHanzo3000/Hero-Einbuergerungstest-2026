@@ -2,7 +2,7 @@
 //  SubscriptionManager.swift
 //  Leben in Deutschland
 //
-//  Source of truth for premium status. Uses RevenueCat entitlements only.
+//  Source of truth for pro status. Uses RevenueCat entitlements only.
 //  Presents SwiftUI PaywallView (RevenueCat offerings / StoreKit).
 //
 
@@ -26,12 +26,12 @@ struct FeaturePreviewContent {
     let accentColorName: String
 }
 
-/// Manages premium subscription status. RevenueCat is the sole source of truth.
+/// Manages pro subscription status. RevenueCat is the sole source of truth.
 @MainActor
 final class SubscriptionManager: ObservableObject {
     static let shared = SubscriptionManager()
 
-    @Published private(set) var isPremium: Bool = false
+    @Published private(set) var isPro: Bool = false
     @Published private(set) var tariffState: SubscriptionTariffState = .free
     @Published private(set) var tariffRenewalDate: Date?
     @Published private(set) var activeProductIdentifier: String?
@@ -45,14 +45,14 @@ final class SubscriptionManager: ObservableObject {
     @Published var showFeaturePreviewSheet: Bool = false
     @Published var featurePreviewContent: FeaturePreviewContent?
 
-    /// Premium status used by UI. In DEBUG, respects DebugOverrides.simulatePremium; otherwise equals isPremium.
-    var effectiveIsPremium: Bool {
+    /// Pro status used by UI. In DEBUG, respects DebugOverrides.simulatePro; otherwise equals isPro.
+    var effectiveIsPro: Bool {
         #if DEBUG
-        if let override = DebugOverrides.shared.simulatePremium {
+        if let override = DebugOverrides.shared.simulatePro {
             return override
         }
         #endif
-        return isPremium
+        return isPro
     }
 
     var hasLifetimeSubscription: Bool {
@@ -138,7 +138,7 @@ final class SubscriptionManager: ObservableObject {
         tariffState != .lifetime
     }
 
-    private let entitlementId = AppConfiguration.premiumEntitlementId
+    private let entitlementId = AppConfiguration.proEntitlementId
     private var customerInfoTask: Task<Void, Never>?
     #if DEBUG
     private var debugCancellable: AnyCancellable?
@@ -147,7 +147,7 @@ final class SubscriptionManager: ObservableObject {
     private init() {
         startObservingCustomerInfo()
         #if DEBUG
-        debugCancellable = DebugOverrides.shared.$simulatePremium
+        debugCancellable = DebugOverrides.shared.$simulatePro
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in self?.objectWillChange.send() }
         #endif
@@ -172,8 +172,8 @@ final class SubscriptionManager: ObservableObject {
         }
     }
 
-    /// Refreshes premium status from RevenueCat. Call on app launch.
-    func refreshPremiumStatus() async {
+    /// Refreshes pro status from RevenueCat. Call on app launch.
+    func refreshProStatus() async {
         guard Purchases.isConfigured else { return }
         do {
             let customerInfo = try await Purchases.shared.customerInfo()
@@ -186,8 +186,8 @@ final class SubscriptionManager: ObservableObject {
     func restorePurchases() async {
         do {
             _ = try await Purchases.shared.restorePurchases()
-            await refreshPremiumStatus()
-            restoreFeedbackMessage = effectiveIsPremium
+            await refreshProStatus()
+            restoreFeedbackMessage = effectiveIsPro
                 ? "paywall_restore_success".localized
                 : "paywall_restore_no_subscription".localized
         } catch {
@@ -212,16 +212,16 @@ final class SubscriptionManager: ObservableObject {
         showPaywall = false
     }
 
-    /// For gated features: if premium, runs handler; otherwise presents paywall.
+    /// For gated features: if pro, runs handler; otherwise presents paywall.
     func gateFeature(placement: String, handler: @escaping () -> Void) {
-        if effectiveIsPremium {
+        if effectiveIsPro {
             handler()
             return
         }
         presentPaywall(placement: placement)
     }
 
-    /// For premium-gated features: if premium, runs handler; otherwise shows feature preview disclaimer first, then paywall on dismiss.
+    /// For pro-gated features: if pro, runs handler; otherwise shows feature preview disclaimer first, then paywall on dismiss.
     /// Use for Learn by Topics, Smart Learning, Favorites, Test Simulation so free users understand what they're unlocking.
     func gateFeatureWithPreview(
         placement: String,
@@ -230,7 +230,7 @@ final class SubscriptionManager: ObservableObject {
         accentColorName: String,
         handler: @escaping () -> Void
     ) {
-        if effectiveIsPremium {
+        if effectiveIsPro {
             handler()
             return
         }
@@ -249,15 +249,15 @@ final class SubscriptionManager: ObservableObject {
         presentPaywall()
     }
 
-    /// Dismisses the feature preview sheet without showing paywall (e.g. if user became premium).
+    /// Dismisses the feature preview sheet without showing paywall (e.g. if user became pro).
     func dismissFeaturePreviewSheet() {
         showFeaturePreviewSheet = false
         featurePreviewContent = nil
     }
 
     /// Shows the feature preview sheet for a limit-reached scenario (e.g. 30 SR questions, 5 favorites). On dismiss, presents paywall.
-    func presentPremiumLimitSheet(titleKey: String, messageKey: String, accentColorName: String) {
-        guard !effectiveIsPremium else { return }
+    func presentProLimitSheet(titleKey: String, messageKey: String, accentColorName: String) {
+        guard !effectiveIsPro else { return }
         featurePreviewContent = FeaturePreviewContent(
             titleKey: titleKey,
             messageKey: messageKey,
@@ -269,7 +269,7 @@ final class SubscriptionManager: ObservableObject {
     private func applyCustomerInfo(_ customerInfo: CustomerInfo, activeOverride: Bool? = nil) {
         let entitlement = customerInfo.entitlements.all[entitlementId]
         let isActive = activeOverride ?? (entitlement?.isActive == true)
-        isPremium = isActive
+        isPro = isActive
         guard isActive, let entitlement else {
             tariffState = .free
             tariffRenewalDate = nil

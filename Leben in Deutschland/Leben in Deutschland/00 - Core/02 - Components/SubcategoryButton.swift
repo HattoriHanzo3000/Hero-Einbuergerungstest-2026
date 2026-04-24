@@ -26,15 +26,15 @@ struct SubcategoryButton: View {
 
         Button {
             HapticManager.shared.lightImpact()
-            if isFreeTopicBlock || subscriptionManager.effectiveIsPremium {
+            if isFreeTopicBlock || subscriptionManager.effectiveIsPro {
                 router.push(.learning(
                     subcategoryName: subcategory.name,
                     categoryName: subcategory.categoryName
                 ))
             } else {
-                subscriptionManager.presentPremiumLimitSheet(
-                    titleKey: "limit_topic_premium_title",
-                    messageKey: "limit_topic_premium_message",
+                subscriptionManager.presentProLimitSheet(
+                    titleKey: "limit_topic_pro_title",
+                    messageKey: "limit_topic_pro_message",
                     accentColorName: "AppCaribean"
                 )
             }

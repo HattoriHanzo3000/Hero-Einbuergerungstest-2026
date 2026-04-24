@@ -69,7 +69,7 @@
 "paywall_redeem" = "Redeem Code";
 "paywall_redeem_hint" = "Enter an App Store promo or gift card code";
 "paywall_onboarding_maybe_later" = "Maybe later";
-"premium_continue" = "Continue";
+"pro_continue" = "Continue";
 
 // TAB BAR
 "tab_learn_title" = "Learn";
@@ -110,8 +110,8 @@
 "learn_by_topics_header_message" = "I grouped all questions by themes for you — choose a path and soar.";
 "learn_by_topics_disclaimer_title" = "Learn by Topics";
 "learn_by_topics_disclaimer_message" = "Questions are grouped by theme so you can study one topic at a time. Choose a topic, answer the questions, and check your answers. This mode does not affect your readiness score.";
-"limit_topic_premium_title" = "Pro Area";
-"limit_topic_premium_message" = "This topic is part of the pro area. Consider upgrading to Pro to study without limits.";
+"limit_topic_pro_title" = "Pro Area";
+"limit_topic_pro_message" = "This topic is part of the pro area. Consider upgrading to Pro to study without limits.";
 "limit_smart_learning_title" = "Limit Reached";
 "limit_smart_learning_message" = "You've reached the limit of 30 free Smart Learning questions. Consider upgrading to Pro to study without limits.";
 "limit_favorites_title" = "Limit Reached";
@@ -289,8 +289,8 @@
 "settings_language_option_turkish" = "Turkish";
 "settings_haptics_toggle" = "Haptic Feedback";
 "settings_appearance_title" = "Appearance";
-"settings_premium_title" = "Hero Pro";
-"settings_premium_accessibility_hint" = "Opens your current plan and subscription options";
+"settings_pro_title" = "Hero Pro";
+"settings_pro_accessibility_hint" = "Opens your current plan and subscription options";
 "settings_reset_app" = "Reset App";
 "hero_pro_nav_title" = "Your Plan";
 "hero_pro_section_title" = "Hero Pro";
@@ -319,14 +319,14 @@
 "hero_pro_manage_subscription_failed_message" = "Please try again in a moment.";
 
 // PREMIUM / PRICING
-"premium_plan_monthly" = "Monthly";
-"premium_plan_lifetime" = "Lifetime";
-"premium_per_month" = "per month";
-"premium_accessibility_label" = "Pro";
-"premium_accessibility_hint" = "Opens Pro features and subscription options";
+"pro_plan_monthly" = "Monthly";
+"pro_plan_lifetime" = "Lifetime";
+"pro_per_month" = "per month";
+"pro_accessibility_label" = "Pro";
+"pro_accessibility_hint" = "Opens Pro features and subscription options";
 "header_test_now_for_free" = "Test now for free";
-"premium_plan_yearly" = "Yearly";
-"premium_per_year" = "per year";
+"pro_plan_yearly" = "Yearly";
+"pro_per_year" = "per year";
 "paywall_best_value" = "Best value";
 "paywall_subtitle_monthly" = "Flexible, cancel anytime";
 "paywall_subtitle_3_months_format" = "Only %@ per month";
@@ -344,10 +344,10 @@
 "paywall_slash_2_months" = "/2mo";
 "paywall_slash_week" = "/wk";
 "paywall_year_savings" = "Save 37% vs monthly";
-"premium_plan_six_month" = "6 month";
-"premium_plan_three_month" = "3 Months";
-"premium_plan_two_month" = "2 month";
-"premium_plan_weekly" = "Weekly";
+"pro_plan_six_month" = "6 month";
+"pro_plan_three_month" = "3 Months";
+"pro_plan_two_month" = "2 month";
+"pro_plan_weekly" = "Weekly";
 
 // FEEDBACK
 "report_question" = "Report Question";

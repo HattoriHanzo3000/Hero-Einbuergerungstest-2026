@@ -4,7 +4,7 @@ import SwiftUI
 enum SettingsDesignTokens {
     enum Palette {
         static let updates = SwiftUI.Color.accentColor
-        static let premium = SwiftUI.Color(red: 0.96, green: 0.78, blue: 0.24)
+        static let pro = SwiftUI.Color(red: 0.96, green: 0.78, blue: 0.24)
         static let regional = SwiftUI.Color(uiColor: .systemPurple)
         static let personalisation = SwiftUI.Color(uiColor: .systemGreen)
         static let support = SwiftUI.Color(uiColor: .systemOrange)

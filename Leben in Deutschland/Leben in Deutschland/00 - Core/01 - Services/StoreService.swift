@@ -3,7 +3,7 @@
 //  Leben in Deutschland
 //
 //  StoreKit 2 service for subscription purchases and restore.
-//  Product IDs must match App Store Connect: hero.lid.premium.monthly, hero.lid.premium.yearly, hero.lid.premium.lifetime.
+//  Product IDs must match App Store Connect: hero.lid.pro.monthly, hero.lid.pro.yearly, hero.lid.pro.lifetime.
 //
 
 import Foundation
@@ -17,9 +17,9 @@ final class StoreService: ObservableObject {
     
     /// Product IDs — must match App Store Connect subscription product IDs.
     private enum ProductID {
-        static let monthly = "hero.lid.premium.monthly"
-        static let yearly = "hero.lid.premium.yearly"
-        static let lifetime = "hero.lid.premium.lifetime"
+        static let monthly = "hero.lid.pro.monthly"
+        static let yearly = "hero.lid.pro.yearly"
+        static let lifetime = "hero.lid.pro.lifetime"
         static var all: [String] { [monthly, yearly, lifetime] }
     }
     
@@ -89,16 +89,16 @@ final class StoreService: ObservableObject {
         }
     }
     
-    /// Syncs current entitlements with PremiumManager (e.g. on app launch).
+    /// Syncs current entitlements with ProManager (e.g. on app launch).
     /// Call this at startup to detect subscriptions from previous installs or renewals.
     func syncEntitlementsOnLaunch() async {
         _ = await restorePurchases()
-        await SubscriptionManager.shared.refreshPremiumStatus()
+        await SubscriptionManager.shared.refreshProStatus()
     }
     
     // MARK: - Restore
     
-    /// Restores purchases by syncing current entitlements with PremiumManager.
+    /// Restores purchases by syncing current entitlements with ProManager.
     /// Returns true if an active subscription was found.
     func restorePurchases() async -> Bool {
         purchaseError = nil
@@ -119,7 +119,7 @@ final class StoreService: ObservableObject {
     
     private func syncEntitlement(transaction: Transaction) async {
         // SubscriptionManager observes RevenueCat; refresh to pick up any new entitlements
-        await SubscriptionManager.shared.refreshPremiumStatus()
+        await SubscriptionManager.shared.refreshProStatus()
     }
     
     private func planType(for productID: String) -> SubscriptionPlanType {

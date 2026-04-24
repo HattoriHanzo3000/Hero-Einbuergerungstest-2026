@@ -74,7 +74,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
         questionId: String? = nil,
         onReportTapped: (() -> Void)? = nil,
         showProBadge: Bool = false,
-        isPremium: Bool,
+        isPro: Bool,
         onProTap: (() -> Void)? = nil,
         @ViewBuilder trailingActions: @escaping () -> ActionContent
     ) {
@@ -88,7 +88,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
             questionId: questionId,
             onReportTapped: onReportTapped,
             showProBadge: showProBadge,
-            isProUser: isPremium,
+            isProUser: isPro,
             onProTap: onProTap,
             trailingActions: trailingActions
         )
@@ -126,7 +126,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
         }
     }
 
-    /// Top row: back (left) | title (optional) | Spacer | premium (optional) | action buttons (right).
+    /// Top row: back (left) | title (optional) | Spacer | pro (optional) | action buttons (right).
     private var backButtonRow: some View {
         HStack {
             Button(action: {
@@ -285,9 +285,9 @@ extension QuestionCardHeaderCard where ActionContent == EmptyView {
         progress: (answered: Int, total: Int)? = nil,
         questionId: String? = nil,
         onReportTapped: (() -> Void)? = nil,
-        showPremiumButton: Bool = false,
-        isPremium: Bool = false,
-        onPremiumTap: (() -> Void)? = nil
+        showProButton: Bool = false,
+        isPro: Bool = false,
+        onProTap: (() -> Void)? = nil
     ) {
         self.init(
             onBackTapped: onBackTapped,
@@ -297,9 +297,9 @@ extension QuestionCardHeaderCard where ActionContent == EmptyView {
             progress: progress,
             questionId: questionId,
             onReportTapped: onReportTapped,
-            showProBadge: showPremiumButton,
-            isProUser: isPremium,
-            onProTap: onPremiumTap
+            showProBadge: showProButton,
+            isProUser: isPro,
+            onProTap: onProTap
         )
     }
 }

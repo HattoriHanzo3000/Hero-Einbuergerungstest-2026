@@ -25,7 +25,7 @@ struct SubscriptionPlanModel {
     static let monthlyPlan = SubscriptionPlanModel(
         type: .monthly,
         price: "1,99",
-        periodKey: "premium_per_month",
+        periodKey: "pro_per_month",
         originalPrice: nil,
         isLimitedOffer: false,
         subtitleKey: nil
@@ -34,7 +34,7 @@ struct SubscriptionPlanModel {
     static let yearlyPlan = SubscriptionPlanModel(
         type: .yearly,
         price: "14,99",
-        periodKey: "premium_per_year",
+        periodKey: "pro_per_year",
         originalPrice: nil,
         isLimitedOffer: true,
         subtitleKey: "paywall_year_savings"

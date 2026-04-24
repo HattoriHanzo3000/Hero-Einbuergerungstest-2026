@@ -5,7 +5,7 @@ struct SettingsProSectionView: View {
     @ObservedObject private var subscriptionManager = SubscriptionManager.shared
 
     var body: some View {
-        Section("settings_premium_title".localized) {
+        Section("settings_pro_title".localized) {
             Button {
                 viewModel.handleTap()
             } label: {
@@ -21,7 +21,7 @@ struct SettingsProSectionView: View {
             .tint(.primary)
             .accessibilityLabel(Text("hero_pro_nav_title".localized))
             .accessibilityValue(Text(subscriptionManager.localizedPlanStatusLine))
-            .accessibilityHint(Text("settings_premium_accessibility_hint".localized))
+            .accessibilityHint(Text("settings_pro_accessibility_hint".localized))
         }
     }
 }

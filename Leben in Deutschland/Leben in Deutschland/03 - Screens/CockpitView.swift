@@ -54,7 +54,7 @@ private extension CockpitView {
     var progressHeaderSection: some View {
         HomeHeader(
             readinessPercentage: viewModel.statistics.readinessPercentage,
-            isProUser: subscriptionManager.effectiveIsPremium,
+            isProUser: subscriptionManager.effectiveIsPro,
             useCard: false,
             mascotHorizontallyFlipped: true,
             alternatingEnabled: true

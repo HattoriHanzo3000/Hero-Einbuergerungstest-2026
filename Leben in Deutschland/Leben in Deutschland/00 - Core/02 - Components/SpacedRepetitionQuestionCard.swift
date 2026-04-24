@@ -292,7 +292,7 @@ private extension SpacedRepetitionQuestionCard {
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
             showProBadge: true,
-            isProUser: subscriptionManager.effectiveIsPremium,
+            isProUser: subscriptionManager.effectiveIsPro,
             trailingActions: { EmptyView() }
         )
     }

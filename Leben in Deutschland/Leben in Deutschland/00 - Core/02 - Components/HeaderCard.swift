@@ -29,20 +29,6 @@ struct HeaderCard<Content: View>: View {
         self.content = content()
     }
 
-    init(
-        gradient: LiquidGlassGradient = .blue,
-        showPremiumButton: Bool = false,
-        onPremiumTap: (() -> Void)? = nil,
-        @ViewBuilder content: () -> Content
-    ) {
-        self.init(
-            gradient: gradient,
-            showProButton: showPremiumButton,
-            onProTap: onPremiumTap,
-            content: content
-        )
-    }
-
     private var verticalPadding: CGFloat { layoutMetrics.adaptive(18) }
     private var horizontalPadding: CGFloat { layoutMetrics.adaptive(20) }
 

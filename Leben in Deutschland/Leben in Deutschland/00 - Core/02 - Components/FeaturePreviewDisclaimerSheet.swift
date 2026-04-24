@@ -10,7 +10,7 @@
 import SwiftUI
 
 // MARK: - Feature Preview Disclaimer Sheet
-/// Explains a premium feature to free users. Dismissible by swipe or Continue button.
+/// Explains a pro feature to free users. Dismissible by swipe or Continue button.
 /// Parent's sheet onDismiss presents the paywall.
 struct FeaturePreviewDisclaimerSheet: View {
     let titleKey: String

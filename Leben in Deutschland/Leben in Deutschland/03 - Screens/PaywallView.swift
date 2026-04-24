@@ -90,7 +90,7 @@ struct PaywallView: View {
             }
         }
         .offerCodeRedemption(isPresented: $showRedeemSheet) { _ in
-            Task { await subscriptionManager.refreshPremiumStatus() }
+            Task { await subscriptionManager.refreshProStatus() }
         }
         .onAppear {
             countdownString = LaunchOfferService.formattedCountdown(from: LaunchOfferService.secondsRemaining)
@@ -106,7 +106,7 @@ struct PaywallView: View {
         }
     }
 
-    // MARK: - Header (premium badge top right, like Categories)
+    // MARK: - Header (pro badge top right, like Categories)
     private var headerSection: some View {
         VStack(spacing: layoutMetrics.adaptive(12)) {
             ProBadge(color: .white, showShimmer: true)
@@ -191,10 +191,10 @@ struct PaywallView: View {
             gradient: .blue
         )
         return QuizActionButton(
-            "premium_continue".localized.uppercased(),
+            "pro_continue".localized.uppercased(),
             style: style,
             isEnabled: isActive,
-            accessibilityLabel: "premium_continue".localized
+            accessibilityLabel: "pro_continue".localized
         ) {
             HapticManager.shared.mediumImpact()
             performPurchase()
@@ -340,7 +340,7 @@ struct PaywallView: View {
             do {
                 let result = try await Purchases.shared.purchase(package: package)
                 if !result.userCancelled {
-                    await subscriptionManager.refreshPremiumStatus()
+                    await subscriptionManager.refreshProStatus()
                 }
                 await MainActor.run {
                     isPurchasing = false
@@ -364,10 +364,10 @@ struct PaywallView: View {
         Task {
             do {
                 _ = try await Purchases.shared.restorePurchases()
-                await subscriptionManager.refreshPremiumStatus()
+                await subscriptionManager.refreshProStatus()
                 await MainActor.run {
                     isPurchasing = false
-                    if subscriptionManager.effectiveIsPremium {
+                    if subscriptionManager.effectiveIsPro {
                         restoreMessage = "paywall_restore_success".localized
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             dismiss()

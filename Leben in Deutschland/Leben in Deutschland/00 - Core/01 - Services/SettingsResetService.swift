@@ -49,12 +49,12 @@ final class SettingsResetService: SettingsResetServicing {
 
     @MainActor
     private func clearUserDefaults() {
-        // Preserve premium/trial and app rating so user doesn't get trial again or get re-prompted for rating.
+        // Preserve pro/trial and app rating so user doesn't get trial again or get re-prompted for rating.
         let preservedKeys: Set<String> = [
-            "premium_trial_start_date",
-            "premium_trial_used",
-            "premium_subscription_type",
-            "premium_subscription_expiry_date",
+            "pro_trial_start_date",
+            "pro_trial_used",
+            "pro_subscription_type",
+            "pro_subscription_expiry_date",
             "AppRating_FirstLaunchDate",
             "AppRating_LaunchCount",
             "AppRating_LastPromptDate",

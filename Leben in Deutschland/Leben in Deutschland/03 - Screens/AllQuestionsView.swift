@@ -94,8 +94,8 @@ struct AllQuestionsView: View {
                 onToggleTranslation: { viewModel.toggleTranslation() },
                 isTranslationActive: viewModel.showTranslation,
                 onToggleFavorite: {
-                    if !viewModel.toggleFavorite(for: question.id, isPremium: subscriptionManager.effectiveIsPremium) {
-                        subscriptionManager.presentPremiumLimitSheet(
+                    if !viewModel.toggleFavorite(for: question.id, isPro: subscriptionManager.effectiveIsPro) {
+                        subscriptionManager.presentProLimitSheet(
                             titleKey: "limit_favorites_title",
                             messageKey: "limit_favorites_message",
                             accentColorName: "AppPink"

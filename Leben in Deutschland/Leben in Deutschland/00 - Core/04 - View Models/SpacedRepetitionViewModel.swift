@@ -96,12 +96,12 @@ final class SpacedRepetitionViewModel: ObservableObject {
     
     /// Returns false when free user has reached the 30-question limit and cannot reveal answer.
     @discardableResult
-    func handlePrimaryAction(isPremium: Bool) -> Bool {
+    func handlePrimaryAction(isPro: Bool) -> Bool {
         if showCorrectAnswer {
             advanceToNextQuestion()
             return true
         }
-        return revealAnswer(isPremium: isPremium)
+        return revealAnswer(isPro: isPro)
     }
     
     func refreshSessionIfNeeded() {
@@ -122,8 +122,8 @@ final class SpacedRepetitionViewModel: ObservableObject {
     }
     
     @discardableResult
-    func toggleFavorite(for questionId: String, isPremium: Bool) -> Bool {
-        let ok = favoritesManager.toggleFavorite(for: questionId, isPremium: isPremium)
+    func toggleFavorite(for questionId: String, isPro: Bool) -> Bool {
+        let ok = favoritesManager.toggleFavorite(for: questionId, isPro: isPro)
         if ok { objectWillChange.send() }
         return ok
     }
@@ -131,9 +131,9 @@ final class SpacedRepetitionViewModel: ObservableObject {
 
 private extension SpacedRepetitionViewModel {
     /// Returns false when free user has reached the 30-question limit.
-    func revealAnswer(isPremium: Bool) -> Bool {
+    func revealAnswer(isPro: Bool) -> Bool {
         guard showCorrectAnswer == false else { return true }
-        guard FreemiumUsageService.shared.canRecordSmartLearningAnswer(isPremium: isPremium) else {
+        guard FreemiumUsageService.shared.canRecordSmartLearningAnswer(isPro: isPro) else {
             return false
         }
         let correctIndex = contentService.correctAnswers[currentQuestion.id]

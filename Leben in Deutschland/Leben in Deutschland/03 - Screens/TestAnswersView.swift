@@ -217,8 +217,8 @@ struct TestAnswersView: View {
                 let isFavorite = favoritesManager.isFavorite(q.originalId)
                 Button(action: {
                     HapticManager.shared.lightImpact()
-                    if !favoritesManager.toggleFavorite(for: q.originalId, isPremium: subscriptionManager.effectiveIsPremium) {
-                        subscriptionManager.presentPremiumLimitSheet(
+                    if !favoritesManager.toggleFavorite(for: q.originalId, isPro: subscriptionManager.effectiveIsPro) {
+                        subscriptionManager.presentProLimitSheet(
                             titleKey: "limit_favorites_title",
                             messageKey: "limit_favorites_message",
                             accentColorName: "AppPink"

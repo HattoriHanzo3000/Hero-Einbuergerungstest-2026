@@ -71,8 +71,8 @@ final class AllQuestionsViewModel: ObservableObject {
     }
 
     @discardableResult
-    func toggleFavorite(for questionId: String, isPremium: Bool) -> Bool {
-        let ok = favoritesManager.toggleFavorite(for: questionId, isPremium: isPremium)
+    func toggleFavorite(for questionId: String, isPro: Bool) -> Bool {
+        let ok = favoritesManager.toggleFavorite(for: questionId, isPro: isPro)
         if ok { objectWillChange.send() }
         return ok
     }

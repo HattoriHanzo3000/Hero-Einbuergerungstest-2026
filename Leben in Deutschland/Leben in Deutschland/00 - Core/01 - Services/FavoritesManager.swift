@@ -5,7 +5,7 @@ import Combine
 protocol FavoritesManaging: AnyObject {
     func isFavorite(_ questionId: String) -> Bool
     @discardableResult
-    func toggleFavorite(for questionId: String, isPremium: Bool) -> Bool
+    func toggleFavorite(for questionId: String, isPro: Bool) -> Bool
 }
 
 // MARK: - Favorites Manager
@@ -29,13 +29,13 @@ final class FavoritesManager: ObservableObject, FavoritesManaging {
     }
     
     @discardableResult
-    func toggleFavorite(for questionId: String, isPremium: Bool) -> Bool {
+    func toggleFavorite(for questionId: String, isPro: Bool) -> Bool {
         if let index = favoriteQuestionIds.firstIndex(of: questionId) {
             favoriteQuestionIds.remove(at: index)
             saveFavorites()
             return true
         }
-        if !isPremium && favoriteQuestionIds.count >= FreemiumLimits.freeFavoritesMax {
+        if !isPro && favoriteQuestionIds.count >= FreemiumLimits.freeFavoritesMax {
             return false
         }
         favoriteQuestionIds.append(questionId)

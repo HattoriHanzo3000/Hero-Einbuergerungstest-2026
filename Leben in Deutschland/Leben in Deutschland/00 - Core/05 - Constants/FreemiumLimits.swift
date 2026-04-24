@@ -2,7 +2,7 @@
 //  FreemiumLimits.swift
 //  Leben in Deutschland
 //
-//  Constants for freemium tier limits. Premium users bypass all limits.
+//  Constants for freemium tier limits. Pro users bypass all limits.
 //
 
 import Foundation

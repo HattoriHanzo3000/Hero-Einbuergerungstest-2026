@@ -62,10 +62,10 @@ struct LearningDestinationView: View {
             await loadSubcategory()
             if let sub = subcategory, !sub.questions.isEmpty,
                !TopicAccessPolicy.isFreeCategory(categoryName: categoryName, categories: contentService.categories),
-               !subscriptionManager.effectiveIsPremium {
-                subscriptionManager.presentPremiumLimitSheet(
-                    titleKey: "limit_topic_premium_title",
-                    messageKey: "limit_topic_premium_message",
+               !subscriptionManager.effectiveIsPro {
+                subscriptionManager.presentProLimitSheet(
+                    titleKey: "limit_topic_pro_title",
+                    messageKey: "limit_topic_pro_message",
                     accentColorName: "AppCaribean"
                 )
                 subcategory = nil

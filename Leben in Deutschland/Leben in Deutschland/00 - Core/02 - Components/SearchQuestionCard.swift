@@ -26,7 +26,7 @@ struct SearchQuestionCard: View {
 
     private var canStudyTopic: Bool {
         TopicAccessPolicy.isFreeCategory(categoryName: categoryName, categories: ContentService.shared.categories)
-            || subscriptionManager.effectiveIsPremium
+            || subscriptionManager.effectiveIsPro
     }
 
     var body: some View {
@@ -35,9 +35,9 @@ struct SearchQuestionCard: View {
             if canStudyTopic {
                 onNavigateToLearning()
             } else {
-                subscriptionManager.presentPremiumLimitSheet(
-                    titleKey: "limit_topic_premium_title",
-                    messageKey: "limit_topic_premium_message",
+                subscriptionManager.presentProLimitSheet(
+                    titleKey: "limit_topic_pro_title",
+                    messageKey: "limit_topic_pro_message",
                     accentColorName: "AppCaribean"
                 )
             }

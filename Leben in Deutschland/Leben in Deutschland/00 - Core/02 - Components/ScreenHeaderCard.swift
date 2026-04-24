@@ -73,7 +73,7 @@ struct ScreenHeaderCard: View {
     private var titleToSloganSpacing: CGFloat { layoutMetrics.adaptive(6) }
     private var mascotSize: CGFloat { layoutMetrics.adaptive(120) }
 
-    private var premiumRowSpacing: CGFloat { layoutMetrics.adaptive(12) }
+    private var proRowSpacing: CGFloat { layoutMetrics.adaptive(12) }
 
     private var useHomeHeaderLayout: Bool {
         switch content {
@@ -96,13 +96,13 @@ struct ScreenHeaderCard: View {
         .id(languageManager.currentAppLanguage)
     }
 
-    /// Reusable content (state, slogan, mascot, premium). No card wrapper.
+    /// Reusable content (state, slogan, mascot, pro). No card wrapper.
     private var headerContent: some View {
         Group {
             if useHomeHeaderLayout {
                 homeHeaderLayout
             } else {
-                VStack(alignment: .leading, spacing: premiumRowSpacing) {
+                VStack(alignment: .leading, spacing: proRowSpacing) {
                     headerProRow
                     mascotWithContentLayout
                 }
@@ -112,7 +112,7 @@ struct ScreenHeaderCard: View {
         .fixedSize(horizontal: false, vertical: true)
     }
 
-    /// Home layout: left = state + message (flexible); right = premium (row 1) + mascot (row 2), fixed positions.
+    /// Home layout: left = state + message (flexible); right = pro (row 1) + mascot (row 2), fixed positions.
     @ViewBuilder
     private var homeHeaderLayout: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -121,7 +121,7 @@ struct ScreenHeaderCard: View {
 
             HStack(alignment: .top, spacing: mascotToContentSpacing) {
                 // Left: state + mascot message (wraps as needed)
-                VStack(alignment: .leading, spacing: premiumRowSpacing) {
+                VStack(alignment: .leading, spacing: proRowSpacing) {
                     stateTitleRow
                         .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -132,7 +132,7 @@ struct ScreenHeaderCard: View {
                 .animation(.easeInOut(duration: 0.35), value: rotationState.messageIndex)
 
                 // Right: mascot (fixed position)
-                VStack(alignment: .trailing, spacing: premiumRowSpacing) {
+                VStack(alignment: .trailing, spacing: proRowSpacing) {
                     MascotView(
                         horizontalMirror: mascotHorizontallyFlipped,
                         autoPlayInterval: autoPlayInterval,

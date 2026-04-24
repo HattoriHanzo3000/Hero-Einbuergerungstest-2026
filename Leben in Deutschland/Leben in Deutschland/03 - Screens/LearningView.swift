@@ -166,8 +166,8 @@ struct LearningView: View {
                 let isFavorite = viewModel.isFavorite(questionId: currentQuestion.id)
                 Button(action: {
                     HapticManager.shared.lightImpact()
-                    if !viewModel.toggleFavorite(for: currentQuestion.id, isPremium: subscriptionManager.effectiveIsPremium) {
-                        subscriptionManager.presentPremiumLimitSheet(
+                    if !viewModel.toggleFavorite(for: currentQuestion.id, isPro: subscriptionManager.effectiveIsPro) {
+                        subscriptionManager.presentProLimitSheet(
                             titleKey: "limit_favorites_title",
                             messageKey: "limit_favorites_message",
                             accentColorName: "AppPink"
@@ -201,7 +201,7 @@ struct LearningView: View {
             questionId: viewModel.currentQuestion?.id,
             onReportTapped: { showingFeedbackReport = true },
             showProBadge: true,
-            isProUser: subscriptionManager.effectiveIsPremium,
+            isProUser: subscriptionManager.effectiveIsPro,
             trailingActions: { EmptyView() }
         )
     }

@@ -95,16 +95,16 @@ struct PaywallPackageRow: View {
 
     private var planTitle: String {
         if package.identifier == LaunchOfferService.promoPackageIdentifier {
-            return "premium_plan_lifetime".localized
+            return "pro_plan_lifetime".localized
         }
         switch package.packageType {
-        case .monthly: return "premium_plan_monthly".localized
-        case .annual: return "premium_plan_yearly".localized
-        case .lifetime: return "premium_plan_lifetime".localized
-        case .sixMonth: return "premium_plan_six_month".localized
-        case .threeMonth: return "premium_plan_three_month".localized
-        case .twoMonth: return "premium_plan_two_month".localized
-        case .weekly: return "premium_plan_weekly".localized
+        case .monthly: return "pro_plan_monthly".localized
+        case .annual: return "pro_plan_yearly".localized
+        case .lifetime: return "pro_plan_lifetime".localized
+        case .sixMonth: return "pro_plan_six_month".localized
+        case .threeMonth: return "pro_plan_three_month".localized
+        case .twoMonth: return "pro_plan_two_month".localized
+        case .weekly: return "pro_plan_weekly".localized
         case .custom, .unknown:
             return package.storeProduct.localizedTitle
         }

@@ -72,10 +72,10 @@ struct HomeLearnOptionsSection: View {
 
             Button {
                 HapticManager.shared.lightImpact()
-                if subscriptionManager.effectiveIsPremium || FreemiumUsageService.shared.canStartTestSimulation(isPremium: false) {
+                if subscriptionManager.effectiveIsPro || FreemiumUsageService.shared.canStartTestSimulation(isPro: false) {
                     router.push(.testCountdown)
                 } else {
-                    subscriptionManager.presentPremiumLimitSheet(
+                    subscriptionManager.presentProLimitSheet(
                         titleKey: "limit_test_simulation_title",
                         messageKey: "limit_test_simulation_message",
                         accentColorName: "AppOrange"

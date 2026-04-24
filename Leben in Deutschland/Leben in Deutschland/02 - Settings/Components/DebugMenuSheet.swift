@@ -2,7 +2,7 @@
 //  DebugMenuSheet.swift
 //  Leben in Deutschland
 //
-//  Debug-only developer menu for testing premium/readiness states and test result screens.
+//  Debug-only developer menu for testing pro/readiness states and test result screens.
 //  Only compiled in DEBUG builds.
 //
 
@@ -26,23 +26,23 @@ struct DebugMenuSheet: View {
                 Section {
                     Picker("Simulate Pro", selection: Binding(
                         get: {
-                            switch overrides.simulatePremium {
+                            switch overrides.simulatePro {
                             case nil: return "real"
-                            case true: return "premium"
+                            case true: return "pro"
                             case false: return "free"
                             }
                         },
                         set: { value in
                             switch value {
-                            case "real": overrides.simulatePremium = nil
-                            case "premium": overrides.simulatePremium = true
-                            case "free": overrides.simulatePremium = false
-                            default: overrides.simulatePremium = nil
+                            case "real": overrides.simulatePro = nil
+                            case "pro": overrides.simulatePro = true
+                            case "free": overrides.simulatePro = false
+                            default: overrides.simulatePro = nil
                             }
                         }
                     )) {
                         Text("Use real").tag("real")
-                        Text("Pro").tag("premium")
+                        Text("Pro").tag("pro")
                         Text("Free").tag("free")
                     }
                     .pickerStyle(.segmented)

@@ -55,8 +55,8 @@ enum UserDefaultsKeys {
     static let freemiumTestSimulationsStartedCount = "freemium_test_simulations_started_count"
 
     // MARK: - Debug (DEBUG builds only)
-    /// When set, overrides premium status. "true"/"false" or absent = use real.
-    static let debugSimulatePremium = "debug_simulate_premium"
+    /// When set, overrides pro status. "true"/"false" or absent = use real.
+    static let debugSimulatePro = "debug_simulate_pro"
     /// Overrides readiness percentage. 0 = none, 10/30/50/100 = override.
     static let debugReadinessPercent = "debug_readiness_percent"
 }

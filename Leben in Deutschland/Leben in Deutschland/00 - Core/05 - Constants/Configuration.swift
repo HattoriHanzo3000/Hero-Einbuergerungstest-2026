@@ -14,6 +14,6 @@ enum AppConfiguration {
     static let revenueCatAPIKey = "appl_ADBrnUbVqssHHmMCiWzsLuZYwHi"
     
     // MARK: - Entitlement
-    /// RevenueCat entitlement identifier for premium access.
-    static let premiumEntitlementId = "premium"
+    /// RevenueCat entitlement identifier for pro access.
+    static let proEntitlementId = "pro"
 }

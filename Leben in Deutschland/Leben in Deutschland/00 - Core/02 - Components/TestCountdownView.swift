@@ -48,8 +48,8 @@ struct TestCountdownView: View {
         .hidesTabBar()
         .tabBarHidden(true)
         .onAppear {
-            if !subscriptionManager.effectiveIsPremium && !FreemiumUsageService.shared.canStartTestSimulation(isPremium: false) {
-                subscriptionManager.presentPremiumLimitSheet(
+            if !subscriptionManager.effectiveIsPro && !FreemiumUsageService.shared.canStartTestSimulation(isPro: false) {
+                subscriptionManager.presentProLimitSheet(
                     titleKey: "limit_test_simulation_title",
                     messageKey: "limit_test_simulation_message",
                     accentColorName: "AppOrange"
@@ -88,7 +88,7 @@ struct TestCountdownView: View {
         .onChange(of: count) { _, newCount in
             guard newCount > 0 else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                    if !subscriptionManager.effectiveIsPremium {
+                    if !subscriptionManager.effectiveIsPro {
                         FreemiumUsageService.shared.recordTestSimulationStarted()
                     }
                     onComplete()

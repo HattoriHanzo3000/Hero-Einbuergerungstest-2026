@@ -110,17 +110,6 @@ struct TestNowForFreeChip: View {
     }
 }
 
-// MARK: - Backward-compatible Premium Badge alias
-/// Temporary compatibility shim while call sites migrate to Pro naming.
-struct PremiumBadge: View {
-    var color: Color = .white
-    var showShimmer: Bool = false
-
-    var body: some View {
-        ProBadge(color: color, showShimmer: showShimmer)
-    }
-}
-
 // MARK: - Pro Button
 /// Pro badge button that opens paywall. Reusable across the app.
 struct ProButton: View {
@@ -136,7 +125,7 @@ struct ProButton: View {
             HapticManager.shared.lightImpact()
             action()
         }) {
-            Text("settings_premium_title".localized.uppercased())
+            Text("pro_accessibility_label".localized.uppercased())
                 .font(.system(.footnote, weight: .regular).width(.expanded))
                 .foregroundColor(color)
                 .lineLimit(1)
@@ -151,8 +140,8 @@ struct ProButton: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("premium_accessibility_label".localized)
-        .accessibilityHint("premium_accessibility_hint".localized)
+        .accessibilityLabel("pro_accessibility_label".localized)
+        .accessibilityHint("pro_accessibility_hint".localized)
     }
 }
 
@@ -164,6 +153,3 @@ struct ProButton: View {
         .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
 }
 
-// MARK: - Backward-compatible Premium Button alias
-/// Temporary compatibility shim while call sites migrate to Pro naming.
-typealias PremiumButton = ProButton

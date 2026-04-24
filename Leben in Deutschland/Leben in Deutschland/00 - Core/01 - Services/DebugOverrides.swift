@@ -2,7 +2,7 @@
 //  DebugOverrides.swift
 //  Leben in Deutschland
 //
-//  Debug-only overrides for premium status and readiness. Used by Developer Menu.
+//  Debug-only overrides for pro status and readiness. Used by Developer Menu.
 //  Only compiled in DEBUG builds.
 //
 
@@ -17,13 +17,13 @@ final class DebugOverrides: ObservableObject {
 
     private let defaults = UserDefaults.standard
 
-    /// When non-nil, overrides premium status. nil = use real RevenueCat value.
-    @Published var simulatePremium: Bool? {
+    /// When non-nil, overrides pro status. nil = use real RevenueCat value.
+    @Published var simulatePro: Bool? {
         didSet {
-            if let v = simulatePremium {
-                defaults.set(v, forKey: UserDefaultsKeys.debugSimulatePremium)
+            if let v = simulatePro {
+                defaults.set(v, forKey: UserDefaultsKeys.debugSimulatePro)
             } else {
-                defaults.removeObject(forKey: UserDefaultsKeys.debugSimulatePremium)
+                defaults.removeObject(forKey: UserDefaultsKeys.debugSimulatePro)
             }
         }
     }
@@ -35,14 +35,14 @@ final class DebugOverrides: ObservableObject {
         }
     }
 
-    var isSimulatePremiumSet: Bool { simulatePremium != nil }
+    var isSimulateProSet: Bool { simulatePro != nil }
     var isReadinessOverrideActive: Bool { readinessPercentOverride > 0 }
 
     private init() {
-        if defaults.object(forKey: UserDefaultsKeys.debugSimulatePremium) != nil {
-            self.simulatePremium = defaults.bool(forKey: UserDefaultsKeys.debugSimulatePremium)
+        if defaults.object(forKey: UserDefaultsKeys.debugSimulatePro) != nil {
+            self.simulatePro = defaults.bool(forKey: UserDefaultsKeys.debugSimulatePro)
         } else {
-            self.simulatePremium = nil
+            self.simulatePro = nil
         }
         self.readinessPercentOverride = defaults.integer(forKey: UserDefaultsKeys.debugReadinessPercent)
         if readinessPercentOverride < 0 || readinessPercentOverride > 100 {
@@ -51,7 +51,7 @@ final class DebugOverrides: ObservableObject {
     }
 
     func clearAll() {
-        simulatePremium = nil
+        simulatePro = nil
         readinessPercentOverride = 0
     }
 }

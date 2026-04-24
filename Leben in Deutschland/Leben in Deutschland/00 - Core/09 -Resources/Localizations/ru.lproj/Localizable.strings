@@ -69,7 +69,7 @@
 "paywall_redeem" = "Ввести код";
 "paywall_redeem_hint" = "Введите промокод или код подарочной карты App Store";
 "paywall_onboarding_maybe_later" = "Может, позже";
-"premium_continue" = "Продолжить";
+"pro_continue" = "Продолжить";
 
 // TAB BAR
 "tab_learn_title" = "Учиться";
@@ -110,8 +110,8 @@
 "learn_by_topics_header_message" = "Я сгруппировал все вопросы по темам — выбирай маршрут и взлетай.";
 "learn_by_topics_disclaimer_title" = "Учить по темам";
 "learn_by_topics_disclaimer_message" = "Вопросы сгруппированы по темам, чтобы ты мог изучать их по одной. Выбери тему, ответь на вопросы и проверь себя. Этот режим не влияет на показатель готовности.";
-"limit_topic_premium_title" = "Pro-раздел";
-"limit_topic_premium_message" = "Эта тема входит в Pro-раздел. Оформи Pro, чтобы учиться без ограничений.";
+"limit_topic_pro_title" = "Pro-раздел";
+"limit_topic_pro_message" = "Эта тема входит в Pro-раздел. Оформи Pro, чтобы учиться без ограничений.";
 "limit_smart_learning_title" = "Лимит достигнут";
 "limit_smart_learning_message" = "Ты достиг лимита в 30 бесплатных вопросов интервального повторения. Оформи Pro, чтобы учиться без ограничений.";
 "limit_favorites_title" = "Лимит достигнут";
@@ -289,8 +289,8 @@
 "settings_language_option_turkish" = "Турецкий";
 "settings_haptics_toggle" = "Тактильная отдача";
 "settings_appearance_title" = "Оформление";
-"settings_premium_title" = "Hero Pro";
-"settings_premium_accessibility_hint" = "Открывает ваш текущий тариф и варианты подписки";
+"settings_pro_title" = "Hero Pro";
+"settings_pro_accessibility_hint" = "Открывает ваш текущий тариф и варианты подписки";
 "settings_reset_app" = "Сбросить приложение";
 "hero_pro_nav_title" = "Ваш тариф";
 "hero_pro_section_title" = "Hero Pro";
@@ -319,14 +319,14 @@
 "hero_pro_manage_subscription_failed_message" = "Пожалуйста, попробуйте еще раз через минуту.";
 
 // PREMIUM / PRICING
-"premium_plan_monthly" = "Ежемесячно";
-"premium_plan_lifetime" = "Навсегда";
-"premium_per_month" = "в месяц";
-"premium_accessibility_label" = "Pro";
-"premium_accessibility_hint" = "Открывает функции Pro и варианты подписки";
+"pro_plan_monthly" = "Ежемесячно";
+"pro_plan_lifetime" = "Навсегда";
+"pro_per_month" = "в месяц";
+"pro_accessibility_label" = "Pro";
+"pro_accessibility_hint" = "Открывает функции Pro и варианты подписки";
 "header_test_now_for_free" = "Протестируй бесплатно";
-"premium_plan_yearly" = "Ежегодно";
-"premium_per_year" = "в год";
+"pro_plan_yearly" = "Ежегодно";
+"pro_per_year" = "в год";
 "paywall_best_value" = "Выгодно";
 "paywall_subtitle_monthly" = "Гибко, отмена в любой момент";
 "paywall_subtitle_3_months_format" = "Только %@ в месяц";
@@ -344,10 +344,10 @@
 "paywall_slash_2_months" = "/2мес";
 "paywall_slash_week" = "/нед";
 "paywall_year_savings" = "Экономия 37 % по сравнению с помесячной";
-"premium_plan_six_month" = "6 месяцев";
-"premium_plan_three_month" = "3 месяца";
-"premium_plan_two_month" = "2 месяца";
-"premium_plan_weekly" = "Еженедельно";
+"pro_plan_six_month" = "6 месяцев";
+"pro_plan_three_month" = "3 месяца";
+"pro_plan_two_month" = "2 месяца";
+"pro_plan_weekly" = "Еженедельно";
 
 // FEEDBACK
 "report_question" = "Сообщить о вопросе";

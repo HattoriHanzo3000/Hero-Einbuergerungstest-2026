@@ -25,7 +25,7 @@ struct SettingsHeroProPlanView: View {
         .navigationTitle("hero_pro_nav_title".localized)
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await subscriptionManager.refreshPremiumStatus()
+            await subscriptionManager.refreshProStatus()
         }
         .alert("hero_pro_manage_subscription_failed_title".localized, isPresented: $showManageSubscriptionFailed) {
             Button("ok".localized, role: .cancel) { }
@@ -42,7 +42,7 @@ struct SettingsHeroProPlanView: View {
         .offerCodeRedemption(isPresented: $showOfferCodeRedemption) { result in
             if case .success = result {
                 Task {
-                    await subscriptionManager.refreshPremiumStatus()
+                    await subscriptionManager.refreshProStatus()
                 }
             }
         }
@@ -55,9 +55,9 @@ struct SettingsHeroProPlanView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 8)
 
-            if subscriptionManager.effectiveIsPremium {
+            if subscriptionManager.effectiveIsPro {
                 HeroProShieldBadge(
-                    label: "settings_premium_title".localized,
+                    label: "pro_accessibility_label".localized,
                     showShimmer: true
                 )
                     .frame(maxWidth: .infinity)

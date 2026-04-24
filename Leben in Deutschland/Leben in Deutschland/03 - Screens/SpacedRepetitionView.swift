@@ -31,8 +31,8 @@ struct SpacedRepetitionView: View {
             },
             isTranslationActive: viewModel.showTranslation,
             onToggleFavorite: {
-                if !viewModel.toggleFavorite(for: viewModel.currentQuestion.id, isPremium: subscriptionManager.effectiveIsPremium) {
-                    subscriptionManager.presentPremiumLimitSheet(
+                if !viewModel.toggleFavorite(for: viewModel.currentQuestion.id, isPro: subscriptionManager.effectiveIsPro) {
+                    subscriptionManager.presentProLimitSheet(
                         titleKey: "limit_favorites_title",
                         messageKey: "limit_favorites_message",
                         accentColorName: "AppPink"
@@ -41,8 +41,8 @@ struct SpacedRepetitionView: View {
             },
             isFavorite: viewModel.isFavorite(questionId: viewModel.currentQuestion.id),
             onCheckTapped: {
-                if !viewModel.handlePrimaryAction(isPremium: subscriptionManager.effectiveIsPremium) {
-                    subscriptionManager.presentPremiumLimitSheet(
+                if !viewModel.handlePrimaryAction(isPro: subscriptionManager.effectiveIsPro) {
+                    subscriptionManager.presentProLimitSheet(
                         titleKey: "limit_smart_learning_title",
                         messageKey: "limit_smart_learning_message",
                         accentColorName: "AppBlueLagoon"
