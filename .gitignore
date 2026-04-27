@@ -4,3 +4,6 @@ xcuserdata/
 
 # macOS
 .DS_Store
+
+# Local app secrets
+Leben in Deutschland/Config/LocalSecrets.xcconfig

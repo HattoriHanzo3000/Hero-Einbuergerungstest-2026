@@ -15,13 +15,28 @@
 /* Begin PBXFileReference section */
 		74286D002F675FC000E78E95 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		74B1060E2F55E8BB0091BAC0 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		A1B2C3D42F675FC100E78E95 /* Leben in Deutschland/Config/Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Leben in Deutschland/Config/Shared.xcconfig"; sourceTree = SOURCE_ROOT; };
 		E612E89C2E8299CD00513716 /* Leben in Deutschland.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Leben in Deutschland.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E619899F2E8836B400A0B582 /* Leben in Deutschland.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Leben in Deutschland.xcodeproj"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		746507362F9FBB1000F29BB0 /* Exceptions for "Leben in Deutschland" folder in "Leben in Deutschland" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Config/LocalSecrets.xcconfig,
+				Config/Shared.xcconfig,
+			);
+			target = E612E89B2E8299CD00513716 /* Leben in Deutschland */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E612E89E2E8299CD00513716 /* Leben in Deutschland */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				746507362F9FBB1000F29BB0 /* Exceptions for "Leben in Deutschland" folder in "Leben in Deutschland" target */,
+			);
 			path = "Leben in Deutschland";
 			sourceTree = "<group>";
 		};
@@ -39,6 +54,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		746505852F9FBA4800F29BB0 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D42F675FC100E78E95 /* Leben in Deutschland/Config/Shared.xcconfig */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		E612E8932E8299CD00513716 = {
 			isa = PBXGroup;
 			children = (
@@ -47,6 +70,7 @@
 				E612E89E2E8299CD00513716 /* Leben in Deutschland */,
 				E619899F2E8836B400A0B582 /* Leben in Deutschland.xcodeproj */,
 				E612E89D2E8299CD00513716 /* Products */,
+				746505852F9FBA4800F29BB0 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -97,7 +121,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2600;
-				LastUpgradeCheck = 2610;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					E612E89B2E8299CD00513716 = {
 						CreatedOnToolsVersion = 26.0;
@@ -285,6 +309,7 @@
 		};
 		E612E8A82E8299CE00513716 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1B2C3D42F675FC100E78E95 /* Leben in Deutschland/Config/Shared.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = AppIcon;
@@ -329,6 +354,7 @@
 		};
 		E612E8A92E8299CE00513716 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1B2C3D42F675FC100E78E95 /* Leben in Deutschland/Config/Shared.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

@@ -1,0 +1,7 @@
+// Shared app configuration for build-time values.
+// Keep secrets in the gitignored LocalSecrets.xcconfig file next to this one.
+
+REVENUECAT_PUBLIC_API_KEY = YOUR_REVENUECAT_PUBLIC_API_KEY
+#include? "LocalSecrets.xcconfig"
+
+INFOPLIST_KEY_RevenueCatAPIKey = $(REVENUECAT_PUBLIC_API_KEY)

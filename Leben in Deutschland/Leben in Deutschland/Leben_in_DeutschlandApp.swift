@@ -18,7 +18,12 @@ struct Leben_in_DeutschlandApp: App {
     @AppStorage(UserDefaultsKeys.appearance) private var appAppearance: String = "system"
     
     init() {
-        Purchases.configure(withAPIKey: AppConfiguration.revenueCatAPIKey)
+        let revenueCatAPIKey = AppConfiguration.revenueCatAPIKey
+        if !revenueCatAPIKey.isEmpty {
+            Purchases.configure(withAPIKey: revenueCatAPIKey)
+        } else {
+            assertionFailure("RevenueCat API key is not configured.")
+        }
         recordFirstLaunchIfNeeded()
         configureTabBarAppearance()
     }
