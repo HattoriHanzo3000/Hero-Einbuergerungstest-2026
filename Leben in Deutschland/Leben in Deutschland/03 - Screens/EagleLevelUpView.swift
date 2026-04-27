@@ -15,6 +15,8 @@ struct EagleLevelUpView: View {
 
     @EnvironmentObject private var languageManager: LanguageManager
     @Environment(\.layoutMetrics) private var layoutMetrics
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var confettiActive = false
     private var stageMessage: String {
         ReadinessMessageHelper.message(
             readinessPercentage: readinessPercentage,
@@ -27,6 +29,11 @@ struct EagleLevelUpView: View {
             Rectangle()
                 .fill(LiquidGlassGradient.blue.screenBackground)
                 .ignoresSafeArea()
+
+            if confettiActive {
+                ConfettiOverlay(isActive: true)
+                    .zIndex(2)
+            }
 
             VStack(spacing: layoutMetrics.adaptive(24)) {
                 Spacer()
@@ -88,6 +95,9 @@ struct EagleLevelUpView: View {
         .accessibilityElement(children: .contain)
         .accessibilityLabel("eagle_level_up_title".localized)
         .accessibilityHint(stageMessage)
+        .onAppear {
+            triggerConfettiIfNeeded()
+        }
     }
 
     @ViewBuilder
@@ -102,6 +112,17 @@ struct EagleLevelUpView: View {
                     .mask(Text(title).font(font))
                     .blendMode(.plusLighter)
             )
+    }
+
+    private func triggerConfettiIfNeeded() {
+        guard !reduceMotion else { return }
+        guard !confettiActive else { return }
+
+        confettiActive = true
+        HapticManager.shared.success()
+        DispatchQueue.main.asyncAfter(deadline: .now() + ConfettiOverlay.overlayRemovalDelay) {
+            confettiActive = false
+        }
     }
 }
 

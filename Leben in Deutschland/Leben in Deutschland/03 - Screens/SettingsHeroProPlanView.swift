@@ -4,8 +4,10 @@ import UIKit
 
 struct SettingsHeroProPlanView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
+    @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
     @State private var showManageSubscriptionFailed = false
     @State private var showOfferCodeRedemption = false
+    @State private var lifetimeConfettiActive = false
 
     var body: some View {
         ZStack {
@@ -21,11 +23,22 @@ struct SettingsHeroProPlanView: View {
                 .padding(.top, 8)
                 .padding(.bottom, 24)
             }
+
+            if lifetimeConfettiActive {
+                ConfettiOverlay(isActive: true)
+                    .zIndex(2)
+            }
         }
         .navigationTitle("hero_pro_nav_title".localized)
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await subscriptionManager.refreshProStatus()
+        }
+        .onAppear {
+            triggerLifetimeConfettiIfNeeded()
+        }
+        .onChange(of: subscriptionManager.tariffState) { _, _ in
+            triggerLifetimeConfettiIfNeeded()
         }
         .alert("hero_pro_manage_subscription_failed_title".localized, isPresented: $showManageSubscriptionFailed) {
             Button("ok".localized, role: .cancel) { }
@@ -45,6 +58,18 @@ struct SettingsHeroProPlanView: View {
                     await subscriptionManager.refreshProStatus()
                 }
             }
+        }
+    }
+
+    private func triggerLifetimeConfettiIfNeeded() {
+        guard subscriptionManager.hasLifetimeSubscription else { return }
+        guard !accessibilityReduceMotion else { return }
+        guard !lifetimeConfettiActive else { return }
+
+        lifetimeConfettiActive = true
+        HapticManager.shared.success()
+        DispatchQueue.main.asyncAfter(deadline: .now() + ConfettiOverlay.overlayRemovalDelay) {
+            lifetimeConfettiActive = false
         }
     }
 

@@ -31,7 +31,10 @@ struct FeaturePreviewContent {
 final class SubscriptionManager: ObservableObject {
     static let shared = SubscriptionManager()
 
+    @AppStorage(UserDefaultsKeys.lastKnownPremiumState) private var lastKnownPremiumState = false
+
     @Published private(set) var isPro: Bool = false
+    @Published private(set) var hasCompletedInitialSubscriptionSync: Bool = false
     @Published private(set) var tariffState: SubscriptionTariffState = .free
     @Published private(set) var tariffRenewalDate: Date?
     @Published private(set) var activeProductIdentifier: String?
@@ -45,14 +48,24 @@ final class SubscriptionManager: ObservableObject {
     @Published var showFeaturePreviewSheet: Bool = false
     @Published var featurePreviewContent: FeaturePreviewContent?
 
-    /// Pro status used by UI. In DEBUG, respects DebugOverrides.simulatePro; otherwise equals isPro.
+    /// Pro status used by UI. In DEBUG, respects DebugOverrides.simulatePro; otherwise uses cached/real RevenueCat state.
     var effectiveIsPro: Bool {
-        #if DEBUG
+#if DEBUG
         if let override = DebugOverrides.shared.simulatePro {
             return override
         }
-        #endif
-        return isPro
+#endif
+        return isPremiumVisualState
+    }
+
+    /// Visual premium state used by headers and badges during cold start.
+    var isPremiumVisualState: Bool {
+        hasCompletedInitialSubscriptionSync ? isPro : lastKnownPremiumState
+    }
+
+    /// Authorization state used for gating premium-only actions.
+    var isPremiumAuthorizationGranted: Bool {
+        hasCompletedInitialSubscriptionSync && isPro
     }
 
     var hasLifetimeSubscription: Bool {
@@ -138,19 +151,21 @@ final class SubscriptionManager: ObservableObject {
         tariffState != .lifetime
     }
 
-    private let entitlementId = AppConfiguration.proEntitlementId
+    private let entitlementId = AppConfiguration.premiumEntitlementId
     private var customerInfoTask: Task<Void, Never>?
     #if DEBUG
     private var debugCancellable: AnyCancellable?
     #endif
 
     private init() {
-        startObservingCustomerInfo()
+        applyCachedCustomerInfoIfAvailable()
         #if DEBUG
         debugCancellable = DebugOverrides.shared.$simulatePro
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in self?.objectWillChange.send() }
         #endif
+        startObservingCustomerInfo()
+        Task { await refreshProStatus() }
     }
 
     deinit {
@@ -174,7 +189,11 @@ final class SubscriptionManager: ObservableObject {
 
     /// Refreshes pro status from RevenueCat. Call on app launch.
     func refreshProStatus() async {
-        guard Purchases.isConfigured else { return }
+        guard Purchases.isConfigured else {
+            hasCompletedInitialSubscriptionSync = true
+            return
+        }
+        defer { hasCompletedInitialSubscriptionSync = true }
         do {
             let customerInfo = try await Purchases.shared.customerInfo()
             applyCustomerInfo(customerInfo)
@@ -270,6 +289,7 @@ final class SubscriptionManager: ObservableObject {
         let entitlement = customerInfo.entitlements.all[entitlementId]
         let isActive = activeOverride ?? (entitlement?.isActive == true)
         isPro = isActive
+        lastKnownPremiumState = isActive
         guard isActive, let entitlement else {
             tariffState = .free
             tariffRenewalDate = nil
@@ -293,6 +313,13 @@ final class SubscriptionManager: ObservableObject {
         } else {
             tariffState = .subscription
         }
+    }
+
+    private func applyCachedCustomerInfoIfAvailable() {
+        guard Purchases.isConfigured, let cachedCustomerInfo = Purchases.shared.cachedCustomerInfo else {
+            return
+        }
+        applyCustomerInfo(cachedCustomerInfo, activeOverride: cachedCustomerInfo.entitlements.all[entitlementId]?.isActive == true)
     }
 
     private func refreshAppStorePlanDisplayName(for productIdentifier: String?) async {

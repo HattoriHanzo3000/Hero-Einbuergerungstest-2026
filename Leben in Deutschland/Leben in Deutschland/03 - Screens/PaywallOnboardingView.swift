@@ -343,12 +343,20 @@ struct PaywallOnboardingView: View {
         Task {
             do {
                 let result = try await Purchases.shared.purchase(package: package)
-                if !result.userCancelled {
-                    await subscriptionManager.refreshProStatus()
+                guard !result.userCancelled else {
+                    await MainActor.run {
+                        isPurchasing = false
+                    }
+                    return
                 }
+
+                await subscriptionManager.refreshProStatus()
                 await MainActor.run {
                     isPurchasing = false
-                    if !result.userCancelled {
+                    PaywallWindowConfettiPresenter.show()
+                    HapticManager.shared.success()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + ConfettiOverlay.overlayRemovalDelay) {
+                        PaywallWindowConfettiPresenter.hide()
                         proceedToNext()
                     }
                 }

@@ -34,5 +34,5 @@ enum AppConfiguration {
     
     // MARK: - Entitlement
     /// RevenueCat entitlement identifier for pro access.
-    static let proEntitlementId = "pro"
+    static let premiumEntitlementId = "premium"
 }

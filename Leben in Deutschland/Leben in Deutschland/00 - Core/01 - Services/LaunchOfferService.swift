@@ -8,10 +8,10 @@
 import Foundation
 
 enum LaunchOfferService {
-    /// Promo package identifier in RevenueCat (Product: hero.lid.pro.lifetime.launch).
+    /// Promo package identifier in RevenueCat (Product: hero.lid.premium.lifetime.launch).
     static let promoPackageIdentifier = "$rc_lifetime_promo"
-    /// Standard lifetime product ID in App Store Connect (matches StoreService.ProductId.lifetime).
-    static let standardLifetimeProductId = "hero.lid.pro.lifetime"
+    /// Standard lifetime product ID in App Store Connect (must match the lifetime SKU in RevenueCat).
+    static let standardLifetimeProductId = "hero.lid.premium.lifetime"
 
     private static let launchWindowSeconds: TimeInterval = 72 * 60 * 60 // 3 days
 

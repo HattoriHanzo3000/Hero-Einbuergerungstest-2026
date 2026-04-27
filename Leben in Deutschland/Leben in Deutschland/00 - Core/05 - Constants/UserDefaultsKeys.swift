@@ -53,6 +53,7 @@ enum UserDefaultsKeys {
     // MARK: - Freemium Usage
     static let freemiumSmartLearningAnswerCount = "freemium_smart_learning_answer_count"
     static let freemiumTestSimulationsStartedCount = "freemium_test_simulations_started_count"
+    static let lastKnownPremiumState = "lastKnownPremiumState"
 
     // MARK: - Debug (DEBUG builds only)
     /// When set, overrides pro status. "true"/"false" or absent = use real.
