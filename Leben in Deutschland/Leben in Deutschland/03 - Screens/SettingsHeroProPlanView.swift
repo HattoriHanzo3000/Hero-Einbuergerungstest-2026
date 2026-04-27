@@ -236,7 +236,7 @@ private struct HeroProPrimaryButton: View {
                 shape
                     .fill(
                         LinearGradient(
-                            colors: [Color("AppBurgundy"), Color("AppBurgundy").opacity(0.78)],
+                            colors: [Color("AppOrange"), Color("AppOrange").opacity(0.78)],
                             startPoint: .leading,
                             endPoint: .trailing
                         )
@@ -270,7 +270,7 @@ private struct HeroProFooterLinkBlock: View {
                 .multilineTextAlignment(.center)
             Button(actionTitle, action: action)
                 .font(.system(.footnote, design: .default).weight(.semibold))
-                .foregroundStyle(Color("AppBurgundy"))
+                .foregroundStyle(.white.opacity(0.9))
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, horizontalPadding)

@@ -39,25 +39,6 @@ private struct LaunchOfferRowBadgeView: View {
     }
 }
 
-// MARK: - Best Value Row Badge (beige, on top edge of 3-month when launch offer expired)
-private struct BestValueRowBadgeView: View {
-    let layoutMetrics: LayoutMetrics
-
-    private let cornerRadius: CGFloat = 12
-
-    var body: some View {
-        Text("paywall_best_value".localized)
-            .font(.system(.caption2, weight: .semibold).italic())
-            .textCase(.uppercase)
-            .foregroundStyle(.white)
-            .padding(.horizontal, layoutMetrics.adaptive(10))
-            .padding(.vertical, layoutMetrics.adaptive(6))
-            .background(Color("AppOrange"))
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-            .shadow(color: .black.opacity(0.15), radius: 2, y: 1)
-    }
-}
-
 // MARK: - Trial Shield Badge
 /// Orange "3 days free trial" badge with rounded corners.
 private struct TrialShieldBadgeView: View {
@@ -86,8 +67,6 @@ struct PaywallPackageRow: View {
     var countdownText: String? = nil
     /// When true, shows "LAUNCH OFFER -50%" badge.
     var showLaunchOfferBadge: Bool = false
-    /// When true (e.g. 3-month when launch offer expired), shows beige "Best value" badge on top edge.
-    var showBestValueBadge: Bool = false
     /// Original price shown crossed out when promo is active (e.g. "€19.99").
     var strikethroughPrice: String? = nil
 
@@ -123,11 +102,6 @@ struct PaywallPackageRow: View {
         }
     }
 
-    /// Best value badge: annual only (not lifetime). Launch Offer badge takes precedence for promo.
-    private var isLimitedOffer: Bool {
-        !showLaunchOfferBadge && package.packageType == .annual
-    }
-
     /// True for Lifetime or promo package — use orange gradient/tint instead of blue.
     private var isLifetimeRow: Bool {
         package.identifier == LaunchOfferService.promoPackageIdentifier || package.packageType == .lifetime
@@ -136,11 +110,14 @@ struct PaywallPackageRow: View {
     /// Card background: orange only during launch offer (promo row); after expiry or other plans = blue.
     private var cardBackground: some ShapeStyle {
         if showLaunchOfferBadge {
-            return AnyShapeStyle(LiquidGlassGradient.orange.screenBackground)
+            return AnyShapeStyle(LiquidGlassGradient.orangePromo.screenBackground)
         } else {
             return AnyShapeStyle(LiquidGlassGradient.blue.screenBackground)
         }
     }
+
+    private var rowOpacity: Double { isSelected ? 1.0 : 0.72 }
+    private var rowSaturation: Double { isSelected ? 1.0 : 0.45 }
 
     /// Plan subtitle: Monthly, 3 Months, Lifetime. When promo active, shows "Pay once, own forever" like regular lifetime.
     private var planSubtitle: String? {
@@ -157,8 +134,10 @@ struct PaywallPackageRow: View {
 
     /// Second line for Lifetime/promo only: "No hidden fees. No recurring charges."
     private var planSubtitleLine2: String? {
-        guard isLifetimeRow else { return nil }
-        return "paywall_subtitle_lifetime_no_fees".localized
+        if isLifetimeRow {
+            return "paywall_subtitle_lifetime_no_fees".localized
+        }
+        return nil
     }
 
     /// Text and icons white on gradient; when unselected, slightly lower opacity for less contrast.
@@ -178,15 +157,6 @@ struct PaywallPackageRow: View {
                         Text(planTitle)
                             .font(.system(.headline, weight: .bold))
                             .foregroundStyle(contentForeground)
-                        if !showLaunchOfferBadge, isLimitedOffer {
-                            Text("paywall_best_value".localized)
-                                .font(.system(.caption2, weight: .semibold))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(isSelected ? Color.white.opacity(0.25) : Color("AppOrange"))
-                                .clipShape(Capsule())
-                        }
                     }
                     if let text = planSubtitle {
                         Text(text)
@@ -243,15 +213,11 @@ struct PaywallPackageRow: View {
             }
             .buttonStyle(.plain)
             .scaleEffect(isSelected ? 1.05 : 1)
+            .saturation(rowSaturation)
+            .opacity(rowOpacity)
 
             if showLaunchOfferBadge {
                 LaunchOfferRowBadgeView(layoutMetrics: layoutMetrics)
-                    .frame(maxWidth: .infinity)
-                    .offset(y: layoutMetrics.adaptive(-12))
-                    .scaleEffect(isSelected ? 1.05 : 1)
-            }
-            if showBestValueBadge {
-                BestValueRowBadgeView(layoutMetrics: layoutMetrics)
                     .frame(maxWidth: .infinity)
                     .offset(y: layoutMetrics.adaptive(-12))
                     .scaleEffect(isSelected ? 1.05 : 1)

@@ -66,7 +66,7 @@
 "paywall_privacy" = "Политика конфиденциальности";
 "paywall_privacy_hint" = "Открыть политику конфиденциальности";
 "paywall_terms_boilerplate" = "Подписка продлевается автоматически, если она не была отменена как минимум за 24 часа до окончания текущего периода. Управлять подпиской можно в настройках учетной записи App Store. Продолжая, вы соглашаетесь с Условиями использования и Политикой конфиденциальности.";
-"paywall_redeem" = "Ввести код";
+"paywall_redeem" = "Активировать";
 "paywall_redeem_hint" = "Введите промокод или код подарочной карты App Store";
 "paywall_onboarding_maybe_later" = "Может, позже";
 "pro_continue" = "Продолжить";
@@ -332,7 +332,7 @@
 "paywall_subtitle_3_months_format" = "Только %@ в месяц";
 "paywall_subtitle_lifetime" = "Оплати один раз — пользуйся всегда";
 "paywall_subtitle_lifetime_no_fees" = "Без скрытых комиссий. Без автопродлений.";
-"paywall_trial_shield" = "3 дня бесплатно";
+"paywall_trial_shield" = "Экономь больше. 3 дня бесплатно";
 "launch_offer_badge" = "-50% НА СТАРТЕ";
 "launch_offer_line1" = "Старт";
 "launch_offer_line2" = "Навсегда -50%";

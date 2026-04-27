@@ -78,7 +78,7 @@ struct PaywallOnboardingView: View {
                     } else {
                         plansSection
                         subscribeButton
-                        restoreSection
+                        footerActionsSection
                         legalSection
                     }
                 }
@@ -188,7 +188,6 @@ struct PaywallOnboardingView: View {
                     },
                     countdownText: (package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive) ? countdownString : nil,
                     showLaunchOfferBadge: package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive,
-                    showBestValueBadge: package.packageType == .threeMonth && !LaunchOfferService.isLaunchOfferActive,
                     strikethroughPrice: (package.identifier == LaunchOfferService.promoPackageIdentifier && LaunchOfferService.isLaunchOfferActive) ? standardLifetimePriceString : nil
                 )
                 .id(package.identifier)
@@ -232,28 +231,37 @@ struct PaywallOnboardingView: View {
         }
     }
 
-    // MARK: - Restore
-    private var restoreSection: some View {
-        VStack(spacing: layoutMetrics.adaptive(8)) {
-            Button(action: restorePurchases) {
-                Text("paywall_restore".localized)
-                    .font(.system(.footnote, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.9))
+    // MARK: - Footer Actions
+    private var footerActionsSection: some View {
+        VStack(spacing: layoutMetrics.adaptive(14)) {
+            VStack(spacing: layoutMetrics.adaptive(4)) {
+                PaywallFooterLinkBlock(
+                    caption: "hero_pro_restore_caption".localized,
+                    actionTitle: "paywall_restore".localized,
+                    isActionDisabled: isPurchasing,
+                    horizontalPadding: 24
+                ) {
+                    restorePurchases()
+                }
+                if let message = restoreMessage {
+                    Text(message)
+                        .font(.system(.caption))
+                        .foregroundStyle(.white.opacity(0.85))
+                        .multilineTextAlignment(.center)
+                }
             }
-            .disabled(isPurchasing)
-            .accessibilityLabel("paywall_restore".localized)
-            .accessibilityHint("paywall_restore_hint".localized)
 
-            if let message = restoreMessage {
-                Text(message)
-                    .font(.system(.caption))
-                    .foregroundStyle(.white.opacity(0.85))
-                    .multilineTextAlignment(.center)
+            PaywallFooterLinkBlock(
+                caption: "hero_pro_redeem_caption".localized,
+                actionTitle: "paywall_redeem".localized,
+                horizontalPadding: 24
+            ) {
+                presentRedeemCodeSheet()
             }
         }
     }
 
-    // MARK: - Legal (boilerplate + Redeem · Terms · Privacy on one row)
+    // MARK: - Legal (boilerplate + Terms · Privacy on one row)
     private var legalSection: some View {
         VStack(spacing: layoutMetrics.adaptive(12)) {
             paywallTermsText
@@ -278,18 +286,6 @@ struct PaywallOnboardingView: View {
                 }
                 .accessibilityLabel("paywall_privacy".localized)
                 .accessibilityHint("paywall_privacy_hint".localized)
-
-                Text("·")
-                    .font(.system(.caption2))
-                    .foregroundStyle(.white.opacity(0.7))
-
-                Button(action: presentRedeemCodeSheet) {
-                    Text("paywall_redeem".localized)
-                        .font(.system(.caption2, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.9))
-                }
-                .accessibilityLabel("paywall_redeem".localized)
-                .accessibilityHint("paywall_redeem_hint".localized)
             }
         }
     }

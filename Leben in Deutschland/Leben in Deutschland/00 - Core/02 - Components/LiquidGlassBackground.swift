@@ -11,6 +11,7 @@ import SwiftUI
 enum LiquidGlassGradient {
     case blue
     case orange
+    case orangePromo
     case green
     case red
     case amber
@@ -37,6 +38,16 @@ extension LiquidGlassGradient {
                     Color("AppOrange").opacity(0.95),
                     Color("AppOrange").opacity(0.75),
                     Color("AppOrange").opacity(0.5)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .orangePromo:
+            return LinearGradient(
+                colors: [
+                    Color("AppOrange").opacity(0.95),
+                    Color("AppAmber").opacity(0.95),
+                    Color("AppYellow").opacity(0.95)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing

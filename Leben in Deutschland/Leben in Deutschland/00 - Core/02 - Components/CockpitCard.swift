@@ -7,7 +7,6 @@ struct CockpitCard<Content: View>: View {
     let subtitle: String?
     private let titleTrailing: AnyView?
     @ViewBuilder let content: Content
-    @Environment(\.colorScheme) private var colorScheme
 
     init(
         titleIcon: String,
@@ -70,14 +69,8 @@ struct CockpitCard<Content: View>: View {
                     )
                 )
                 .background(
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .fill(Color(.secondarySystemGroupedBackground))
-                        if colorScheme == .dark {
-                            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                .fill(Color("AppBlue").opacity(0.18))
-                        }
-                    }
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .fill(Color(.secondarySystemGroupedBackground))
                 )
         )
         .overlay(

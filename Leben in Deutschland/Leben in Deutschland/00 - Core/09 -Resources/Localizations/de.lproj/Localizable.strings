@@ -66,7 +66,7 @@
 "paywall_privacy" = "Datenschutz";
 "paywall_privacy_hint" = "Öffnet die Datenschutzerklärung";
 "paywall_terms_boilerplate" = "Das Abonnement verlängert sich automatisch, sofern es nicht mindestens 24 Stunden vor Ablauf des aktuellen Zeitraums gekündigt wird. Du kannst dein Abo in den App Store-Kontoeinstellungen verwalten. Mit dem Fortfahren stimmst du unseren Nutzungsbedingungen und der Datenschutzerklärung zu.";
-"paywall_redeem" = "Code einlösen";
+"paywall_redeem" = "Einlösen";
 "paywall_redeem_hint" = "App-Store-Gutscheincode eingeben";
 "paywall_onboarding_maybe_later" = "Vielleicht später";
 "pro_continue" = "Weiter";
@@ -322,7 +322,7 @@
 "paywall_subtitle_3_months_format" = "Nur %@ pro Monat";
 "paywall_subtitle_lifetime" = "Einmal zahlen, für immer nutzen";
 "paywall_subtitle_lifetime_no_fees" = "Keine versteckten Gebühren. Keine automatischen Verlängerungen.";
-"paywall_trial_shield" = "3 Tage kostenlos";
+"paywall_trial_shield" = "Mehr sparen. 3 Tage kostenlos";
 "launch_offer_badge" = "START-DEAL -50%";
 "launch_offer_line1" = "Start-Deal";
 "launch_offer_line2" = "Dauerhaft -50%";

@@ -82,7 +82,7 @@ struct PaywallView: View {
                     } else {
                         plansSection
                         subscribeButton
-                        restoreSection
+                        footerActionsSection
                         legalSection
                     }
                 }
@@ -197,7 +197,6 @@ struct PaywallView: View {
                     },
                     countdownText: (package.identifier == LaunchOfferService.promoPackageIdentifier && isLaunchOfferActive) ? countdownString : nil,
                     showLaunchOfferBadge: package.identifier == LaunchOfferService.promoPackageIdentifier && isLaunchOfferActive,
-                    showBestValueBadge: package.packageType == .threeMonth && !isLaunchOfferActive,
                     strikethroughPrice: (package.identifier == LaunchOfferService.promoPackageIdentifier && isLaunchOfferActive) ? standardLifetimePriceString : nil
                 )
                 .id(package.identifier)
@@ -228,28 +227,37 @@ struct PaywallView: View {
         .frame(maxWidth: .infinity)
     }
 
-    // MARK: - Restore
-    private var restoreSection: some View {
-        VStack(spacing: layoutMetrics.adaptive(8)) {
-            Button(action: restorePurchases) {
-                Text("paywall_restore".localized)
-                    .font(.system(.footnote, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.9))
+    // MARK: - Footer Actions
+    private var footerActionsSection: some View {
+        VStack(spacing: layoutMetrics.adaptive(14)) {
+            VStack(spacing: layoutMetrics.adaptive(4)) {
+                PaywallFooterLinkBlock(
+                    caption: "hero_pro_restore_caption".localized,
+                    actionTitle: "paywall_restore".localized,
+                    isActionDisabled: isPurchasing,
+                    horizontalPadding: 24
+                ) {
+                    restorePurchases()
+                }
+                if let message = restoreMessage {
+                    Text(message)
+                        .font(.system(.caption))
+                        .foregroundStyle(.white.opacity(0.85))
+                        .multilineTextAlignment(.center)
+                }
             }
-            .disabled(isPurchasing)
-            .accessibilityLabel("paywall_restore".localized)
-            .accessibilityHint("paywall_restore_hint".localized)
 
-            if let message = restoreMessage {
-                Text(message)
-                    .font(.system(.caption))
-                    .foregroundStyle(.white.opacity(0.85))
-                    .multilineTextAlignment(.center)
+            PaywallFooterLinkBlock(
+                caption: "hero_pro_redeem_caption".localized,
+                actionTitle: "paywall_redeem".localized,
+                horizontalPadding: 24
+            ) {
+                presentRedeemCodeSheet()
             }
         }
     }
 
-    // MARK: - Legal (boilerplate + Redeem · Terms · Privacy on one row)
+    // MARK: - Legal (boilerplate + Terms · Privacy on one row)
     private var legalSection: some View {
         VStack(spacing: layoutMetrics.adaptive(12)) {
             paywallTermsText
@@ -274,18 +282,6 @@ struct PaywallView: View {
                 }
                 .accessibilityLabel("paywall_privacy".localized)
                 .accessibilityHint("paywall_privacy_hint".localized)
-
-                Text("·")
-                    .font(.system(.caption2))
-                    .foregroundStyle(.white.opacity(0.7))
-
-                Button(action: presentRedeemCodeSheet) {
-                    Text("paywall_redeem".localized)
-                        .font(.system(.caption2, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.9))
-                }
-                .accessibilityLabel("paywall_redeem".localized)
-                .accessibilityHint("paywall_redeem_hint".localized)
             }
         }
     }
@@ -405,14 +401,34 @@ private struct PaywallMascotImage: View {
 }
 
 // MARK: - Previews
+private struct PaywallPreviewHost: View {
+    let activeLaunchOffer: Bool
+    let simulateOfferExpired: Bool
+
+    init(activeLaunchOffer: Bool, simulateOfferExpired: Bool) {
+        self.activeLaunchOffer = activeLaunchOffer
+        self.simulateOfferExpired = simulateOfferExpired
+        if activeLaunchOffer {
+            UserDefaults.standard.set(Date(), forKey: UserDefaultsKeys.firstLaunchDate)
+        } else {
+            UserDefaults.standard.set(
+                Date().addingTimeInterval(-8 * 24 * 60 * 60),
+                forKey: UserDefaultsKeys.firstLaunchDate
+            )
+        }
+    }
+
+    var body: some View {
+        PaywallView(previewSimulateOfferExpired: simulateOfferExpired)
+            .environmentObject(SubscriptionManager.shared)
+            .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
+    }
+}
+
 #Preview("Paywall") {
-    PaywallView()
-        .environmentObject(SubscriptionManager.shared)
-        .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
+    PaywallPreviewHost(activeLaunchOffer: true, simulateOfferExpired: false)
 }
 
 #Preview("Paywall (after 3 days)") {
-    PaywallView(previewSimulateOfferExpired: true)
-        .environmentObject(SubscriptionManager.shared)
-        .layoutMetrics(LayoutMetrics.make(for: CGSize(width: 390, height: 844)))
+    PaywallPreviewHost(activeLaunchOffer: false, simulateOfferExpired: true)
 }
