@@ -25,20 +25,50 @@ struct PaywallView: View {
         previewSimulateOfferExpired ? false : LaunchOfferService.isLaunchOfferActive
     }
 
-    @State private var packages: [Package] = []
-    @State private var selectedPackage: Package?
-    @State private var isLoading = true
+    @State private var selectedPackageIdentifier: String?
     @State private var isPurchasing = false
     @State private var restoreMessage: String?
     @State private var activeLegalURL: URL?
-    @State private var loadError: String?
     @State private var showRedeemSheet = false
     @State private var countdownString: String = ""
-    @State private var hasRefreshedAfterExpiry = false
-    @State private var standardLifetimePriceString: String?
 
     private static let termsURL = AppURLs.termsOfUse
     private static let privacyURL = AppURLs.privacyPolicy
+
+    private var currentOffering: Offering? {
+        subscriptionManager.currentOffering
+    }
+
+    private var loadError: String? {
+        subscriptionManager.offeringsLoadError
+    }
+
+    private var allAvailablePackages: [Package] {
+        currentOffering?.availablePackages ?? []
+    }
+
+    private var packages: [Package] {
+        filterPackagesForLaunchOffer(allAvailablePackages)
+    }
+
+    private var isLoading: Bool {
+        currentOffering == nil && loadError == nil
+    }
+
+    private var selectedPackage: Package? {
+        if let selectedPackageIdentifier,
+           let selected = packages.first(where: { $0.identifier == selectedPackageIdentifier }) {
+            return selected
+        }
+        return packages.first { $0.identifier == LaunchOfferService.promoPackageIdentifier && isLaunchOfferActive }
+            ?? packages.first { $0.packageType == .lifetime }
+            ?? packages.first { $0.packageType == .threeMonth }
+            ?? packages.first
+    }
+
+    private var standardLifetimePriceString: String? {
+        allAvailablePackages.first { $0.storeProduct.productIdentifier == LaunchOfferService.standardLifetimeProductId }?.formattedPriceString
+    }
 
     var body: some View {
         NavigationStack {
@@ -94,15 +124,11 @@ struct PaywallView: View {
         }
         .onAppear {
             countdownString = LaunchOfferService.formattedCountdown(from: LaunchOfferService.secondsRemaining)
-            Task { await fetchOfferings() }
+            Task { await subscriptionManager.loadOfferingsIfNeeded() }
         }
         .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
             let remaining = LaunchOfferService.secondsRemaining
             countdownString = LaunchOfferService.formattedCountdown(from: remaining)
-            if remaining <= 0, !hasRefreshedAfterExpiry {
-                hasRefreshedAfterExpiry = true
-                Task { await fetchOfferings() }
-            }
         }
     }
 
@@ -167,7 +193,7 @@ struct PaywallView: View {
                     isSelected: selectedPackage?.identifier == package.identifier,
                     onSelect: {
                         HapticManager.shared.lightImpact()
-                        selectedPackage = package
+                        selectedPackageIdentifier = package.identifier
                     },
                     countdownText: (package.identifier == LaunchOfferService.promoPackageIdentifier && isLaunchOfferActive) ? countdownString : nil,
                     showLaunchOfferBadge: package.identifier == LaunchOfferService.promoPackageIdentifier && isLaunchOfferActive,
@@ -269,47 +295,6 @@ struct PaywallView: View {
             .font(.system(.caption2))
             .foregroundStyle(.white.opacity(0.8))
             .multilineTextAlignment(.center)
-    }
-
-    // MARK: - Data Fetching
-    private func fetchOfferings() async {
-        guard Purchases.isConfigured else {
-            await MainActor.run {
-                loadError = "RevenueCat not configured"
-                isLoading = false
-            }
-            return
-        }
-        await MainActor.run { isLoading = true; loadError = nil }
-
-        do {
-            let offerings = try await Purchases.shared.offerings()
-            guard let offering = offerings.current else {
-                await MainActor.run {
-                    loadError = "No offerings available"
-                    isLoading = false
-                }
-                return
-            }
-            let available = offering.availablePackages
-            let standardLifetime = available.first { $0.storeProduct.productIdentifier == LaunchOfferService.standardLifetimeProductId }
-            let standardPrice = standardLifetime?.formattedPriceString
-            let filtered = filterPackagesForLaunchOffer(available)
-            await MainActor.run {
-                standardLifetimePriceString = standardPrice
-                packages = filtered
-                selectedPackage = filtered.first { $0.identifier == LaunchOfferService.promoPackageIdentifier }
-                    ?? filtered.first { $0.packageType == .lifetime }
-                    ?? filtered.first { $0.packageType == .threeMonth }
-                    ?? filtered.first
-                isLoading = false
-            }
-        } catch {
-            await MainActor.run {
-                loadError = error.localizedDescription
-                isLoading = false
-            }
-        }
     }
 
     /// Applies Launch Offer logic: within 3 days show promo in place of standard lifetime (3 buttons total).

@@ -39,6 +39,9 @@ final class SubscriptionManager: ObservableObject {
     @Published private(set) var tariffRenewalDate: Date?
     @Published private(set) var activeProductIdentifier: String?
     @Published private(set) var appStorePlanDisplayName: String?
+    @Published private(set) var currentOffering: Offering?
+    @Published private(set) var offeringsLoadError: String?
+    @Published private(set) var isLoadingOfferings: Bool = false
     @Published var showRestoreFeedbackAlert: Bool = false
     @Published var restoreFeedbackMessage: String?
     /// When true, present PaywallView as a sheet. Set by presentPaywall().
@@ -165,6 +168,7 @@ final class SubscriptionManager: ObservableObject {
             .sink { [weak self] _ in self?.objectWillChange.send() }
         #endif
         startObservingCustomerInfo()
+        Task { await loadOfferingsIfNeeded() }
         Task { await refreshProStatus() }
     }
 
@@ -213,6 +217,21 @@ final class SubscriptionManager: ObservableObject {
             restoreFeedbackMessage = error.localizedDescription
         }
         showRestoreFeedbackAlert = true
+    }
+
+    func loadOfferingsIfNeeded() async {
+        guard Purchases.isConfigured else { return }
+        guard currentOffering == nil, !isLoadingOfferings else { return }
+        isLoadingOfferings = true
+        offeringsLoadError = nil
+        defer { isLoadingOfferings = false }
+
+        do {
+            let offerings = try await Purchases.shared.offerings()
+            currentOffering = offerings.current
+        } catch {
+            offeringsLoadError = error.localizedDescription
+        }
     }
 
     func dismissRestoreFeedbackAlert() {
