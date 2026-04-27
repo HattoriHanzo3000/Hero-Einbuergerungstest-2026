@@ -25,7 +25,14 @@
           "glass" : true,
           "hidden" : false,
           "image-name" : "Passport.png",
-          "name" : "Passport"
+          "name" : "Passport",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              -10,
+              77.4296875
+            ]
+          }
         }
       ],
       "lighting" : "individual",

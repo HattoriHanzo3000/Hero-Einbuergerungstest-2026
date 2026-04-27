@@ -89,7 +89,8 @@ struct AdvertisementView: View {
         }
         .task {
             let appSummary = await AppStoreArtworkLookup.lookupApp(
-                appID: AdvertisementDestination.b2AppStoreID
+                appID: AdvertisementDestination.b2AppStoreID,
+                appStoreURL: AdvertisementDestination.b2AppStoreURL
             )
             b2ArtworkURL = appSummary?.artworkURL
             b2TrackName = appSummary?.trackName
@@ -232,6 +233,7 @@ struct AdvertisementView: View {
 // MARK: - Destination
 private enum AdvertisementDestination {
     static let b2AppStoreID = 6755700752
+    static let b2AppStoreURL = URL(string: "https://apps.apple.com/us/app/hero-b2-beruf-vokabeln/id6755700752")!
 }
 
 // MARK: - App Icon View
@@ -291,7 +293,6 @@ private struct ITunesLookupAppResult: Decodable {
     let artworkUrl512: String?
     let trackName: String?
     let subtitle: String?
-    let primaryGenreName: String?
 }
 
 private enum AppStoreArtworkLookup {
@@ -301,7 +302,7 @@ private enum AppStoreArtworkLookup {
         let subtitle: String?
     }
 
-    static func lookupApp(appID: Int, countryCode: String = "us") async -> AppSummary? {
+    static func lookupApp(appID: Int, appStoreURL: URL, countryCode: String = "us") async -> AppSummary? {
         var components = URLComponents(url: URL(string: "https://itunes.apple.com/lookup")!, resolvingAgainstBaseURL: false)!
         components.queryItems = [
             URLQueryItem(name: "id", value: String(appID)),
@@ -318,9 +319,12 @@ private enum AppStoreArtworkLookup {
             let string = first.artworkUrl512 ?? first.artworkUrl100 ?? first.artworkUrl60
             let artworkURL = string.flatMap { URL(string: $0) }
 
-            // Prefer explicit App Store subtitle if present; fallback to primary genre.
             let normalizedSubtitle = first.subtitle?.trimmingCharacters(in: .whitespacesAndNewlines)
-            let subtitle = (normalizedSubtitle?.isEmpty == false) ? normalizedSubtitle : first.primaryGenreName
+            let subtitle = if normalizedSubtitle?.isEmpty == false {
+                normalizedSubtitle
+            } else {
+                await fetchSubtitle(from: appStoreURL)
+            }
 
             return AppSummary(
                 artworkURL: artworkURL,
@@ -330,6 +334,45 @@ private enum AppStoreArtworkLookup {
         } catch {
             return nil
         }
+    }
+
+    private static func fetchSubtitle(from url: URL) async -> String? {
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            guard let http = response as? HTTPURLResponse, (200 ... 299).contains(http.statusCode),
+                  let html = String(data: data, encoding: .utf8) else {
+                return nil
+            }
+            return extractSubtitle(from: html)
+        } catch {
+            return nil
+        }
+    }
+
+    private static func extractSubtitle(from html: String) -> String? {
+        let pattern = #"<p class="subtitle[^"]*">([^<]+)</p>"#
+        guard let regex = try? NSRegularExpression(pattern: pattern),
+              let match = regex.firstMatch(in: html, range: NSRange(html.startIndex..., in: html)),
+              let range = Range(match.range(at: 1), in: html) else {
+            return nil
+        }
+
+        let subtitle = html[range]
+            .htmlDecoded()
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        return subtitle.isEmpty ? nil : subtitle
+    }
+}
+
+private extension StringProtocol {
+    func htmlDecoded() -> String {
+        String(self)
+            .replacingOccurrences(of: "&amp;", with: "&")
+            .replacingOccurrences(of: "&quot;", with: "\"")
+            .replacingOccurrences(of: "&#39;", with: "'")
+            .replacingOccurrences(of: "&apos;", with: "'")
+            .replacingOccurrences(of: "&lt;", with: "<")
+            .replacingOccurrences(of: "&gt;", with: ">")
     }
 }
 
