@@ -69,16 +69,12 @@ struct TestSessionView: View {
         }
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
-        .navigationBarHidden(true)
-        .hidesTabBar()
-        .tabBarHidden(true) // Force hide using UIKit for reliability
+        .hidesLearningChrome()
         .onAppear {
             initializeTest()
         }
         .onDisappear {
             viewModel.stopTimer()
-            // Restore tab bar when leaving test session
-            restoreTabBar()
         }
         .fullScreenCover(item: $showingLevelUp) { stage in
             EagleLevelUpView(
@@ -152,17 +148,7 @@ struct TestSessionView: View {
     
     
     // MARK: - Helper Functions
-    
-    private func restoreTabBar() {
-        DispatchQueue.main.async {
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let window = windowScene.windows.first,
-               let tabBarController = UITabBarController.find(in: window.rootViewController) {
-                tabBarController.tabBar.isHidden = false
-            }
-        }
-    }
-    
+
     func initializeTest() {
         Task {
             // Test simulation always loads German content

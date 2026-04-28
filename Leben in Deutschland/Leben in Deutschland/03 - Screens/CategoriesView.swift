@@ -102,7 +102,6 @@ struct CategoriesView: View {
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .id(languageManager.currentAppLanguage)
-        .navigationBarHidden(true)
         .task {
             await viewModel.loadCategories(
                 for: languageManager.currentAppLanguage,
@@ -148,8 +147,7 @@ struct CategoriesView: View {
             .environmentObject(languageManager)
             .environment(\.layoutMetrics, layoutMetrics)
         }
-        .hidesTabBar()
-        .tabBarHidden(true)
+        .hidesLearningChrome()
     }
 }
 

@@ -44,9 +44,7 @@ struct TestCountdownView: View {
                     .animation(.easeOut(duration: 0.25), value: count)
             }
         }
-        .navigationBarHidden(true)
-        .hidesTabBar()
-        .tabBarHidden(true)
+        .hidesLearningChrome()
         .onAppear {
             if !subscriptionManager.effectiveIsPro && !FreemiumUsageService.shared.canStartTestSimulation(isPro: false) {
                 subscriptionManager.presentProLimitSheet(

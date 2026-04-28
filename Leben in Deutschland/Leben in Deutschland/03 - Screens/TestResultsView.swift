@@ -87,9 +87,7 @@ struct TestResultsView: View {
         }
         .id(languageManager.currentAppLanguage)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .hidesTabBar()
-        .tabBarHidden(true)
+        .hidesLearningChrome()
         .sheet(isPresented: $showingAnswers) {
             TestAnswersView(viewModel: viewModel)
                 .environmentObject(languageManager)

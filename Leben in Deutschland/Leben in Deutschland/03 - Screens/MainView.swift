@@ -7,6 +7,7 @@ struct MainView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @AppStorage("appLanguage") private var appLanguage: String = LanguageManager.baseLanguageCode
     @State private var selectedTab: TabIdentifier = .learn
+    @State private var sectionBeforeSearch: TabIdentifier = .learn
 
     enum TabIdentifier: Hashable {
         case learn
@@ -25,24 +26,29 @@ struct MainView: View {
 
     @available(iOS 18.0, *)
     private var tabViewiOS18: some View {
-        TabView {
-            Tab("tab_learn_title".localized(for: appLanguage), systemImage: "book.fill") {
+        TabView(selection: $selectedTab) {
+            Tab("tab_learn_title".localized(for: appLanguage), systemImage: "book.fill", value: TabIdentifier.learn) {
                 HomeView()
             }
             .accessibilityHint("tab_learn_hint".localized(for: appLanguage))
 
-            Tab("tab_progress_title".localized(for: appLanguage), systemImage: "gauge.with.dots.needle.bottom.50percent") {
+            Tab("tab_progress_title".localized(for: appLanguage), systemImage: "gauge.with.dots.needle.bottom.50percent", value: TabIdentifier.progress) {
                 CockpitView()
             }
             .accessibilityHint("tab_progress_hint".localized(for: appLanguage))
 
-            Tab("tab_settings_title".localized(for: appLanguage), systemImage: "gear") {
+            Tab("tab_settings_title".localized(for: appLanguage), systemImage: "gear", value: TabIdentifier.settings) {
                 SettingsDashboardView()
             }
             .accessibilityHint("tab_settings_hint".localized(for: appLanguage))
 
-            Tab("tab_search_title".localized(for: appLanguage), systemImage: "magnifyingglass", role: .search) {
-                SearchTabView()
+            Tab(value: TabIdentifier.search, role: .search) {
+                SearchTabView(
+                    selectedTab: $selectedTab,
+                    sectionBeforeSearch: sectionBeforeSearch
+                )
+            } label: {
+                Label("tab_search_title".localized(for: appLanguage), systemImage: "magnifyingglass")
             }
             .accessibilityHint("tab_search_hint".localized(for: appLanguage))
         }
@@ -50,6 +56,9 @@ struct MainView: View {
         .compactTabBarSpacing(0)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized(for: appLanguage))
         .task { await SubscriptionManager.shared.refreshProStatus() }
+        .onChange(of: selectedTab) { oldValue, newValue in
+            handleSelectedTabChange(from: oldValue, to: newValue)
+        }
         .sheet(isPresented: $subscriptionManager.showPaywall, onDismiss: {
             subscriptionManager.dismissPaywall()
         }) {
@@ -87,7 +96,10 @@ struct MainView: View {
                 }
                 .tag(TabIdentifier.settings)
 
-            SearchTabView()
+            SearchTabView(
+                selectedTab: $selectedTab,
+                sectionBeforeSearch: sectionBeforeSearch
+            )
                 .tabItem {
                     Label("tab_search_title".localized(for: appLanguage), systemImage: "magnifyingglass")
                 }
@@ -96,8 +108,8 @@ struct MainView: View {
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
         .task { await SubscriptionManager.shared.refreshProStatus() }
-        .onChange(of: selectedTab) { _, _ in
-            HapticManager.shared.selectionChanged()
+        .onChange(of: selectedTab) { oldValue, newValue in
+            handleSelectedTabChange(from: oldValue, to: newValue)
         }
         .sheet(isPresented: $subscriptionManager.showPaywall, onDismiss: {
             subscriptionManager.dismissPaywall()
@@ -114,6 +126,15 @@ struct MainView: View {
                     accentColorName: content.accentColorName
                 )
             }
+        }
+    }
+
+    private func handleSelectedTabChange(from oldValue: TabIdentifier, to newValue: TabIdentifier) {
+        HapticManager.shared.selectionChanged()
+        if newValue == .search, oldValue != .search {
+            sectionBeforeSearch = oldValue
+        } else if newValue != .search {
+            sectionBeforeSearch = newValue
         }
     }
 }

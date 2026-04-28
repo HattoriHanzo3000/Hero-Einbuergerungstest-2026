@@ -66,7 +66,6 @@ struct HomeView: View {
         .onAppear {
             handleOnAppear()
         }
-        .tabBarHidden(false)
         .id(stateManager.selectedState ?? "no_state")
         }
         .environment(router)

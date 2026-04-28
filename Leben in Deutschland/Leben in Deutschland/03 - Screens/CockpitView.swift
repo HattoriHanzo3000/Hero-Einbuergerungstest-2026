@@ -45,7 +45,6 @@ struct CockpitView: View {
         .sheet(isPresented: $showMoreFromHeroSheet) {
             AdvertisementView()
         }
-        .tabBarHidden(false)
     }
 }
 

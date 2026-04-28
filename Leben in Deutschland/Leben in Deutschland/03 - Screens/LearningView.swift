@@ -26,6 +26,14 @@ struct LearningView: View {
     @State private var hintGlowPhase = false
     
     private let hintService = HintService.shared
+
+    private var shouldHideTabBar: Bool {
+        usesRouterNavigation
+    }
+
+    private var shouldHideNavigationBar: Bool {
+        usesRouterNavigation
+    }
     
     init(subcategory: SubcategoryModel, usesRouterNavigation: Bool = true) {
         self.subcategory = subcategory
@@ -52,9 +60,11 @@ struct LearningView: View {
         }
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground).ignoresSafeArea(edges: .bottom))
-        .toolbar(.hidden, for: .navigationBar)
-        .hidesTabBar()
-        .tabBarHidden(true)
+        .navigationBarHidden(shouldHideNavigationBar)
+        .navigationBarBackButtonHidden(shouldHideNavigationBar)
+        .toolbar(shouldHideNavigationBar ? .hidden : .visible, for: .navigationBar)
+        .toolbar(shouldHideTabBar ? .hidden : .visible, for: .tabBar)
+        .hidesBottomBarWhenPushed(shouldHideTabBar)
         .fullScreenCover(item: $zoomedAsset) { item in
             FullScreenImageView(assetName: item.name, onDismiss: {
                 zoomedAsset = nil
@@ -189,13 +199,9 @@ struct LearningView: View {
     // MARK: - Header View
     private var headerView: some View {
         QuestionCardHeaderCard(
-            onBackTapped: {
-                if usesRouterNavigation {
+            onBackTapped: usesRouterNavigation ? {
                     router.pop()
-                } else {
-                    dismiss()
-                }
-            },
+            } : nil,
             title: subcategory.name,
             progress: viewModel.questions.count > 1 ? (viewModel.answeredCount, viewModel.questions.count) : nil,
             questionId: viewModel.currentQuestion?.id,

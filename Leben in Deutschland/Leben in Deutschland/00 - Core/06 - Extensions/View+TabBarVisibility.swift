@@ -1,6 +1,50 @@
 import SwiftUI
 import UIKit
 
+private struct HidesBottomBarWhenPushedBridge: UIViewControllerRepresentable {
+    var hidesBottomBar: Bool
+
+    func makeUIViewController(context: Context) -> UIViewController {
+        let controller = UIViewController()
+        controller.view.backgroundColor = .clear
+        controller.view.isUserInteractionEnabled = false
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        applyHidesBottomBarWhenPushed(from: uiViewController)
+    }
+
+    private func applyHidesBottomBarWhenPushed(from bridge: UIViewController) {
+        func targetHost() -> UIViewController? {
+            var current: UIViewController? = bridge.parent
+            while let vc = current {
+                let className = NSStringFromClass(type(of: vc))
+                if className.contains("UIHostingController") {
+                    return vc
+                }
+                current = vc.parent
+            }
+            return bridge.parent
+        }
+
+        func assign(to host: UIViewController) {
+            guard host.hidesBottomBarWhenPushed != hidesBottomBar else { return }
+            host.hidesBottomBarWhenPushed = hidesBottomBar
+        }
+
+        if let host = targetHost() {
+            assign(to: host)
+            return
+        }
+        DispatchQueue.main.async {
+            if let host = targetHost() {
+                assign(to: host)
+            }
+        }
+    }
+}
+
 // MARK: - Tab Bar Visibility Helpers
 extension View {
     /// Hides the tab bar when this view is presented in a navigation stack hosted inside a TabView.
@@ -12,10 +56,22 @@ extension View {
     func showsTabBar() -> some View {
         toolbar(.visible, for: .tabBar)
     }
+
+    /// Syncs UIKit tab bar visibility with push/pop transitions.
+    func hidesBottomBarWhenPushed(_ hides: Bool) -> some View {
+        background(HidesBottomBarWhenPushedBridge(hidesBottomBar: hides))
+    }
+
+    /// Unified immersive chrome for learning/question-card flows.
+    func hidesLearningChrome() -> some View {
+        navigationBarBackButtonHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
+            .toolbar(.hidden, for: .tabBar)
+            .hidesBottomBarWhenPushed(true)
+    }
 }
 
-// MARK: - Option 1: UIKit-based Tab Bar Control with Slide Animation
-/// Hides tab bar instantly; shows it with a slide-up-from-bottom animation when returning to root.
+// MARK: - Legacy UIKit Tab Bar Visibility
 struct TabBarVisibilityModifier: ViewModifier {
     let isHidden: Bool
     
@@ -35,69 +91,10 @@ struct TabBarVisibilityModifier: ViewModifier {
                   let window = windowScene.windows.first,
                   let tabBarController = UITabBarController.find(in: window.rootViewController) else { return }
             let tabBar = tabBarController.tabBar
-            
-            if hidden {
-                // Animate hiding: slide down smoothly
-                // Only animate if tab bar is currently visible
-                guard !tabBar.isHidden && tabBar.alpha > 0 else {
-                    tabBar.isHidden = true
-                    return
-                }
-                
-                let height = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
-                
-                UIView.animate(
-                    withDuration: 0.35,
-                    delay: 0,
-                    usingSpringWithDamping: 0.9,
-                    initialSpringVelocity: 0.3,
-                    options: [.allowUserInteraction, .beginFromCurrentState, .curveEaseIn],
-                    animations: {
-                        tabBar.transform = CGAffineTransform(translationX: 0, y: height)
-                        tabBar.alpha = 0
-                    },
-                    completion: { _ in
-                        tabBar.isHidden = true
-                        tabBar.transform = .identity
-                        tabBar.alpha = 1
-                    }
-                )
-            } else {
-                // Only animate if tab bar is currently hidden or off-screen (e.g. after returning from pushed view)
-                guard tabBar.isHidden || tabBar.alpha < 1 || tabBar.transform != .identity else { return }
-                
-                // Animate showing: slide up from bottom
-                tabBar.isHidden = false
-                tabBar.alpha = 0
-                
-                // Get the actual height - use frame if bounds is 0
-                let height = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
-                
-                // Set initial position off-screen
-                tabBar.transform = CGAffineTransform(translationX: 0, y: height)
-                
-                // Wait for next run loop to ensure tab bar is laid out, then animate
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    // Double-check tab bar is still visible and get updated height
-                    let currentHeight = tabBar.bounds.height > 0 ? tabBar.bounds.height : (tabBar.frame.height > 0 ? tabBar.frame.height : 49)
-                    
-                    // Ensure it starts from off-screen position
-                    tabBar.transform = CGAffineTransform(translationX: 0, y: currentHeight)
-                    tabBar.alpha = 0
-                    
-                    UIView.animate(
-                        withDuration: 0.45,
-                        delay: 0,
-                        usingSpringWithDamping: 0.82,
-                        initialSpringVelocity: 0.4,
-                        options: [.allowUserInteraction, .beginFromCurrentState, .curveEaseOut],
-                        animations: {
-                            tabBar.transform = .identity
-                            tabBar.alpha = 1
-                        }
-                    )
-                }
-            }
+            tabBar.layer.removeAllAnimations()
+            tabBar.transform = .identity
+            tabBar.alpha = 1
+            tabBar.isHidden = hidden
         }
     }
 }

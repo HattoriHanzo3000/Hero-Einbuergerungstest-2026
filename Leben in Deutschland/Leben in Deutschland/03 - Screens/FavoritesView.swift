@@ -32,10 +32,7 @@ struct FavoritesView: View {
         }
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
-        .navigationBarBackButtonHidden(true)
-        .toolbar(.hidden, for: .navigationBar)
-        .hidesTabBar()
-        .tabBarHidden(true)
+        .hidesLearningChrome()
         .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
             viewModel.setLanguageManager(languageManager)
             await viewModel.loadFavorites(

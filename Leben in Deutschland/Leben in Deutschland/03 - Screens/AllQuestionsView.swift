@@ -38,10 +38,7 @@ struct AllQuestionsView: View {
         }
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
-        .navigationBarBackButtonHidden(true)
-        .toolbar(.hidden, for: .navigationBar)
-        .hidesTabBar()
-        .tabBarHidden(true)
+        .hidesLearningChrome()
         .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)-\(stateManager.selectedState ?? "")") {
             await viewModel.loadQuestions(
                 language: languageManager.currentAppLanguage,

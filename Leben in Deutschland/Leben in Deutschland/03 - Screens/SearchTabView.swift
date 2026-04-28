@@ -7,18 +7,50 @@
 
 import SwiftUI
 
+struct SearchLearningTarget: Hashable {
+    let question: QuestionModel
+    let subcategory: String
+    let categoryName: String
+    let matchedByTranslation: Bool
+
+    private var subcategoryModel: SubcategoryModel {
+        SubcategoryModel(
+            name: subcategory,
+            categoryName: categoryName,
+            questions: [question]
+        )
+    }
+
+    var id: String {
+        "\(subcategoryModel.id)-\(question.id)"
+    }
+
+    var learningSubcategory: SubcategoryModel {
+        subcategoryModel
+    }
+}
+
 // MARK: - Search Tab View
 struct SearchTabView: View {
+    @Binding var selectedTab: MainView.TabIdentifier
+    var sectionBeforeSearch: MainView.TabIdentifier
+
+    @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject var languageManager: LanguageManager
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @StateObject private var viewModel = CategoriesViewModel()
     @State private var searchText = ""
     @State private var isSearchPresented = true
     @FocusState private var isSearchFieldFocused: Bool
+    @State private var navigationPath = NavigationPath()
     @State private var router = AppRouter()
+    
+    private var searchTabIsSelected: Bool {
+        selectedTab == .search
+    }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             ZStack {
                 Color(uiColor: .systemGroupedBackground)
                     .ignoresSafeArea()
@@ -36,12 +68,38 @@ struct SearchTabView: View {
             .searchable(
                 text: $searchText,
                 isPresented: $isSearchPresented,
-                placement: .automatic,
+                placement: .navigationBarDrawer(displayMode: .always),
                 prompt: Text("search".localized)
             )
             .searchFocused($isSearchFieldFocused)
             .onAppear {
+                isSearchPresented = true
                 scheduleSearchFieldFocus()
+            }
+            .onChange(of: isSearchPresented) { _, presented in
+                guard !presented, selectedTab == .search else { return }
+                guard scenePhase == .active else { return }
+                searchText = ""
+                isSearchFieldFocused = false
+                selectedTab = sectionBeforeSearch
+            }
+            .onChange(of: searchTabIsSelected) { _, isSelected in
+                if isSelected {
+                    isSearchPresented = true
+                    scheduleSearchFieldFocus()
+                } else {
+                    isSearchPresented = true
+                }
+            }
+            .onChange(of: navigationPath.count) { _, depth in
+                guard depth == 0, selectedTab == .search else { return }
+                isSearchPresented = true
+                scheduleSearchFieldFocus()
+            }
+            .navigationDestination(for: SearchLearningTarget.self) { target in
+                LearningView(subcategory: target.learningSubcategory, usesRouterNavigation: false)
+                    .environmentObject(languageManager)
+                    .environmentObject(subscriptionManager)
             }
         }
         .environment(router)
@@ -73,6 +131,9 @@ struct SearchTabView: View {
 
 // MARK: - Preview
 #Preview {
-    SearchTabView()
+    SearchTabView(
+        selectedTab: .constant(.search),
+        sectionBeforeSearch: .learn
+    )
         .environmentObject(LanguageManager())
 }

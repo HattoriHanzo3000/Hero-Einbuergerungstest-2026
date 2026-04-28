@@ -57,9 +57,7 @@ struct TestAnswersView: View {
             FullScreenImageView(assetName: item.name, onDismiss: { zoomedAsset = nil })
         }
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .hidesTabBar()
-        .tabBarHidden(true)
+        .hidesLearningChrome()
         .sheet(isPresented: $showingFeedbackReport) {
             if let q = currentQuestion {
                 FeedbackReportView(

@@ -54,10 +54,7 @@ struct SpacedRepetitionView: View {
         .environmentObject(languageManager)
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
-        .navigationBarBackButtonHidden(true)
-        .toolbar(.hidden, for: .navigationBar)
-        .hidesTabBar()
-        .tabBarHidden(true)
+        .hidesLearningChrome()
         .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
             // Ensure content and hints are loaded when app or translation language changes
             await ContentService.shared.loadContent(for: languageManager.currentAppLanguage)
