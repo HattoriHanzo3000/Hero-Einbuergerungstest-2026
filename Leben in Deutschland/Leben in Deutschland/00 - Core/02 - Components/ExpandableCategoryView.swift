@@ -15,6 +15,7 @@ struct ExpandableCategoryView: View {
     let isFreeTopicBlock: Bool
     let onToggle: () -> Void
     @ObservedObject var answersService: AnswersService
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @State private var isPressed = false
     @State private var iconWiggle: Double = 0
     @State private var wiggleTrigger = 0
@@ -64,6 +65,10 @@ struct ExpandableCategoryView: View {
         )
     }
 
+    private var shouldShowProShield: Bool {
+        !isFreeTopicBlock && !subscriptionManager.effectiveIsPro
+    }
+
     private func runWiggleAnimation() {
         let duration: Double = 0.07
         withAnimation(.easeInOut(duration: duration)) { iconWiggle = -8 }
@@ -83,7 +88,6 @@ struct ExpandableCategoryView: View {
         let image = Image(systemName: categoryIcon)
             .font(.system(.title, design: .rounded).weight(.semibold))
             .foregroundColor(.white)
-            .frame(maxWidth: .infinity, alignment: .leading)
 
         if #available(iOS 18.0, *) {
             image
@@ -111,7 +115,13 @@ struct ExpandableCategoryView: View {
                 onToggle()
             }) {
                 VStack(alignment: .leading, spacing: 12) {
-                    categoryIconView
+                    HStack(spacing: 12) {
+                        categoryIconView
+                        Spacer()
+                        if shouldShowProShield {
+                            ProBadge(color: .white)
+                        }
+                    }
 
                     HStack(spacing: 12) {
                         Text(category.name)

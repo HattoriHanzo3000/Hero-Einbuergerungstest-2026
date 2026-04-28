@@ -13,20 +13,35 @@ struct SearchTabView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @StateObject private var viewModel = CategoriesViewModel()
     @State private var searchText = ""
+    @State private var isSearchPresented = true
+    @FocusState private var isSearchFieldFocused: Bool
     @State private var router = AppRouter()
 
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(.systemBackground)
+                Color(uiColor: .systemGroupedBackground)
                     .ignoresSafeArea()
 
                 SearchView(
                     searchText: $searchText,
-                    searchResults: viewModel.searchResults(for: searchText)
+                    searchResults: viewModel.searchResults(for: searchText),
+                    showsSearchField: false
                 )
                 .environmentObject(languageManager)
                 .environmentObject(subscriptionManager)
+            }
+            .navigationTitle("tab_search_title".localized(for: languageManager.currentAppLanguage))
+            .navigationBarTitleDisplayMode(.large)
+            .searchable(
+                text: $searchText,
+                isPresented: $isSearchPresented,
+                placement: .automatic,
+                prompt: Text("search".localized)
+            )
+            .searchFocused($isSearchFieldFocused)
+            .onAppear {
+                scheduleSearchFieldFocus()
             }
         }
         .environment(router)
@@ -45,6 +60,13 @@ struct SearchTabView: View {
             } else {
                 ContentService.shared.clearTranslationCache()
             }
+        }
+    }
+
+    private func scheduleSearchFieldFocus() {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 120_000_000)
+            isSearchFieldFocused = true
         }
     }
 }

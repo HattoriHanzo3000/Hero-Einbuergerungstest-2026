@@ -68,19 +68,13 @@ struct Leben_in_DeutschlandApp: App {
                         OnboardingDateView(
                             viewModel: OnboardingDateViewModel(
                                 languageManager: languageManager,
-                                onNext: { appFlow.stage = .onboardingPaywall },
+                                onNext: {
+                                    UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+                                    appFlow.stage = .main
+                                },
                                 onBack: { appFlow.stage = .onboardingState }
                             )
                         )
-                    case .onboardingPaywall:
-                        PaywallOnboardingView(onProceedToNext: {
-                            appFlow.stage = .onboardingSplash
-                        })
-                    case .onboardingSplash:
-                        WelcomeVideoView {
-                            UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
-                            appFlow.stage = .main
-                        }
                     case .main:
                         MainView()
                     }

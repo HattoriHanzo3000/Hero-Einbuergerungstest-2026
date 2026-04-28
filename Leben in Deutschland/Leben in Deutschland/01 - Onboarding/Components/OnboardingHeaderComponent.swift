@@ -8,13 +8,9 @@ struct OnboardingHeaderComponent: View {
     let messageParameters: [String]?
     let selectedState: String?
     @Binding var showDialog: Bool
-    let playSignal: UUID?
-    let onPlayCompleted: (() -> Void)?
     
     @EnvironmentObject private var languageManager: LanguageManager
     @Environment(\.layoutMetrics) private var layoutMetrics
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.colorScheme) private var colorScheme
     
     init(
         currentStep: Int,
@@ -22,9 +18,7 @@ struct OnboardingHeaderComponent: View {
         messageKey: String,
         messageParameters: [String]? = nil,
         selectedState: String? = nil,
-        showDialog: Binding<Bool>,
-        playSignal: UUID? = nil,
-        onPlayCompleted: (() -> Void)? = nil
+        showDialog: Binding<Bool>
     ) {
         self.currentStep = currentStep
         self.totalSteps = totalSteps
@@ -32,15 +26,13 @@ struct OnboardingHeaderComponent: View {
         self.messageParameters = messageParameters
         self.selectedState = selectedState
         self._showDialog = showDialog
-        self.playSignal = playSignal
-        self.onPlayCompleted = onPlayCompleted
     }
     
     private var verticalPadding: CGFloat { layoutMetrics.adaptive(18) }
     private var horizontalPadding: CGFloat { layoutMetrics.adaptive(20) }
     private var mascotToContentSpacing: CGFloat { layoutMetrics.adaptive(16) }
     private var titleToSloganSpacing: CGFloat { layoutMetrics.adaptive(6) }
-    private var mascotSize: CGFloat { layoutMetrics.adaptive(120) }
+    private var mascotSize: CGFloat { layoutMetrics.adaptive(104) }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -59,13 +51,6 @@ struct OnboardingHeaderComponent: View {
             
             // Mascot + content row (same layout as ScreenHeaderCard)
             HStack(alignment: .center, spacing: mascotToContentSpacing) {
-                MascotView(
-                    autoPlayInterval: nil,
-                    playSignal: playSignal,
-                    onPlayCompleted: onPlayCompleted
-                )
-                .frame(width: mascotSize, height: mascotSize)
-                
                 if let selectedState = selectedState {
                     // With title: state name + slogan (ScreenHeaderCard style)
                     VStack(alignment: .leading, spacing: titleToSloganSpacing) {
@@ -93,6 +78,12 @@ struct OnboardingHeaderComponent: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .fixedSize(horizontal: false, vertical: true)
                 }
+                
+                Image("MascotLiDHeader")
+                    .resizable()
+                    .scaledToFit()
+                .frame(width: mascotSize, height: mascotSize)
+                .scaleEffect(x: -1, y: 1, anchor: .center)
             }
             .padding(.vertical, verticalPadding)
             .padding(.horizontal, horizontalPadding)
@@ -104,13 +95,6 @@ struct OnboardingHeaderComponent: View {
         .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
         .padding(.horizontal)
         .padding(.top, layoutMetrics.adaptive(8))
-        .onChange(of: playSignal) { _, _ in
-            if reduceMotion {
-                onPlayCompleted?()
-            } else {
-                // Signal is handled by MascotView
-            }
-        }
     }
     
     private var formattedMessage: String {

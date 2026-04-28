@@ -33,8 +33,6 @@ struct CategoriesTabHeaderCard: View {
             .transaction { $0.animation = nil }
 
             HStack(alignment: .center, spacing: mascotToContentSpacing) {
-                MascotView(autoPlayInterval: 60)
-                    .frame(width: mascotSize, height: mascotSize)
                 Text("learn_by_topics_header_message".localized)
                     .font(.system(.body, weight: .semibold))
                     .italic()
@@ -43,6 +41,9 @@ struct CategoriesTabHeaderCard: View {
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                MascotView(autoPlayInterval: 60)
+                    .scaleEffect(x: -1, y: 1)
+                    .frame(width: mascotSize, height: mascotSize)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

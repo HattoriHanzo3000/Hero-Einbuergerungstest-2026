@@ -21,8 +21,6 @@ struct OnboardingScreenContainer<Content: View>: View {
     let disableContentAnimation: Bool
     @ViewBuilder let content: Content
     
-    @State private var nextPlayToken: UUID? = nil
-    
     init(
         headerStep: Int,
         headerMessageKey: String,
@@ -73,9 +71,7 @@ struct OnboardingScreenContainer<Content: View>: View {
                     messageKey: headerMessageKey,
                     messageParameters: headerMessageParameters,
                     selectedState: headerSelectedState,
-                    showDialog: showDialog,
-                    playSignal: nextPlayToken,
-                    onPlayCompleted: onNext
+                    showDialog: showDialog
                 )
                 .id(headerId)
                 .padding(.top, OnboardingConstants.headerTopPadding)
@@ -113,7 +109,7 @@ struct OnboardingScreenContainer<Content: View>: View {
                 // Next Button
                 OnboardingNextButtonComponent(
                     isEnabled: isNextEnabled,
-                    action: { nextPlayToken = UUID() },
+                    action: onNext,
                     showBackButton: showBackButton,
                     backAction: onBack,
                     titleKey: nextButtonTitleKey

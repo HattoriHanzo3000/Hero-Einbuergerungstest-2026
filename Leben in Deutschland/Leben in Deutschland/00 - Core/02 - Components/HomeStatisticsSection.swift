@@ -74,6 +74,7 @@ private struct HomeRingChartView: View {
     @State private var isPulsing = false
     @Environment(\.layoutMetrics) private var layoutMetrics
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
 
     private var ringThickness: CGFloat { layoutMetrics.adaptive(70) }
     private var baseRadius: CGFloat { layoutMetrics.adaptive(130) }
@@ -81,7 +82,7 @@ private struct HomeRingChartView: View {
 
     private var rings: [(value: Double, color: Color, maxValue: Int)] {
         let total = Double(max(progress.total, 1))
-        let backgroundRingColor = Color(.systemGray4)
+        let backgroundRingColor: Color = colorScheme == .dark ? .black : Color(.systemGray4)
         let backgroundRing = (1.0, backgroundRingColor, 0)
         let dataRings = [
             (Double(progress.expert) / total, Color("AppGreen"), progress.expert),
