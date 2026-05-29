@@ -16,9 +16,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="MainChick_About" translatesAutoresizingMaskIntoConstraints="NO" id="F9f-Wj-nTi">
-                                <rect key="frame" x="107" y="339" width="179" height="175"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="MainChick_About" translatesAutoresizingMaskIntoConstraints="NO" id="F9f-Wj-nTi">
+                                <rect key="frame" x="46.5" y="276" width="300" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="9Q0-vE-k0L"/>
+                                    <constraint firstAttribute="height" secondItem="F9f-Wj-nTi" secondAttribute="width" multiplier="1:1" id="6d6-u2-NfJ"/>
+                                    <constraint firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ILi-QI-s2A"/>
+                                    <constraint firstAttribute="width" constant="300" id="mGN-nY-cDP"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>

@@ -73,7 +73,7 @@
 
 // TAB BAR
 "tab_learn_title" = "Öğren";
-"tab_progress_title" = "Cockpit";
+"tab_progress_title" = "Kokpit";
 "tab_settings_title" = "Ayarlar";
 "tab_search_title" = "Arama";
 "main_tab_bar_accessibility_label" = "Ana Navigasyon";
