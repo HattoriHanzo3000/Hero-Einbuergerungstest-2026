@@ -2,7 +2,7 @@
 //  CategoriesTabHeaderCard.swift
 //  Leben in Deutschland
 //
-//  Header for Categories tab. Layout: back | pro (top row), mascot + message (bottom row).
+//  Header for Categories tab. Layout: mascot + message. System navigation bar provides back.
 //  When useCard is false, renders content only for flat gradient headers (same as Home).
 //
 
@@ -10,9 +10,6 @@ import SwiftUI
 
 // MARK: - Categories Tab Header Card
 struct CategoriesTabHeaderCard: View {
-    var onBackTapped: () -> Void
-    /// When true, shows decorative Pro badge. Hidden for free users.
-    var isProUser: Bool = false
     /// When false, renders content only for flat gradient headers (no rounded card).
     var useCard: Bool = true
 
@@ -23,15 +20,6 @@ struct CategoriesTabHeaderCard: View {
 
     private var headerContent: some View {
         VStack(alignment: .leading, spacing: layoutMetrics.adaptive(6)) {
-            HStack {
-                AdaptiveIconButton.backButton(action: onBackTapped, tintColor: .white)
-                Spacer()
-                if isProUser {
-                    ProBadge(color: .white)
-                }
-            }
-            .transaction { $0.animation = nil }
-
             HStack(alignment: .center, spacing: mascotToContentSpacing) {
                 Text("learn_by_topics_header_message".localized)
                     .font(.system(.body, weight: .semibold))

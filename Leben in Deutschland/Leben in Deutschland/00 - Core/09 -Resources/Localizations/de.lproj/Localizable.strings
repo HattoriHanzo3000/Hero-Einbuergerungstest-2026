@@ -144,7 +144,7 @@
 "hint_button_title" = "Tipp";
 
 // LEARN CAROUSEL
-"learn_option_test_title" = "Test ablegen";
+"learn_option_test_title" = "Testsimulation";
 "learn_option_test_subtitle" = "Offizielle Prüfung simulieren";
 "learn_option_test_description" = "Entspricht der offiziellen Prüfung: 33 Fragen (30 bundesweit, 3 aus deinem Bundesland), 60 Minuten, ein Versuch. Keine Tipps oder Korrekturen. Ideal, um deine Bereitschaft zu prüfen.";
 

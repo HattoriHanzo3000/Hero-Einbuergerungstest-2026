@@ -3,7 +3,6 @@ import SwiftUI
 // MARK: - Spaced Repetition View
 /// Entry point for the spaced repetition practice session.
 struct SpacedRepetitionView: View {
-    @Environment(AppRouter.self) private var router
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -22,9 +21,6 @@ struct SpacedRepetitionView: View {
             progress: viewModel.progressState,
             onAnswerSelected: { index in
                 viewModel.selectAnswer(index)
-            },
-            onBackTapped: {
-                router.pop()
             },
             onToggleTranslation: {
                 viewModel.toggleTranslation()
@@ -54,6 +50,8 @@ struct SpacedRepetitionView: View {
         .environmentObject(languageManager)
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
+        .navigationTitle("home_learn_spaced_repetition".localized)
+        .navigationBarTitleDisplayMode(.inline)
         .hidesLearningChrome()
         .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
             // Ensure content and hints are loaded when app or translation language changes

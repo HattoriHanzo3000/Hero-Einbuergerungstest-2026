@@ -10,8 +10,6 @@ import SwiftUI
 // MARK: - Categories View
 struct CategoriesView: View {
     @EnvironmentObject var languageManager: LanguageManager
-    @EnvironmentObject private var subscriptionManager: SubscriptionManager
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
 
     @StateObject private var viewModel = CategoriesViewModel()
@@ -31,11 +29,7 @@ struct CategoriesView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                CategoriesTabHeaderCard(
-                    onBackTapped: { dismiss() },
-                    isProUser: subscriptionManager.effectiveIsPro,
-                    useCard: false
-                )
+                CategoriesTabHeaderCard(useCard: false)
                 .padding(.horizontal, layoutMetrics.adaptive(16))
                 .padding(.bottom, layoutMetrics.adaptive(12))
                 .background(
@@ -102,6 +96,9 @@ struct CategoriesView: View {
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .id(languageManager.currentAppLanguage)
+        .navigationTitle("home_learn_by_topics".localized)
+        .navigationBarTitleDisplayMode(.inline)
+        .hidesLearningChrome()
         .task {
             await viewModel.loadCategories(
                 for: languageManager.currentAppLanguage,
@@ -147,7 +144,6 @@ struct CategoriesView: View {
             .environmentObject(languageManager)
             .environment(\.layoutMetrics, layoutMetrics)
         }
-        .hidesLearningChrome()
     }
 }
 

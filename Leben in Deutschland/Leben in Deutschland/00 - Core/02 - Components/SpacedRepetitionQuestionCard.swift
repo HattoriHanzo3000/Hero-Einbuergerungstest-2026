@@ -16,7 +16,6 @@ struct SpacedRepetitionQuestionCard: View {
     let showTranslation: Bool
     let progress: ProgressState?
     let onAnswerSelected: (Int) -> Void
-    let onBackTapped: (() -> Void)?
     let onToggleTranslation: (() -> Void)?
     let isTranslationActive: Bool
     let onToggleFavorite: (() -> Void)?
@@ -31,7 +30,6 @@ struct SpacedRepetitionQuestionCard: View {
         showTranslation: Bool,
         progress: ProgressState?,
         onAnswerSelected: @escaping (Int) -> Void,
-        onBackTapped: (() -> Void)? = nil,
         onToggleTranslation: (() -> Void)? = nil,
         isTranslationActive: Bool = false,
         onToggleFavorite: (() -> Void)? = nil,
@@ -45,7 +43,6 @@ struct SpacedRepetitionQuestionCard: View {
         self.showTranslation = showTranslation
         self.progress = progress
         self.onAnswerSelected = onAnswerSelected
-        self.onBackTapped = onBackTapped
         self.onToggleTranslation = onToggleTranslation
         self.isTranslationActive = isTranslationActive
         self.onToggleFavorite = onToggleFavorite
@@ -57,7 +54,6 @@ struct SpacedRepetitionQuestionCard: View {
     // MARK: - Dependencies
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
-    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @State private var showingFeedbackReport = false
     @State private var showingHintSheet = false
     @State private var zoomedAsset: ZoomedAsset?
@@ -286,13 +282,10 @@ private extension SpacedRepetitionQuestionCard {
 
     var headerView: some View {
         QuestionCardHeaderCard(
-            onBackTapped: onBackTapped,
             title: question.subcategory ?? question.category,
             progress: progress.map { ($0.answeredCount, $0.totalCount) },
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
-            showProBadge: true,
-            isProUser: subscriptionManager.effectiveIsPro,
             trailingActions: { EmptyView() }
         )
     }
@@ -321,7 +314,6 @@ private extension SpacedRepetitionQuestionCard {
         showTranslation: false,
         progress: .init(answeredCount: 4, totalCount: 20),
         onAnswerSelected: { _ in },
-        onBackTapped: {},
         onToggleTranslation: {},
         isTranslationActive: true,
         onToggleFavorite: {},

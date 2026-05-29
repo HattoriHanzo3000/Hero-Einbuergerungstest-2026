@@ -84,13 +84,13 @@ struct HomeLearnOptionsSection: View {
             } label: {
                 LearnButtonContent(
                     icon: "checkmark.seal",
-                    title: "learn_option_test_title",
+                    title: "test_simulation_title",
                     subtitle: "learn_option_test_subtitle",
                     color: Color("AppOrange")
                 )
             }
             .buttonStyle(BouncyScaleButtonStyle())
-            .accessibilityLabel("learn_option_test_title".localized)
+            .accessibilityLabel("test_simulation_title".localized)
             .accessibilityHint("learn_option_test_description".localized)
         }
         .id(languageManager.currentAppLanguage)

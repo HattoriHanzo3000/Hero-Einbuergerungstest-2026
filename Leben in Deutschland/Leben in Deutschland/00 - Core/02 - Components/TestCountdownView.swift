@@ -44,6 +44,8 @@ struct TestCountdownView: View {
                     .animation(.easeOut(duration: 0.25), value: count)
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
+        .navigationInteractivePopDisabled()
         .hidesLearningChrome()
         .onAppear {
             if !subscriptionManager.effectiveIsPro && !FreemiumUsageService.shared.canStartTestSimulation(isPro: false) {

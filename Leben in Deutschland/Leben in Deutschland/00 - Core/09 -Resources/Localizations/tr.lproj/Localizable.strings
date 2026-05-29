@@ -144,7 +144,7 @@
 "hint_button_title" = "İpucu";
 
 // LEARN CAROUSEL
-"learn_option_test_title" = "Deneme Sınavı Çöz";
+"learn_option_test_title" = "Test Simülasyonu";
 "learn_option_test_subtitle" = "Resmi sınavı simüle et";
 "learn_option_test_description" = "Resmi sınavla birebir aynı: 33 soru (30 genel, 3 kendi eyaletinden), 60 dakika, tek hak. İpucu veya düzeltme yok. Hazır olup olmadığını görmek için ideal.";
 

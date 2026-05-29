@@ -26,38 +26,41 @@ struct TestAnswersView: View {
         guard currentQuestionIndex < viewModel.questions.count else { return nil }
         return viewModel.questions[currentQuestionIndex]
     }
-    
-    /// Swipe-down on header dismisses the sheet; gesture is only on the header so body scroll is unaffected.
-    private var headerSwipeToDismissGesture: some Gesture {
-        DragGesture(minimumDistance: 20)
-            .onEnded { value in
-                let dragDown = value.translation.height > 0
-                let sufficient = value.translation.height > 80 || value.predictedEndTranslation.height > 120
-                if dragDown && sufficient {
-                    HapticManager.shared.lightImpact()
-                    dismiss()
-                }
-            }
+
+    /// Subcategory (or category) for the header right label, resolved from loaded content.
+    private var currentSubcategoryTitle: String? {
+        guard let question = currentQuestion else { return nil }
+        if let model = contentService.getAllQuestions().first(where: { $0.id == question.originalId }) {
+            let name = model.subcategory ?? model.category
+            if let name, !name.isEmpty { return name }
+        }
+        return question.category.isEmpty ? nil : question.category
     }
 
     var body: some View {
         VStack(spacing: 0) {
-            // Stack 1: Header only — swipe down here dismisses the sheet
             headerSection
-                .contentShape(Rectangle())
-                .gesture(headerSwipeToDismissGesture)
-
-            // Stack 2: Body + footer — scroll lives here only; touches here never dismiss the sheet
             bodySection
         }
-        .padding(.top, layoutMetrics.adaptive(16))
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
+        .navigationTitle("your_answers".localized)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button {
+                    HapticManager.shared.lightImpact()
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("close".localized)
+            }
+        }
         .fullScreenCover(item: $zoomedAsset) { item in
             FullScreenImageView(assetName: item.name, onDismiss: { zoomedAsset = nil })
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .hidesLearningChrome()
         .sheet(isPresented: $showingFeedbackReport) {
             if let q = currentQuestion {
                 FeedbackReportView(
@@ -74,11 +77,11 @@ struct TestAnswersView: View {
     private var headerSection: some View {
         VStack(spacing: 0) {
             QuestionCardHeaderCard(
-                onBackTapped: { dismiss() },
-                backIcon: .down,
                 gradient: viewModel.isPassed ? .green : .red,
-                title: "your_answers".localized,
-                titleInBackRow: false,
+                title: currentSubcategoryTitle,
+                progress: viewModel.questions.isEmpty
+                    ? nil
+                    : (currentQuestionIndex + 1, viewModel.questions.count),
                 questionId: currentQuestion?.originalId,
                 onReportTapped: { showingFeedbackReport = true },
                 trailingActions: { EmptyView() }

@@ -29,12 +29,21 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
     var isProUser: Bool = false
     /// Legacy: not used when badge is decorative.
     var onProTap: (() -> Void)? = nil
+    /// Renders trailing actions in a top row inside the header when back uses the system nav bar.
+    var showsTopToolbar: Bool = false
+    /// When true, `trailingActions` appear on the question ID row (right) instead of the top toolbar.
+    var trailingActionsOnQuestionRow: Bool = false
     @ViewBuilder var trailingActions: () -> ActionContent
 
     @Environment(\.layoutMetrics) private var layoutMetrics
 
-    private var contentSpacing: CGFloat { layoutMetrics.adaptive(16) }
+    /// Inset above the first row, below the last row, and between toolbar and progress.
+    private var headerVerticalSpacing: CGFloat { layoutMetrics.adaptive(20) }
+    /// Slightly tighter gap between the progress bar row and ID/title row.
+    private var headerProgressToContentSpacing: CGFloat { layoutMetrics.adaptive(16) }
     private var progressBarHeight: CGFloat { layoutMetrics.adaptive(8) }
+    /// Matches ~title2 line height so the thin progress bar row balances the ID/title row.
+    private var progressRowMinHeight: CGFloat { layoutMetrics.adaptive(28) }
 
     init(
         onBackTapped: (() -> Void)? = nil,
@@ -48,6 +57,8 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
         showProBadge: Bool = false,
         isProUser: Bool = false,
         onProTap: (() -> Void)? = nil,
+        showsTopToolbar: Bool = false,
+        trailingActionsOnQuestionRow: Bool = false,
         @ViewBuilder trailingActions: @escaping () -> ActionContent
     ) {
         self.onBackTapped = onBackTapped
@@ -61,6 +72,8 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
         self.showProBadge = showProBadge
         self.isProUser = isProUser
         self.onProTap = onProTap
+        self.showsTopToolbar = showsTopToolbar
+        self.trailingActionsOnQuestionRow = trailingActionsOnQuestionRow
         self.trailingActions = trailingActions
     }
 
@@ -76,6 +89,8 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
         showProBadge: Bool = false,
         isPro: Bool,
         onProTap: (() -> Void)? = nil,
+        showsTopToolbar: Bool = false,
+        trailingActionsOnQuestionRow: Bool = false,
         @ViewBuilder trailingActions: @escaping () -> ActionContent
     ) {
         self.init(
@@ -90,13 +105,14 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
             showProBadge: showProBadge,
             isProUser: isPro,
             onProTap: onProTap,
+            showsTopToolbar: showsTopToolbar,
+            trailingActionsOnQuestionRow: trailingActionsOnQuestionRow,
             trailingActions: trailingActions
         )
     }
 
     var body: some View {
         headerCardContent
-            .padding(.vertical, layoutMetrics.adaptive(18))
             .padding(.horizontal, layoutMetrics.adaptive(20))
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(LiquidGlassBackground(gradient: gradient))
@@ -107,13 +123,15 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
     }
 
     private var headerCardContent: some View {
-        VStack(alignment: .leading, spacing: contentSpacing) {
-            if onBackTapped != nil {
-                backButtonRow
+        VStack(alignment: .leading, spacing: 0) {
+            if shouldShowTopToolbar {
+                topToolbarRow
+                    .padding(.bottom, hasContentBelowToolbar ? headerVerticalSpacing : 0)
             }
 
             if progress != nil {
                 progressBar
+                    .padding(.bottom, hasSecondaryContentRow ? headerProgressToContentSpacing : 0)
             }
 
             if title != nil, !titleInBackRow, questionId != nil {
@@ -124,32 +142,35 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
                 questionHeaderRow
             }
         }
+        .padding(.vertical, headerVerticalSpacing)
     }
 
-    /// Top row: back (left) | title (optional) | Spacer | pro (optional) | action buttons (right).
-    private var backButtonRow: some View {
-        HStack {
-            Button(action: {
-                HapticManager.shared.lightImpact()
-                onBackTapped?()
-            }) {
-                Image(systemName: backIcon.systemName)
-                    .font(.system(size: layoutMetrics.adaptive(20), weight: .semibold))
-                    .foregroundColor(.white)
-                    .frame(width: layoutMetrics.adaptive(40), height: layoutMetrics.adaptive(40))
-                    .background(
-                        Circle()
-                            .fill(Color.white.opacity(0.18))
-                    )
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("back_button_accessibility_label".localized)
+    private var hasSecondaryContentRow: Bool {
+        (title != nil && !titleInBackRow) || questionId != nil
+    }
 
+    private var hasContentBelowToolbar: Bool {
+        progress != nil || hasSecondaryContentRow
+    }
+
+    private var shouldShowTopToolbar: Bool {
+        titleInBackRow
+            || (showProBadge && isProUser)
+            || (showsTopToolbar && !trailingActionsOnQuestionRow)
+    }
+
+    private var showsTrailingActionsOnQuestionRow: Bool {
+        trailingActionsOnQuestionRow && questionId != nil
+    }
+
+    /// Top row inside header card: title (optional) | Spacer | pro badge | trailing actions.
+    private var topToolbarRow: some View {
+        HStack {
             if titleInBackRow, let title {
                 Text(title)
                     .font(.system(.title, weight: .regular).width(.condensed))
                     .foregroundColor(.white)
-                    .multilineTextAlignment(.trailing)
+                    .multilineTextAlignment(.leading)
                     .lineLimit(2)
                     .minimumScaleFactor(0.85)
             }
@@ -160,7 +181,9 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
                 ProBadge(color: .white)
             }
 
-            trailingActions()
+            if !trailingActionsOnQuestionRow {
+                trailingActions()
+            }
         }
     }
 
@@ -203,13 +226,17 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
             .progressViewStyle(LinearProgressViewStyle(tint: Color(.systemGray6)))
             .frame(height: progressBarHeight)
             .clipShape(Capsule())
+            .frame(maxWidth: .infinity, minHeight: progressRowMinHeight, alignment: .center)
         }
     }
 
     private var questionHeaderRow: some View {
-        HStack {
+        HStack(alignment: .center) {
             questionLabelView
-            Spacer()
+            Spacer(minLength: 8)
+            if showsTrailingActionsOnQuestionRow {
+                trailingActions()
+            }
         }
     }
 
@@ -307,7 +334,6 @@ extension QuestionCardHeaderCard where ActionContent == EmptyView {
 // MARK: - Preview
 #Preview {
     QuestionCardHeaderCard(
-        onBackTapped: {},
         title: "Politics in Democracy",
         progress: (5, 10),
         questionId: "101",

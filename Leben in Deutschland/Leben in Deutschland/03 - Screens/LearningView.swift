@@ -15,8 +15,6 @@ struct LearningView: View {
     @StateObject private var viewModel: LearningViewModel
     @EnvironmentObject var languageManager: LanguageManager
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
-    @Environment(AppRouter.self) private var router
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.layoutMetrics) private var layoutMetrics
     
     @State private var zoomedAsset: ZoomedAsset?
@@ -31,10 +29,6 @@ struct LearningView: View {
         usesRouterNavigation
     }
 
-    private var shouldHideNavigationBar: Bool {
-        usesRouterNavigation
-    }
-    
     init(subcategory: SubcategoryModel, usesRouterNavigation: Bool = true) {
         self.subcategory = subcategory
         self.usesRouterNavigation = usesRouterNavigation
@@ -60,9 +54,8 @@ struct LearningView: View {
         }
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground).ignoresSafeArea(edges: .bottom))
-        .navigationBarHidden(shouldHideNavigationBar)
-        .navigationBarBackButtonHidden(shouldHideNavigationBar)
-        .toolbar(shouldHideNavigationBar ? .hidden : .visible, for: .navigationBar)
+        .navigationTitle("home_learn_by_topics".localized)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar(shouldHideTabBar ? .hidden : .visible, for: .tabBar)
         .hidesBottomBarWhenPushed(shouldHideTabBar)
         .fullScreenCover(item: $zoomedAsset) { item in
@@ -199,15 +192,10 @@ struct LearningView: View {
     // MARK: - Header View
     private var headerView: some View {
         QuestionCardHeaderCard(
-            onBackTapped: usesRouterNavigation ? {
-                    router.pop()
-            } : nil,
             title: subcategory.name,
             progress: viewModel.questions.count > 1 ? (viewModel.answeredCount, viewModel.questions.count) : nil,
             questionId: viewModel.currentQuestion?.id,
             onReportTapped: { showingFeedbackReport = true },
-            showProBadge: true,
-            isProUser: subscriptionManager.effectiveIsPro,
             trailingActions: { EmptyView() }
         )
     }

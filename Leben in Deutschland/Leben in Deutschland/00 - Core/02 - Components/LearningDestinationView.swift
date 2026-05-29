@@ -57,7 +57,6 @@ struct LearningDestinationView: View {
                 .background(Color(.systemBackground))
             }
         }
-        .toolbar(.hidden, for: .navigationBar)
         .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
             await loadSubcategory()
             if let sub = subcategory, !sub.questions.isEmpty,

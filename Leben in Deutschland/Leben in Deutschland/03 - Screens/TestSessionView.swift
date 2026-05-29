@@ -20,8 +20,8 @@ struct TestSessionView: View {
     
     @State private var showingResults = false
     @State private var showingLevelUp: EagleStage? = nil
-    @State private var showingConfirmation = false
     @State private var showingTimerPopup = false
+    @State private var showingQuitConfirmation = false
     @State private var isLoading = true
     
     private let contentService = ContentService.shared
@@ -33,7 +33,6 @@ struct TestSessionView: View {
             if viewModel.currentQuestion != nil {
                 TestSessionQuestionCard(
                     viewModel: viewModel,
-                    showingConfirmation: $showingConfirmation,
                     showingTimerPopup: $showingTimerPopup,
                     zoomedAsset: $zoomedAsset,
                     onFinish: {
@@ -45,11 +44,7 @@ struct TestSessionView: View {
                             showingResults = true
                         }
                     },
-                    onDismiss: {
-                        // Pop twice to skip countdown and return to Home
-                        router.pop()
-                        router.pop()
-                    }
+                    onDismiss: quitTest
                 )
                 .environmentObject(languageManager)
                 .environmentObject(favoritesManager)
@@ -69,7 +64,36 @@ struct TestSessionView: View {
         }
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
+        .navigationTitle("test_simulation_title".localized)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationInteractivePopDisabled()
         .hidesLearningChrome()
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    HapticManager.shared.lightImpact()
+                    showingQuitConfirmation = true
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(.primary)
+                }
+                .tint(.primary)
+                .accessibilityLabel("close".localized)
+            }
+        }
+        .alert("quit_test_title".localized, isPresented: $showingQuitConfirmation) {
+            Button("quit_test".localized, role: .destructive) {
+                HapticManager.shared.lightImpact()
+                quitTest()
+            }
+            Button("cancel".localized, role: .cancel) {
+                HapticManager.shared.lightImpact()
+            }
+        } message: {
+            Text("quit_test_message".localized)
+        }
         .onAppear {
             initializeTest()
         }
@@ -117,26 +141,6 @@ struct TestSessionView: View {
                 .environment(router)
                 .interactiveDismissDisabled(true)
         }
-        .alert(
-            "quit_test_title".localized,
-            isPresented: $showingConfirmation,
-            actions: {
-                Button("cancel".localized, role: .cancel) {
-                                HapticManager.shared.lightImpact()
-                }
-                Button("quit_test".localized, role: .destructive) {
-                                HapticManager.shared.heavyImpact()
-                                // Save partial test answers before quitting
-                                viewModel.finishTest()
-                                // Pop twice to skip countdown and return to Home
-                                router.pop()
-                                router.pop()
-                }
-            },
-            message: {
-                Text("quit_test_message".localized)
-            }
-        )
         .onChange(of: viewModel.remainingTime) { _, remainingTime in
             // Auto-finish only if time runs out (regardless of whether all questions are answered)
             if remainingTime <= 0 && viewModel.finishTime == nil {
@@ -148,6 +152,12 @@ struct TestSessionView: View {
     
     
     // MARK: - Helper Functions
+
+    private func quitTest() {
+        viewModel.stopTimer()
+        router.pop()
+        router.pop()
+    }
 
     func initializeTest() {
         Task {

@@ -144,7 +144,7 @@
 "hint_button_title" = "Hint";
 
 // LEARN CAROUSEL
-"learn_option_test_title" = "Take the Test";
+"learn_option_test_title" = "Test Simulation";
 "learn_option_test_subtitle" = "Simulate an official exam";
 "learn_option_test_description" = "Matches the official exam: 33 questions (30 federal, 3 from your state), 60 minutes, single attempt. No hints or corrections. A great way to check your readiness.";
 

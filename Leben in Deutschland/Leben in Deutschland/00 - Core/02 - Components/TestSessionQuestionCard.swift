@@ -9,7 +9,6 @@ import SwiftUI
 
 struct TestSessionQuestionCard: View {
     @ObservedObject var viewModel: TestSessionViewModel
-    @Binding var showingConfirmation: Bool
     @Binding var showingTimerPopup: Bool
     @Binding var zoomedAsset: ZoomedAsset?
     @State private var showingFeedbackReport = false
@@ -107,7 +106,7 @@ struct TestSessionQuestionCard: View {
     // MARK: - Footer View
     private var footerView: some View {
         VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
-            // Action bar: favorite only (timer is in header)
+            // Action bar: favorite only (timer is on the header question row)
             HStack(spacing: layoutMetrics.adaptive(12)) {
                 Spacer(minLength: 0)
                 favoriteFooterButton
@@ -236,18 +235,16 @@ struct TestSessionQuestionCard: View {
     // MARK: - Header View
     private var headerView: some View {
         QuestionCardHeaderCard(
-            onBackTapped: { showingConfirmation = true },
             gradient: .orange,
-            title: "test_simulation_title".localized,
-            titleInBackRow: false,
             progress: (viewModel.answers.count, viewModel.questions.count),
             questionId: viewModel.currentQuestion?.originalId,
             onReportTapped: { showingFeedbackReport = true },
+            trailingActionsOnQuestionRow: true,
             trailingActions: { headerTimerButton }
         )
     }
-    
-    /// Expandable timer in header row (same row as back arrow): icon only when collapsed, icon + time when expanded, inside a rounded rectangle.
+
+    /// Expandable timer on the question ID row: icon only when collapsed, icon + time when expanded.
     private var headerTimerButton: some View {
         let isLowTime = viewModel.remainingTime < 300
         let timerColor: Color = isLowTime ? .red : .white

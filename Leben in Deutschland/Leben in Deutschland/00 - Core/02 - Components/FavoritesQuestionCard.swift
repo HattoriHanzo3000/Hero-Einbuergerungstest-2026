@@ -16,7 +16,6 @@ struct FavoritesQuestionCard: View {
     
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
-    @EnvironmentObject private var subscriptionManager: SubscriptionManager
     
     @State private var showingFeedbackReport = false
     @State private var showingHintSheet = false
@@ -31,7 +30,6 @@ struct FavoritesQuestionCard: View {
     let showTranslation: Bool
     let progress: ProgressState
     let onAnswerSelected: (Int) -> Void
-    let onBackTapped: (() -> Void)?
     let onToggleTranslation: (() -> Void)?
     let isTranslationActive: Bool
     let onToggleFavorite: (() -> Void)?
@@ -46,7 +44,6 @@ struct FavoritesQuestionCard: View {
         currentIndex: Int,
         totalCount: Int,
         onAnswerSelected: @escaping (Int) -> Void,
-        onBackTapped: (() -> Void)? = nil,
         onToggleTranslation: (() -> Void)? = nil,
         isTranslationActive: Bool = false,
         onToggleFavorite: (() -> Void)? = nil,
@@ -59,7 +56,6 @@ struct FavoritesQuestionCard: View {
         self.showTranslation = showTranslation
         self.progress = ProgressState(currentIndex: currentIndex, totalCount: totalCount)
         self.onAnswerSelected = onAnswerSelected
-        self.onBackTapped = onBackTapped
         self.onToggleTranslation = onToggleTranslation
         self.isTranslationActive = isTranslationActive
         self.onToggleFavorite = onToggleFavorite
@@ -109,13 +105,10 @@ struct FavoritesQuestionCard: View {
 private extension FavoritesQuestionCard {
     var headerView: some View {
         QuestionCardHeaderCard(
-            onBackTapped: onBackTapped,
             title: (question.subcategory ?? "").isEmpty ? (question.category ?? "Favorites") : (question.subcategory ?? ""),
             progress: (progress.currentIndex, progress.totalCount),
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
-            showProBadge: true,
-            isProUser: subscriptionManager.effectiveIsPro,
             trailingActions: { EmptyView() }
         )
     }
@@ -304,7 +297,6 @@ private extension FavoritesQuestionCard {
         currentIndex: 1,
         totalCount: 5,
         onAnswerSelected: { _ in },
-        onBackTapped: {},
         onToggleTranslation: {},
         isTranslationActive: true,
         onToggleFavorite: {},

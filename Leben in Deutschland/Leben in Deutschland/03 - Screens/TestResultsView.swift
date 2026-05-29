@@ -89,11 +89,12 @@ struct TestResultsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .hidesLearningChrome()
         .sheet(isPresented: $showingAnswers) {
-            TestAnswersView(viewModel: viewModel)
-                .environmentObject(languageManager)
-                .environmentObject(favoritesManager)
-                .environmentObject(subscriptionManager)
-                .interactiveDismissDisabled(true) // Prevent swipe-down dismissal; use header button instead
+            NavigationStack {
+                TestAnswersView(viewModel: viewModel)
+                    .environmentObject(languageManager)
+                    .environmentObject(favoritesManager)
+                    .environmentObject(subscriptionManager)
+            }
         }
         .fullScreenCover(isPresented: $showingRetryCountdown) {
             TestCountdownView {

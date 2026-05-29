@@ -53,7 +53,7 @@ struct HomeStatisticsSection: View {
             LearnModeDisclaimerSheet(
                 titleKey: "home_statistics_title",
                 messageKey: "progress_readiness_explanation",
-                messageFormatted: String(format: "progress_readiness_explanation_full".localized, statistics.totalQuestions, "home_learn_spaced_repetition".localized, "learn_option_test_title".localized),
+                messageFormatted: String(format: "progress_readiness_explanation_full".localized, statistics.totalQuestions, "home_learn_spaced_repetition".localized, "test_simulation_title".localized),
                 accentColor: Color.accentColor,
                 doNotShowAgain: .constant(false),
                 showDoNotShowAgain: false,

@@ -12,7 +12,6 @@ import SwiftUI
 struct AllQuestionsQuestionCard: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
-    @EnvironmentObject private var subscriptionManager: SubscriptionManager
 
     @State private var showingFeedbackReport = false
     @State private var zoomedAsset: ZoomedAsset?
@@ -21,7 +20,6 @@ struct AllQuestionsQuestionCard: View {
     let showTranslation: Bool
     let currentIndex: Int
     let totalCount: Int
-    let onBackTapped: (() -> Void)?
     let onToggleTranslation: (() -> Void)?
     let isTranslationActive: Bool
     let onToggleFavorite: (() -> Void)?
@@ -58,13 +56,9 @@ struct AllQuestionsQuestionCard: View {
 private extension AllQuestionsQuestionCard {
     var headerView: some View {
         QuestionCardHeaderCard(
-            onBackTapped: onBackTapped,
-            title: "home_learn_all_questions".localized,
             progress: (currentIndex + 1, totalCount),
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
-            showProBadge: true,
-            isProUser: subscriptionManager.effectiveIsPro,
             trailingActions: { EmptyView() }
         )
     }
@@ -235,7 +229,6 @@ private extension AllQuestionsQuestionCard {
         showTranslation: false,
         currentIndex: 0,
         totalCount: 310,
-        onBackTapped: {},
         onToggleTranslation: {},
         isTranslationActive: false,
         onToggleFavorite: {},

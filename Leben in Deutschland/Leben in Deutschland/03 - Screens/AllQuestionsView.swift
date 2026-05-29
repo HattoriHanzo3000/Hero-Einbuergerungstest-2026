@@ -10,7 +10,6 @@ import SwiftUI
 
 // MARK: - All Questions View
 struct AllQuestionsView: View {
-    @Environment(AppRouter.self) private var router
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var stateManager: StateManager
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
@@ -38,6 +37,8 @@ struct AllQuestionsView: View {
         }
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
+        .navigationTitle("home_learn_all_questions".localized)
+        .navigationBarTitleDisplayMode(.inline)
         .hidesLearningChrome()
         .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)-\(stateManager.selectedState ?? "")") {
             await viewModel.loadQuestions(
@@ -87,7 +88,6 @@ struct AllQuestionsView: View {
                 showTranslation: viewModel.showTranslation,
                 currentIndex: viewModel.currentIndex,
                 totalCount: viewModel.questions.count,
-                onBackTapped: { router.pop() },
                 onToggleTranslation: { viewModel.toggleTranslation() },
                 isTranslationActive: viewModel.showTranslation,
                 onToggleFavorite: {
@@ -116,13 +116,6 @@ struct AllQuestionsView: View {
     // MARK: - Empty State View
     private var emptyStateView: some View {
         VStack(spacing: 0) {
-            HStack {
-                AdaptiveIconButton.backButton(action: { router.pop() }, tintColor: .primary)
-                Spacer()
-            }
-            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
-            .padding(.top, layoutMetrics.adaptive(LayoutMetrics.headerTopPadding))
-
             VStack(spacing: layoutMetrics.adaptive(24)) {
                 Spacer()
                 Image(systemName: "book.closed")

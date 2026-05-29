@@ -9,7 +9,6 @@ import SwiftUI
 
 // MARK: - Favorites View
 struct FavoritesView: View {
-    @Environment(AppRouter.self) private var router
     @EnvironmentObject private var languageManager: LanguageManager
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(\.layoutMetrics) private var layoutMetrics
@@ -32,6 +31,8 @@ struct FavoritesView: View {
         }
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground))
+        .navigationTitle("home_learn_favorites".localized)
+        .navigationBarTitleDisplayMode(.inline)
         .hidesLearningChrome()
         .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
             viewModel.setLanguageManager(languageManager)
@@ -66,12 +67,6 @@ struct FavoritesView: View {
     // MARK: - Loading View
     private var loadingView: some View {
         VStack(spacing: 0) {
-            HStack {
-                AdaptiveIconButton.backButton(action: { router.pop() }, tintColor: .primary)
-                Spacer()
-            }
-            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
-            .padding(.top, layoutMetrics.adaptive(LayoutMetrics.headerTopPadding))
             Spacer()
             ProgressView()
                 .scaleEffect(1.2)
@@ -95,7 +90,6 @@ struct FavoritesView: View {
                 currentIndex: viewModel.currentIndex + 1,
                 totalCount: viewModel.favoriteQuestions.count,
                 onAnswerSelected: { _ in },
-                onBackTapped: { router.pop() },
                 onToggleTranslation: { viewModel.toggleTranslation() },
                 isTranslationActive: viewModel.showTranslation,
                 onToggleFavorite: {
@@ -118,15 +112,6 @@ struct FavoritesView: View {
     // MARK: - Empty State View
     private var emptyStateView: some View {
         VStack(spacing: 0) {
-            // Back button header
-            HStack {
-                AdaptiveIconButton.backButton(action: {
-                    router.pop()
-                }, tintColor: .primary)
-                Spacer()
-            }
-            .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.headerHorizontalPadding))
-            .padding(.top, layoutMetrics.adaptive(LayoutMetrics.headerTopPadding))
             
             // Empty state content
             VStack(spacing: layoutMetrics.adaptive(24)) {

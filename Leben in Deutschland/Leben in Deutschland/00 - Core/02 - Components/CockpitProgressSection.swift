@@ -39,7 +39,7 @@ struct CockpitProgressSection: View {
                     format: "progress_readiness_explanation_full".localized,
                     statistics.totalQuestions,
                     "home_learn_spaced_repetition".localized,
-                    "learn_option_test_title".localized
+                    "test_simulation_title".localized
                 ),
                 accentColor: Color.accentColor,
                 doNotShowAgain: .constant(false),

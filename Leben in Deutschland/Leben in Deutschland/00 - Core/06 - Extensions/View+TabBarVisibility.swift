@@ -62,12 +62,50 @@ extension View {
         background(HidesBottomBarWhenPushedBridge(hidesBottomBar: hides))
     }
 
-    /// Unified immersive chrome for learning/question-card flows.
+    /// Hides tab bar when a learning/question-card screen is pushed; keeps the system navigation bar.
     func hidesLearningChrome() -> some View {
-        navigationBarBackButtonHidden(true)
-            .toolbar(.hidden, for: .navigationBar)
-            .toolbar(.hidden, for: .tabBar)
+        toolbar(.hidden, for: .tabBar)
             .hidesBottomBarWhenPushed(true)
+    }
+
+    /// Disables the navigation stack edge-swipe back gesture (UIKit interactive pop).
+    func navigationInteractivePopDisabled(_ disabled: Bool = true) -> some View {
+        background(NavigationInteractivePopBridge(isDisabled: disabled))
+    }
+}
+
+// MARK: - Interactive Pop Gesture
+private struct NavigationInteractivePopBridge: UIViewControllerRepresentable {
+    var isDisabled: Bool
+
+    func makeUIViewController(context: Context) -> UIViewController {
+        let controller = UIViewController()
+        controller.view.backgroundColor = .clear
+        controller.view.isUserInteractionEnabled = false
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        apply(to: uiViewController)
+    }
+
+    static func dismantleUIViewController(_ uiViewController: UIViewController, coordinator: ()) {
+        uiViewController.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+    }
+
+    private func apply(to bridge: UIViewController) {
+        let enabled = !isDisabled
+        func setGesture(on navigationController: UINavigationController?) {
+            navigationController?.interactivePopGestureRecognizer?.isEnabled = enabled
+        }
+
+        if let navigationController = bridge.navigationController {
+            setGesture(on: navigationController)
+            return
+        }
+        DispatchQueue.main.async {
+            setGesture(on: bridge.navigationController)
+        }
     }
 }
 
