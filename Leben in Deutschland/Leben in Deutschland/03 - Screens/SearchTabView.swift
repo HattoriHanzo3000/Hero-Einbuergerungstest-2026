@@ -97,7 +97,11 @@ struct SearchTabView: View {
                 scheduleSearchFieldFocus()
             }
             .navigationDestination(for: SearchLearningTarget.self) { target in
-                LearningView(subcategory: target.learningSubcategory, usesRouterNavigation: false)
+                LearningView(
+                    subcategory: target.learningSubcategory,
+                    usesRouterNavigation: false,
+                    navigationTitleKey: "tab_search_title"
+                )
                     .environmentObject(languageManager)
                     .environmentObject(subscriptionManager)
             }

@@ -11,6 +11,7 @@ import SwiftUI
 struct LearningView: View {
     let subcategory: SubcategoryModel
     private let usesRouterNavigation: Bool
+    private let navigationTitleKey: String
     
     @StateObject private var viewModel: LearningViewModel
     @EnvironmentObject var languageManager: LanguageManager
@@ -29,9 +30,14 @@ struct LearningView: View {
         usesRouterNavigation
     }
 
-    init(subcategory: SubcategoryModel, usesRouterNavigation: Bool = true) {
+    init(
+        subcategory: SubcategoryModel,
+        usesRouterNavigation: Bool = true,
+        navigationTitleKey: String = "home_learn_by_topics"
+    ) {
         self.subcategory = subcategory
         self.usesRouterNavigation = usesRouterNavigation
+        self.navigationTitleKey = navigationTitleKey
         self._viewModel = StateObject(wrappedValue: LearningViewModel(subcategory: subcategory))
     }
     
@@ -54,7 +60,7 @@ struct LearningView: View {
         }
         .id(languageManager.currentAppLanguage)
         .background(Color(.systemBackground).ignoresSafeArea(edges: .bottom))
-        .navigationTitle("home_learn_by_topics".localized)
+        .navigationTitle(navigationTitleKey.localized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(shouldHideTabBar ? .hidden : .visible, for: .tabBar)
         .hidesBottomBarWhenPushed(shouldHideTabBar)
