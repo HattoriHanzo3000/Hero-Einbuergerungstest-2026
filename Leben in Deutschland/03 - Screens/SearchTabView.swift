@@ -13,20 +13,8 @@ struct SearchLearningTarget: Hashable {
     let categoryName: String
     let matchedByTranslation: Bool
 
-    private var subcategoryModel: SubcategoryModel {
-        SubcategoryModel(
-            name: subcategory,
-            categoryName: categoryName,
-            questions: [question]
-        )
-    }
-
     var id: String {
-        "\(subcategoryModel.id)-\(question.id)"
-    }
-
-    var learningSubcategory: SubcategoryModel {
-        subcategoryModel
+        "\(categoryName)-\(subcategory)-\(question.id)"
     }
 }
 
@@ -97,11 +85,7 @@ struct SearchTabView: View {
                 scheduleSearchFieldFocus()
             }
             .navigationDestination(for: SearchLearningTarget.self) { target in
-                LearningView(
-                    subcategory: target.learningSubcategory,
-                    usesRouterNavigation: false,
-                    navigationTitleKey: "tab_search_title"
-                )
+                SearchQuestionDetailView(question: target.question)
                     .environmentObject(languageManager)
                     .environmentObject(subscriptionManager)
             }

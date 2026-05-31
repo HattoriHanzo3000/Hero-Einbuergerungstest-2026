@@ -149,7 +149,7 @@ struct TestAnswersView: View {
         }
     }
 
-    // MARK: - Footer (action bar + navigation, same as SpacedRepetitionQuestionCard / FavoritesQuestionCard)
+    // MARK: - Footer (action bar + navigation, same as SpacedRepetitionQuestionCard / ReviewQuestionCard)
     private var footerView: some View {
         VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
             HStack(spacing: layoutMetrics.adaptive(12)) {

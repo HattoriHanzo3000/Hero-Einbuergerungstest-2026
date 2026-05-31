@@ -1,14 +1,14 @@
 //
-//  FavoritesQuestionCard.swift
+//  ReviewQuestionCard.swift
 //  Leben in Deutschland
 //
-//  Question card component for favorites - matches LearningView design
+//  Read-only question card for review flows (favorites, search). Matches LearningView design.
 //
 
 import SwiftUI
 
-// MARK: - Favorites Question Card
-struct FavoritesQuestionCard: View {
+// MARK: - Review Question Card
+struct ReviewQuestionCard: View {
     struct ProgressState {
         let currentIndex: Int
         let totalCount: Int
@@ -35,6 +35,8 @@ struct FavoritesQuestionCard: View {
     let onToggleFavorite: (() -> Void)?
     let isFavorite: Bool
     let onGoToQuestion: ((Int) -> Void)?
+    let footerBottomExtraPadding: CGFloat
+    let showsHeaderProgress: Bool
     
     init(
         question: QuestionModel,
@@ -48,7 +50,9 @@ struct FavoritesQuestionCard: View {
         isTranslationActive: Bool = false,
         onToggleFavorite: (() -> Void)? = nil,
         isFavorite: Bool = false,
-        onGoToQuestion: ((Int) -> Void)? = nil
+        onGoToQuestion: ((Int) -> Void)? = nil,
+        footerBottomExtraPadding: CGFloat = 0,
+        showsHeaderProgress: Bool = true
     ) {
         self.question = question
         self.selectedAnswer = selectedAnswer
@@ -61,6 +65,8 @@ struct FavoritesQuestionCard: View {
         self.onToggleFavorite = onToggleFavorite
         self.isFavorite = isFavorite
         self.onGoToQuestion = onGoToQuestion
+        self.footerBottomExtraPadding = footerBottomExtraPadding
+        self.showsHeaderProgress = showsHeaderProgress
     }
     
     var body: some View {
@@ -102,11 +108,11 @@ struct FavoritesQuestionCard: View {
 }
 
 // MARK: - Header View
-private extension FavoritesQuestionCard {
+private extension ReviewQuestionCard {
     var headerView: some View {
         QuestionCardHeaderCard(
             title: (question.subcategory ?? "").isEmpty ? (question.category ?? "Favorites") : (question.subcategory ?? ""),
-            progress: (progress.currentIndex, progress.totalCount),
+            progress: showsHeaderProgress ? (progress.currentIndex, progress.totalCount) : nil,
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
             trailingActions: { EmptyView() }
@@ -115,7 +121,7 @@ private extension FavoritesQuestionCard {
 }
 
 // MARK: - Question Content (scroll + bottom gradient dissolve)
-private extension FavoritesQuestionCard {
+private extension ReviewQuestionCard {
     var questionScrollView: some View {
         ScrollView {
             let assetName = ContentService.shared.getIllustrationAsset(for: question.id)
@@ -153,7 +159,7 @@ private extension FavoritesQuestionCard {
 }
 
 // MARK: - Footer View (action bar + hint + nav, same style as LearningView / SpacedRepetition)
-private extension FavoritesQuestionCard {
+private extension ReviewQuestionCard {
     var footerView: some View {
         VStack(spacing: layoutMetrics.adaptive(LayoutMetrics.footerSectionSpacing)) {
             // Action bar: hint (left, when available), translation + favorite (right)
@@ -199,6 +205,7 @@ private extension FavoritesQuestionCard {
             }
         }
         .padding(.top, layoutMetrics.adaptive(12))
+        .padding(.bottom, footerBottomExtraPadding)
         .background(Color(.systemBackground))
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showCorrectAnswer)
         .onChange(of: showCorrectAnswer) { _, isRevealed in
@@ -279,7 +286,7 @@ private extension FavoritesQuestionCard {
 }
 
 // MARK: - Preview
-#Preview("Favorites Question Card") {
+#Preview("Review Question Card") {
     let sampleQuestion = QuestionModel(
         id: "001",
         text: "What is the capital of Germany?",
@@ -289,7 +296,7 @@ private extension FavoritesQuestionCard {
         subcategory: "Cities"
     )
     
-    FavoritesQuestionCard(
+    ReviewQuestionCard(
         question: sampleQuestion,
         selectedAnswer: nil,
         showCorrectAnswer: false,

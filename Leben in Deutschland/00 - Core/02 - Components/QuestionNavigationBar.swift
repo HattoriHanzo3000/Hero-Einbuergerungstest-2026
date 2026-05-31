@@ -3,7 +3,7 @@
 //  Leben in Deutschland
 //
 //  Horizontal scroll of numbered circles only (no back/forward arrows).
-//  Used by LearningView, TestSessionQuestionCard, TestAnswersView, FavoritesQuestionCard.
+//  Used by LearningView, TestSessionQuestionCard, TestAnswersView, ReviewQuestionCard.
 //
 
 import SwiftUI

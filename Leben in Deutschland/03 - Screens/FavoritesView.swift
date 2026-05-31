@@ -82,7 +82,7 @@ struct FavoritesView: View {
     private var carouselView: some View {
         if viewModel.currentIndex < viewModel.favoriteQuestions.count {
             let question = viewModel.favoriteQuestions[viewModel.currentIndex]
-            FavoritesQuestionCard(
+            ReviewQuestionCard(
                 question: question,
                 selectedAnswer: nil,
                 showCorrectAnswer: true,
