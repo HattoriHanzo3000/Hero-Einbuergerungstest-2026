@@ -231,7 +231,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
     }
 
     private var questionHeaderRow: some View {
-        HStack(alignment: .center) {
+        HStack(alignment: .bottom) {
             questionLabelView
             Spacer(minLength: 8)
             if showsTrailingActionsOnQuestionRow {

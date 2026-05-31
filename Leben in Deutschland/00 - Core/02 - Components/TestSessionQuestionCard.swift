@@ -254,28 +254,19 @@ struct TestSessionQuestionCard: View {
                 showingTimerPopup.toggle()
             }
         }) {
-            HStack(spacing: layoutMetrics.adaptive(2)) {
+            HStack(alignment: .bottom, spacing: 4) {
                 Image(systemName: "gauge.with.needle.fill")
-                    .font(.system(size: layoutMetrics.adaptive(22), weight: .semibold, design: .rounded))
+                    .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(timerColor)
                     .rotationEffect(.degrees(showingTimerPopup ? Double(viewModel.timerTick * 6) : 0))
                 if showingTimerPopup {
                     Text(timeString(from: viewModel.remainingTime))
-                        .font(
-                            .system(size: layoutMetrics.adaptive(26), weight: .semibold)
-                                .width(.expanded)
-                        )
+                        .font(.system(size: 18, weight: .semibold))
                         .monospacedDigit()
                         .foregroundColor(timerColor)
                         .transition(.opacity.combined(with: .scale(scale: 0.95)))
                 }
             }
-            .padding(.horizontal, layoutMetrics.adaptive(12))
-            .padding(.vertical, layoutMetrics.adaptive(8))
-            .background(
-                RoundedRectangle(cornerRadius: layoutMetrics.adaptive(20), style: .continuous)
-                    .fill(Color.white.opacity(0.18))
-            )
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Timer")
