@@ -77,7 +77,7 @@ struct TestAnswersView: View {
     private var headerSection: some View {
         VStack(spacing: 0) {
             QuestionCardHeaderCard(
-                gradient: viewModel.isPassed ? .green : .red,
+                gradient: .blue,
                 title: currentSubcategoryTitle,
                 progress: viewModel.questions.isEmpty
                     ? nil
@@ -163,6 +163,22 @@ struct TestAnswersView: View {
             }
             .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
 
+            if !viewModel.questions.isEmpty {
+                QuizActionButton(
+                    "next_button".localizedUppercased(),
+                    style: nextButtonStyle,
+                    isEnabled: currentQuestionIndex < viewModel.questions.count - 1,
+                    accessibilityLabel: "next_button".localized
+                ) {
+                    HapticManager.shared.lightImpact()
+                    if currentQuestionIndex < viewModel.questions.count - 1 {
+                        currentQuestionIndex += 1
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
+            }
+
             if viewModel.questions.count > 1 {
                 QuestionNavigationBar(
                     questionCount: viewModel.questions.count,
@@ -188,6 +204,17 @@ struct TestAnswersView: View {
         }
         .padding(.top, layoutMetrics.adaptive(12))
         .background(Color(.systemBackground))
+    }
+
+    private var nextButtonStyle: QuizActionButton.Style {
+        QuizActionButton.Style(
+            backgroundColor: Color("AppBlueLagoon"),
+            disabledBackgroundColor: Color(.systemGray2),
+            haloPrimaryColor: Color("AppBlueLagoon").opacity(0.36),
+            haloSecondaryColor: Color.white.opacity(0.18),
+            suppressGlow: true,
+            gradient: .blue
+        )
     }
 
     private func footerIconCircle<Content: View>(@ViewBuilder content: () -> Content) -> some View {
