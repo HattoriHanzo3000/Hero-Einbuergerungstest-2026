@@ -162,6 +162,39 @@ class TestSessionViewModel: ObservableObject {
     }
 
     #if DEBUG
+    /// Fixed question list for screenshot preview (no shuffle, timer not started).
+    func debug_initializeTest(questions: [TestQuestion]) {
+        self.questions = questions
+        startTime = Date()
+        finishTime = nil
+        currentQuestionIndex = 0
+        answers = []
+        stopTimer()
+    }
+
+    /// Records an answer without changing `currentQuestionIndex`.
+    func debug_recordAnswer(at index: Int, selectedIndex: Int) {
+        guard index >= 0, index < questions.count else { return }
+        let question = questions[index]
+        let isCorrect = selectedIndex == question.correctIndex
+        let answer = TestUserAnswer(
+            questionId: question.id,
+            selectedIndex: selectedIndex,
+            isCorrect: isCorrect,
+            answeredAt: Date()
+        )
+        answers.removeAll(where: { $0.questionId == question.id })
+        answers.append(answer)
+    }
+
+    /// Freezes countdown at a fixed remaining time (e.g. 58:28). Stops the timer.
+    func debug_setRemainingTimeForPreview(seconds: TimeInterval) {
+        let clamped = max(0, min(seconds, maxTime))
+        let elapsed = maxTime - clamped
+        startTime = Date().addingTimeInterval(-elapsed)
+        stopTimer()
+    }
+
     /// Adjusts `startTime` so `timeUsed` matches a fixed duration (for mock results / screenshots).
     /// Call only after `finishTest()`.
     func debug_setTimeUsedForPreview(seconds: TimeInterval) {

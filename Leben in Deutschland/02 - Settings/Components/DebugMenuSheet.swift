@@ -20,6 +20,7 @@ struct DebugMenuSheet: View {
     @State private var showTestResultFailed = false
     @State private var showEagleLevelUp = false
     @State private var showLanguageScreenshot = false
+    @State private var testSessionScreenshotPresentation: DebugTestSessionPreviewPresentation?
 
     var body: some View {
         NavigationStack {
@@ -69,6 +70,11 @@ struct DebugMenuSheet: View {
                 }
 
                 Section {
+                    Button("Preview Test Screenshot (Q8 · 234)") {
+                        testSessionScreenshotPresentation = DebugTestSessionPreviewPresentation(
+                            viewModel: DebugTestSessionHelper.makeScreenshotViewModel()
+                        )
+                    }
                     Button("Preview Test Passed") {
                         showTestResultPassed = true
                     }
@@ -76,9 +82,9 @@ struct DebugMenuSheet: View {
                         showTestResultFailed = true
                     }
                 } header: {
-                    Text("Test Simulation Result")
+                    Text("Test Simulation")
                 } footer: {
-                    Text("Shows how the result screen looks when user passed or failed the test.")
+                    Text("Screenshot: question 8 of 33, catalog #234, circles 1–7 answered, timer 58:28. Does not save statistics.")
                 }
 
                 Section {
@@ -134,6 +140,19 @@ struct DebugMenuSheet: View {
             .fullScreenCover(isPresented: $showLanguageScreenshot) {
                 LanguageScreenshotPreviewView(onDismiss: { showLanguageScreenshot = false })
                     .layoutMetrics(layoutMetrics)
+            }
+            .fullScreenCover(item: $testSessionScreenshotPresentation) { presentation in
+                DebugTestSessionPreviewView(
+                    viewModel: presentation.viewModel,
+                    onDismiss: {
+                        presentation.viewModel.stopTimer()
+                        testSessionScreenshotPresentation = nil
+                    }
+                )
+                .environmentObject(languageManager)
+                .environmentObject(favoritesManager)
+                .environmentObject(SubscriptionManager.shared)
+                .layoutMetrics(layoutMetrics)
             }
         }
     }
