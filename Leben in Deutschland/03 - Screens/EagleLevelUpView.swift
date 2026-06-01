@@ -24,10 +24,22 @@ struct EagleLevelUpView: View {
         )
     }
 
+    private var solidBackground: LinearGradient {
+        LinearGradient(
+            colors: [
+                Color("AppBlueLagoon"),
+                Color("AppBlueLagoon"),
+                Color("AppCaribean")
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+
     var body: some View {
         ZStack {
             Rectangle()
-                .fill(LiquidGlassGradient.blue.screenBackground)
+                .fill(solidBackground)
                 .ignoresSafeArea()
 
             if confettiActive {
@@ -92,6 +104,7 @@ struct EagleLevelUpView: View {
                 .accessibilityLabel("eagle_level_up_continue".localized)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityElement(children: .contain)
         .accessibilityLabel("eagle_level_up_title".localized)
         .accessibilityHint(stageMessage)
