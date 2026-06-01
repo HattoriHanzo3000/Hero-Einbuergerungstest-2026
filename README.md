@@ -19,15 +19,14 @@ Native **iOS-App** zur Vorbereitung auf den **Leben-in-Deutschland-** / **Einbü
 
 ### Technik
 
-- **iOS 18+** · Xcode · Swift · **SwiftUI**
-- Strukturierter Code: Screens, ViewModels, Services
+- **iOS 18+** · **Xcode** · **Swift** · **SwiftUI**
+- Strukturierter Code: **Screens**, **ViewModels**, **Services**
 - Fragen und Inhalte als **JSON**; Fortschritt lokal gespeichert
 - **Datengetriebene Auswertung:** Lernstatistiken, Prüfungsbereitschaft, Fortschritt pro Frage
-- **Adaptive Lernplanung** (Spaced Repetition) auf Basis der Antwort-Historie
-- Python-Skripte zur Pflege der JSON-Fragenkataloge
+- **Adaptive Lernplanung** (**Spaced Repetition**) auf Basis der Antwort-Historie
+- **Python**-Skripte zur Pflege der **JSON**-Fragenkataloge
 - **Lokalisierung** (DE, EN, RU, TR)
-- **RevenueCat** / App Store — Abonnements
-- Willkommens-**Video** in der Einführung
+- **RevenueCat** / **App Store** — Abonnements
 
 ### Links
 
@@ -55,15 +54,14 @@ Practice with the official question catalog, track your progress, and simulate t
 
 ### Tech
 
-- **iOS 18+** · Xcode · Swift · **SwiftUI**
-- Structured code: screens, view models, services
+- **iOS 18+** · **Xcode** · **Swift** · **SwiftUI**
+- Structured code: **screens**, **view models**, **services**
 - **JSON** content; progress saved on device
 - **Data-driven analytics:** per-question stats, readiness score, progress dashboards
-- **Adaptive review scheduling** (spaced repetition) from answer history
-- Python scripts for maintaining the JSON question catalogs
+- **Adaptive review scheduling** (**spaced repetition**) from answer history
+- **Python** scripts for maintaining the **JSON** question catalogs
 - **Localization** (DE, EN, RU, TR)
-- **RevenueCat** / App Store — subscriptions
-- Welcome **video** in onboarding
+- **RevenueCat** / **App Store** — subscriptions
 
 ### Links
 
