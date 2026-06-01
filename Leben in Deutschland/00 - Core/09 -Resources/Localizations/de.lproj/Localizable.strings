@@ -107,6 +107,13 @@
 "all_questions_empty_message" = "Die Fragen erscheinen hier, sobald die Inhalte geladen sind. Ziehen zum Aktualisieren oder erneut versuchen.";
 "all_questions_disclaimer_title" = "Alle Fragen";
 "all_questions_disclaimer_message" = "Alle 310 offiziellen Prüfungsfragen sind hier in chronologischer Reihenfolge aufgelistet – wie in den offiziellen Prüfungsunterlagen. Dieser Bereich ist nur zum Lesen: Jede Frage wird mit der richtigen Antwort angezeigt.";
+"all_questions_jump_title" = "Zur Aufgabe springen";
+"all_questions_jump_hint" = "Gib eine Zahl von 1 bis %d ein (Bund 1–300, danach dein Bundesland 301–310).";
+"all_questions_jump_placeholder" = "z. B. 255";
+"all_questions_jump_go" = "Los";
+"all_questions_jump_error_invalid" = "Gib eine Zahl von 1 bis %d ein.";
+"all_questions_jump_field_accessibility_label" = "Aufgabennummer";
+"all_questions_jump_question_id_hint" = "Öffnet ein Feld, um per Nummer zu einer Aufgabe zu springen.";
 "learn_by_topics_header_message" = "Ich habe alle Fragen für dich nach Themen gruppiert — wähle deinen Weg und leg los.";
 "learn_by_topics_disclaimer_title" = "Nach Themen lernen";
 "learn_by_topics_disclaimer_message" = "Die Fragen sind nach Themen gruppiert, damit du ein Thema nach dem anderen lernen kannst. Wähle ein Thema, beantworte die Fragen und prüfe deine Antworten. Dieser Modus beeinflusst nicht deinen Bereitschaftsstand.";

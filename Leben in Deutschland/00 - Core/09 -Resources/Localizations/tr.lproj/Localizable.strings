@@ -107,6 +107,13 @@
 "all_questions_empty_message" = "İçerikler yüklendiğinde sorular burada görünecek. Yenilemek için aşağı çek veya tekrar dene.";
 "all_questions_disclaimer_title" = "Tüm Sorular";
 "all_questions_disclaimer_message" = "310 resmi sınav sorusunun tamamı, resmi sınav belgelerinde olduğu gibi burada kronolojik sırayla listelenmiştir. Bu bölüm sadece okumak içindir: Her soru doğru cevabıyla birlikte gösterilir.";
+"all_questions_jump_title" = "Soruya git";
+"all_questions_jump_hint" = "1 ile %d arasında bir sayı gir (genel 1–300, ardından eyaletin 301–310).";
+"all_questions_jump_placeholder" = "örn. 255";
+"all_questions_jump_go" = "Git";
+"all_questions_jump_error_invalid" = "1 ile %d arasında bir sayı gir.";
+"all_questions_jump_field_accessibility_label" = "Soru numarası";
+"all_questions_jump_question_id_hint" = "Numarayla bir soruya atlamak için alan açar.";
 "learn_by_topics_header_message" = "Senin için tüm soruları konulara göre gruplandırdım — kendi yolunu seç ve başla.";
 "learn_by_topics_disclaimer_title" = "Konulara Göre Öğrenme";
 "learn_by_topics_disclaimer_message" = "Sorular, konuları sırayla öğrenebilmen için konulara göre gruplandırılmıştır. Bir konu seç, soruları cevapla ve cevaplarını kontrol et. Bu mod sınava hazır olma durumunu etkilemez.";

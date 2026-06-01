@@ -14,6 +14,7 @@ struct AllQuestionsQuestionCard: View {
     @EnvironmentObject private var languageManager: LanguageManager
 
     @State private var showingFeedbackReport = false
+    @State private var showingJumpSheet = false
     @State private var zoomedAsset: ZoomedAsset?
 
     let question: QuestionModel
@@ -49,6 +50,17 @@ struct AllQuestionsQuestionCard: View {
             )
             .environmentObject(languageManager)
         }
+        .sheet(isPresented: $showingJumpSheet) {
+            AllQuestionsJumpSheet(
+                totalCount: totalCount,
+                initialNumber: currentIndex + 1,
+                onJump: { number in
+                    onGoToQuestion(number - 1)
+                }
+            )
+            .environmentObject(languageManager)
+            .environment(\.layoutMetrics, layoutMetrics)
+        }
     }
 }
 
@@ -59,6 +71,7 @@ private extension AllQuestionsQuestionCard {
             progress: (currentIndex + 1, totalCount),
             questionId: question.id,
             onReportTapped: { showingFeedbackReport = true },
+            onQuestionIdTapped: { showingJumpSheet = true },
             trailingActions: { EmptyView() }
         )
     }

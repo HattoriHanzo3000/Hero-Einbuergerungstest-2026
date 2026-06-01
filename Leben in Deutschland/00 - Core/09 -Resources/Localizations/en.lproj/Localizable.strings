@@ -107,6 +107,13 @@
 "all_questions_empty_message" = "Questions will appear here once content is loaded. Pull to refresh or try again.";
 "all_questions_disclaimer_title" = "All Questions";
 "all_questions_disclaimer_message" = "All 310 official exam questions are listed here in chronological order, as in the official exam materials. This section is for reading only—each question is shown with its correct answer.";
+"all_questions_jump_title" = "Go to question";
+"all_questions_jump_hint" = "Enter a number from 1 to %d (federal 1–300, then your state’s 301–310).";
+"all_questions_jump_placeholder" = "e.g. 255";
+"all_questions_jump_go" = "Go";
+"all_questions_jump_error_invalid" = "Enter a number from 1 to %d.";
+"all_questions_jump_field_accessibility_label" = "Question number";
+"all_questions_jump_question_id_hint" = "Opens a field to jump to a question by number.";
 "learn_by_topics_header_message" = "I grouped all questions by themes for you — choose a path and soar.";
 "learn_by_topics_disclaimer_title" = "Learn by Topics";
 "learn_by_topics_disclaimer_message" = "Questions are grouped by theme so you can study one topic at a time. Choose a topic, answer the questions, and check your answers. This mode does not affect your readiness score.";

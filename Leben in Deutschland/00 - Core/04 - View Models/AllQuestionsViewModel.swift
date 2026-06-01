@@ -82,4 +82,12 @@ final class AllQuestionsViewModel: ObservableObject {
         currentIndex = index
         saveCurrentPosition()
     }
+
+    /// Jumps to a 1-based question number (1…count). Returns false if out of range.
+    @discardableResult
+    func goToQuestion(number: Int) -> Bool {
+        guard number >= 1, number <= questions.count else { return false }
+        goToQuestion(at: number - 1)
+        return true
+    }
 }

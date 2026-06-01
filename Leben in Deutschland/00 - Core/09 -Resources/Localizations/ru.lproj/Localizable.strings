@@ -107,6 +107,13 @@
 "all_questions_empty_message" = "Вопросы появятся здесь после загрузки контента. Потяни для обновления или попробуй снова.";
 "all_questions_disclaimer_title" = "Все вопросы";
 "all_questions_disclaimer_message" = "Все 310 официальных экзаменационных вопросов представлены здесь в хронологическом порядке, как в официальных экзаменационных материалах. Этот раздел только для чтения — каждый вопрос показан с правильным ответом.";
+"all_questions_jump_title" = "Перейти к вопросу";
+"all_questions_jump_hint" = "Введи число от 1 до %d (общие 1–300, затем твоя земля 301–310).";
+"all_questions_jump_placeholder" = "напр. 255";
+"all_questions_jump_go" = "Перейти";
+"all_questions_jump_error_invalid" = "Введи число от 1 до %d.";
+"all_questions_jump_field_accessibility_label" = "Номер вопроса";
+"all_questions_jump_question_id_hint" = "Открывает поле для перехода к вопросу по номеру.";
 "learn_by_topics_header_message" = "Я сгруппировал все вопросы по темам — выбирай маршрут и взлетай.";
 "learn_by_topics_disclaimer_title" = "Учить по темам";
 "learn_by_topics_disclaimer_message" = "Вопросы сгруппированы по темам, чтобы ты мог изучать их по одной. Выбери тему, ответь на вопросы и проверь себя. Этот режим не влияет на показатель готовности.";

@@ -24,6 +24,8 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
     /// Question ID for label. When nil, question row is hidden.
     var questionId: String?
     var onReportTapped: (() -> Void)?
+    /// When set, the question ID label is tappable (e.g. jump-to-question in All Questions).
+    var onQuestionIdTapped: (() -> Void)? = nil
     /// When true, shows decorative Pro badge. Hidden for free users.
     var showProBadge: Bool = false
     var isProUser: Bool = false
@@ -54,6 +56,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
         progress: (answered: Int, total: Int)? = nil,
         questionId: String? = nil,
         onReportTapped: (() -> Void)? = nil,
+        onQuestionIdTapped: (() -> Void)? = nil,
         showProBadge: Bool = false,
         isProUser: Bool = false,
         onProTap: (() -> Void)? = nil,
@@ -69,6 +72,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
         self.progress = progress
         self.questionId = questionId
         self.onReportTapped = onReportTapped
+        self.onQuestionIdTapped = onQuestionIdTapped
         self.showProBadge = showProBadge
         self.isProUser = isProUser
         self.onProTap = onProTap
@@ -86,6 +90,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
         progress: (answered: Int, total: Int)? = nil,
         questionId: String? = nil,
         onReportTapped: (() -> Void)? = nil,
+        onQuestionIdTapped: (() -> Void)? = nil,
         showProBadge: Bool = false,
         isPro: Bool,
         onProTap: (() -> Void)? = nil,
@@ -102,6 +107,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
             progress: progress,
             questionId: questionId,
             onReportTapped: onReportTapped,
+            onQuestionIdTapped: onQuestionIdTapped,
             showProBadge: showProBadge,
             isProUser: isPro,
             onProTap: onProTap,
@@ -244,10 +250,7 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
     private var questionLabelView: some View {
         if let questionId {
             HStack(spacing: 8) {
-                Text("question_label".localized + " \(questionId)")
-                    .font(.system(.title2, weight: .light).width(.compressed))
-                    .foregroundColor(.white)
-                    .accessibilityLabel("question_label".localized + " " + questionId)
+                questionIdLabel(questionId: questionId)
 
                 if let onReportTapped {
                     Button(action: {
@@ -260,6 +263,29 @@ struct QuestionCardHeaderCard<ActionContent: View>: View {
                     }
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private func questionIdLabel(questionId: String) -> some View {
+        let label = Text("question_label".localized + " \(questionId)")
+            .font(.system(.title2, weight: .light).width(.compressed))
+            .foregroundColor(.white)
+
+        if let onQuestionIdTapped {
+            Button {
+                HapticManager.shared.lightImpact()
+                onQuestionIdTapped()
+            } label: {
+                label
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("question_label".localized + " " + questionId)
+            .accessibilityHint("all_questions_jump_question_id_hint".localized)
+            .accessibilityAddTraits(.isButton)
+        } else {
+            label
+                .accessibilityLabel("question_label".localized + " " + questionId)
         }
     }
 }
