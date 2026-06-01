@@ -48,11 +48,7 @@ struct SettingsShareView: View {
             }
         }
         .sheet(isPresented: $showShareSheet) {
-            if let url = URL(string: appStoreURL) {
-                ShareSheet(activityItems: [shareText, url])
-            } else {
-                ShareSheet(activityItems: [shareText])
-            }
+            ShareSheet(activityItems: [shareText])
         }
     }
 
@@ -72,7 +68,9 @@ struct SettingsShareView: View {
                 .font(.body)
                 .foregroundStyle(.white.opacity(0.95))
                 .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
         }
+        .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
     }
 
@@ -104,9 +102,13 @@ private struct SettingsQRCodeView: View {
         filter.setValue("M", forKey: "inputCorrectionLevel")
 
         guard let outputImage = filter.outputImage else { return nil }
-        let transform = CGAffineTransform(scaleX: 10, y: 10)
-        let scaledImage = outputImage.transformed(by: transform)
-        guard let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) else { return nil }
+        let scaledImage = outputImage.transformed(by: CGAffineTransform(scaleX: 10, y: 10))
+        let extent = scaledImage.extent
+        let normalized = scaledImage.transformed(
+            by: CGAffineTransform(translationX: -extent.origin.x, y: -extent.origin.y)
+        )
+        let bounds = CGRect(origin: .zero, size: extent.size)
+        guard let cgImage = context.createCGImage(normalized, from: bounds) else { return nil }
         return UIImage(cgImage: cgImage)
     }
 }
