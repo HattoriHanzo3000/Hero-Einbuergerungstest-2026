@@ -1,0 +1,34 @@
+# Capitalization rules for content_*.json
+# Implemented in fix_content_capitalization.py
+
+ru:
+  constitution_noun:
+    description: >
+      Capitalize конституция and inflected noun forms when referring to
+      Germany's Verfassung / Basic Law. Do not touch конституцион-* adjectives.
+    pattern: "(?<![А-Яа-яЁё])конституци(я|и|ю|ей|ям|ями)(?!он)"
+    replacement: "Конституци\\1"
+
+uk:
+  constitution_noun:
+    description: Same as Russian, for конституція / конституційний.
+    pattern: "(?<![А-Яа-яІіЇїЄєҐґ])конституці(я|ї|ю|єю|ям|ями)(?!йн)"
+    replacement: "Конституці\\1"
+
+en:
+  basic_law:
+    description: Capitalize "Basic Law" (German Grundgesetz). Leave "constitution" lowercase in running text.
+    pattern: "\\bbasic law\\b"
+    replacement: "Basic Law"
+
+de:
+  grundgesetz:
+    description: Ensure Grundgesetz is capitalized (nouns are always capped in German; safety net only).
+    pattern: "\\bgrundgesetz\\b"
+    replacement: "Grundgesetz"
+
+tr:
+  temel_yasa:
+    description: Capitalize the fixed phrase Temel Yasa (Grundgesetz), not every anayasa in body text.
+    pattern: "\\btemel yasa\\b"
+    replacement: "Temel Yasa"
