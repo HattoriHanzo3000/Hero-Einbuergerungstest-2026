@@ -31,6 +31,7 @@ Native **iOS-App** zur Vorbereitung auf den **Leben-in-Deutschland-** / **Einbü
 ### Links
 
 - [App Store](https://apps.apple.com/app/id6752272685)
+- [Website — App-Seite](https://www.gizatech.de/hero-einb%C3%BCrgerungstest)
 - [Datenschutz](https://www.gizatech.de/hero-einb%C3%BCrgerungstest/privacy-policy)
 
 Quellcode dieses Repositories; aktiv in Entwicklung (`develop`).
@@ -66,6 +67,7 @@ Practice with the official question catalog, track your progress, and simulate t
 ### Links
 
 - [App Store](https://apps.apple.com/app/id6752272685)
+- [Website — app page](https://www.gizatech.de/hero-einb%C3%BCrgerungstest)
 - [Privacy policy](https://www.gizatech.de/hero-einb%C3%BCrgerungstest/privacy-policy)
 
 Source code for this app; actively developed (`develop` branch).
