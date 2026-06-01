@@ -161,8 +161,7 @@ struct TestSessionView: View {
 
     func initializeTest() {
         Task {
-            // Test simulation always loads German content
-            let testLanguage = "de"
+            let testLanguage = ContentService.testSimulationLanguageCode
             
             // Always reload content in German for test simulation
             await contentService.loadContent(for: testLanguage)

@@ -293,20 +293,60 @@ class ContentService: ObservableObject {
     }
     
     // MARK: - Test Questions
+
+    /// Test simulation exam language (questions and answers are always German).
+    nonisolated static let testSimulationLanguageCode = "de"
+
+    /// Loads questions from a bundled content file without replacing the app's loaded `categories`.
+    func questionsSnapshot(for language: String) async throws -> [QuestionModel] {
+        try await ensureCorrectAnswersLoaded()
+        let content = try await loadContentFile(for: language)
+        return content.content.flatMap { categoryData in
+            categoryData.questions.map { question in
+                var enriched = question
+                enriched.category = categoryData.category
+                enriched.subcategory = categoryData.subcategory
+                return enriched
+            }
+        }
+    }
+
+    /// Federal test question text/options from a language file (e.g. German for test simulation).
+    func federalTestQuestion(originalId: String, language: String = testSimulationLanguageCode) async throws -> TestQuestion? {
+        let question = try await questionsSnapshot(for: language).first(where: { $0.id == originalId })
+        guard let question, Self.isFederalQuestionId(question.id) else { return nil }
+        guard let correctIndex = correctAnswers[question.id] else { return nil }
+        return TestQuestion(
+            id: 0,
+            originalId: question.id,
+            text: question.text,
+            options: question.options,
+            correctIndex: correctIndex,
+            isRegional: false,
+            category: question.category ?? ""
+        )
+    }
+
+    private func ensureCorrectAnswersLoaded() async throws {
+        if !correctAnswers.isEmpty { return }
+        try await loadCorrectAnswers()
+    }
+
+    private static func isFederalQuestionId(_ id: String) -> Bool {
+        let components = id.split(separator: " ")
+        if components.count == 2,
+           let stateCode = components.last,
+           stateCode.count == 2,
+           stateCode.allSatisfy(\.isUppercase) {
+            return false
+        }
+        return true
+    }
     
     /// Get federal (general) test questions - questions without state codes
     func getTestFederalQuestions(language: String = "de") -> [TestQuestion] {
         let allQuestions = getAllQuestions()
-        let federalQuestions = allQuestions.filter { question in
-            // Federal questions are those without state codes (e.g., "001", "021")
-            // Regional questions have state codes (e.g., "301 BW", "308 BY")
-            // Check if question ID contains a space followed by two uppercase letters (state code)
-            let components = question.id.split(separator: " ")
-            if components.count == 2, let stateCode = components.last, stateCode.count == 2, stateCode.allSatisfy({ $0.isUppercase }) {
-                return false // This is a regional question
-            }
-            return true // This is a federal question
-        }
+        let federalQuestions = allQuestions.filter { Self.isFederalQuestionId($0.id) }
         
         return federalQuestions.enumerated().compactMap { index, question in
             guard let correctIndex = correctAnswers[question.id] else { return nil }

@@ -19,8 +19,8 @@ enum DebugTestSessionHelper {
     static let screenshotQuestionOriginalId = "234"
 
     @MainActor
-    static func makeScreenshotViewModel() -> TestSessionViewModel {
-        let questions = buildScreenshotQuestions()
+    static func makeScreenshotViewModel() async -> TestSessionViewModel {
+        let questions = await buildScreenshotQuestions()
         let vm = TestSessionViewModel()
         vm.debug_initializeTest(questions: questions)
 
@@ -35,30 +35,36 @@ enum DebugTestSessionHelper {
         return vm
     }
 
-    private static func buildScreenshotQuestions() -> [TestQuestion] {
+    @MainActor
+    private static func buildScreenshotQuestions() async -> [TestQuestion] {
         let slotIndex = screenshotCurrentQuestionNumber - 1
+        let question234 = await loadQuestion234German()
         return (0..<33).map { index in
             if index == slotIndex {
-                question234()
+                question234
             } else {
                 placeholderQuestion(number: index + 1)
             }
         }
     }
 
-    private static func question234() -> TestQuestion {
-        let content = ContentService.shared
-        if let model = content.getAllQuestions().first(where: { $0.id == screenshotQuestionOriginalId }),
-           let federal = content.getTestFederalQuestions().first(where: { $0.originalId == screenshotQuestionOriginalId }) {
-            return TestQuestion(
+    @MainActor
+    private static func loadQuestion234German() async -> TestQuestion {
+        let language = ContentService.testSimulationLanguageCode
+        if var loaded = try? await ContentService.shared.federalTestQuestion(
+            originalId: screenshotQuestionOriginalId,
+            language: language
+        ) {
+            loaded = TestQuestion(
                 id: screenshotCurrentQuestionNumber,
-                originalId: federal.originalId,
-                text: model.text,
-                options: model.options,
-                correctIndex: federal.correctIndex,
-                isRegional: false,
-                category: model.category ?? federal.category
+                originalId: loaded.originalId,
+                text: loaded.text,
+                options: loaded.options,
+                correctIndex: loaded.correctIndex,
+                isRegional: loaded.isRegional,
+                category: loaded.category
             )
+            return loaded
         }
 
         return TestQuestion(

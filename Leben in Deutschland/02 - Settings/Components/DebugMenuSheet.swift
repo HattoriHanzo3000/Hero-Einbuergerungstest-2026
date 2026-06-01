@@ -71,9 +71,7 @@ struct DebugMenuSheet: View {
 
                 Section {
                     Button("Preview Test Screenshot (Q8 · 234)") {
-                        testSessionScreenshotPresentation = DebugTestSessionPreviewPresentation(
-                            viewModel: DebugTestSessionHelper.makeScreenshotViewModel()
-                        )
+                        testSessionScreenshotPresentation = DebugTestSessionPreviewPresentation()
                     }
                     Button("Preview Test Passed") {
                         showTestResultPassed = true
@@ -84,7 +82,7 @@ struct DebugMenuSheet: View {
                 } header: {
                     Text("Test Simulation")
                 } footer: {
-                    Text("Screenshot: question 8 of 33, catalog #234, circles 1–7 answered, timer 58:28. Does not save statistics.")
+                    Text("Screenshot: question 8 of 33, catalog #234 (German text), UI in app language, circles 1–7 answered, timer 58:28.")
                 }
 
                 Section {
@@ -141,14 +139,10 @@ struct DebugMenuSheet: View {
                 LanguageScreenshotPreviewView(onDismiss: { showLanguageScreenshot = false })
                     .layoutMetrics(layoutMetrics)
             }
-            .fullScreenCover(item: $testSessionScreenshotPresentation) { presentation in
-                DebugTestSessionPreviewView(
-                    viewModel: presentation.viewModel,
-                    onDismiss: {
-                        presentation.viewModel.stopTimer()
-                        testSessionScreenshotPresentation = nil
-                    }
-                )
+            .fullScreenCover(item: $testSessionScreenshotPresentation) { _ in
+                DebugTestSessionPreviewView(onDismiss: {
+                    testSessionScreenshotPresentation = nil
+                })
                 .environmentObject(languageManager)
                 .environmentObject(favoritesManager)
                 .environmentObject(SubscriptionManager.shared)
