@@ -1,33 +1,73 @@
 # Hero – Leben in Deutschland
 
-Native **iOS** app for preparing for the German **Leben in Deutschland** / **Einbürgerungstest** (citizenship test).
+---
 
-Practice with the official question catalog, track your readiness, and simulate the real exam—all in a SwiftUI app built for learners in Germany.
+## Deutsch
 
-## Features
+Native **iOS-App** zur Vorbereitung auf den **Leben-in-Deutschland-** / **Einbürgerungstest**.
 
-- **Smart Learning** — spaced repetition to focus on what you need most
-- **Learn by Topics** — study questions grouped by theme
-- **Test Simulation** — 33 questions, 60 minutes, exam-style conditions
-- **Favorites & Search** — save and find questions quickly
-- **Cockpit** — progress and statistics for your federal state
-- **Multilingual UI** — German, English, Russian, and Turkish (with optional question translations)
+Übe mit dem offiziellen Fragenkatalog, verfolge deinen Lernstand und simuliere die echte Prüfung.
 
-## Tech
+### Funktionen
 
-- Swift · SwiftUI · iOS 17+
-- RevenueCat (subscriptions)
-- JSON-backed content and localization
+- **Smart Learning** — Lernen mit Wiederholungen in Abständen
+- **Nach Themen lernen** — Fragen nach Kategorien
+- **Prüfungssimulation** — 33 Fragen, 60 Minuten
+- **Favoriten & Suche**
+- **Cockpit** — Fortschritt für dein Bundesland
+- **Mehrsprachig** — DE, EN, RU, TR
 
-## Links
+### Technik
+
+- **iOS 18+** · Xcode · Swift · **SwiftUI**
+- Strukturierter Code: Screens, ViewModels, Services
+- Fragen und Inhalte als **JSON**; Fortschritt lokal gespeichert
+- **Lokalisierung** (DE, EN, RU, TR)
+- **RevenueCat** / App Store — Abonnements
+- Willkommens-**Video** in der Einführung
+
+### Links
+
+- [App Store](https://apps.apple.com/app/id6752272685)
+- [Datenschutz](https://www.gizatech.de/hero-einb%C3%BCrgerungstest/privacy-policy)
+
+Quellcode dieses Repositories; aktiv in Entwicklung (`develop`).
+
+---
+
+## English
+
+Native **iOS** app to prepare for the German **Leben in Deutschland** / **Einbürgerungstest** (citizenship test).
+
+Practice with the official question catalog, track your progress, and simulate the real exam.
+
+### Features
+
+- **Smart Learning** — spaced repetition
+- **Learn by Topics** — questions by category
+- **Test Simulation** — 33 questions, 60 minutes
+- **Favorites & Search**
+- **Cockpit** — progress for your federal state
+- **Multilingual** — DE, EN, RU, TR
+
+### Tech
+
+- **iOS 18+** · Xcode · Swift · **SwiftUI**
+- Structured code: screens, view models, services
+- **JSON** content; progress saved on device
+- **Localization** (DE, EN, RU, TR)
+- **RevenueCat** / App Store — subscriptions
+- Welcome **video** in onboarding
+
+### Links
 
 - [App Store](https://apps.apple.com/app/id6752272685)
 - [Privacy policy](https://www.gizatech.de/hero-einb%C3%BCrgerungstest/privacy-policy)
 
-## Repository
+Source code for this app; actively developed (`develop` branch).
 
-This repo contains the **source code** for the app. It is actively developed; the App Store build may differ slightly from the latest commit on `develop`.
+---
 
-## Author
+## Author / Autor
 
 Ildar Gizatullin
