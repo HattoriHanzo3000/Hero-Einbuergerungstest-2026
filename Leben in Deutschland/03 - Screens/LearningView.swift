@@ -271,7 +271,7 @@ struct LearningView: View {
                 QuizActionButton(
                     buttonTitle,
                     style: checkButtonStyle,
-                    isEnabled: viewModel.canCheck || viewModel.showCorrectAnswer,
+                    isEnabled: viewModel.canCheck || (viewModel.showCorrectAnswer && viewModel.hasNext),
                     accessibilityLabel: checkButtonAccessibilityLabel
                 ) {
                     HapticManager.shared.lightImpact()
