@@ -150,6 +150,7 @@ struct SettingsDashboardView: View {
                 .animation(.easeInOut(duration: 0.2), value: languageManager.isApplyingLanguageChange || (viewModel.regionalViewModel?.isApplyingStateChange ?? false))
             }
         }
+        .restoresTabBarOnAppear()
     }
 
     private var contactMailBinding: Binding<SettingsSupportMailModel?> {

@@ -8,6 +8,9 @@ struct MainView: View {
     @AppStorage("appLanguage") private var appLanguage: String = LanguageManager.baseLanguageCode
     @State private var selectedTab: TabIdentifier = .learn
     @State private var sectionBeforeSearch: TabIdentifier = .learn
+    /// Bumps when leaving search so TabView remounts and resyncs tab bar visibility (iPadOS 18 workaround).
+    @State private var tabShellGeneration = 0
+    @StateObject private var searchSession = SearchSessionStore()
 
     enum TabIdentifier: Hashable {
         case learn
@@ -45,13 +48,19 @@ struct MainView: View {
             Tab(value: TabIdentifier.search, role: .search) {
                 SearchTabView(
                     selectedTab: $selectedTab,
-                    sectionBeforeSearch: sectionBeforeSearch
+                    sectionBeforeSearch: sectionBeforeSearch,
+                    session: searchSession
                 )
             } label: {
                 Label("tab_search_title".localized(for: appLanguage), systemImage: "magnifyingglass")
             }
             .accessibilityHint("tab_search_hint".localized(for: appLanguage))
         }
+        .id(tabShellGeneration)
+        .modifier(TabShellTabBarChromeModifier(isSearchSelected: selectedTab == .search))
+        .toolbar(tabBarToolbarVisibility, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
+        .background(TabBarRestoreHost(isActive: selectedTab != .search))
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized(for: appLanguage))
@@ -98,7 +107,8 @@ struct MainView: View {
 
             SearchTabView(
                 selectedTab: $selectedTab,
-                sectionBeforeSearch: sectionBeforeSearch
+                sectionBeforeSearch: sectionBeforeSearch,
+                session: searchSession
             )
                 .tabItem {
                     Label("tab_search_title".localized(for: appLanguage), systemImage: "magnifyingglass")
@@ -129,13 +139,26 @@ struct MainView: View {
         }
     }
 
+    @available(iOS 18.0, *)
+    private var tabBarToolbarVisibility: Visibility {
+        selectedTab == .search ? .automatic : .visible
+    }
+
     private func handleSelectedTabChange(from oldValue: TabIdentifier, to newValue: TabIdentifier) {
         HapticManager.shared.selectionChanged()
         if newValue == .search, oldValue != .search {
             sectionBeforeSearch = oldValue
         } else if newValue != .search {
             sectionBeforeSearch = newValue
+            if oldValue == .search {
+                tabShellGeneration += 1
+                restoreTabBarAfterLeavingSearch()
+            }
         }
+    }
+
+    private func restoreTabBarAfterLeavingSearch() {
+        TabBarVisibility.restoreVisible()
     }
 }
 

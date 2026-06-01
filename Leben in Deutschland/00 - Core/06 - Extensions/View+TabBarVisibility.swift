@@ -57,6 +57,25 @@ extension View {
         toolbar(.visible, for: .tabBar)
     }
 
+    /// SwiftUI + UIKit restore after search tab or pushed screens hide the tab bar.
+    func restoresTabBarOnAppear() -> some View {
+        modifier(RestoresTabBarOnAppearModifier())
+    }
+}
+
+private struct RestoresTabBarOnAppearModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .toolbar(.visible, for: .tabBar)
+            .toolbarBackground(.visible, for: .tabBar)
+            .onAppear {
+                TabBarVisibility.restoreVisible()
+            }
+    }
+}
+
+extension View {
+
     /// Syncs UIKit tab bar visibility with push/pop transitions.
     func hidesBottomBarWhenPushed(_ hides: Bool) -> some View {
         background(HidesBottomBarWhenPushedBridge(hidesBottomBar: hides))
@@ -109,31 +128,131 @@ private struct NavigationInteractivePopBridge: UIViewControllerRepresentable {
     }
 }
 
-// MARK: - Legacy UIKit Tab Bar Visibility
-struct TabBarVisibilityModifier: ViewModifier {
-    let isHidden: Bool
-    
-    func body(content: Content) -> some View {
-        content
-            .onAppear {
-                updateTabBarVisibility(hidden: isHidden)
-            }
-            .onChange(of: isHidden) { _, newValue in
-                updateTabBarVisibility(hidden: newValue)
-            }
+// MARK: - UIKit Tab Bar Visibility
+enum TabBarVisibility {
+    /// Restores the tab bar after search-tab chrome or navigation push left it hidden (common on iPad).
+    static func restoreVisible() {
+        setHidden(false)
+        resetNavigationBarsHidingTabBar()
+        unhideAllTabBarViews(hidden: false)
+        scheduleRestoreRetries()
     }
-    
-    private func updateTabBarVisibility(hidden: Bool) {
+
+    static func setHidden(_ hidden: Bool) {
         DispatchQueue.main.async {
-            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                  let window = windowScene.windows.first,
-                  let tabBarController = UITabBarController.find(in: window.rootViewController) else { return }
+            applyHidden(hidden)
+            if !hidden {
+                resetNavigationBarsHidingTabBar()
+                unhideAllTabBarViews(hidden: false)
+            }
+        }
+    }
+
+    private static func scheduleRestoreRetries() {
+        for delay in [0.15, 0.35, 0.6] {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                applyHidden(false)
+                resetNavigationBarsHidingTabBar()
+                unhideAllTabBarViews(hidden: false)
+            }
+        }
+    }
+
+    private static func applyHidden(_ hidden: Bool) {
+        for window in keyWindows() {
+            guard let tabBarController = UITabBarController.find(in: window.rootViewController) else { continue }
             let tabBar = tabBarController.tabBar
             tabBar.layer.removeAllAnimations()
             tabBar.transform = .identity
             tabBar.alpha = 1
             tabBar.isHidden = hidden
         }
+    }
+
+    private static func keyWindows() -> [UIWindow] {
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let keyed = scenes.flatMap(\.windows).filter(\.isKeyWindow)
+        if !keyed.isEmpty { return keyed }
+        return scenes.flatMap(\.windows)
+    }
+
+    private static func unhideAllTabBarViews(hidden: Bool) {
+        for window in keyWindows() {
+            applyTabBarVisibility(in: window, hidden: hidden)
+        }
+    }
+
+    private static func applyTabBarVisibility(in view: UIView, hidden: Bool) {
+        if let tabBar = view as? UITabBar {
+            tabBar.layer.removeAllAnimations()
+            tabBar.transform = .identity
+            tabBar.alpha = 1
+            tabBar.isHidden = hidden
+        }
+        view.subviews.forEach { applyTabBarVisibility(in: $0, hidden: hidden) }
+    }
+
+    private static func resetNavigationBarsHidingTabBar() {
+        for window in keyWindows() {
+            resetHidesBottomBarWhenPushed(in: window.rootViewController)
+        }
+    }
+
+    private static func resetHidesBottomBarWhenPushed(in viewController: UIViewController?) {
+        guard let viewController else { return }
+
+        if let navigationController = viewController as? UINavigationController {
+            navigationController.viewControllers.forEach { $0.hidesBottomBarWhenPushed = false }
+        }
+
+        viewController.children.forEach { resetHidesBottomBarWhenPushed(in: $0) }
+        resetHidesBottomBarWhenPushed(in: viewController.presentedViewController)
+    }
+}
+
+// MARK: - Tab Shell Chrome (iOS 18+ search tab)
+struct TabShellTabBarChromeModifier: ViewModifier {
+    let isSearchSelected: Bool
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content.tabBarMinimizeBehavior(isSearchSelected ? .automatic : .never)
+        } else {
+            content
+        }
+    }
+}
+
+// MARK: - Tab Bar Restore Host
+/// Keeps forcing tab bar visible while a non-search tab is selected (works around iPadOS 18 search-tab bugs).
+struct TabBarRestoreHost: UIViewControllerRepresentable {
+    var isActive: Bool
+
+    func makeUIViewController(context: Context) -> UIViewController {
+        let controller = UIViewController()
+        controller.view.isUserInteractionEnabled = false
+        controller.view.backgroundColor = .clear
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        guard isActive else { return }
+        TabBarVisibility.restoreVisible()
+    }
+}
+
+// MARK: - Legacy UIKit Tab Bar Visibility
+struct TabBarVisibilityModifier: ViewModifier {
+    let isHidden: Bool
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear {
+                TabBarVisibility.setHidden(isHidden)
+            }
+            .onChange(of: isHidden) { _, newValue in
+                TabBarVisibility.setHidden(newValue)
+            }
     }
 }
 

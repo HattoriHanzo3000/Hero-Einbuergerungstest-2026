@@ -86,6 +86,7 @@ struct HomeView: View {
                 .zIndex(1000)
             }
         }
+        .restoresTabBarOnAppear()
     }
     
     @ViewBuilder

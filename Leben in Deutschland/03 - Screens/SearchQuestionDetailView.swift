@@ -49,6 +49,8 @@ struct SearchQuestionDetailView: View {
         .background(Color(.systemBackground))
         .navigationTitle("tab_search_title".localized)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.visible, for: .tabBar)
+        .hidesBottomBarWhenPushed(false)
         .task(id: "\(languageManager.currentAppLanguage)-\(languageManager.currentTranslationLanguage)") {
             await HintService.shared.loadHints(for: languageManager.currentAppLanguage)
             if languageManager.currentTranslationLanguage != languageManager.currentAppLanguage {
