@@ -35,7 +35,7 @@ private struct ConfettiBurstCanvas: View {
     private var palette: [Color] {
         [
             Color("AppBlue"),
-            Color("AppBlueThird"),
+            Color("AppBlueLagoon"),
             Color.white.opacity(0.95),
             Color.yellow.opacity(0.88),
             Color.pink.opacity(0.78),
