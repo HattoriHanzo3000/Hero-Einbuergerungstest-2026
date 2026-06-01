@@ -382,6 +382,10 @@
 "close" = "Close";
 "no_hint_available" = "No hint is available for this question yet.";
 
+// APP STORE SCREENSHOTS (DEBUG preview)
+"screenshot_languages_headline" = "Your language\nYour pace";
+"screenshot_languages_subtitle" = "Interface and all 310 questions with answers - fully in your language.";
+
 // APP RATING
 "rating_prompt_title" = "Loving Hero?";
 "rating_prompt_message" = "If Hero's been helping you ace those questions, we'd love to hear about it! A quick rating helps other learners discover us too.";

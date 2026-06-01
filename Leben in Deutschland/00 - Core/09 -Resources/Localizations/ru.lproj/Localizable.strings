@@ -382,6 +382,10 @@
 "close" = "Закрыть";
 "no_hint_available" = "Для этого вопроса пока нет подсказки.";
 
+// APP STORE SCREENSHOTS (DEBUG preview)
+"screenshot_languages_headline" = "Твой язык\nТвой темп";
+"screenshot_languages_subtitle" = "Интерфейс и все 310 вопросов с ответами - полностью на твоём языке.";
+
 // APP RATING
 "rating_prompt_title" = "Нравится Hero?";
 "rating_prompt_message" = "Если Hero помогает тебе справляться с вопросами, мы будем рады узнать об этом! Быстрая оценка помогает другим ученикам тоже нас найти.";

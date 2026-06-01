@@ -372,6 +372,10 @@
 "close" = "Kapat";
 "no_hint_available" = "Bu soru için henüz bir ipucu bulunmuyor.";
 
+// APP STORE SCREENSHOTS (DEBUG preview)
+"screenshot_languages_headline" = "Kendi dilin\nKendi hızın";
+"screenshot_languages_subtitle" = "Arayüz ve 310 soru cevaplarıyla - tamamen senin dilinde.";
+
 // APP RATING
 "rating_prompt_title" = "Hero hoşuna gitti mi?";
 "rating_prompt_message" = "Eğer Hero soruları kavramana yardımcı oluyorsa, bunu duymak isteriz! Kısa bir değerlendirme, diğer öğrenenlerin de bizi keşfetmesine yardımcı olur.";

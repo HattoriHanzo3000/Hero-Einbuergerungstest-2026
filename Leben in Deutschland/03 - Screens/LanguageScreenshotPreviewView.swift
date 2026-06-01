@@ -9,7 +9,7 @@
 import SwiftUI
 
 // MARK: - Language Screenshot Preview (DEBUG)
-/// Full-screen layout: mascot + headline, subtitle, language list; small X dismiss at bottom.
+/// Full-screen layout: mascot + headline, subtitle, language list. Tap headline to dismiss (DEBUG).
 /// Flags use bundled PNGs (`ScreenshotFlag*`) — emoji text often renders as □/� in SwiftUI; assets are Twemoji (CC-BY 4.0).
 struct LanguageScreenshotPreviewView: View {
     let onDismiss: () -> Void
@@ -40,14 +40,22 @@ struct LanguageScreenshotPreviewView: View {
                     }
                     .frame(maxWidth: .infinity)
 
-                    Text("screenshot_languages_headline".localized)
-                        .font(.system(.title, weight: .black))
-                        .italic()
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity)
-                        .accessibilityAddTraits(.isHeader)
+                    Button {
+                        HapticManager.shared.lightImpact()
+                        onDismiss()
+                    } label: {
+                        Text("screenshot_languages_headline".localized)
+                            .font(.system(.title, weight: .black))
+                            .italic()
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityLabel("screenshot_languages_headline".localized)
+                    .accessibilityHint("close".localized)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, layoutMetrics.adaptive(24))
@@ -84,21 +92,6 @@ struct LanguageScreenshotPreviewView: View {
                 .padding(.horizontal, layoutMetrics.adaptive(24))
 
                 Spacer(minLength: 0)
-
-                Button {
-                    HapticManager.shared.lightImpact()
-                    onDismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.system(size: layoutMetrics.adaptive(15), weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.88))
-                        .frame(width: layoutMetrics.adaptive(32), height: layoutMetrics.adaptive(32))
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .frame(maxWidth: .infinity)
-                .padding(.bottom, layoutMetrics.adaptive(8))
-                .accessibilityLabel("close".localized)
             }
             .padding(.top, layoutMetrics.adaptive(24))
         }

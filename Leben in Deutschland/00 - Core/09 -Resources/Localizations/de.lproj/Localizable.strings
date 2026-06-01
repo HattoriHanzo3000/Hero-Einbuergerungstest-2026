@@ -372,6 +372,10 @@
 "close" = "Schließen";
 "no_hint_available" = "Für diese Frage ist noch kein Hinweis verfügbar.";
 
+// APP STORE SCREENSHOTS (DEBUG preview)
+"screenshot_languages_headline" = "Deine Sprache\nDein Tempo";
+"screenshot_languages_subtitle" = "Oberfläche und alle 310 Fragen mit Antworten - vollständig auf deiner Sprache.";
+
 // APP RATING
 "rating_prompt_title" = "Hero gefällt dir?";
 "rating_prompt_message" = "Wenn Hero dir dabei hilft, die Fragen zu meistern, würden wir gerne davon hören! Eine kurze Bewertung hilft auch anderen Lernenden, uns zu entdecken.";

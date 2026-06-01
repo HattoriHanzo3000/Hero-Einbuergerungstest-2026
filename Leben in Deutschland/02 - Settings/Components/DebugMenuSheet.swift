@@ -19,6 +19,7 @@ struct DebugMenuSheet: View {
     @State private var showTestResultPassed = false
     @State private var showTestResultFailed = false
     @State private var showEagleLevelUp = false
+    @State private var showLanguageScreenshot = false
 
     var body: some View {
         NavigationStack {
@@ -95,6 +96,16 @@ struct DebugMenuSheet: View {
                 } footer: {
                     Text("Directly previews the 100% (master) splash screen for UI testing.")
                 }
+
+                Section {
+                    Button("Preview Language Screenshot") {
+                        showLanguageScreenshot = true
+                    }
+                } header: {
+                    Text("App Store Screenshots")
+                } footer: {
+                    Text("Marketing layout for the languages screenshot. Switch app language in Settings before capturing.")
+                }
             }
             .navigationTitle("Developer Menu")
             .navigationBarTitleDisplayMode(.inline)
@@ -119,6 +130,10 @@ struct DebugMenuSheet: View {
                 )
                 .environmentObject(languageManager)
                 .layoutMetrics(layoutMetrics)
+            }
+            .fullScreenCover(isPresented: $showLanguageScreenshot) {
+                LanguageScreenshotPreviewView(onDismiss: { showLanguageScreenshot = false })
+                    .layoutMetrics(layoutMetrics)
             }
         }
     }
