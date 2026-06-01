@@ -8,3 +8,8 @@ xcuserdata/
 
 # Local app secrets
 Leben in Deutschland/Config/LocalSecrets.xcconfig
+
+# Cursor AI (local workflow only)
+.cursor/
+*.cursorrules
+#Global Project Rules*
