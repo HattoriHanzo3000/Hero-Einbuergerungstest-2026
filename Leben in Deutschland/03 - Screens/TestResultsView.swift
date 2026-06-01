@@ -168,8 +168,8 @@ private extension TestResultsView {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                // Right: mascot (flipped variant)
-                MascotView(autoPlayInterval: nil)
+                // Right: mascot mirrored to face the result text (same as Home / Cockpit).
+                MascotView(horizontalMirror: true, autoPlayInterval: nil)
                     .frame(width: mascotSize, height: mascotSize)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
