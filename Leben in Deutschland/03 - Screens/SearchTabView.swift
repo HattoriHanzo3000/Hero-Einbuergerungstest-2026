@@ -40,7 +40,7 @@ struct SearchTabView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             ZStack {
-                Color(uiColor: .systemGroupedBackground)
+                Color(.systemBackground)
                     .ignoresSafeArea()
 
                 SearchView(

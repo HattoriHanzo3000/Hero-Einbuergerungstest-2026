@@ -126,6 +126,7 @@
 "limit_test_simulation_title" = "Limit Aşıldı";
 "limit_test_simulation_message" = "3 ücretsiz test simülasyonu limitine ulaştın. Limitsiz çalışmak için Pro'ya geçmeyi düşün.";
 "no_search_results" = "Sonuç bulunamadı";
+"search_results_count" = "%d %@";
 "question_label" = "Soru";
 
 // HEADER / READINESS

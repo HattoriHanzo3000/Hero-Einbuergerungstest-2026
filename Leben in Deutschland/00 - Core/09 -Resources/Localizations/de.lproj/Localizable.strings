@@ -126,6 +126,7 @@
 "limit_test_simulation_title" = "Limit erreicht";
 "limit_test_simulation_message" = "Du hast das Limit von 3 kostenlosen Test-Simulationen erreicht. Erwäge ein Pro-Abo, um ohne Limits zu lernen.";
 "no_search_results" = "Keine Ergebnisse gefunden";
+"search_results_count" = "%d %@";
 "question_label" = "Aufgabe";
 
 // HEADER / READINESS

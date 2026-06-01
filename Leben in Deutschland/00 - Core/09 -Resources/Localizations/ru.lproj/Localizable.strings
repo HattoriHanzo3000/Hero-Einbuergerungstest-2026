@@ -126,6 +126,7 @@
 "limit_test_simulation_title" = "Лимит достигнут";
 "limit_test_simulation_message" = "Ты достиг лимита в 3 бесплатные тестовые симуляции. Оформи Pro, чтобы учиться без ограничений.";
 "no_search_results" = "Ничего не найдено";
+"search_results_count" = "%d %@";
 "question_label" = "Вопрос";
 
 // HEADER / READINESS

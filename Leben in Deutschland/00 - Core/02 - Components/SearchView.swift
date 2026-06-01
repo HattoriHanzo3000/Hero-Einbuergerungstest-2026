@@ -73,6 +73,23 @@ struct SearchView: View {
                 ContentUnavailableView.search(text: trimmedQuery)
             } else {
                 List {
+                    Text(
+                        String(
+                            format: "search_results_count".localized,
+                            searchResults.count,
+                            Pluralization.localizedSearchResultsWord(
+                                for: searchResults.count,
+                                languageCode: languageManager.currentAppLanguage
+                            )
+                        )
+                    )
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .listRowSeparator(.hidden, edges: .top)
+                        .listRowInsets(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+                        .accessibilityAddTraits(.isHeader)
+
                     ForEach(searchResults, id: \.question.id) { result in
                         let canStudyTopic = TopicAccessPolicy.isFreeCategory(
                             categoryName: result.categoryName,
@@ -95,7 +112,7 @@ struct SearchView: View {
                             }
                             .buttonStyle(.plain)
                             .listRowSeparator(.visible)
-                            .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                            .listRowInsets(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
                         } else {
                             Button {
                                 HapticManager.shared.lightImpact()
@@ -115,16 +132,17 @@ struct SearchView: View {
                             }
                             .buttonStyle(.plain)
                             .listRowSeparator(.visible)
-                            .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                            .listRowInsets(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
                         }
                     }
                 }
                 .listStyle(.plain)
-                .scrollContentBackground(.hidden)
                 .contentMargins(.horizontal, 0, for: .scrollContent)
                 .contentMargins(.top, showsSearchField ? 8 : 0, for: .scrollContent)
                 .contentMargins(.bottom, 24, for: .scrollContent)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground))
     }
 }

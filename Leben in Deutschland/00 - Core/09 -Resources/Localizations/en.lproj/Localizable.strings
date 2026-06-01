@@ -126,6 +126,7 @@
 "limit_test_simulation_title" = "Limit Reached";
 "limit_test_simulation_message" = "You've reached the limit of 3 free test simulations. Consider upgrading to Pro to study without limits.";
 "no_search_results" = "No results found";
+"search_results_count" = "%d %@";
 "question_label" = "Question";
 
 // HEADER / READINESS
