@@ -10,10 +10,7 @@ opt_in_rules:
   - operator_usage_whitespace
   - unused_declaration
 included:
-  - Sources
-  - App
-  - Features
-  - Shared
+  - Leben in Deutschland
 excluded:
   - Carthage
   - Pods

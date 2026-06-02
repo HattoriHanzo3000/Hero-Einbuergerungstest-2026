@@ -1,14 +1,12 @@
-project: YourApp.xcodeproj
-workspace: YourApp.xcworkspace
+project: Leben in Deutschland.xcodeproj
 schemes:
-  - YourApp
+  - Leben in Deutschland
 targets:
-  - YourApp
-  - YourAppTests
+  - Leben in Deutschland
 retain_public: true
 retain_objc_accessible: true
 retain_assign_only_properties: true
-retain_annotated: 
+retain_annotated:
   - "@IBInspectable"
   - "@IBAction"
   - "@IBSegueAction"
