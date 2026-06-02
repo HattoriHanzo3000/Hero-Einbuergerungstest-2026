@@ -74,6 +74,18 @@ Source code for this app; actively developed (`develop` branch).
 
 ---
 
+## Screenshots
+
+| Home | Learn by topics |
+|:---:|:---:|
+| ![Home screen](docs/screenshots/home.png) | ![Learn by topics](docs/screenshots/learn-by-topics.png) |
+
+| Progress (Cockpit) | Search |
+|:---:|:---:|
+| ![Progress](docs/screenshots/progress.png) | ![Search](docs/screenshots/search.png) |
+
+---
+
 ## Author / Autor
 
 Ildar Gizatullin
