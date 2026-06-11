@@ -191,7 +191,7 @@ final class SettingsRegionalViewModel: ObservableObject {
         HapticManager.shared.heavyImpact()
         showStateChangeWarning = false
         isApplyingStateChange = true
-        applyStateChange(name: pendingStateName, shouldResetProgress: true)
+        applyStateChange(name: pendingStateName)
         Task { @MainActor in
             try? await Task.sleep(nanoseconds: 1_000_000_000)
             isApplyingStateChange = false
@@ -253,11 +253,8 @@ final class SettingsRegionalViewModel: ObservableObject {
         return currentOption
     }
 
-    private func applyStateChange(name: String, shouldResetProgress: Bool) {
-        if shouldResetProgress {
-            FederalStateProgressResetService.reset()
-        }
-
+    private func applyStateChange(name: String) {
+        ProgressPersistenceCoordinator.shared.reloadForFederalState(name)
         stateManager.setSelectedState(name)
         originalState = name
         federalStateName = name

@@ -158,7 +158,7 @@
 
 // SETTINGS / REGIONAL
 "change_state_confirmation_title" = "Изменить федеральную землю?";
-"change_state_confirmation_message" = "Ты действительно хочешь изменить федеральную землю? Весь текущий прогресс будет потерян.";
+"change_state_confirmation_message" = "Твой прогресс сохраняется отдельно для каждой федеральной земли. При смене загружается прогресс выбранной земли.";
 "change_state_confirmation_cancel" = "Отмена";
 "change_state_confirmation_confirm" = "Изменить";
 "settings_app_language_change_title" = "Изменить язык приложения?";

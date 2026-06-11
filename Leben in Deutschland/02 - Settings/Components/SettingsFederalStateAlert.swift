@@ -22,7 +22,7 @@ struct FederalStateAlertModifier: ViewModifier {
                 } label: {
                     Text("change_state_confirmation_cancel".localized)
                 }
-                Button(role: .destructive) {
+                Button {
                     regionalViewModel.confirmPendingStateChange()
                 } label: {
                     Text("change_state_confirmation_confirm".localized)

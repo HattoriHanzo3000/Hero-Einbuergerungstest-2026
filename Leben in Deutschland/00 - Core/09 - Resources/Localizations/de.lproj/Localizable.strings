@@ -158,7 +158,7 @@
 
 // SETTINGS / REGIONAL
 "change_state_confirmation_title" = "Bundesland ändern?";
-"change_state_confirmation_message" = "Möchtest du wirklich das Bundesland ändern? Der gesamte Fortschritt geht verloren.";
+"change_state_confirmation_message" = "Dein Fortschritt wird pro Bundesland gespeichert. Beim Wechsel wird der Fortschritt für das gewählte Bundesland geladen.";
 "change_state_confirmation_cancel" = "Abbrechen";
 "change_state_confirmation_confirm" = "Ändern";
 "settings_app_language_change_title" = "App-Sprache ändern?";

@@ -158,7 +158,7 @@
 
 // SETTINGS / REGIONAL
 "change_state_confirmation_title" = "Eyalet değiştirilsin mi?";
-"change_state_confirmation_message" = "Eyaleti gerçekten değiştirmek istiyor musun? Tüm ilerlemen kaybolacak.";
+"change_state_confirmation_message" = "İlerlemen her eyalet için ayrı kaydedilir. Değiştirdiğinde seçilen eyaletin ilerlemesi yüklenir.";
 "change_state_confirmation_cancel" = "İptal";
 "change_state_confirmation_confirm" = "Değiştir";
 "settings_app_language_change_title" = "Uygulama dili değiştirilsin mi?";
