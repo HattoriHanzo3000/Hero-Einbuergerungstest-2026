@@ -172,6 +172,7 @@ struct MainView: View {
 
 #Preview("Main View") {
     MainView()
+        .modelContainer(try! SwiftDataModelContainerFactory.makePreviewContainer())
         .environmentObject(LanguageManager())
         .environmentObject(StateManager.shared)
         .environmentObject(SoundManager.shared)

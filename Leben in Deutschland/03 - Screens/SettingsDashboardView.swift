@@ -39,7 +39,6 @@ struct SettingsDashboardView: View {
                 if let personalisationViewModel = viewModel.personalisationViewModel {
                     SettingsPersonalisationSectionView(viewModel: personalisationViewModel)
                 }
-                SettingsCloudSyncSectionView()
                 SettingsSupportSectionView(viewModel: viewModel.supportViewModel)
                 SettingsLegalSectionView(viewModel: viewModel.legalViewModel)
                 if let dangerViewModel = viewModel.dangerViewModel {

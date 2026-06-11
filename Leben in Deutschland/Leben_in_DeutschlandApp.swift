@@ -28,19 +28,8 @@ struct Leben_in_DeutschlandApp: App {
             assertionFailure("RevenueCat API key is not configured.")
         }
 
-        let schema = Schema([
-            QuestionStatisticsRecord.self,
-            LearningAnswerRecord.self,
-            FavoriteQuestion.self,
-            UserProgressProfile.self,
-        ])
-        let modelConfiguration = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false,
-            cloudKitDatabase: .automatic
-        )
         do {
-            sharedModelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            sharedModelContainer = try SwiftDataModelContainerFactory.makeSharedContainer()
         } catch {
             fatalError("Could not create ModelContainer: \(error.localizedDescription)")
         }
