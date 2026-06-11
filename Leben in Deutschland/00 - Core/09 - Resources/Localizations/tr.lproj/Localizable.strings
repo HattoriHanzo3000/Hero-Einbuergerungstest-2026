@@ -177,6 +177,9 @@
 "settings_appearance_light" = "Açık";
 "settings_appearance_dark" = "Koyu";
 "settings_appearance_system" = "Sistem";
+"settings_sync_title" = "Senkronizasyon";
+"icloud_sync" = "iCloud";
+"icloud_sync_footer_static" = "İlerlemen, iCloud'a giriş yaptığında Apple cihazların arasında otomatik olarak senkronize edilir. İlerleme her eyalet için ayrı kaydedilir.";
 "settings_support_title" = "Destek";
 "settings_faq_button" = "SSS";
 "settings_contact_button" = "Bize Ulaşın";

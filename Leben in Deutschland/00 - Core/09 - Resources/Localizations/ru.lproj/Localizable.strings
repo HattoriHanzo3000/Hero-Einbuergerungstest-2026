@@ -177,6 +177,9 @@
 "settings_appearance_light" = "Светлая";
 "settings_appearance_dark" = "Темная";
 "settings_appearance_system" = "Системная";
+"settings_sync_title" = "Синхронизация";
+"icloud_sync" = "iCloud";
+"icloud_sync_footer_static" = "Твой прогресс автоматически синхронизируется между устройствами Apple через iCloud, если ты вошёл в аккаунт. Прогресс сохраняется отдельно для каждой федеральной земли.";
 "settings_support_title" = "Поддержка";
 "settings_faq_button" = "FAQ";
 "settings_contact_button" = "Связаться с нами";

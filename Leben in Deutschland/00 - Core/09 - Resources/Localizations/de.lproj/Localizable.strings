@@ -177,6 +177,9 @@
 "settings_appearance_light" = "Hell";
 "settings_appearance_dark" = "Dunkel";
 "settings_appearance_system" = "System";
+"settings_sync_title" = "Synchronisation";
+"icloud_sync" = "iCloud";
+"icloud_sync_footer_static" = "Dein Fortschritt wird automatisch über iCloud auf deine Apple-Geräte synchronisiert, wenn du angemeldet bist. Der Fortschritt wird pro Bundesland gespeichert.";
 "settings_support_title" = "Support";
 "settings_faq_button" = "FAQ";
 "settings_contact_button" = "Kontaktiere uns";

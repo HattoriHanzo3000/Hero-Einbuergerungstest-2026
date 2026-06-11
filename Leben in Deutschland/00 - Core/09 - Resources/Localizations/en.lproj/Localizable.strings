@@ -177,6 +177,9 @@
 "settings_appearance_light" = "Light";
 "settings_appearance_dark" = "Dark";
 "settings_appearance_system" = "System";
+"settings_sync_title" = "Synchronization";
+"icloud_sync" = "iCloud";
+"icloud_sync_footer_static" = "Your progress is automatically synced across your Apple devices via iCloud when you're signed in. Progress is saved separately for each federal state.";
 "settings_support_title" = "Support";
 "settings_faq_button" = "FAQ";
 "settings_contact_button" = "Contact Us";
