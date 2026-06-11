@@ -98,6 +98,7 @@ final class SettingsResetService: SettingsResetServicing {
         answersService.clearAllAnswers()
         categoriesStateService.clearAllState()
         SpacedRepetitionManager.shared.clearAllStatistics()
+        FavoritesManager.shared.clearAllFavorites()
     }
 }
 

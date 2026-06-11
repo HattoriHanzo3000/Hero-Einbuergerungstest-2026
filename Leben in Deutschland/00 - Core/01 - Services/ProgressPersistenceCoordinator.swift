@@ -45,7 +45,7 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
     MigrationManager.migrateLegacyUserDefaultsProgressToSwiftDataIfNeeded(context: modelContext)
     bootstrapActiveFederalState(using: modelContext)
     startObservingRemoteChanges()
-    // Phase 3: bind SpacedRepetitionManager, AnswersService, FavoritesManager
+    bindProgressServices()
   }
 
   func reloadForFederalState(_ state: String) {
@@ -116,9 +116,25 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
     }
   }
 
+  private func bindProgressServices() {
+    guard let modelContext else { return }
+    SpacedRepetitionManager.shared.bind(
+      modelContext: modelContext,
+      activeFederalState: activeFederalState
+    )
+    AnswersService.shared.bind(
+      modelContext: modelContext,
+      activeFederalState: activeFederalState
+    )
+    FavoritesManager.shared.bind(
+      modelContext: modelContext,
+      activeFederalState: activeFederalState
+    )
+  }
+
   private func reloadBoundServices() {
-    // Phase 3: SpacedRepetitionManager.shared.reloadForFederalState(activeFederalState)
-    // Phase 3: AnswersService.shared.reloadForFederalState(activeFederalState)
-    // Phase 3: FavoritesManager.shared.reloadForFederalState(activeFederalState)
+    SpacedRepetitionManager.shared.reloadForFederalState(activeFederalState)
+    AnswersService.shared.reloadForFederalState(activeFederalState)
+    FavoritesManager.shared.reloadForFederalState(activeFederalState)
   }
 }

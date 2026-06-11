@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftData
 
 // MARK: - Spaced Repetition Managing
 protocol SpacedRepetitionManaging: AnyObject {
@@ -14,40 +15,53 @@ protocol SpacedRepetitionManaging: AnyObject {
 }
 
 // MARK: - Spaced Repetition Manager
+@MainActor
 final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging {
     static let shared = SpacedRepetitionManager()
-    
+
     @Published private(set) var statistics: [String: QuestionStatisticsModel] = [:]
-    
+
     private let defaults: UserDefaults
     private let calendar = Calendar.current
-    
+    private var modelContext: ModelContext?
+    private var activeFederalState: String = ""
+
     private init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-        loadStatistics()
     }
-    
+
+    func bind(modelContext: ModelContext, activeFederalState: String) {
+        self.modelContext = modelContext
+        self.activeFederalState = activeFederalState
+        reloadFromStore()
+    }
+
+    func reloadForFederalState(_ state: String) {
+        activeFederalState = state
+        reloadFromStore()
+    }
+
     // MARK: - Session
     func questionsForSession(from questions: [QuestionModel], limit: Int = 20) -> [QuestionModel] {
         guard limit > 0 else { return [] }
         let today = Date()
-        
+
         let readyQuestions = questions.filter { question in
             guard let stats = statistics[question.id] else { return true }
             guard let nextReview = stats.nextReviewDate else { return true }
             return nextReview <= today
         }
-        
+
         // Bucketed selection for diversity (avoid ID clustering)
         enum Bucket { case new, hard, medium, easy }
-        
+
         func bucket(for question: QuestionModel) -> Bucket {
             guard let stats = statistics[question.id] else { return .new }
             if stats.correctCount >= 4 { return .easy }
             if stats.accuracy < 0.65 { return .hard }
             return .medium
         }
-        
+
         func comparePriority(_ l: QuestionModel, _ r: QuestionModel) -> Bool {
             let lStats = statistics[l.id]
             let rStats = statistics[r.id]
@@ -56,7 +70,7 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
             if lDate != rDate { return lDate < rDate }
             return (lStats?.showCount ?? 0) < (rStats?.showCount ?? 0)
         }
-        
+
         let new = readyQuestions.filter { bucket(for: $0) == .new }.shuffled()
         let hard = readyQuestions.filter { bucket(for: $0) == .hard }
             .sorted(by: comparePriority).shuffled()
@@ -64,27 +78,27 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
             .sorted(by: comparePriority).shuffled()
         let easy = readyQuestions.filter { bucket(for: $0) == .easy }
             .sorted(by: comparePriority).shuffled()
-        
+
         // Target mix: 5 Hard, 3 Medium, 2 New, 1 Easy (for limit 12)
         let targetHard = min(5, limit)
         let targetMedium = min(3, max(0, limit - targetHard))
         let targetNew = min(2, max(0, limit - targetHard - targetMedium))
         let targetEasy = min(1, max(0, limit - targetHard - targetMedium - targetNew))
-        
+
         var session: [QuestionModel] = []
         var usedIds = Set<String>()
-        
+
         func add(_ q: QuestionModel) {
             guard !usedIds.contains(q.id) else { return }
             usedIds.insert(q.id)
             session.append(q)
         }
-        
+
         for q in hard.prefix(targetHard) { add(q) }
         for q in medium.prefix(targetMedium) { add(q) }
         for q in new.prefix(targetNew) { add(q) }
         for q in easy.prefix(targetEasy) { add(q) }
-        
+
         // Backfill from remaining buckets in round-robin
         var h = targetHard, m = targetMedium, n = targetNew, e = targetEasy
         var bucketIndex = 0
@@ -104,32 +118,32 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
             bucketIndex = (bucketIndex + 1) % 4
             if !didAdd && h >= hard.count && m >= medium.count && n >= new.count && e >= easy.count { break }
         }
-        
+
         if session.count < limit {
             let unseen = questions.filter { statistics[$0.id] == nil }
             for q in unseen where session.count < limit && !usedIds.contains(q.id) {
                 add(q)
             }
         }
-        
+
         if session.count < limit {
             for q in questions where session.count < limit && !usedIds.contains(q.id) {
                 add(q)
             }
         }
-        
+
         return session
     }
-    
+
     // MARK: - Recording
     func recordAnswer(for questionId: String, isCorrect: Bool) {
         let daysUntilTest = computeDaysUntilTest()
         var stats = statistics[questionId] ?? QuestionStatisticsModel(questionId: questionId)
         stats.registerAnswer(isCorrect: isCorrect, daysUntilTest: daysUntilTest)
         statistics[questionId] = stats
-        saveStatistics()
+        persistRecord(stats)
     }
-    
+
     private func computeDaysUntilTest() -> Int {
         let testDate = OnboardingPreferences.shared.testDate
             ?? defaults.object(forKey: UserDefaultsKeys.selectedTestDate) as? Date
@@ -143,7 +157,7 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
         guard var stats = statistics[questionId] else { return }
         stats.applyReset()
         statistics[questionId] = stats
-        saveStatistics()
+        persistRecord(stats)
     }
 
     // MARK: - Progress (readiness based on correct count only: 1→0.25, 2→0.5, 3→0.75, 4+→1.0)
@@ -165,7 +179,7 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
         default: return 1.0  // 4+ correct = full credit
         }
     }
-    
+
     func progressBuckets(totalQuestions: Int) -> (familiar: Int, reinforced: Int, mastered: Int, expert: Int, total: Int) {
         let familiar = statistics.values.filter { $0.correctCount == 1 }.count
         let reinforced = statistics.values.filter { $0.correctCount == 2 }.count
@@ -177,25 +191,58 @@ final class SpacedRepetitionManager: ObservableObject, SpacedRepetitionManaging 
     func clearAllStatistics() {
         statistics = [:]
         defaults.removeObject(forKey: UserDefaultsKeys.questionStatistics)
+        guard let context = modelContext else { return }
+        try? QuestionStatisticsRecord.deleteAll(in: context)
     }
 }
 
 // MARK: - Persistence
 private extension SpacedRepetitionManager {
-    func loadStatistics() {
-        guard let data = defaults.data(forKey: UserDefaultsKeys.questionStatistics) else {
+    func reloadFromStore() {
+        guard let context = modelContext, !activeFederalState.isEmpty else {
             statistics = [:]
             return
         }
-        if let decoded = try? JSONDecoder().decode([String: QuestionStatisticsModel].self, from: data) {
-            statistics = decoded
+
+        let state = activeFederalState
+        let descriptor = FetchDescriptor<QuestionStatisticsRecord>(
+            predicate: #Predicate<QuestionStatisticsRecord> { $0.federalState == state }
+        )
+        let rows = (try? context.fetch(descriptor)) ?? []
+        var loaded: [String: QuestionStatisticsModel] = [:]
+        for row in rows {
+            loaded[row.questionId] = QuestionStatisticsModel(record: row)
         }
+        statistics = loaded
     }
 
-    func saveStatistics() {
-        if let data = try? JSONEncoder().encode(statistics) {
-            defaults.set(data, forKey: UserDefaultsKeys.questionStatistics)
+    func persistRecord(_ stats: QuestionStatisticsModel) {
+        guard let context = modelContext, !activeFederalState.isEmpty else { return }
+
+        let recordId = ProgressRecordID.make(federalState: activeFederalState, questionId: stats.questionId)
+        let id = recordId
+        var descriptor = FetchDescriptor<QuestionStatisticsRecord>(
+            predicate: #Predicate<QuestionStatisticsRecord> { $0.recordId == id }
+        )
+        descriptor.fetchLimit = 1
+
+        if let existing = try? context.fetch(descriptor).first {
+            existing.apply(from: stats)
+        } else {
+            context.insert(QuestionStatisticsRecord(
+                federalState: activeFederalState,
+                questionId: stats.questionId,
+                showCount: stats.showCount,
+                correctCount: stats.correctCount,
+                incorrectCount: stats.incorrectCount,
+                lastShownDate: stats.lastShownDate,
+                nextReviewDate: stats.nextReviewDate,
+                interval: stats.interval,
+                masteryLevel: stats.masteryLevel,
+                consecutiveCorrect: stats.consecutiveCorrect,
+                lastAnswerWasCorrect: stats.lastAnswerWasCorrect
+            ))
         }
+        try? context.save()
     }
 }
-

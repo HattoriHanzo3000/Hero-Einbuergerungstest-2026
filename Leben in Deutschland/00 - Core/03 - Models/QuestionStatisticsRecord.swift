@@ -51,6 +51,18 @@ final class QuestionStatisticsRecord {
     self.lastAnswerWasCorrect = lastAnswerWasCorrect
   }
 
+  func apply(from model: QuestionStatisticsModel) {
+    showCount = model.showCount
+    correctCount = model.correctCount
+    incorrectCount = model.incorrectCount
+    lastShownDate = model.lastShownDate
+    nextReviewDate = model.nextReviewDate
+    interval = model.interval
+    masteryLevel = model.masteryLevel
+    consecutiveCorrect = model.consecutiveCorrect
+    lastAnswerWasCorrect = model.lastAnswerWasCorrect
+  }
+
   @MainActor
   static func deleteAll(in context: ModelContext) throws {
     let descriptor = FetchDescriptor<QuestionStatisticsRecord>()

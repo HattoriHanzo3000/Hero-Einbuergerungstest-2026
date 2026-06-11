@@ -4,6 +4,7 @@ import Foundation
 /// Persists spaced repetition metadata for a single question.
 struct QuestionStatisticsModel: Codable, Hashable {
     let questionId: String
+
     var showCount: Int = 0
     var correctCount: Int = 0
     var incorrectCount: Int = 0
@@ -14,7 +15,24 @@ struct QuestionStatisticsModel: Codable, Hashable {
     var consecutiveCorrect: Int = 0
     /// Tracks the last answer type to enable "undo last input" on reset
     var lastAnswerWasCorrect: Bool? = nil
-    
+
+    init(questionId: String) {
+        self.questionId = questionId
+    }
+
+    init(record: QuestionStatisticsRecord) {
+        questionId = record.questionId
+        showCount = record.showCount
+        correctCount = record.correctCount
+        incorrectCount = record.incorrectCount
+        lastShownDate = record.lastShownDate
+        nextReviewDate = record.nextReviewDate
+        interval = record.interval
+        masteryLevel = record.masteryLevel
+        consecutiveCorrect = record.consecutiveCorrect
+        lastAnswerWasCorrect = record.lastAnswerWasCorrect
+    }
+
     var accuracy: Double {
         guard showCount > 0 else { return 0 }
         return Double(correctCount) / Double(showCount)
