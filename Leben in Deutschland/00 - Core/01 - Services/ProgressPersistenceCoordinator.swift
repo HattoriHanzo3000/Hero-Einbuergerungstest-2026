@@ -17,6 +17,7 @@ protocol ProgressPersistenceCoordinating: AnyObject {
   var activeFederalState: String { get }
   func attach(modelContext: ModelContext)
   func reloadForFederalState(_ state: String)
+  func clearAllProgressData(using defaults: UserDefaults)
 }
 
 // MARK: - Coordinator
@@ -52,6 +53,25 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
     activeFederalState = state
     persistActiveFederalState(state)
     reloadBoundServices()
+  }
+
+  /// Deletes all progress across every federal state (Settings global reset only).
+  func clearAllProgressData(using defaults: UserDefaults = .standard) {
+    if let context = modelContext {
+      try? QuestionStatisticsRecord.deleteAll(in: context)
+      try? LearningAnswerRecord.deleteAll(in: context)
+      try? FavoriteQuestion.deleteAll(in: context)
+      try? UserProgressProfile.deleteAll(in: context)
+    }
+    MigrationManager.resetProgressMigrationFlags(using: defaults)
+    activeFederalState = FederalStateModel.allStates.first?.name ?? "Berlin"
+    if modelContext != nil {
+      reloadBoundServices()
+    } else {
+      SpacedRepetitionManager.shared.clearAllStatistics()
+      AnswersService.shared.clearAllAnswers()
+      FavoritesManager.shared.clearAllFavorites()
+    }
   }
 
   func stopObservingRemoteChanges() {

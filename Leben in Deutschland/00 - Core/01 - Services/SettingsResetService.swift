@@ -16,16 +16,16 @@ final class SettingsResetService: SettingsResetServicing {
     static let shared = SettingsResetService()
 
     private let defaults: UserDefaults
-    private let answersService: AnswersService
+    private let progressCoordinator: ProgressPersistenceCoordinating
     private let categoriesStateService: CategoriesStateService
 
     private init(
         defaults: UserDefaults = .standard,
-        answersService: AnswersService? = nil,
+        progressCoordinator: ProgressPersistenceCoordinating? = nil,
         categoriesStateService: CategoriesStateService? = nil
     ) {
         self.defaults = defaults
-        self.answersService = answersService ?? AnswersService.shared
+        self.progressCoordinator = progressCoordinator ?? ProgressPersistenceCoordinator.shared
         self.categoriesStateService = categoriesStateService ?? CategoriesStateService.shared
     }
 
@@ -44,7 +44,6 @@ final class SettingsResetService: SettingsResetServicing {
             onboardingPreferences: onboardingPreferences
         )
         clearPersistedProgress()
-        FavoritesManager.shared.reloadFromStorage()
     }
 
     @MainActor
@@ -95,10 +94,7 @@ final class SettingsResetService: SettingsResetServicing {
 
     @MainActor
     private func clearPersistedProgress() {
-        answersService.clearAllAnswers()
+        progressCoordinator.clearAllProgressData(using: defaults)
         categoriesStateService.clearAllState()
-        SpacedRepetitionManager.shared.clearAllStatistics()
-        FavoritesManager.shared.clearAllFavorites()
     }
 }
-
