@@ -1,0 +1,39 @@
+Hero: Einbürgerungstest — App Review Notes (v2.3)
+=================================================
+Paste into App Store Connect → App Review Information → Notes (or version-specific review notes).
+
+---
+
+TEST SCOPE
+
+- Primary: onboarding → home → Smart Learning → Learn by Topics → Test Simulation → Cockpit → Settings.
+- New in 2.3: learning progress syncs via the user’s iCloud account (CloudKit). No Hero login.
+
+ACCESS
+
+- No account registration. Open the app and complete onboarding (federal state, optional test date, language).
+- Core learning works immediately on the free tier.
+- Hero Pro: Settings → Hero Pro, or paywall entry points. Restore Purchases on the paywall.
+
+iCLOUD SYNC (2.3)
+
+- Progress (statistics, topic answers, favorites, federal state, test date) syncs automatically when the reviewer is signed in to iCloud on the test device.
+- Container: iCloud.com.gizatech.Leben-in-Deutschland (private CloudKit database).
+- Settings → Synchronization section explains sync; there is no in-app iCloud toggle — sync follows system iCloud.
+- To verify: answer questions on one device, wait for sync, open the same Apple ID on a second device — progress should appear without reinstall.
+- Federal state switch (Settings → Region): loads per-state progress; does not wipe other states.
+- Settings → Reset App clears all learning data (all states).
+
+SUBSCRIPTIONS
+
+- Auto-renewable subscriptions + optional lifetime IAP via RevenueCat.
+- Restore: paywall or Settings → Hero Pro → Restore Purchases.
+
+NETWORK
+
+- Question content is bundled (JSON). iCloud is used only for personal progress sync.
+- App should not crash when iCloud is unavailable; progress remains local on device.
+
+CONTACT
+
+- Settings → Contact Us (in-app mail compose).

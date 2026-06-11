@@ -43,7 +43,7 @@ Smart Learning uses spaced repetition — a proven method that brings questions 
 
 9. Why do I need to choose a federal state?
 
-The real exam includes questions about the state where you take the test. In Hero, questions 301–310 are specific to your chosen Bundesland. Pick your state during onboarding or in Settings. If you change your federal state later, all progress is reset because the question set changes.
+The real exam includes questions about the state where you take the test. In Hero, questions 301–310 are specific to your chosen Bundesland. Pick your state during onboarding or in Settings. If you change your federal state later, Hero loads the progress saved for that state — your progress for each Bundesland is kept separately.
 
 
 10. Which languages does the app support?
@@ -51,9 +51,17 @@ The real exam includes questions about the state where you take the test. In Her
 You can set the app interface language and a separate translation language for questions and answers. Supported languages are German, English, Russian, and Turkish. You can change both at any time in Settings.
 
 
-11. Where is my progress stored?
+11. Where is my progress stored? Does it sync across devices?
 
-Your learning progress, favorites, and statistics are stored locally on your device. They are not synced to the cloud. If you delete the app, reset it in Settings, or change your federal state, your progress may be lost — so make sure your state and test date are set correctly before you start studying seriously.
+Your learning progress (Smart Learning statistics, Learn by Topics answers, favorites, active federal state, and test date) is stored on your device using Apple’s SwiftData and, when you are signed in to iCloud with iCloud enabled for this app, synced automatically to your private iCloud database (CloudKit). The same Apple ID on another iPhone or iPad can receive your progress after sync — no separate Hero account or login is required.
+
+Progress is saved separately for each federal state. Switching Bundesland in Settings loads that state’s dataset; progress you earned in other states is not deleted.
+
+Question content (the official catalog) is built into the app and is not synced — only your personal learning data syncs.
+
+If you are not signed in to iCloud, progress stays on the device only. Freemium usage counters and app preferences (language, appearance, disclaimers) remain on the device and are not synced.
+
+Use Settings → Reset App to erase all learning progress on all devices linked to your iCloud account. Deleting the app alone does not remove data already stored in iCloud.
 
 
 12. How is my readiness score calculated?

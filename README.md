@@ -21,7 +21,7 @@ Native **iOS-App** zur Vorbereitung auf den **Leben-in-Deutschland-** / **Einbü
 
 - **iOS 18+** · **Xcode** · **Swift** · **SwiftUI**
 - Strukturierter Code: **Screens**, **ViewModels**, **Services**
-- Fragen und Inhalte als **JSON**; Fortschritt lokal gespeichert
+- Fragen und Inhalte als **JSON**; Fortschritt mit **SwiftData** + **CloudKit (iCloud)** — optional auf Apple-Geräten synchronisiert, pro Bundesland getrennt
 - **Datengetriebene Auswertung:** Lernstatistiken, Prüfungsbereitschaft, Fortschritt pro Frage
 - **Adaptive Lernplanung** (**Spaced Repetition**) auf Basis der Antwort-Historie
 - **Python**-Skripte zur Pflege der **JSON**-Fragenkataloge
@@ -57,7 +57,7 @@ Practice with the official question catalog, track your progress, and simulate t
 
 - **iOS 18+** · **Xcode** · **Swift** · **SwiftUI**
 - Structured code: **screens**, **view models**, **services**
-- **JSON** content; progress saved on device
+- **JSON** content; progress via **SwiftData** + **CloudKit (iCloud)** — syncs across Apple devices when signed in; separate dataset per federal state
 - **Data-driven analytics:** per-question stats, readiness score, progress dashboards
 - **Adaptive review scheduling** (**spaced repetition**) from answer history
 - **Python** scripts for maintaining the **JSON** question catalogs

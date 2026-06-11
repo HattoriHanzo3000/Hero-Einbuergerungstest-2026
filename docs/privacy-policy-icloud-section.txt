@@ -1,0 +1,52 @@
+Privacy policy addendum — iCloud sync (Hero: Einbürgerungstest)
+==============================================================
+Publish this section on https://www.gizatech.de/hero-einbürgerungstest/privacy-policy
+(or merge into the existing privacy policy page).
+
+---
+
+ENGLISH
+
+iCloud sync (CloudKit)
+
+When you are signed in to iCloud on your device, Hero stores certain learning data in your private iCloud database using Apple CloudKit. This is separate from our servers — we do not operate a Hero login or host your progress on gizatech.de.
+
+Data synced via iCloud may include:
+- Spaced-repetition statistics (Smart Learning progress per question)
+- Learn by Topics answers
+- Favorite questions
+- Your active federal state and test date
+
+Progress is stored per federal state (Bundesland). Switching states in the app loads the matching dataset; data for other states remains stored until you delete it.
+
+Data not synced via iCloud includes: app language and appearance settings, freemium usage limits, disclaimer acknowledgements, subscription status (handled by Apple/RevenueCat), and anonymous app-rating prompts.
+
+iCloud sync requires the same Apple ID on each device and iCloud enabled for the app. Apple’s iCloud terms and privacy policy apply to data stored in your iCloud account.
+
+You can remove all synced learning data with Settings → Reset App in Hero. Subscription management remains through Apple.
+
+Contact: see the Contact section in the app (Settings → Contact Us).
+
+---
+
+DEUTSCH
+
+iCloud-Synchronisation (CloudKit)
+
+Wenn du auf deinem Gerät bei iCloud angemeldet bist, speichert Hero bestimmte Lerndaten in deiner privaten iCloud-Datenbank über Apple CloudKit. Das ist getrennt von unseren Servern — es gibt kein Hero-Login und wir hosten deinen Fortschritt nicht auf gizatech.de.
+
+Über iCloud synchronisierte Daten können umfassen:
+- Spaced-Repetition-Statistiken (Smart-Learning-Fortschritt pro Frage)
+- Antworten aus „Nach Themen lernen“
+- Favoriten
+- Dein aktives Bundesland und Prüfungstermin
+
+Der Fortschritt wird pro Bundesland gespeichert. Beim Wechsel des Bundeslands in der App wird der passende Datensatz geladen; Daten anderer Bundesländer bleiben gespeichert, bis du sie löschst.
+
+Nicht über iCloud synchronisiert werden u. a.: App-Sprache und Darstellung, Freemium-Nutzungszähler, Bestätigungen von Hinweisen, Abo-Status (über Apple/RevenueCat) sowie anonyme App-Bewertungsaufforderungen.
+
+Die iCloud-Synchronisation erfordert dieselbe Apple-ID auf jedem Gerät und aktiviertes iCloud für die App. Für in deinem iCloud-Konto gespeicherte Daten gelten die iCloud-Nutzungsbedingungen und die Datenschutzrichtlinie von Apple.
+
+Du kannst alle synchronisierten Lerndaten unter Einstellungen → App zurücksetzen in Hero entfernen. Abos verwaltest du weiter über Apple.
+
+Kontakt: siehe Kontakt im App-Menü (Einstellungen → Kontaktiere uns).
