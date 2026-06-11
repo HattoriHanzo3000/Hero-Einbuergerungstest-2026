@@ -15,7 +15,7 @@ enum UserProgressProfileKeys {
 
 @Model
 final class UserProgressProfile {
-  @Attribute(.unique) var singletonKey: String = UserProgressProfileKeys.singletonKey
+  var singletonKey: String = UserProgressProfileKeys.singletonKey
   var activeFederalState: String = ""
   var testDate: Date?
   var testDateDontKnow: Bool = true

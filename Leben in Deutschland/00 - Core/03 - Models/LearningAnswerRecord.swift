@@ -11,7 +11,7 @@ import SwiftData
 
 @Model
 final class LearningAnswerRecord {
-  @Attribute(.unique) var recordId: String = ""
+  var recordId: String = ""
   var federalState: String = ""
   var questionId: String = ""
   var answerIndex: Int = 0

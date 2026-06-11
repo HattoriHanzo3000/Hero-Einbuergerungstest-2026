@@ -47,18 +47,14 @@ enum SwiftDataModelContainerFactory {
         let configuration = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false,
-            cloudKitDatabase: .automatic
+            cloudKitDatabase: .private("iCloud.com.gizatech.Leben-in-Deutschland")
         )
         do {
             return try ModelContainer(for: schema, configurations: [configuration])
         } catch {
-#if DEBUG
-            // Recover from an incompatible on-disk store after schema changes during development.
+            // Recover from an incompatible on-disk store (e.g. schema no longer matches CloudKit rules).
             try removeDefaultStoreFiles()
             return try ModelContainer(for: schema, configurations: [configuration])
-#else
-            throw error
-#endif
         }
     }
 

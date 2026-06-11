@@ -122,8 +122,9 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
       object: nil,
       queue: .main
     ) { [weak self] _ in
-      guard let self else { return }
-      self.scheduleRemoteReload()
+      MainActor.assumeIsolated {
+        self?.scheduleRemoteReload()
+      }
     }
   }
 

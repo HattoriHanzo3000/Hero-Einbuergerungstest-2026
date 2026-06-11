@@ -79,7 +79,7 @@ private extension FavoritesManager {
         }
 
         let state = activeFederalState
-        var descriptor = FetchDescriptor<FavoriteQuestion>(
+        let descriptor = FetchDescriptor<FavoriteQuestion>(
             predicate: #Predicate<FavoriteQuestion> { $0.federalState == state },
             sortBy: [SortDescriptor(\.addedAt)]
         )
