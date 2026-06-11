@@ -1,9 +1,11 @@
+import SwiftData
 import SwiftUI
 
 // MARK: - Main View
 /// Root tab navigation that hosts the primary app sections.
 /// Mirrors B2's `MainView` role as the app-wide container with visible tab bar.
 struct MainView: View {
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @AppStorage("appLanguage") private var appLanguage: String = LanguageManager.baseLanguageCode
     @State private var selectedTab: TabIdentifier = .learn
@@ -64,6 +66,9 @@ struct MainView: View {
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized(for: appLanguage))
+        .onAppear {
+            ProgressPersistenceCoordinator.shared.attach(modelContext: modelContext)
+        }
         .task { await SubscriptionManager.shared.refreshProStatus() }
         .onChange(of: selectedTab) { oldValue, newValue in
             handleSelectedTabChange(from: oldValue, to: newValue)
@@ -117,6 +122,9 @@ struct MainView: View {
         }
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
+        .onAppear {
+            ProgressPersistenceCoordinator.shared.attach(modelContext: modelContext)
+        }
         .task { await SubscriptionManager.shared.refreshProStatus() }
         .onChange(of: selectedTab) { oldValue, newValue in
             handleSelectedTabChange(from: oldValue, to: newValue)

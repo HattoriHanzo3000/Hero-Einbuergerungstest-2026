@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 import UIKit
 import RevenueCat
 
@@ -16,7 +17,9 @@ struct Leben_in_DeutschlandApp: App {
     @StateObject private var appFlow = AppFlow()
     @StateObject private var stateManager = StateManager.shared
     @AppStorage(UserDefaultsKeys.appearance) private var appAppearance: String = "system"
-    
+
+    private let sharedModelContainer: ModelContainer
+
     init() {
         let revenueCatAPIKey = AppConfiguration.revenueCatAPIKey
         if !revenueCatAPIKey.isEmpty {
@@ -24,6 +27,24 @@ struct Leben_in_DeutschlandApp: App {
         } else {
             assertionFailure("RevenueCat API key is not configured.")
         }
+
+        let schema = Schema([
+            QuestionStatisticsRecord.self,
+            LearningAnswerRecord.self,
+            FavoriteQuestion.self,
+            UserProgressProfile.self,
+        ])
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            cloudKitDatabase: .automatic
+        )
+        do {
+            sharedModelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
+        } catch {
+            fatalError("Could not create ModelContainer: \(error.localizedDescription)")
+        }
+
         recordFirstLaunchIfNeeded()
         configureTabBarAppearance()
     }
@@ -93,6 +114,7 @@ struct Leben_in_DeutschlandApp: App {
                 .background(Color("LaunchScreenBackground").ignoresSafeArea())
             }
         }
+        .modelContainer(sharedModelContainer)
     }
     
     /// Records first launch date for 3-day Launch Offer. Called once per install.

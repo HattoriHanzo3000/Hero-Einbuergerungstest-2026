@@ -1,0 +1,61 @@
+Hero: Einbürgerungstest 2026 — FAQ (English)
+================================================
+
+1. What is Hero and who is it for?
+
+Hero is an iOS app that helps you prepare for the German Leben in Deutschland / Einbürgerungstest (citizenship test). You can practice with the official question catalog, track your progress, and simulate the real exam — at your own pace, in your preferred language.
+
+
+2. Are the questions in the app official?
+
+The app includes all 310 official exam questions (300 federal questions plus 10 about your chosen federal state). Hero is an independent learning app and is not affiliated with, authorized by, or endorsed by BAMF (Bundesamt für Migration und Flüchtlinge). The official test is administered by BAMF.
+
+
+3. What can I use for free?
+
+You can explore the app without paying: browse and search questions, study one topic category for free, save up to 5 favorites, answer up to 30 Smart Learning questions, and run up to 3 test simulations. The Cockpit (progress dashboard), federal state selection, and translation support are also available on the free plan.
+
+
+4. What is Hero Pro and what does it unlock?
+
+Hero Pro removes the free limits and opens every learning topic. With Pro you get unlimited Smart Learning, unlimited test simulations, unlimited favorites, and full access to Learn by Topics. Pro also supports the app’s continued development and content updates.
+
+
+5. What subscription options are available?
+
+Hero Pro is available through the App Store. Plans typically include monthly and yearly subscriptions, as well as a one-time lifetime purchase. Many plans include a 3-day free trial — you can cancel anytime before the trial ends to avoid being charged. Exact prices and plans are shown in the app and may vary by region.
+
+
+6. How do I restore a purchase or manage my subscription?
+
+If you already subscribed on this Apple ID, open Settings → Hero Pro in the app and tap “Restore Purchases.” To change or cancel a subscription, go to Settings → Hero Pro → “Manage Subscription,” or open your App Store account settings on your iPhone. Subscriptions renew automatically unless you cancel at least 24 hours before the end of the current period.
+
+
+7. How does the test simulation work?
+
+Test Simulation mirrors the official exam: 33 questions (30 federal + 3 from your federal state), 60 minutes, and a single attempt with no hints or translations during the test. You need at least 17 correct answers to pass. Your result affects your readiness score in the Cockpit.
+
+
+8. What is Smart Learning?
+
+Smart Learning uses spaced repetition — a proven method that brings questions back at the right time so you remember more with less effort. Your answers update your progress and readiness score. Free users can answer up to 30 Smart Learning questions; Pro users have no limit.
+
+
+9. Why do I need to choose a federal state?
+
+The real exam includes questions about the state where you take the test. In Hero, questions 301–310 are specific to your chosen Bundesland. Pick your state during onboarding or in Settings. If you change your federal state later, all progress is reset because the question set changes.
+
+
+10. Which languages does the app support?
+
+You can set the app interface language and a separate translation language for questions and answers. Supported languages are German, English, Russian, and Turkish. You can change both at any time in Settings.
+
+
+11. Where is my progress stored?
+
+Your learning progress, favorites, and statistics are stored locally on your device. They are not synced to the cloud. If you delete the app, reset it in Settings, or change your federal state, your progress may be lost — so make sure your state and test date are set correctly before you start studying seriously.
+
+
+12. How is my readiness score calculated?
+
+Your readiness score reflects how well you know the material based on your practice across modes that count toward progress (Smart Learning and Test Simulation). The Cockpit shows detailed stats so you can see how close you are to being exam-ready. Learn by Topics and All Questions are for practice and do not affect the score in the same way.
