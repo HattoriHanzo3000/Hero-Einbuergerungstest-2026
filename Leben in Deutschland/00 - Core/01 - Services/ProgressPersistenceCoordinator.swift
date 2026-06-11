@@ -42,9 +42,9 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
     guard !didAttach else { return }
     didAttach = true
     self.modelContext = modelContext
+    MigrationManager.migrateLegacyUserDefaultsProgressToSwiftDataIfNeeded(context: modelContext)
     bootstrapActiveFederalState(using: modelContext)
     startObservingRemoteChanges()
-    // Phase 2: MigrationManager.migrateLegacyUserDefaultsProgressToSwiftDataIfNeeded(context:)
     // Phase 3: bind SpacedRepetitionManager, AnswersService, FavoritesManager
   }
 

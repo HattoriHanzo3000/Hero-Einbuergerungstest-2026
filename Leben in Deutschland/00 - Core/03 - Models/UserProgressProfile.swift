@@ -40,6 +40,16 @@ final class UserProgressProfile {
 
 extension UserProgressProfile {
   @MainActor
+  static func fetchExistingSingleton(in context: ModelContext) -> UserProgressProfile? {
+    let key = UserProgressProfileKeys.singletonKey
+    var descriptor = FetchDescriptor<UserProgressProfile>(
+      predicate: #Predicate<UserProgressProfile> { $0.singletonKey == key }
+    )
+    descriptor.fetchLimit = 1
+    return try? context.fetch(descriptor).first
+  }
+
+  @MainActor
   static func fetchOrInsertSingleton(in context: ModelContext) -> UserProgressProfile {
     let key = UserProgressProfileKeys.singletonKey
     var descriptor = FetchDescriptor<UserProgressProfile>(
