@@ -56,22 +56,6 @@ extension View {
     func showsTabBar() -> some View {
         toolbar(.visible, for: .tabBar)
     }
-
-    /// SwiftUI + UIKit restore after search tab or pushed screens hide the tab bar.
-    func restoresTabBarOnAppear() -> some View {
-        modifier(RestoresTabBarOnAppearModifier())
-    }
-}
-
-private struct RestoresTabBarOnAppearModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .toolbar(.visible, for: .tabBar)
-            .toolbarBackground(.visible, for: .tabBar)
-            .onAppear {
-                TabBarVisibility.restoreVisible()
-            }
-    }
 }
 
 extension View {
@@ -130,11 +114,10 @@ private struct NavigationInteractivePopBridge: UIViewControllerRepresentable {
 
 // MARK: - UIKit Tab Bar Visibility
 enum TabBarVisibility {
-    /// Restores the tab bar after search-tab chrome or navigation push left it hidden (common on iPad).
+    /// Unhides the UITabBar after the iOS 18 search tab leaves it stuck hidden (iPad workaround).
+    /// Does not reset `hidesBottomBarWhenPushed` on navigation children.
     static func restoreVisible() {
-        setHidden(false)
-        resetNavigationBarsHidingTabBar()
-        unhideAllTabBarViews(hidden: false)
+        unhideTabBar()
         scheduleRestoreRetries()
     }
 
@@ -142,9 +125,15 @@ enum TabBarVisibility {
         DispatchQueue.main.async {
             applyHidden(hidden)
             if !hidden {
-                resetNavigationBarsHidingTabBar()
                 unhideAllTabBarViews(hidden: false)
             }
+        }
+    }
+
+    private static func unhideTabBar() {
+        DispatchQueue.main.async {
+            applyHidden(false)
+            unhideAllTabBarViews(hidden: false)
         }
     }
 
@@ -152,7 +141,6 @@ enum TabBarVisibility {
         for delay in [0.15, 0.35, 0.6] {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 applyHidden(false)
-                resetNavigationBarsHidingTabBar()
                 unhideAllTabBarViews(hidden: false)
             }
         }
@@ -191,23 +179,6 @@ enum TabBarVisibility {
         }
         view.subviews.forEach { applyTabBarVisibility(in: $0, hidden: hidden) }
     }
-
-    private static func resetNavigationBarsHidingTabBar() {
-        for window in keyWindows() {
-            resetHidesBottomBarWhenPushed(in: window.rootViewController)
-        }
-    }
-
-    private static func resetHidesBottomBarWhenPushed(in viewController: UIViewController?) {
-        guard let viewController else { return }
-
-        if let navigationController = viewController as? UINavigationController {
-            navigationController.viewControllers.forEach { $0.hidesBottomBarWhenPushed = false }
-        }
-
-        viewController.children.forEach { resetHidesBottomBarWhenPushed(in: $0) }
-        resetHidesBottomBarWhenPushed(in: viewController.presentedViewController)
-    }
 }
 
 // MARK: - Tab Shell Chrome (iOS 18+ search tab)
@@ -220,24 +191,6 @@ struct TabShellTabBarChromeModifier: ViewModifier {
         } else {
             content
         }
-    }
-}
-
-// MARK: - Tab Bar Restore Host
-/// Keeps forcing tab bar visible while a non-search tab is selected (works around iPadOS 18 search-tab bugs).
-struct TabBarRestoreHost: UIViewControllerRepresentable {
-    var isActive: Bool
-
-    func makeUIViewController(context: Context) -> UIViewController {
-        let controller = UIViewController()
-        controller.view.isUserInteractionEnabled = false
-        controller.view.backgroundColor = .clear
-        return controller
-    }
-
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        guard isActive else { return }
-        TabBarVisibility.restoreVisible()
     }
 }
 

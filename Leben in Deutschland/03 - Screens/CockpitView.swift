@@ -38,7 +38,6 @@ struct CockpitView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
-        .restoresTabBarOnAppear()
         .onAppear {
             viewModel.refreshStatistics()
         }

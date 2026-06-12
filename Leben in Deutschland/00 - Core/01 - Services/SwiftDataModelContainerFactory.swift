@@ -44,9 +44,12 @@ enum SwiftDataModelContainerFactory {
     }
 
     private static func makePersistentContainer() throws -> ModelContainer {
+        // CloudKit-backed SwiftData uses NSPersistentCloudKitContainer, which enables persistent
+        // history and posts NSPersistentStoreRemoteChange for imported sync transactions.
         let configuration = ModelConfiguration(
             schema: schema,
-            isStoredInMemoryOnly: false,
+            url: defaultStoreURL(),
+            allowsSave: true,
             cloudKitDatabase: .private("iCloud.com.gizatech.Leben-in-Deutschland")
         )
         do {
@@ -58,15 +61,24 @@ enum SwiftDataModelContainerFactory {
         }
     }
 
-    private static func removeDefaultStoreFiles() throws {
-        guard let appSupport = FileManager.default.urls(
+    private static func defaultStoreURL() -> URL {
+        let appSupport = FileManager.default.urls(
             for: .applicationSupportDirectory,
             in: .userDomainMask
-        ).first else { return }
+        ).first!
+        return appSupport.appendingPathComponent("default.store")
+    }
 
-        let storeNames = ["default.store", "default.store-shm", "default.store-wal"]
+    private static func removeDefaultStoreFiles() throws {
+        let storeURL = defaultStoreURL()
+        let storeNames = [
+            storeURL.lastPathComponent,
+            "\(storeURL.lastPathComponent)-shm",
+            "\(storeURL.lastPathComponent)-wal",
+        ]
+        let directory = storeURL.deletingLastPathComponent()
         for name in storeNames {
-            let url = appSupport.appendingPathComponent(name)
+            let url = directory.appendingPathComponent(name)
             if FileManager.default.fileExists(atPath: url.path) {
                 try FileManager.default.removeItem(at: url)
             }

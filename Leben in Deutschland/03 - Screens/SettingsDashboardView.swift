@@ -81,6 +81,7 @@ struct SettingsDashboardView: View {
                 }
             }
         }
+        .toolbar(viewModel.navigationPath.isEmpty ? .visible : .hidden, for: .tabBar)
         .task {
             viewModel.configureRegionalSection(
                 languageManager: languageManager,
@@ -150,7 +151,6 @@ struct SettingsDashboardView: View {
                 .animation(.easeInOut(duration: 0.2), value: languageManager.isApplyingLanguageChange || (viewModel.regionalViewModel?.isApplyingStateChange ?? false))
             }
         }
-        .restoresTabBarOnAppear()
     }
 
     private var contactMailBinding: Binding<SettingsSupportMailModel?> {

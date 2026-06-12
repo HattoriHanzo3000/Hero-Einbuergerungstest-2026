@@ -68,6 +68,7 @@ struct HomeView: View {
         }
         .id(stateManager.selectedState ?? "no_state")
         }
+        .toolbar(router.navigationPath.isEmpty ? .visible : .hidden, for: .tabBar)
         .environment(router)
         .overlay {
             if showRatingPrompt {
@@ -86,7 +87,6 @@ struct HomeView: View {
                 .zIndex(1000)
             }
         }
-        .restoresTabBarOnAppear()
     }
     
     @ViewBuilder

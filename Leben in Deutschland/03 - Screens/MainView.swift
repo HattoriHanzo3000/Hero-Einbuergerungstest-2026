@@ -60,9 +60,8 @@ struct MainView: View {
         }
         .id(tabShellGeneration)
         .modifier(TabShellTabBarChromeModifier(isSearchSelected: selectedTab == .search))
-        .toolbar(tabBarToolbarVisibility, for: .tabBar)
+        .toolbar(.automatic, for: .tabBar)
         .toolbarBackground(.visible, for: .tabBar)
-        .background(TabBarRestoreHost(isActive: selectedTab != .search))
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized(for: appLanguage))
@@ -145,11 +144,6 @@ struct MainView: View {
                 )
             }
         }
-    }
-
-    @available(iOS 18.0, *)
-    private var tabBarToolbarVisibility: Visibility {
-        selectedTab == .search ? .automatic : .visible
     }
 
     private func handleSelectedTabChange(from oldValue: TabIdentifier, to newValue: TabIdentifier) {

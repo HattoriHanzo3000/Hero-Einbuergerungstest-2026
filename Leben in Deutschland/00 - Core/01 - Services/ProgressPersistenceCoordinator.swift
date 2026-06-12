@@ -30,7 +30,7 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
 
   private var modelContext: ModelContext?
   private var didAttach = false
-  private var saveObserver: NSObjectProtocol?
+  private var remoteChangeObserver: NSObjectProtocol?
   private var remoteReloadTask: Task<Void, Never>?
 
   private init() {
@@ -75,9 +75,9 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
   }
 
   func stopObservingRemoteChanges() {
-    if let saveObserver {
-      NotificationCenter.default.removeObserver(saveObserver)
-      self.saveObserver = nil
+    if let remoteChangeObserver {
+      NotificationCenter.default.removeObserver(remoteChangeObserver)
+      self.remoteChangeObserver = nil
     }
     remoteReloadTask?.cancel()
     remoteReloadTask = nil
@@ -117,8 +117,9 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
 
   private func startObservingRemoteChanges() {
     stopObservingRemoteChanges()
-    saveObserver = NotificationCenter.default.addObserver(
-      forName: .NSManagedObjectContextDidSave,
+    // CloudKit imports only — local practice saves do not post this notification.
+    remoteChangeObserver = NotificationCenter.default.addObserver(
+      forName: .NSPersistentStoreRemoteChange,
       object: nil,
       queue: .main
     ) { [weak self] _ in
