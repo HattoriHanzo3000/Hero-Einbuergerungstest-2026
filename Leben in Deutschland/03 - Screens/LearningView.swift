@@ -145,7 +145,7 @@ struct LearningView: View {
         }) {
             footerIconCircle {
                 Image(systemName: "arrow.counterclockwise")
-                    .foregroundColor(resetButtonFlash ? Color.green : Color(.secondaryLabel))
+                    .foregroundColor(resetButtonFlash ? AppActionIconColors.resetActive : Color(.secondaryLabel))
                     .animation(.easeOut(duration: 0.3), value: resetButtonFlash)
             }
         }

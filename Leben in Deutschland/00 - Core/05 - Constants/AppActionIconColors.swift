@@ -14,4 +14,6 @@ enum AppActionIconColors {
     static let translationActive = Color("AppCaribean")
     /// Favorite (heart) icon when active.
     static let favoriteActive = Color("AppPink")
+    /// Reset icon flash feedback on tap.
+    static let resetActive = Color("AppOrange")
 }
