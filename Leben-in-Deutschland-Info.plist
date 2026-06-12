@@ -6,6 +6,10 @@
 	<string>$(REVENUECAT_PUBLIC_API_KEY)</string>
 	<key>SKIncludeConsumableInAppPurchaseHistory</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UIDesignRequiresCompatibility</key>
 	<false/>
 	<key>UILaunchScreen</key>
