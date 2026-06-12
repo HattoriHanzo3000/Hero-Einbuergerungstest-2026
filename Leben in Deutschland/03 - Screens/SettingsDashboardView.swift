@@ -17,10 +17,6 @@ struct SettingsDashboardView: View {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
     }
 
-    private var buildNumber: String {
-        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
-    }
-
     init(viewModel: SettingsDashboardViewModel? = nil) {
         _viewModel = StateObject(wrappedValue: viewModel ?? SettingsDashboardViewModel())
     }
@@ -47,12 +43,12 @@ struct SettingsDashboardView: View {
                 Section {
                     HStack {
                         Spacer()
-                        Text("\("version".localized) \(appVersion) (\(buildNumber))")
+                        Text("\("version".localized) \(appVersion)")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                             .accessibilityLabel("version".localized)
-                            .accessibilityValue("\(appVersion) (\(buildNumber))")
+                            .accessibilityValue(appVersion)
                             #if DEBUG
                             .onTapGesture(count: 7) {
                                 showDebugMenu = true
