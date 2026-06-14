@@ -74,13 +74,9 @@ struct SearchView: View {
             } else {
                 List {
                     Text(
-                        String(
-                            format: "search_results_count".localized,
+                        "search_results_count".localizedPlural(
                             searchResults.count,
-                            Pluralization.localizedSearchResultsWord(
-                                for: searchResults.count,
-                                languageCode: languageManager.currentAppLanguage
-                            )
+                            languageCode: languageManager.currentAppLanguage
                         )
                     )
                         .font(.subheadline)

@@ -22,34 +22,32 @@ class OnboardingDateViewModel: ObservableObject {
         self.onBack = onBack
     }
     
-    /// Header message: no-selection prompt vs days/dont-know when selected
+    /// Header message key for simple (non-plural) onboarding copy.
     var dialogMessageKey: String {
         if hasSelectedDate, let date = selectedDate {
             let days = daysUntil(date)
-            if days > 365 {
-                return "onboarding_date_prompt"
-            }
-            if days == 0 {
-                return "perfect_test_today"
-            } else if days == 1 {
-                return "perfect_day_left"
-            } else if days >= 2 && days <= 4 {
-                return "perfect_days_left_2_4"
-            } else {
-                return "perfect_days_left"
-            }
-        } else if hasSelectedDontKnow {
-            return "no_problem_later"
+            if days > 365 { return "onboarding_date_prompt" }
+            if days == 0 { return "perfect_test_today" }
+            return "onboarding_date_prompt"
         }
+        if hasSelectedDontKnow { return "no_problem_later" }
         return "onboarding_date_prompt"
     }
-    
-    var dialogParameters: [String]? {
-        guard let date = selectedDate, hasSelectedDate else { return nil }
-        let days = max(0, daysUntil(date))
-        guard days <= 365 else { return nil }
-        let dayWord = Pluralization.localizedDayWord(for: days, languageCode: languageManager.currentAppLanguage)
-        return [String(days), dayWord]
+
+    /// Preformatted header copy for plural day countdown (1–365 days).
+    var dialogMessageText: String? {
+        guard hasSelectedDate, let date = selectedDate else { return nil }
+        let days = daysUntil(date)
+        guard days >= 1, days <= 365 else { return nil }
+        return "perfect_days_remaining".localizedPlural(
+            days,
+            languageCode: languageManager.currentAppLanguage
+        )
+    }
+
+    var dialogHeaderId: String {
+        if let text = dialogMessageText { return "days-\(text)" }
+        return dialogMessageKey
     }
     
     func setupInitialState() {

@@ -26,7 +26,7 @@ struct LearningDestinationView: View {
             } else if isLoading {
                 VStack(spacing: 16) {
                     ProgressView()
-                    Text("Loading questions...")
+                    Text("Loading questions...".localized)
                         .font(.headline)
                         .foregroundColor(.secondary)
                 }
@@ -37,7 +37,7 @@ struct LearningDestinationView: View {
                     Image(systemName: "exclamationmark.triangle")
                         .font(.system(size: 48))
                         .foregroundColor(.secondary)
-                    Text("Could not load questions for \(subcategoryName)")
+                    Text("learning_load_questions_failed".localizedFormat(subcategoryName))
                         .font(.headline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)

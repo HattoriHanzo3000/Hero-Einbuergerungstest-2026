@@ -1,37 +1,55 @@
 import Foundation
 
+// MARK: - Localization Bundle
+
+/// Resolves language-specific bundles compiled from `Localizable.xcstrings`.
+enum LocalizationBundle {
+    static func bundle(for languageCode: String) -> Bundle {
+        if let path = Bundle.main.path(forResource: languageCode, ofType: "lproj"),
+           let bundle = Bundle(path: path) {
+            return bundle
+        }
+        if languageCode != LanguageManager.baseLanguageCode,
+           let path = Bundle.main.path(forResource: LanguageManager.baseLanguageCode, ofType: "lproj"),
+           let bundle = Bundle(path: path) {
+            return bundle
+        }
+        return .main
+    }
+}
+
 // MARK: - String Localization Extension
+
 /// German is the base language (matches Xcode project default localization).
 extension String {
     var localized: String {
-        let languageCode = UserDefaults.standard.string(forKey: "appLanguage") ?? LanguageManager.baseLanguageCode
-        return self.localized(for: languageCode)
+        localized(for: LanguageManager.currentAppLanguageCode)
     }
 
     func localized(for languageCode: String) -> String {
-        // 1. Try standard .lproj bundle at root
-        if let lprojPath = Bundle.main.path(forResource: languageCode, ofType: "lproj"),
-           let bundle = Bundle(path: lprojPath) {
-            return NSLocalizedString(self, bundle: bundle, comment: "")
-        }
-        // 2. Try Localizable.strings path inside .lproj (alternative bundle layout)
-        if let stringsURL = Bundle.main.url(forResource: "Localizable", withExtension: "strings", subdirectory: "\(languageCode).lproj"),
-           let bundle = Bundle(url: stringsURL.deletingLastPathComponent()) {
-            return NSLocalizedString(self, bundle: bundle, comment: "")
-        }
-        // 3. Fallback to main bundle default (Xcode development language)
-        let fallback = NSLocalizedString(self, comment: "")
-        if fallback != self { return fallback }
-        // 4. Last resort: try German bundle (base language)
-        if languageCode != LanguageManager.baseLanguageCode,
-           let dePath = Bundle.main.path(forResource: LanguageManager.baseLanguageCode, ofType: "lproj"),
-           let deBundle = Bundle(path: dePath) {
-            return NSLocalizedString(self, bundle: deBundle, comment: "")
-        }
-        return self
+        String(
+            localized: String.LocalizationValue(self),
+            bundle: LocalizationBundle.bundle(for: languageCode)
+        )
     }
-    
-    func localizedUppercased() -> String {
-        localized.uppercased(with: Locale(identifier: LanguageManager.currentAppLanguageCode))
+
+    func localizedUppercased(for languageCode: String = LanguageManager.currentAppLanguageCode) -> String {
+        localized(for: languageCode).uppercased(with: Locale(identifier: languageCode))
+    }
+
+    func localizedFormat(_ arguments: CVarArg..., languageCode: String = LanguageManager.currentAppLanguageCode) -> String {
+        String(
+            format: localized(for: languageCode),
+            locale: Locale(identifier: languageCode),
+            arguments: arguments
+        )
+    }
+
+    /// Resolves a String Catalog entry with `plural` variations for the given count.
+    func localizedPlural(_ count: Int, languageCode: String = LanguageManager.currentAppLanguageCode) -> String {
+        let locale = Locale(identifier: languageCode)
+        let bundle = LocalizationBundle.bundle(for: languageCode)
+        let format = String(localized: String.LocalizationValue(self), bundle: bundle, locale: locale)
+        return String(format: format, locale: locale, count)
     }
 }

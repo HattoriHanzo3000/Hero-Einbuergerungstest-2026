@@ -46,15 +46,9 @@ enum TestDateMessageHelper {
         if days == 0 {
             return "perfect_test_today".localized
         }
-        let key: String
-        if days == 1 {
-            key = "perfect_day_left"
-        } else if days >= 2 && days <= 4 {
-            key = "perfect_days_left_2_4"
-        } else {
-            key = "perfect_days_left"
-        }
-        let dayWord = Pluralization.localizedDayWord(for: days, languageCode: LanguageManager.currentAppLanguageCode)
-        return String(format: key.localized, days, dayWord)
+        return "perfect_days_remaining".localizedPlural(
+            days,
+            languageCode: LanguageManager.currentAppLanguageCode
+        )
     }
 }

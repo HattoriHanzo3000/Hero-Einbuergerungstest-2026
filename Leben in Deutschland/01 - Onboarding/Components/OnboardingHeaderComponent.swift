@@ -5,6 +5,7 @@ struct OnboardingHeaderComponent: View {
     let currentStep: Int
     let totalSteps: Int
     let messageKey: String
+    let messageText: String?
     let messageParameters: [String]?
     let selectedState: String?
     @Binding var showDialog: Bool
@@ -16,6 +17,7 @@ struct OnboardingHeaderComponent: View {
         currentStep: Int,
         totalSteps: Int,
         messageKey: String,
+        messageText: String? = nil,
         messageParameters: [String]? = nil,
         selectedState: String? = nil,
         showDialog: Binding<Bool>
@@ -23,6 +25,7 @@ struct OnboardingHeaderComponent: View {
         self.currentStep = currentStep
         self.totalSteps = totalSteps
         self.messageKey = messageKey
+        self.messageText = messageText
         self.messageParameters = messageParameters
         self.selectedState = selectedState
         self._showDialog = showDialog
@@ -98,7 +101,7 @@ struct OnboardingHeaderComponent: View {
     }
     
     private var formattedMessage: String {
-        // Onboarding copy follows the current app language (updates when user picks a language on step 1).
+        if let messageText, !messageText.isEmpty { return messageText }
         let languageCode = languageManager.currentAppLanguage
         let localizedString = messageKey.localized(for: languageCode)
         guard let parameters = messageParameters, !parameters.isEmpty else { return localizedString }

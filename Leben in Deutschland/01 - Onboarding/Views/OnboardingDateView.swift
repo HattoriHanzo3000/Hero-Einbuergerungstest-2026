@@ -15,8 +15,8 @@ struct OnboardingDateView: View {
         OnboardingScreenContainer(
             headerStep: OnboardingConstants.dateStep,
             headerMessageKey: viewModel.dialogMessageKey,
-            headerMessageParameters: viewModel.dialogParameters,
-            headerId: viewModel.dialogMessageKey,
+            headerMessageText: viewModel.dialogMessageText,
+            headerId: viewModel.dialogHeaderId,
             showDialog: $viewModel.showDialog,
             isNextEnabled: viewModel.hasSelectedDate || viewModel.hasSelectedDontKnow,
             showBackButton: true,

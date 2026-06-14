@@ -106,7 +106,7 @@ struct SettingsDashboardView: View {
             if let url = viewModel.supportViewModel.faqURL {
                 SafariSheetView(url: url)
             } else {
-                Text("FAQ is currently unavailable.")
+                Text("settings_faq_unavailable".localized)
                     .font(.body)
                     .foregroundStyle(.secondary)
                     .padding()

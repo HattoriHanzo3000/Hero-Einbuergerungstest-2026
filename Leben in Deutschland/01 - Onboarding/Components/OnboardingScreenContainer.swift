@@ -6,6 +6,7 @@ struct OnboardingScreenContainer<Content: View>: View {
     @Environment(\.layoutMetrics) private var layoutMetrics
     let headerStep: Int
     let headerMessageKey: String
+    let headerMessageText: String?
     let headerMessageParameters: [String]?
     let headerSelectedState: String?
     let headerId: AnyHashable?
@@ -24,6 +25,7 @@ struct OnboardingScreenContainer<Content: View>: View {
     init(
         headerStep: Int,
         headerMessageKey: String,
+        headerMessageText: String? = nil,
         headerMessageParameters: [String]? = nil,
         headerSelectedState: String? = nil,
         headerId: AnyHashable? = nil,
@@ -41,6 +43,7 @@ struct OnboardingScreenContainer<Content: View>: View {
     ) {
         self.headerStep = headerStep
         self.headerMessageKey = headerMessageKey
+        self.headerMessageText = headerMessageText
         self.headerMessageParameters = headerMessageParameters
         self.headerSelectedState = headerSelectedState
         self.headerId = headerId
@@ -69,6 +72,7 @@ struct OnboardingScreenContainer<Content: View>: View {
                     currentStep: headerStep,
                     totalSteps: OnboardingConstants.totalSteps,
                     messageKey: headerMessageKey,
+                    messageText: headerMessageText,
                     messageParameters: headerMessageParameters,
                     selectedState: headerSelectedState,
                     showDialog: showDialog
