@@ -28,13 +28,7 @@ class OnboardingTranslationViewModel: ObservableObject {
     func setupInitialState() {
         // Only restore when user had previously selected (returning from a later step)
         if preferences.translationSelected, let savedTranslationCode = preferences.translationLanguageCode {
-            if savedTranslationCode == "uk" {
-                preferences.translationLanguageCode = "de"
-                selectedLanguage = "Deutsch"
-                if "de" != languageManager.currentAppLanguage {
-                    languageManager.setTranslationLanguage("de")
-                }
-            } else if let languageOption = LanguageOption.availableLanguages.first(where: { $0.languageCode == savedTranslationCode }) {
+            if let languageOption = LanguageOption.availableLanguages.first(where: { $0.languageCode == savedTranslationCode }) {
                 selectedLanguage = languageOption.name
                 if savedTranslationCode != languageManager.currentAppLanguage {
                     languageManager.setTranslationLanguage(savedTranslationCode)

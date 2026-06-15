@@ -40,14 +40,6 @@ final class SettingsRegionalViewModel: ObservableObject {
         self.onboardingPreferences = onboardingPreferences ?? OnboardingPreferences.shared
         self.defaults = defaults
 
-        // Migrate away from Ukrainian (no longer supported)
-        if languageManager.currentAppLanguage == "uk" {
-            languageManager.setAppLanguage(LanguageManager.baseLanguageCode)
-        }
-        if languageManager.currentTranslationLanguage == "uk" {
-            languageManager.setTranslationLanguage("de")
-        }
-
         let initialAppLanguage = SettingsAppLanguageOption(rawValue: languageManager.currentAppLanguage) ?? .german
         var initialTranslationLanguage = SettingsTranslationLanguageOption(rawValue: languageManager.currentTranslationLanguage) ?? .german
         initialTranslationLanguage = Self.resolveTranslationLanguage(
