@@ -8,10 +8,11 @@ TEST SCOPE
 
 - Primary: onboarding → home → Smart Learning → Learn by Topics → Test Simulation → Cockpit → Settings.
 - New in 2.3: learning progress syncs via the user’s iCloud account (CloudKit). No Hero login.
+- Interface languages: German, English, Russian, Turkish, and Ukrainian (uk). Test Simulation questions remain in German (official exam language); UI chrome localizes with the selected app language.
 
 ACCESS
 
-- No account registration. Open the app and complete onboarding (federal state, optional test date, language).
+- No account registration. Open the app and complete onboarding (federal state, optional test date, language). Choose Українська in onboarding or Settings → Personalisation to verify Ukrainian UI.
 - Core learning works immediately on the free tier.
 - Hero Pro: Settings → Hero Pro, or paywall entry points. Restore Purchases on the paywall.
 

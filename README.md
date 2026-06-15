@@ -15,7 +15,7 @@ Native **iOS-App** zur Vorbereitung auf den **Leben-in-Deutschland-** / **Einbü
 - **Prüfungssimulation** — 33 Fragen, 60 Minuten
 - **Favoriten & Suche**
 - **Cockpit** — Fortschritt für dein Bundesland
-- **Mehrsprachig** — DE, EN, RU, TR
+- **Mehrsprachig** — DE, EN, RU, TR, UK
 
 ### Technik
 
@@ -25,7 +25,7 @@ Native **iOS-App** zur Vorbereitung auf den **Leben-in-Deutschland-** / **Einbü
 - **Datengetriebene Auswertung:** Lernstatistiken, Prüfungsbereitschaft, Fortschritt pro Frage
 - **Adaptive Lernplanung** (**Spaced Repetition**) auf Basis der Antwort-Historie
 - **Python**-Skripte zur Pflege der **JSON**-Fragenkataloge
-- **Lokalisierung** (DE, EN, RU, TR)
+- **Lokalisierung** (DE, EN, RU, TR, UK)
 - **RevenueCat** / **App Store** — Abonnements
 
 ### Links
@@ -51,7 +51,7 @@ Practice with the official question catalog, track your progress, and simulate t
 - **Test Simulation** — 33 questions, 60 minutes
 - **Favorites & Search**
 - **Cockpit** — progress for your federal state
-- **Multilingual** — DE, EN, RU, TR
+- **Multilingual** — DE, EN, RU, TR, UK
 
 ### Tech
 
@@ -61,7 +61,7 @@ Practice with the official question catalog, track your progress, and simulate t
 - **Data-driven analytics:** per-question stats, readiness score, progress dashboards
 - **Adaptive review scheduling** (**spaced repetition**) from answer history
 - **Python** scripts for maintaining the **JSON** question catalogs
-- **Localization** (DE, EN, RU, TR)
+- **Localization** (DE, EN, RU, TR, UK)
 - **RevenueCat** / **App Store** — subscriptions
 
 ### Links
