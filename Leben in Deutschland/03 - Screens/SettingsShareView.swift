@@ -8,11 +8,9 @@ struct SettingsShareView: View {
     @EnvironmentObject private var languageManager: LanguageManager
     @State private var showShareSheet = false
 
-    private let appStoreURL = "https://apps.apple.com/app/id6752272685"
-
     private var shareText: String {
         let appName = "Hero – Einbürgerungstest"
-        return "\(appName)\n\(appStoreURL)"
+        return "\(appName)\n\(AppURLs.appStoreURL.absoluteString)"
     }
 
     var body: some View {
@@ -54,7 +52,7 @@ struct SettingsShareView: View {
 
     private var qrSection: some View {
         VStack(spacing: layoutMetrics.adaptive(20)) {
-            SettingsQRCodeView(url: appStoreURL)
+            SettingsQRCodeView(url: AppURLs.appStoreURL.absoluteString)
                 .frame(width: layoutMetrics.adaptive(280), height: layoutMetrics.adaptive(280))
                 .padding(layoutMetrics.adaptive(16))
                 .background(

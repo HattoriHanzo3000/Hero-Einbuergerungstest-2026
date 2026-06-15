@@ -1,9 +1,10 @@
 import SwiftUI
 
-/// Top Settings section with About and Share rows.
+/// Top Settings section with About, Share, and Rate rows.
 struct SettingsInfoSectionView: View {
     var onAboutTapped: () -> Void
     var onShareTapped: () -> Void
+    var onRateTapped: () -> Void
 
     var body: some View {
         Section("settings_info_title".localized) {
@@ -30,6 +31,18 @@ struct SettingsInfoSectionView: View {
                 )
             }
             .buttonStyle(.plain)
+
+            Button {
+                onRateTapped()
+            } label: {
+                SettingsRowButtonLabel(
+                    title: "settings_rate_app_button".localized,
+                    iconSystemName: "star.fill",
+                    tint: .orange,
+                    showsChevron: false
+                )
+            }
+            .buttonStyle(.plain)
         }
     }
 }
@@ -39,7 +52,8 @@ struct SettingsInfoSectionView: View {
         List {
             SettingsInfoSectionView(
                 onAboutTapped: {},
-                onShareTapped: {}
+                onShareTapped: {},
+                onRateTapped: {}
             )
         }
         .listStyle(.insetGrouped)

@@ -8,9 +8,7 @@ struct HomeView: View {
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     @StateObject private var viewModel: HomeViewModel
-    @StateObject private var ratingManager = AppRatingManager.shared
     @State private var router = AppRouter()
-    @State private var showRatingPrompt = false
     
     private var sectionSpacing: CGFloat { layoutMetrics.adaptive(LayoutMetrics.sectionSpacing) }
     private var footerPadding: CGFloat { layoutMetrics.adaptive(LayoutMetrics.footerPadding) }
@@ -70,23 +68,6 @@ struct HomeView: View {
         }
         .toolbar(router.navigationPath.isEmpty ? .visible : .hidden, for: .tabBar)
         .environment(router)
-        .overlay {
-            if showRatingPrompt {
-                AppRatingPromptView(
-                    ratingManager: ratingManager,
-                    onRateNow: {
-                        ratingManager.userChoseToRate()
-                        showRatingPrompt = false
-                    },
-                    onAskLater: {
-                        ratingManager.userChoseLater()
-                        showRatingPrompt = false
-                    }
-                )
-                .transition(.opacity.combined(with: .scale(scale: 0.9)))
-                .zIndex(1000)
-            }
-        }
     }
     
     @ViewBuilder
@@ -150,18 +131,7 @@ struct HomeView: View {
 private extension HomeView {
     func handleOnAppear() {
         viewModel.refreshStatistics()
-        
-        // Record app launch for rating manager
-        ratingManager.recordAppLaunch()
-        
-        // Show rating prompt after a delay to not interrupt user on first load
-        if ratingManager.shouldPromptForRating() && !showRatingPrompt {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                    showRatingPrompt = true
-                }
-            }
-        }
+        AppRatingManager.shared.recordAppLaunch()
     }
 }
 

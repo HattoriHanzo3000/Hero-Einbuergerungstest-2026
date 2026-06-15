@@ -24,10 +24,14 @@ struct SettingsDashboardView: View {
     var body: some View {
         NavigationStack(path: $viewModel.navigationPath) {
             List {
-                SettingsInfoSectionView(
-                    onAboutTapped: { viewModel.navigationPath.append(.about) },
-                    onShareTapped: { viewModel.navigationPath.append(.share) }
-                )
+            SettingsInfoSectionView(
+                onAboutTapped: { viewModel.navigationPath.append(.about) },
+                onShareTapped: { viewModel.navigationPath.append(.share) },
+                onRateTapped: {
+                    HapticManager.shared.lightImpact()
+                    AppRatingManager.shared.openAppStoreReviewPage()
+                }
+            )
                 SettingsProSectionView(viewModel: viewModel.proViewModel)
                 if let regionalViewModel = viewModel.regionalViewModel {
                     SettingsRegionalSectionView(viewModel: regionalViewModel)

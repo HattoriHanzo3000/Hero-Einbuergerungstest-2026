@@ -57,8 +57,6 @@ final class SettingsResetService: SettingsResetServicing {
             "AppRating_FirstLaunchDate",
             "AppRating_LaunchCount",
             "AppRating_LastPromptDate",
-            "AppRating_UserDeclined",
-            "AppRating_UserRated",
         ]
         let dictionary = defaults.dictionaryRepresentation()
         dictionary.keys.forEach { key in

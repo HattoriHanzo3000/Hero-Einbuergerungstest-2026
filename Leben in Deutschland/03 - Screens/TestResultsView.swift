@@ -26,6 +26,7 @@ struct TestResultsView: View {
     
     @State private var showingAnswers = false
     @State private var showingRetryCountdown = false
+    @State private var didRequestReviewForThisResult = false
     
     private var results: TestResults {
         TestResults(
@@ -106,6 +107,17 @@ struct TestResultsView: View {
             .environmentObject(subscriptionManager)
             .interactiveDismissDisabled(true)
         }
+        .task(id: results.isPassed) {
+            await requestReviewAfterPassedTestIfNeeded()
+        }
+    }
+
+    private func requestReviewAfterPassedTestIfNeeded() async {
+        guard results.isPassed, !didRequestReviewForThisResult else { return }
+        try? await Task.sleep(for: .seconds(1.5))
+        guard !Task.isCancelled else { return }
+        didRequestReviewForThisResult = true
+        AppRatingManager.shared.requestReviewIfEligible()
     }
 }
 

@@ -16,4 +16,10 @@ enum AppURLs: Sendable {
     nonisolated static var termsOfUse: URL { URL(string: "\(base)/terms-of-use")! }
     nonisolated static var privacyPolicy: URL { URL(string: "\(base)/privacy-policy")! }
     nonisolated static var contactEmail: String { "info@gizatech.de" }
+
+    nonisolated static let appStoreAppID = "6752272685"
+    nonisolated static var appStoreURL: URL { URL(string: "https://apps.apple.com/app/id\(appStoreAppID)")! }
+    nonisolated static var appStoreWriteReviewURL: URL {
+        URL(string: "https://apps.apple.com/app/id\(appStoreAppID)?action=write-review")!
+    }
 }
