@@ -53,7 +53,10 @@ struct HomeStatisticsSection: View {
             LearnModeDisclaimerSheet(
                 titleKey: "home_statistics_title",
                 messageKey: "progress_readiness_explanation",
-                messageFormatted: String(format: "progress_readiness_explanation_full".localized, statistics.totalQuestions, "home_learn_spaced_repetition".localized, "test_simulation_title".localized),
+                messageFormatted: ReadinessExplanationFormatter.fullMessage(
+                    totalQuestions: statistics.totalQuestions,
+                    languageCode: languageManager.currentAppLanguage
+                ),
                 accentColor: Color.accentColor,
                 doNotShowAgain: .constant(false),
                 showDoNotShowAgain: false,
@@ -72,6 +75,7 @@ private struct HomeRingChartView: View {
     let readinessPercentage: Int
 
     @State private var isPulsing = false
+    @EnvironmentObject private var languageManager: LanguageManager
     @Environment(\.layoutMetrics) private var layoutMetrics
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorScheme) private var colorScheme
@@ -107,7 +111,7 @@ private struct HomeRingChartView: View {
                 )
             }
 
-            Text("\(readinessPercentage)%")
+            Text(readinessPercentage.localizedReadinessPercent(languageCode: languageManager.currentAppLanguage))
                 .font(.system(.title2, design: .default).weight(.bold).width(.expanded))
                 .foregroundColor(.primary)
                 .frame(width: chartSize, height: chartSize)
@@ -126,7 +130,12 @@ private struct HomeRingChartView: View {
         .frame(width: chartSize, height: chartSize)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("home_statistics_accessibility_label".localized)
-        .accessibilityValue(String(format: "home_statistics_accessibility_value".localized, readinessPercentage))
+        .accessibilityValue(
+            "home_statistics_accessibility_value".localizedFormat(
+                readinessPercentage.localizedReadinessPercent(languageCode: languageManager.currentAppLanguage),
+                languageCode: languageManager.currentAppLanguage
+            )
+        )
     }
 }
 

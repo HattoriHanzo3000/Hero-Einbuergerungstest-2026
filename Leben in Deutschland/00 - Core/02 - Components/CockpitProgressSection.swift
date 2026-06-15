@@ -35,11 +35,9 @@ struct CockpitProgressSection: View {
             LearnModeDisclaimerSheet(
                 titleKey: "home_statistics_title",
                 messageKey: "progress_readiness_explanation",
-                messageFormatted: String(
-                    format: "progress_readiness_explanation_full".localized,
-                    statistics.totalQuestions,
-                    "home_learn_spaced_repetition".localized,
-                    "test_simulation_title".localized
+                messageFormatted: ReadinessExplanationFormatter.fullMessage(
+                    totalQuestions: statistics.totalQuestions,
+                    languageCode: languageManager.currentAppLanguage
                 ),
                 accentColor: Color.accentColor,
                 doNotShowAgain: .constant(false),

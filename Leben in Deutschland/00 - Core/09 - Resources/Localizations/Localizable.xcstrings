@@ -80,12 +80,6 @@
         }
       }
     },
-    "%lld%%" : {
-
-    },
-    "17 %@ 33" : {
-
-    },
     "about_disclaimer" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1438,25 +1432,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du bist zu %d%% bereit. Los geht's! Du hebst langsam ab."
+            "value" : "Du bist zu %@ bereit. Los geht's! Du hebst langsam ab."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You're %d%% ready. Let's go! You're learning to flap your wings."
+            "value" : "You're %@ ready. Let's go! You're learning to flap your wings."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Готовность %d%%. Вперёд! Первые взмахи крыльев уже за тобой."
+            "value" : "Готовность %@. Вперёд! Первые взмахи крыльев уже за тобой."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d%% hazırsın. Hadi bakalım! Yavaş yavaş havalanıyorsun."
+            "value" : "%@ hazırsın. Hadi bakalım! Yavaş yavaş havalanıyorsun."
           }
         }
       }
@@ -1467,25 +1461,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du bist zu %d%% bereit für den Test. Du bist gerade geschlüpft! Auf zu neuen Erkenntnissen!"
+            "value" : "Du bist zu %@ bereit für den Test. Du bist gerade geschlüpft! Auf zu neuen Erkenntnissen!"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You're %d%% ready for the test. You've just hatched! Time to learn and grow!"
+            "value" : "You're %@ ready for the test. You've just hatched! Time to learn and grow!"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Готовность к тесту — %d%%. Первые шаги! Вперёд к знаниям!"
+            "value" : "Готовность к тесту — %@. Первые шаги! Вперёд к знаниям!"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sınava %d%% hazırsın. Daha yeni yumurtadan çıktın! Yeni bilgilere doğru!"
+            "value" : "Sınava %@ hazırsın. Daha yeni yumurtadan çıktın! Yeni bilgilere doğru!"
           }
         }
       }
@@ -1496,25 +1490,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du bist zu %d%% bereit. Du fliegst richtig gut! Fast geschafft!"
+            "value" : "Du bist zu %@ bereit. Du fliegst richtig gut! Fast geschafft!"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You're %d%% ready. You're flying high! Almost there."
+            "value" : "You're %@ ready. You're flying high! Almost there."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Готовность %d%%. Отличный полёт! До вершины — рукой подать."
+            "value" : "Готовность %@. Отличный полёт! До вершины — рукой подать."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d%% hazırsın. Gerçekten iyi uçuyorsun! Neredeyse başardın!"
+            "value" : "%@ hazırsın. Gerçekten iyi uçuyorsun! Neredeyse başardın!"
           }
         }
       }
@@ -1525,25 +1519,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du bist zu %d%% bereit. Du bist ein echter Wissens-Adler!"
+            "value" : "Du bist zu %@ bereit. Du bist ein echter Wissens-Adler!"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You're %d%% ready. You're a true knowledge eagle!"
+            "value" : "You're %@ ready. You're a true knowledge eagle!"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Готовность %d%%. Ты — орёл знаний!"
+            "value" : "Готовность %@. Ты — орёл знаний!"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d%% hazırsın. Sen gerçek bir bilgi kartalısın!"
+            "value" : "%@ hazırsın. Sen gerçek bir bilgi kartalısın!"
           }
         }
       }
@@ -1554,25 +1548,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du bist zu %d%% bereit. Nur noch ein kleiner Flug – du schaffst das!"
+            "value" : "Du bist zu %@ bereit. Nur noch ein kleiner Flug – du schaffst das!"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You're %d%% ready. Just one more flight — you've got this!"
+            "value" : "You're %@ ready. Just one more flight — you've got this!"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Готовность %d%%. Осталось совсем чуть-чуть — не сбавляй высоты!"
+            "value" : "Готовность %@. Осталось совсем чуть-чуть — не сбавляй высоты!"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d%% hazırsın. Sadece küçük bir uçuş kaldı – bunu başarabilirsin!"
+            "value" : "%@ hazırsın. Sadece küçük bir uçuş kaldı – bunu başarabilirsin!"
           }
         }
       }
@@ -1583,25 +1577,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du bist zu %d%% bereit. Deine Flügel werden stärker – weiter so!"
+            "value" : "Du bist zu %@ bereit. Deine Flügel werden stärker – weiter so!"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You're %d%% ready. Your wings are getting stronger — keep going!"
+            "value" : "You're %@ ready. Your wings are getting stronger — keep going!"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Готовность %d%%. Крылья крепнут! Продолжай в том же духе."
+            "value" : "Готовность %@. Крылья крепнут! Продолжай в том же духе."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d%% hazırsın. Kanatların güçleniyor – böyle devam et!"
+            "value" : "%@ hazırsın. Kanatların güçleniyor – böyle devam et!"
           }
         }
       }
@@ -3645,25 +3639,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d Prozent vorbereitet"
+            "value" : "%@ vorbereitet"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d percent prepared"
+            "value" : "%@ prepared"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d процентов готовности"
+            "value" : "%@ готовности"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yüzde %d hazır"
+            "value" : "%@ hazır"
           }
         }
       }
@@ -6439,25 +6433,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das ist deine Bereitschaftsbewertung. Je höher der Prozentsatz, desto näher bist du an der Prüfungsbereitschaft; 100%% heißt volle Bereitschaft. Das erreichst du, wenn du jede der %d Fragen viermal richtig beantwortest. Die vier Farben zeigen, wie viele Fragen du pro Stufe hast: einmal (Bekannt), zweimal (Gefestigt), dreimal (Beherrscht) oder viermal bzw. öfter (Experte)."
+            "value" : "Das ist deine Bereitschaftsbewertung. Je höher der Prozentsatz, desto näher bist du an der Prüfungsbereitschaft; %@ heißt volle Bereitschaft. Das erreichst du, wenn du jede der %d Fragen viermal richtig beantwortest. Die vier Farben zeigen, wie viele Fragen du pro Stufe hast: einmal (Bekannt), zweimal (Gefestigt), dreimal (Beherrscht) oder viermal bzw. öfter (Experte)."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This is your readiness score. The higher the percentage, the closer you are to being ready for the exam; 100%% means full readiness. You can reach that by answering each of the %d questions correctly four times. The four colors show how many questions you've got at each level: once (Familiar), twice (Reinforced), three times (Mastered), or four and more (Expert)."
+            "value" : "This is your readiness score. The higher the percentage, the closer you are to being ready for the exam; %@ means full readiness. You can reach that by answering each of the %d questions correctly four times. The four colors show how many questions you've got at each level: once (Familiar), twice (Reinforced), three times (Mastered), or four and more (Expert)."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Это твоя оценка готовности. Чем выше процент, тем ближе ты к готовности к экзамену; полные 100%% означают полную готовность. Такого результата можно достичь, если ответить правильно на каждый из %d вопросов четыре раза. Четыре цвета показывают количество по уровням: один раз правильно (Знакомо), два (Закреплено), три (Усвоено), четыре и больше (Эксперт)."
+            "value" : "Это твоя оценка готовности. Чем выше процент, тем ближе ты к готовности к экзамену; %@ означают полную готовность. Такого результата можно достичь, если ответить правильно на каждый из %d вопросов четыре раза. Четыре цвета показывают количество по уровням: один раз правильно (Знакомо), два (Закреплено), три (Усвоено), четыре и больше (Эксперт)."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu senin sınava hazır olma puanın. Yüzde ne kadar yüksekse, sınava o kadar hazırsın demektir; 100%% tam hazır olduğunu gösterir. Buna, %d sorunun her birini dört kez doğru cevapladığında ulaşırsın. Dört renk, her seviyede kaç sorunun olduğunu gösterir: bir kez (Tanıdık), iki kez (Pekiştirilmiş), üç kez (Kavranmış) veya dört kez ve üzeri (Uzman)."
+            "value" : "Bu senin sınava hazır olma puanın. Yüzde ne kadar yüksekse, sınava o kadar hazırsın demektir; %@ tam hazır olduğunu gösterir. Buna, %d sorunun her birini dört kez doğru cevapladığında ulaşırsın. Dört renk, her seviyede kaç sorunun olduğunu gösterir: bir kez (Tanıdık), iki kez (Pekiştirilmiş), üç kez (Kavranmış) veya dört kez ve üzeri (Uzman)."
           }
         }
       }
@@ -6468,25 +6462,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das ist deine Bereitschaftsbewertung. Je höher der Prozentsatz, desto näher bist du an der Prüfungsbereitschaft; 100%% heißt volle Bereitschaft. Das erreichst du, wenn du jede der %d Fragen viermal richtig beantwortest. Jede Farbe steht für eine Stufe: Bekannt - einmal richtig beantwortet, Gefestigt - zweimal richtig beantwortet, Beherrscht - dreimal richtig beantwortet, Experte - viermal oder öfter richtig beantwortet. Nur Fragen aus %@ und %@ zählen für diesen Stand."
+            "value" : "Das ist deine Bereitschaftsbewertung. Je höher der Prozentsatz, desto näher bist du an der Prüfungsbereitschaft; %@ heißt volle Bereitschaft. Das erreichst du, wenn du jede der %d Fragen viermal richtig beantwortest. Jede Farbe steht für eine Stufe: Bekannt - einmal richtig beantwortet, Gefestigt - zweimal richtig beantwortet, Beherrscht - dreimal richtig beantwortet, Experte - viermal oder öfter richtig beantwortet. Nur Fragen aus %@ und %@ zählen für diesen Stand."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This is your readiness score. The higher the percentage, the closer you are to being ready for the exam; 100%% means full readiness. You can reach that by answering each of the %d questions correctly four times. Each color shows a different stage: Familiar - answered correctly once, Reinforced - answered correctly twice, Mastered - answered correctly three times, Expert - answered correctly four times or more. Only questions from %@ and %@ count toward this score."
+            "value" : "This is your readiness score. The higher the percentage, the closer you are to being ready for the exam; %@ means full readiness. You can reach that by answering each of the %d questions correctly four times. Each color shows a different stage: Familiar - answered correctly once, Reinforced - answered correctly twice, Mastered - answered correctly three times, Expert - answered correctly four times or more. Only questions from %@ and %@ count toward this score."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Это твоя оценка готовности. Чем выше процент, тем ближе ты к готовности к экзамену; полные 100%% означают полную готовность. Такого результата можно достичь, если ответить правильно на каждый из %d вопросов четыре раза. Каждый цвет — свой уровень: Знакомо - ответил правильно один раз, Закреплено - ответил правильно два раза, Усвоено - ответил правильно три раза, Эксперт - ответил правильно четыре раза и больше. Только вопросы из %@ и %@ учитываются в этом показателе."
+            "value" : "Это твоя оценка готовности. Чем выше процент, тем ближе ты к готовности к экзамену; %@ означают полную готовность. Такого результата можно достичь, если ответить правильно на каждый из %d вопросов четыре раза. Каждый цвет — свой уровень: Знакомо - ответил правильно один раз, Закреплено - ответил правильно два раза, Усвоено - ответил правильно три раза, Эксперт - ответил правильно четыре раза и больше. Только вопросы из %@ и %@ учитываются в этом показателе."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu senin sınava hazır olma puanın. Yüzde ne kadar yüksekse, sınava o kadar hazırsın demektir; 100%% tam hazır olduğunu gösterir. Buna, %d sorunun her birini dört kez doğru cevapladığında ulaşırsın. Her renk bir seviyeyi temsil eder: Tanıdık - bir kez doğru cevaplandı, Pekiştirilmiş - iki kez doğru cevaplandı, Kavranmış - üç kez doğru cevaplandı, Uzman - dört veya daha fazla kez doğru cevaplandı. Sadece %@ ve %@ kategorilerindeki sorular bu duruma etki eder."
+            "value" : "Bu senin sınava hazır olma puanın. Yüzde ne kadar yüksekse, sınava o kadar hazırsın demektir; %@ tam hazır olduğunu gösterir. Buna, %d sorunun her birini dört kez doğru cevapladığında ulaşırsın. Her renk bir seviyeyi temsil eder: Tanıdık - bir kez doğru cevaplandı, Pekiştirilmiş - iki kez doğru cevaplandı, Kavranmış - üç kez doğru cevaplandı, Uzman - dört veya daha fazla kez doğru cevaplandı. Sadece %@ ve %@ kategorilerindeki sorular bu duruma etki eder."
           }
         }
       }

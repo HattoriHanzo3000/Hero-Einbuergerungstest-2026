@@ -13,9 +13,8 @@ enum ReadinessMessageHelper {
     /// Returns localized eagle_desc message for the given readiness percentage.
     static func message(readinessPercentage: Int, languageCode: String) -> String {
         let key = eagleDescKey(for: readinessPercentage)
-        let localized = key.localized
-        let locale = Locale(identifier: languageCode)
-        return String(format: localized, locale: locale, readinessPercentage)
+        let percent = readinessPercentage.localizedReadinessPercent(languageCode: languageCode)
+        return key.localizedFormat(percent, languageCode: languageCode)
     }
 
     private static func eagleDescKey(for percentage: Int) -> String {
