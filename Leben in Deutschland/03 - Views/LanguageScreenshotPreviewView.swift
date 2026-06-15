@@ -61,13 +61,22 @@ struct LanguageScreenshotPreviewView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, layoutMetrics.adaptive(24))
 
-                // Block 3: languages (native names only; ISO 639-1 order via LanguageOption)
+                // Block 3: languages (globe + native name; ISO 639-1 order via LanguageOption)
                 VStack(alignment: .leading, spacing: layoutMetrics.adaptive(16)) {
                     ForEach(LanguageOption.languagesInDisplayOrder) { language in
-                        Text(language.nativeName)
-                            .font(.system(.title3, weight: .semibold).width(.expanded))
-                            .foregroundColor(.white)
-                            .accessibilityLabel(language.nativeName)
+                        HStack(alignment: .center, spacing: layoutMetrics.adaptive(14)) {
+                            Image(systemName: "globe")
+                                .font(.system(size: layoutMetrics.adaptive(22), weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.9))
+                                .frame(width: layoutMetrics.adaptive(32), alignment: .center)
+                                .accessibilityHidden(true)
+
+                            Text(language.nativeName)
+                                .font(.system(.title3, weight: .semibold).width(.expanded))
+                                .foregroundColor(.white)
+                        }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(language.nativeName)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
