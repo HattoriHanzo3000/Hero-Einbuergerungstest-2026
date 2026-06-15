@@ -49,7 +49,33 @@ extension String {
     func localizedPlural(_ count: Int, languageCode: String = LanguageManager.currentAppLanguageCode) -> String {
         let locale = Locale(identifier: languageCode)
         let bundle = LocalizationBundle.bundle(for: languageCode)
-        let format = String(localized: String.LocalizationValue(self), bundle: bundle, locale: locale)
-        return String(format: format, locale: locale, count)
+        return Self.pluralLocalized(key: self, count: count, bundle: bundle, locale: locale)
+    }
+
+    private static func pluralLocalized(
+        key: String,
+        count: Int,
+        bundle: Bundle,
+        locale: Locale
+    ) -> String {
+        switch key {
+        case "perfect_days_remaining":
+            return String(
+                localized: "perfect_days_remaining",
+                defaultValue: "\(count, specifier: "%lld")",
+                bundle: bundle,
+                locale: locale
+            )
+        case "search_results_count":
+            return String(
+                localized: "search_results_count",
+                defaultValue: "\(count, specifier: "%lld")",
+                bundle: bundle,
+                locale: locale
+            )
+        default:
+            let format = bundle.localizedString(forKey: key, value: nil, table: nil)
+            return String(format: format, locale: locale, arguments: [count])
+        }
     }
 }
