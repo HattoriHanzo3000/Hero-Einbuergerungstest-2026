@@ -29,7 +29,7 @@ CONTENT_DIR = (
     REPO_ROOT
     / "Leben in Deutschland"
     / "00 - Core"
-    / "09 -Resources"
+    / "09 - Resources"
     / "Content"
 )
 
