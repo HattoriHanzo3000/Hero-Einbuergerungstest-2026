@@ -28,7 +28,7 @@ private struct LaunchOfferRowBadgeView: View {
     private let cornerRadius: CGFloat = 12
 
     var body: some View {
-        Text("launch_offer_badge".localized)
+        Text(PaywallPercentFormatting.launchOfferBadgeText())
             .font(.system(.caption2, weight: .semibold).italic())
             .foregroundStyle(.white)
             .padding(.horizontal, layoutMetrics.adaptive(10))

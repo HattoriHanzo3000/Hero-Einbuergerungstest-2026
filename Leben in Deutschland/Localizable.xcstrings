@@ -3697,25 +3697,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "START-DEAL -50%"
+            "value" : "START-DEAL %@"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "LAUNCH OFFER -50%"
+            "value" : "LAUNCH OFFER %@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "-50% НА СТАРТЕ"
+            "value" : "%@ НА СТАРТЕ"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "LANSMAN FIRSATI -%50"
+            "value" : "LANSMAN FIRSATI %@"
           }
         }
       }
@@ -3784,25 +3784,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dauerhaft -50%"
+            "value" : "Dauerhaft %@"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lifetime -50%"
+            "value" : "Lifetime %@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Навсегда -50%"
+            "value" : "Навсегда %@"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kalıcı Olarak -%50"
+            "value" : "Kalıcı Olarak %@"
           }
         }
       }
@@ -5908,25 +5908,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "37 % Ersparnis gegenüber Monat"
+            "value" : "%@ Ersparnis gegenüber Monat"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Save 37% vs monthly"
+            "value" : "Save %@ vs monthly"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Экономия 37 % по сравнению с помесячной"
+            "value" : "Экономия %@ по сравнению с помесячной"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aylığa göre %37 tasarruf"
+            "value" : "Aylığa göre %@ tasarruf"
           }
         }
       }

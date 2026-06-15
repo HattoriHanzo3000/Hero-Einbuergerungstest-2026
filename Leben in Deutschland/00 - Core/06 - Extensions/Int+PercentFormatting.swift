@@ -22,6 +22,42 @@ extension Int {
     static func localizedFullReadinessPercent(languageCode: String = LanguageManager.currentAppLanguageCode) -> String {
         100.localizedReadinessPercent(languageCode: languageCode)
     }
+
+    /// Formats a negative discount for marketing copy (e.g. "-50%").
+    static func localizedDiscountPercent(_ value: Int, languageCode: String = LanguageManager.currentAppLanguageCode) -> String {
+        (-abs(value)).formatted(
+            .percent
+                .scale(1)
+                .precision(.fractionLength(0))
+                .locale(Locale(identifier: languageCode))
+        )
+    }
+}
+
+enum PaywallPercentFormatting {
+    static let launchOfferDiscount = 50
+    static let annualSavings = 37
+
+    static func launchOfferBadgeText(languageCode: String = LanguageManager.currentAppLanguageCode) -> String {
+        "launch_offer_badge".localizedFormat(
+            Int.localizedDiscountPercent(launchOfferDiscount, languageCode: languageCode),
+            languageCode: languageCode
+        )
+    }
+
+    static func launchOfferLine2Text(languageCode: String = LanguageManager.currentAppLanguageCode) -> String {
+        "launch_offer_line2".localizedFormat(
+            Int.localizedDiscountPercent(launchOfferDiscount, languageCode: languageCode),
+            languageCode: languageCode
+        )
+    }
+
+    static func yearSavingsText(languageCode: String = LanguageManager.currentAppLanguageCode) -> String {
+        "paywall_year_savings".localizedFormat(
+            annualSavings.localizedReadinessPercent(languageCode: languageCode),
+            languageCode: languageCode
+        )
+    }
 }
 
 enum ReadinessExplanationFormatter {
