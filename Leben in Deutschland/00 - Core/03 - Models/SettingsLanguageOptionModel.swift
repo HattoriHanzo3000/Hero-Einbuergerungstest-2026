@@ -19,7 +19,11 @@ enum SettingsAppLanguageOption: String, CaseIterable, Identifiable {
         }
     }
 
-    static var displayCases: [SettingsAppLanguageOption] { Array(allCases) }
+    static var displayCases: [SettingsAppLanguageOption] {
+        Self.displayOrder.compactMap { SettingsAppLanguageOption(rawValue: $0) }
+    }
+
+    private static let displayOrder = ["de", "en", "ru", "tr", "uk"]
 }
 
 enum SettingsTranslationLanguageOption: String, CaseIterable, Identifiable {
@@ -41,6 +45,10 @@ enum SettingsTranslationLanguageOption: String, CaseIterable, Identifiable {
         }
     }
 
-    static var displayCases: [SettingsTranslationLanguageOption] { Array(allCases) }
+    static var displayCases: [SettingsTranslationLanguageOption] {
+        Self.displayOrder.compactMap { SettingsTranslationLanguageOption(rawValue: $0) }
+    }
+
+    private static let displayOrder = ["de", "en", "ru", "tr", "uk"]
 }
 

@@ -10,18 +10,10 @@ import SwiftUI
 
 // MARK: - Language Screenshot Preview (DEBUG)
 /// Full-screen layout: mascot + headline, subtitle, language list. Tap headline to dismiss (DEBUG).
-/// Flags use bundled PNGs (`ScreenshotFlag*`) — emoji text often renders as □/� in SwiftUI; assets are Twemoji (CC-BY 4.0).
 struct LanguageScreenshotPreviewView: View {
     let onDismiss: () -> Void
 
     @Environment(\.layoutMetrics) private var layoutMetrics
-
-    private static let languageRows: [(flagAsset: String, nativeName: String, accessibilityLabel: String)] = [
-        ("ScreenshotFlagDE", "Deutsch", "Deutsch"),
-        ("ScreenshotFlagGB", "English", "English"),
-        ("ScreenshotFlagRU", "Русский", "Русский"),
-        ("ScreenshotFlagTR", "Türkçe", "Türkçe")
-    ]
 
     var body: some View {
         ZStack {
@@ -69,23 +61,13 @@ struct LanguageScreenshotPreviewView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, layoutMetrics.adaptive(24))
 
-                // Block 3: languages
+                // Block 3: languages (native names only; ISO 639-1 order via LanguageOption)
                 VStack(alignment: .leading, spacing: layoutMetrics.adaptive(16)) {
-                    ForEach(Array(Self.languageRows.enumerated()), id: \.offset) { _, row in
-                        HStack(alignment: .center, spacing: layoutMetrics.adaptive(14)) {
-                            Image(row.flagAsset)
-                                .resizable()
-                                .interpolation(.high)
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: layoutMetrics.adaptive(48), height: layoutMetrics.adaptive(44))
-                                .accessibilityHidden(true)
-
-                            Text(row.nativeName)
-                                .font(.system(.title3, weight: .semibold).width(.expanded))
-                                .foregroundColor(.white)
-                        }
-                        .accessibilityElement(children: .combine)
-                        .accessibilityLabel(row.accessibilityLabel)
+                    ForEach(LanguageOption.languagesInDisplayOrder) { language in
+                        Text(language.nativeName)
+                            .font(.system(.title3, weight: .semibold).width(.expanded))
+                            .foregroundColor(.white)
+                            .accessibilityLabel(language.nativeName)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)

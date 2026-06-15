@@ -9,7 +9,7 @@ struct OnboardingTranslationSelectionContentComponent: View {
     
     var body: some View {
         VStack(spacing: OnboardingConstants.defaultSpacing) {
-            ForEach(LanguageOption.availableLanguages) { language in
+            ForEach(LanguageOption.languagesInDisplayOrder) { language in
                 OnboardingTranslationLanguageOptionRowComponent(
                     language: language,
                     isSelected: selectedLanguage == language.name,

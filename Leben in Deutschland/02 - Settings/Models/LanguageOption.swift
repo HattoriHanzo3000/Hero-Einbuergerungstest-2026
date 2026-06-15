@@ -27,7 +27,16 @@ extension LanguageOption {
             LanguageOption(name: "Українська", nativeName: "Українська", isSelected: false, languageCode: "uk"),
         ]
     }
-    
+
+    /// German (host/exam language) first, then remaining languages by ISO 639-1 code.
+    static var languagesInDisplayOrder: [LanguageOption] {
+        availableLanguages.sorted { lhs, rhs in
+            if lhs.languageCode == LanguageManager.baseLanguageCode { return true }
+            if rhs.languageCode == LanguageManager.baseLanguageCode { return false }
+            return lhs.languageCode < rhs.languageCode
+        }
+    }
+
     // MARK: - Helper Methods
     
     /// Returns the language code for a given language name (case-insensitive)
