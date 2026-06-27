@@ -65,9 +65,7 @@ struct MainView: View {
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
         .accessibilityLabel("main_tab_bar_accessibility_label".localized(for: appLanguage))
-        .onAppear {
-            ProgressPersistenceCoordinator.shared.attach(modelContext: modelContext)
-        }
+        .onAppear(perform: attachProgressPersistenceCoordinator)
         .task { await SubscriptionManager.shared.refreshProStatus() }
         .onChange(of: selectedTab) { oldValue, newValue in
             handleSelectedTabChange(from: oldValue, to: newValue)
@@ -121,9 +119,7 @@ struct MainView: View {
         }
         .tint(Color.accentColor)
         .compactTabBarSpacing(0)
-        .onAppear {
-            ProgressPersistenceCoordinator.shared.attach(modelContext: modelContext)
-        }
+        .onAppear(perform: attachProgressPersistenceCoordinator)
         .task { await SubscriptionManager.shared.refreshProStatus() }
         .onChange(of: selectedTab) { oldValue, newValue in
             handleSelectedTabChange(from: oldValue, to: newValue)
@@ -161,6 +157,15 @@ struct MainView: View {
 
     private func restoreTabBarAfterLeavingSearch() {
         TabBarVisibility.restoreVisible()
+    }
+
+    private func attachProgressPersistenceCoordinator() {
+        ProgressPersistenceCoordinator.shared.attach(modelContext: modelContext)
+#if DEBUG
+        if let federalState = LaunchConfiguration.consumePendingFederalStateReload() {
+            ProgressPersistenceCoordinator.shared.reloadForFederalState(federalState)
+        }
+#endif
     }
 }
 

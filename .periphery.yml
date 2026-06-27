@@ -1,6 +1,6 @@
 project: Leben in Deutschland.xcodeproj
 schemes:
-  - Leben in Deutschland
+  - LiD Default
 targets:
   - Leben in Deutschland
 retain_public: true

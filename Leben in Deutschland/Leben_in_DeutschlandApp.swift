@@ -12,15 +12,23 @@ import RevenueCat
 
 @main
 struct Leben_in_DeutschlandApp: App {
-    @StateObject private var languageManager = LanguageManager()
-    @StateObject private var soundManager = SoundManager.shared
-    @StateObject private var appFlow = AppFlow()
-    @StateObject private var stateManager = StateManager.shared
+    @StateObject private var languageManager: LanguageManager
+    @StateObject private var soundManager: SoundManager
+    @StateObject private var appFlow: AppFlow
+    @StateObject private var stateManager: StateManager
     @AppStorage(UserDefaultsKeys.appearance) private var appAppearance: String = "system"
 
     private let sharedModelContainer: ModelContainer
 
     init() {
+#if DEBUG
+        LaunchConfiguration.applyIfNeeded()
+#endif
+        _languageManager = StateObject(wrappedValue: LanguageManager())
+        _soundManager = StateObject(wrappedValue: SoundManager.shared)
+        _appFlow = StateObject(wrappedValue: AppFlow())
+        _stateManager = StateObject(wrappedValue: StateManager.shared)
+
         let revenueCatAPIKey = AppConfiguration.revenueCatAPIKey
         if !revenueCatAPIKey.isEmpty {
             Purchases.configure(withAPIKey: revenueCatAPIKey)
