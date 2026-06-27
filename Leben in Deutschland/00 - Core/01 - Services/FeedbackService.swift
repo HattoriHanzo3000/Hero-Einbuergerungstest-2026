@@ -89,7 +89,7 @@ final class FeedbackService: ObservableObject {
         case .noAccount, .restricted, .temporarilyUnavailable:
             throw FeedbackError.iCloudUnavailable
         case .couldNotDetermine:
-            <#code#>
+            throw FeedbackError.serverUnavailable
         @unknown default:
             throw FeedbackError.iCloudUnavailable
         }

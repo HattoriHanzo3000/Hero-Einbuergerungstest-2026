@@ -10,7 +10,6 @@ import SwiftUI
 
 struct FeedbackReportView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.layoutMetrics) private var layoutMetrics
     @EnvironmentObject private var languageManager: LanguageManager
     
     let questionId: String?
@@ -18,12 +17,18 @@ struct FeedbackReportView: View {
     let category: String?
     
     @StateObject private var feedbackService = FeedbackService.shared
-    @State private var selectedType: FeedbackModel.FeedbackType = .other
+    @FocusState private var focusedField: FocusField?
+    @State private var selectedType: FeedbackModel.FeedbackType = .questionError
     @State private var message: String = ""
     @State private var userEmail: String = ""
     @State private var showingSuccess = false
     @State private var showingError = false
     @State private var errorMessage: String = ""
+    
+    private enum FocusField: Hashable {
+        case message
+        case email
+    }
     
     private var canSubmit: Bool {
         !message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !feedbackService.isSubmitting
@@ -53,6 +58,7 @@ struct FeedbackReportView: View {
                 Section {
                     TextEditor(text: $message)
                         .frame(minHeight: 120)
+                        .focused($focusedField, equals: .message)
                 } header: {
                     Text("additional_details".localized)
                 } footer: {
@@ -63,14 +69,19 @@ struct FeedbackReportView: View {
                 Section {
                     TextField("email_optional".localized, text: $userEmail)
                         .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
+                        .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
+                        .focused($focusedField, equals: .email)
                 } header: {
                     Text("contact_info".localized)
                 } footer: {
                     Text("feedback_email_hint".localized)
                         .font(.caption)
                 }
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .onChange(of: selectedType) { _, _ in
+                focusedField = nil
             }
             .navigationTitle("report_question".localized)
             .navigationBarTitleDisplayMode(.inline)
@@ -85,9 +96,9 @@ struct FeedbackReportView: View {
                     .buttonStyle(.plain)
                     .accessibilityLabel("close".localized)
                 }
-            }
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                submitButton
+                ToolbarItem(placement: .confirmationAction) {
+                    sendToolbarButton
+                }
             }
             .alert("feedback_submitted".localized, isPresented: $showingSuccess) {
                 Button("ok".localized) {
@@ -112,25 +123,32 @@ struct FeedbackReportView: View {
         }
     }
     
-    private var submitButton: some View {
-        Button {
+    @ViewBuilder
+    private var sendToolbarButton: some View {
+        let button = Button {
             HapticManager.shared.lightImpact()
             submitFeedback()
         } label: {
-            Text("submit".localized)
-                .frame(maxWidth: .infinity)
+            Image(systemName: "arrow.up")
+                .fontWeight(.semibold)
         }
-        .buttonStyle(.borderedProminent)
-        .controlSize(.large)
+        .buttonBorderShape(.circle)
         .disabled(!canSubmit)
         .accessibilityLabel("submit".localized)
-        .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
-        .padding(.top, layoutMetrics.adaptive(12))
-        .padding(.bottom, layoutMetrics.adaptive(16))
-        .background(Color(.systemBackground))
+        
+        if #available(iOS 26.0, *) {
+            button
+                .buttonStyle(.glassProminent)
+                .controlSize(.regular)
+        } else {
+            button
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+        }
     }
     
     private func submitFeedback() {
+        focusedField = nil
         Task {
             do {
                 let feedback = FeedbackModel(
