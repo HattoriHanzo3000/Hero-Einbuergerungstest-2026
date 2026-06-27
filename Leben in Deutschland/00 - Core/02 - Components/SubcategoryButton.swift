@@ -39,19 +39,18 @@ struct SubcategoryButton: View {
                 )
             }
         } label: {
-            HStack(alignment: .bottom, spacing: 12) {
+            HStack(alignment: .center, spacing: 12) {
                 Text(subcategory.name)
                     .font(.system(.title2, weight: .light).width(.condensed))
                     .foregroundColor(.white)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                Spacer()
-
                 Text("\(subcategory.questionCount)")
                     .font(.system(.title2, weight: .regular).width(.expanded))
                     .foregroundColor(.white)
             }
+            .padding(.vertical, 8)
             .frame(minHeight: rowHeight)
             .padding(.horizontal, horizontalPadding)
             .background(
