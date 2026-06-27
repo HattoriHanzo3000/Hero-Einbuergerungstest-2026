@@ -25,6 +25,10 @@ struct FeedbackReportView: View {
     @State private var showingError = false
     @State private var errorMessage: String = ""
     
+    private var canSubmit: Bool {
+        !message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !feedbackService.isSubmitting
+    }
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -72,16 +76,18 @@ struct FeedbackReportView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("cancel".localized) {
+                    Button {
+                        HapticManager.shared.lightImpact()
                         dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("close".localized)
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("submit".localized) {
-                        submitFeedback()
-                    }
-                    .disabled(message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || feedbackService.isSubmitting)
-                }
+            }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                submitButton
             }
             .alert("feedback_submitted".localized, isPresented: $showingSuccess) {
                 Button("ok".localized) {
@@ -104,6 +110,24 @@ struct FeedbackReportView: View {
                 }
             }
         }
+    }
+    
+    private var submitButton: some View {
+        Button {
+            HapticManager.shared.lightImpact()
+            submitFeedback()
+        } label: {
+            Text("submit".localized)
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent)
+        .controlSize(.large)
+        .disabled(!canSubmit)
+        .accessibilityLabel("submit".localized)
+        .padding(.horizontal, layoutMetrics.adaptive(LayoutMetrics.footerHorizontalPadding))
+        .padding(.top, layoutMetrics.adaptive(12))
+        .padding(.bottom, layoutMetrics.adaptive(16))
+        .background(Color(.systemBackground))
     }
     
     private func submitFeedback() {
