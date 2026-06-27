@@ -2,8 +2,8 @@
 //  FeedbackReportView.swift
 //  Leben in Deutschland
 //
-//  In-app feedback form for reporting questions
-//  Sends directly to backend API - no mail app needed
+//  In-app feedback form for reporting questions.
+//  Sends reports to the CloudKit public database.
 //
 
 import SwiftUI

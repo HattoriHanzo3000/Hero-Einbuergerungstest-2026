@@ -1,0 +1,22 @@
+// CloudKit public-database schema for in-app question reports.
+// Import into Development first; deploy to Production after smoke tests.
+// See docs/cloudkit-question-feedback-schema.md and Scripts/import_question_feedback_schema.sh
+
+DEFINE SCHEMA
+
+    RECORD TYPE QuestionFeedback (
+        "___createTime" TIMESTAMP QUERYABLE SORTABLE,
+        "___recordID" REFERENCE QUERYABLE,
+        questionId STRING QUERYABLE,
+        questionText STRING,
+        category STRING,
+        feedbackType STRING QUERYABLE,
+        message STRING,
+        userEmail STRING,
+        deviceInfo STRING,
+        appVersion STRING,
+        language STRING,
+        submittedAt TIMESTAMP QUERYABLE SORTABLE,
+        GRANT CREATE TO "_icloud",
+        GRANT WRITE TO "_creator"
+    );

@@ -25,6 +25,14 @@ iCloud sync requires the same Apple ID on each device and iCloud enabled for the
 
 You can remove all synced learning data with Settings → Reset App in Hero. Subscription management remains through Apple.
 
+Question reports (CloudKit public database)
+
+When you report a question (flag icon on a question card), Hero sends the report to Apple CloudKit’s public database for our container. This requires you to be signed in to iCloud on your device. We do not use a separate Hero login.
+
+A report may include: the question ID and text, category, report type, your message, optional email address, app version, device model and iOS version, app language, and submission time. Reports are not visible to other app users; we read them in Apple’s CloudKit Console to fix content issues. We do not use reports for advertising or sell this data.
+
+If you are not signed in to iCloud or have no network connection, the report cannot be sent and the app shows an error.
+
 Contact: see the Contact section in the app (Settings → Contact Us).
 
 ---
@@ -48,5 +56,13 @@ Nicht über iCloud synchronisiert werden u. a.: App-Sprache und Darstellung, Fre
 Die iCloud-Synchronisation erfordert dieselbe Apple-ID auf jedem Gerät und aktiviertes iCloud für die App. Für in deinem iCloud-Konto gespeicherte Daten gelten die iCloud-Nutzungsbedingungen und die Datenschutzrichtlinie von Apple.
 
 Du kannst alle synchronisierten Lerndaten unter Einstellungen → App zurücksetzen in Hero entfernen. Abos verwaltest du weiter über Apple.
+
+Fragen melden (CloudKit-öffentliche Datenbank)
+
+Wenn du eine Frage meldest (Flaggen-Symbol auf der Fragekarte), sendet Hero die Meldung an die öffentliche CloudKit-Datenbank unseres Containers. Dafür musst du auf dem Gerät bei iCloud angemeldet sein. Es gibt kein separates Hero-Login.
+
+Eine Meldung kann enthalten: Fragen-ID und -text, Kategorie, Meldungstyp, deine Nachricht, optional deine E-Mail-Adresse, App-Version, Gerätemodell und iOS-Version, App-Sprache und Zeitpunkt der Übermittlung. Meldungen sind für andere Nutzer nicht sichtbar; wir lesen sie in der CloudKit-Konsole von Apple, um Inhalte zu korrigieren. Wir nutzen Meldungen nicht für Werbung und verkaufen diese Daten nicht.
+
+Ohne iCloud-Anmeldung oder ohne Netzwerkverbindung kann die Meldung nicht gesendet werden; die App zeigt eine Fehlermeldung.
 
 Kontakt: siehe Kontakt im App-Menü (Einstellungen → Kontaktiere uns).

@@ -30,9 +30,17 @@ SUBSCRIPTIONS
 - Auto-renewable subscriptions + optional lifetime IAP via RevenueCat.
 - Restore: paywall or Settings → Hero Pro → Restore Purchases.
 
+QUESTION REPORTS (2.3)
+
+- Flag icon on any question card opens an in-app report form (no Mail app).
+- Requires iCloud sign-in; saves to CloudKit public database (container: iCloud.com.gizatech.Leben-in-Deutschland).
+- Fields: question ID/text, report type, user message, optional email, app/device metadata.
+- Reports are developer-only (CloudKit Console); not visible to other users.
+- Without iCloud or network, submit shows a localized error; app does not crash.
+
 NETWORK
 
-- Question content is bundled (JSON). iCloud is used only for personal progress sync.
+- Question content is bundled (JSON). iCloud is used for personal progress sync (private database) and optional question reports (public database).
 - App should not crash when iCloud is unavailable; progress remains local on device.
 
 CONTACT

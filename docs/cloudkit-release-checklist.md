@@ -12,6 +12,19 @@ Complete before submitting build **2.3 (12+)** to App Store review.
 ## CloudKit Console
 
 - [ ] Open [CloudKit Console](https://icloud.developer.apple.com/) → container `iCloud.com.gizatech.Leben-in-Deutschland`
+
+### Question reports (public database)
+
+- [x] Import [`CloudKit/QuestionFeedback.ckdb`](../CloudKit/QuestionFeedback.ckdb) into **Development** (`./Scripts/import_question_feedback_schema.sh` or Console — see [`cloudkit-question-feedback-schema.md`](cloudkit-question-feedback-schema.md))
+- [x] Verify record type `QuestionFeedback` with fields: `questionId`, `questionText`, `category`, `feedbackType`, `message`, `userEmail`, `deviceInfo`, `appVersion`, `language`, `submittedAt`
+- [x] Security: **Create** = `_icloud`, **Write** = `_creator`, **Read** ≠ `_world`
+- [x] Indexes: queryable `submittedAt`, `questionId`, `feedbackType`; sortable `submittedAt`
+- [x] After app integration: test report appears under **Development → Data → Public Database → QuestionFeedback**
+- [ ] Deploy `QuestionFeedback` schema to **Production** (CloudKit Console → **Deploy Schema to Production** — cktool is Development-only)
+- [ ] Submit one test report from a **Release** build; verify under **Production → Data → Public Database → QuestionFeedback**
+
+### Progress sync (private database)
+
 - [ ] Validate **Development** schema after running the app (record types created by SwiftData):
   - `CD_QuestionStatisticsRecord` (or SwiftData-generated equivalents)
   - `CD_LearningAnswerRecord`
@@ -33,11 +46,14 @@ Complete before submitting build **2.3 (12+)** to App Store review.
 | Not signed into iCloud | Local progress works; no crash |
 | Settings → Reset App | All states cleared locally; syncs deletion via CloudKit |
 | Freemium limits | Still per device (UserDefaults); unchanged |
+| Question report (iCloud on) | Success toast; record in Development → Public Database → `QuestionFeedback` |
+| Question report (no iCloud) | Localized error; sheet stays open |
+| Question report (airplane mode) | Network error message; no crash |
 
 ## Documentation & store
 
 - [ ] Publish updated FAQ on website (`docs/faq-en.txt` → site FAQ)
-- [ ] Merge iCloud section into privacy policy (`docs/privacy-policy-icloud-section.txt`)
+- [ ] Publish privacy policy addendum on website (`docs/privacy-policy-icloud-section.txt` — includes progress sync + question reports)
 - [ ] Paste App Review notes (`docs/app-review-notes-v2.3.txt`)
 - [ ] README reflects SwiftData + CloudKit sync
 
