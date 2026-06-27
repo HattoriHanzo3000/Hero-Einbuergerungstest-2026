@@ -58,6 +58,7 @@ final class FeedbackService: ObservableObject {
     @Published var lastSubmissionError: String?
 
     private let container = CKContainer(identifier: QuestionFeedbackCloudKitSchema.containerIdentifier)
+    private let rateLimiter = QuestionFeedbackRateLimiter()
 
     private init() {}
 
@@ -67,11 +68,13 @@ final class FeedbackService: ObservableObject {
         isSubmitting = true
         defer { isSubmitting = false }
 
+        try rateLimiter.enforceLimit()
         try await ensureiCloudAvailable()
 
         let record = feedback.makeQuestionFeedbackRecord()
         do {
             let saved = try await container.publicCloudDatabase.save(record)
+            rateLimiter.recordSuccessfulSubmission()
             #if DEBUG
             print("✅ Question feedback saved to CloudKit: \(saved.recordID.recordName)")
             #endif
@@ -106,6 +109,39 @@ final class FeedbackService: ObservableObject {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
         return "\(version) (\(build))"
+    }
+}
+
+// MARK: - Rate limiting
+
+private struct QuestionFeedbackRateLimiter {
+    private static let maxSubmissionsPerHour = 5
+    private static let window: TimeInterval = 3600
+
+    func enforceLimit() throws {
+        let recent = recentSubmissionTimestamps()
+        guard recent.count < Self.maxSubmissionsPerHour else {
+            throw FeedbackError.rateLimitExceeded
+        }
+    }
+
+    func recordSuccessfulSubmission(at date: Date = .now) {
+        var recent = recentSubmissionTimestamps(relativeTo: date)
+        recent.append(date)
+        UserDefaults.standard.set(
+            recent.map(\.timeIntervalSince1970),
+            forKey: UserDefaultsKeys.questionFeedbackSubmissionTimestamps
+        )
+    }
+
+    private func recentSubmissionTimestamps(relativeTo now: Date = .now) -> [Date] {
+        let cutoff = now.addingTimeInterval(-Self.window)
+        let stored = UserDefaults.standard.array(
+            forKey: UserDefaultsKeys.questionFeedbackSubmissionTimestamps
+        ) as? [TimeInterval] ?? []
+        return stored
+            .map { Date(timeIntervalSince1970: $0) }
+            .filter { $0 > cutoff }
     }
 }
 
@@ -146,6 +182,7 @@ enum FeedbackError: LocalizedError {
     case iCloudUnavailable
     case networkUnavailable
     case quotaExceeded
+    case rateLimitExceeded
     case serverUnavailable
 
     var errorDescription: String? {
@@ -154,6 +191,8 @@ enum FeedbackError: LocalizedError {
             return "feedback_error_icloud_unavailable".localized
         case .networkUnavailable:
             return "feedback_error_network".localized
+        case .rateLimitExceeded:
+            return "feedback_error_rate_limit".localized
         case .quotaExceeded, .serverUnavailable:
             return "feedback_error_server".localized
         }

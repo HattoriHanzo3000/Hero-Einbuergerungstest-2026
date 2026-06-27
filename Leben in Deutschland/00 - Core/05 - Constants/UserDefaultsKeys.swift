@@ -50,6 +50,10 @@ enum UserDefaultsKeys {
     /// Prefix for Learning mode position keys. Full key: "\(subcategoryPositionPrefix)\(subcategoryName)"
     static let subcategoryPositionPrefix = "subcategory_position_"
 
+    // MARK: - Question feedback
+    /// Recent report submission timestamps (TimeInterval) for client-side rate limiting.
+    static let questionFeedbackSubmissionTimestamps = "question_feedback_submission_timestamps"
+
     // MARK: - Freemium Usage
     static let freemiumSmartLearningAnswerCount = "freemium_smart_learning_answer_count"
     static let freemiumTestSimulationsStartedCount = "freemium_test_simulations_started_count"

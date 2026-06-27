@@ -2618,6 +2618,41 @@
         }
       }
     },
+    "feedback_error_rate_limit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst höchstens 5 Berichte pro Stunde senden. Bitte versuche es später erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can send up to 5 reports per hour. Please try again later."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Можно отправить не больше 5 сообщений в час. Попробуй позже."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saatte en fazla 5 rapor gönderebilirsin. Lütfen daha sonra tekrar dene."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Можна надіслати не більше 5 звітів на годину. Спробуй пізніше."
+          }
+        }
+      }
+    },
     "feedback_error_server" : {
       "extractionState" : "manual",
       "localizations" : {
