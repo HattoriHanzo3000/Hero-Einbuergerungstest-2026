@@ -8,9 +8,15 @@ protocol HomeStatisticsProviding {
 }
 
 // MARK: - Home Statistics Service
-/// Derives home-screen stats from the in-memory spaced-repetition state for the active federal state.
+/// Derives home-screen stats from spaced-repetition state for the requested federal state.
 final class HomeStatisticsService: HomeStatisticsProviding {
     func loadStatistics(selectedState: String?) -> HomeStatisticsModel {
+        let coordinator = ProgressPersistenceCoordinator.shared
+        let resolvedState = selectedState ?? coordinator.activeFederalState
+        if resolvedState != coordinator.activeFederalState {
+            coordinator.reloadForFederalState(resolvedState)
+        }
+
         let totalQuestions = LayoutMetrics.totalFederalQuestions
         let statistics = SpacedRepetitionManager.shared.statistics.values
 
