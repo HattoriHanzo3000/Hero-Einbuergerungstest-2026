@@ -50,9 +50,7 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
   }
 
   func reloadForFederalState(_ state: String) {
-    activeFederalState = state
-    persistActiveFederalState(state)
-    reloadBoundServices()
+    applyActiveFederalState(state, reloadServices: true)
   }
 
   /// Deletes all progress across every federal state (Settings global reset only).
@@ -88,13 +86,22 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
   private func bootstrapActiveFederalState(using context: ModelContext) {
     let profile = UserProgressProfile.fetchOrInsertSingleton(in: context)
     let resolved = resolveFederalState(from: profile)
-    activeFederalState = resolved
+    applyActiveFederalState(resolved, reloadServices: false)
+  }
 
-    if profile.activeFederalState != resolved {
-      profile.activeFederalState = resolved
-      profile.lastUpdated = Date()
-      try? context.save()
+  /// Keeps SwiftData, UI selection, and in-memory progress services on the same federal state.
+  private func applyActiveFederalState(_ state: String, reloadServices: Bool) {
+    activeFederalState = state
+    persistActiveFederalState(state)
+    syncFederalStateToUI(state)
+    if reloadServices, modelContext != nil {
+      reloadBoundServices()
     }
+  }
+
+  private func syncFederalStateToUI(_ state: String) {
+    StateManager.shared.setSelectedState(state)
+    OnboardingPreferences.shared.selectedState = state
   }
 
   private func resolveFederalState(from profile: UserProgressProfile) -> String {
@@ -134,7 +141,15 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
     remoteReloadTask = Task { @MainActor in
       try? await Task.sleep(for: .milliseconds(200))
       guard !Task.isCancelled else { return }
-      reloadBoundServices()
+      guard let context = modelContext else { return }
+
+      let profile = UserProgressProfile.fetchOrInsertSingleton(in: context)
+      let syncedState = profile.activeFederalState
+      if !syncedState.isEmpty, syncedState != activeFederalState {
+        applyActiveFederalState(syncedState, reloadServices: true)
+      } else {
+        reloadBoundServices()
+      }
     }
   }
 

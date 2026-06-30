@@ -247,11 +247,9 @@ final class SettingsRegionalViewModel: ObservableObject {
 
     private func applyStateChange(name: String) {
         ProgressPersistenceCoordinator.shared.reloadForFederalState(name)
-        stateManager.setSelectedState(name)
         originalState = name
         federalStateName = name
         pendingStateName = nil
-        self.onboardingPreferences.selectedState = name
     }
 
 }
