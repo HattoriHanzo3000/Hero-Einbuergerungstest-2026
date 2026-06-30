@@ -37,8 +37,8 @@ class AnswersService: ObservableObject {
 
     /// Save an answer for a question in learning mode
     func saveAnswer(_ answerIndex: Int, for questionId: String) {
+        guard persistAnswer(questionId: questionId, answerIndex: answerIndex) else { return }
         learningAnswers[questionId] = answerIndex
-        persistAnswer(questionId: questionId, answerIndex: answerIndex)
     }
 
     /// Get saved answer for a question
@@ -53,8 +53,8 @@ class AnswersService: ObservableObject {
 
     /// Clear answer for a specific question
     func clearAnswer(for questionId: String) {
+        guard deleteAnswer(questionId: questionId) else { return }
         learningAnswers.removeValue(forKey: questionId)
-        deleteAnswer(questionId: questionId)
     }
 
     /// Clear all answers (used in settings reset)
@@ -108,8 +108,9 @@ class AnswersService: ObservableObject {
         learningAnswers = loaded
     }
 
-    private func persistAnswer(questionId: String, answerIndex: Int) {
-        guard let context = modelContext, !activeFederalState.isEmpty else { return }
+    @discardableResult
+    private func persistAnswer(questionId: String, answerIndex: Int) -> Bool {
+        guard let context = modelContext, !activeFederalState.isEmpty else { return false }
 
         let recordId = ProgressRecordID.make(federalState: activeFederalState, questionId: questionId)
         let id = recordId
@@ -118,20 +119,26 @@ class AnswersService: ObservableObject {
         )
         descriptor.fetchLimit = 1
 
-        if let existing = try? context.fetch(descriptor).first {
-            existing.answerIndex = answerIndex
-        } else {
-            context.insert(LearningAnswerRecord(
-                federalState: activeFederalState,
-                questionId: questionId,
-                answerIndex: answerIndex
-            ))
+        do {
+            if let existing = try context.fetch(descriptor).first {
+                existing.answerIndex = answerIndex
+            } else {
+                context.insert(LearningAnswerRecord(
+                    federalState: activeFederalState,
+                    questionId: questionId,
+                    answerIndex: answerIndex
+                ))
+            }
+            try context.save()
+            return true
+        } catch {
+            return false
         }
-        try? context.save()
     }
 
-    private func deleteAnswer(questionId: String) {
-        guard let context = modelContext, !activeFederalState.isEmpty else { return }
+    @discardableResult
+    private func deleteAnswer(questionId: String) -> Bool {
+        guard let context = modelContext, !activeFederalState.isEmpty else { return false }
 
         let recordId = ProgressRecordID.make(federalState: activeFederalState, questionId: questionId)
         let id = recordId
@@ -139,9 +146,14 @@ class AnswersService: ObservableObject {
             predicate: #Predicate<LearningAnswerRecord> { $0.recordId == id }
         )
         descriptor.fetchLimit = 1
-        if let existing = try? context.fetch(descriptor).first {
+
+        do {
+            guard let existing = try context.fetch(descriptor).first else { return true }
             context.delete(existing)
-            try? context.save()
+            try context.save()
+            return true
+        } catch {
+            return false
         }
     }
 }
