@@ -59,10 +59,9 @@ class AnswersService: ObservableObject {
 
     /// Clear all answers (used in settings reset)
     func clearAllAnswers() {
+        guard deleteAllAnswersFromStore() else { return }
         learningAnswers.removeAll()
         UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.learningAnswers)
-        guard let context = modelContext else { return }
-        try? LearningAnswerRecord.deleteAll(in: context)
     }
 
     /// Get count of answered questions
@@ -151,6 +150,18 @@ class AnswersService: ObservableObject {
             guard let existing = try context.fetch(descriptor).first else { return true }
             context.delete(existing)
             try context.save()
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    @discardableResult
+    private func deleteAllAnswersFromStore() -> Bool {
+        guard let context = modelContext else { return true }
+
+        do {
+            try LearningAnswerRecord.deleteAll(in: context)
             return true
         } catch {
             return false

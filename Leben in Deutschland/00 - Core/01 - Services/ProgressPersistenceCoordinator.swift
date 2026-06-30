@@ -62,10 +62,11 @@ final class ProgressPersistenceCoordinator: ProgressPersistenceCoordinating {
       try? UserProgressProfile.deleteAll(in: context)
     }
     MigrationManager.resetProgressMigrationFlags(using: defaults)
-    activeFederalState = FederalStateModel.allStates.first?.name ?? "Berlin"
+    let defaultState = FederalStateModel.allStates.first?.name ?? "Berlin"
     if modelContext != nil {
-      reloadBoundServices()
+      applyActiveFederalState(defaultState, reloadServices: true)
     } else {
+      applyActiveFederalState(defaultState, reloadServices: false)
       SpacedRepetitionManager.shared.clearAllStatistics()
       AnswersService.shared.clearAllAnswers()
       FavoritesManager.shared.clearAllFavorites()
