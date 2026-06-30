@@ -44,16 +44,18 @@ final class FavoritesManager: ObservableObject, FavoritesManaging {
 
     @discardableResult
     func toggleFavorite(for questionId: String, isPro: Bool) -> Bool {
+        var updatedIds = favoriteQuestionIds
         if let index = favoriteQuestionIds.firstIndex(of: questionId) {
-            favoriteQuestionIds.remove(at: index)
-            persist()
-            return true
+            updatedIds.remove(at: index)
+        } else {
+            if !isPro && favoriteQuestionIds.count >= FreemiumLimits.freeFavoritesMax {
+                return false
+            }
+            updatedIds.append(questionId)
         }
-        if !isPro && favoriteQuestionIds.count >= FreemiumLimits.freeFavoritesMax {
-            return false
-        }
-        favoriteQuestionIds.append(questionId)
-        persist()
+
+        guard persist(desiredIds: updatedIds) else { return true }
+        favoriteQuestionIds = updatedIds
         return true
     }
 
@@ -87,24 +89,30 @@ private extension FavoritesManager {
         favoriteQuestionIds = rows.map(\.questionId)
     }
 
-    func persist() {
-        guard let context = modelContext, !activeFederalState.isEmpty else { return }
+    @discardableResult
+    func persist(desiredIds: [String]) -> Bool {
+        guard let context = modelContext, !activeFederalState.isEmpty else { return false }
 
         let state = activeFederalState
         let descriptor = FetchDescriptor<FavoriteQuestion>(
             predicate: #Predicate<FavoriteQuestion> { $0.federalState == state }
         )
-        let existing = (try? context.fetch(descriptor)) ?? []
-        let existingIds = Set(existing.map(\.questionId))
-        let desiredIds = favoriteQuestionIds
 
-        for row in existing where !desiredIds.contains(row.questionId) {
-            context.delete(row)
-        }
+        do {
+            let existing = try context.fetch(descriptor)
+            let existingIds = Set(existing.map(\.questionId))
 
-        for questionId in desiredIds where !existingIds.contains(questionId) {
-            context.insert(FavoriteQuestion(federalState: activeFederalState, questionId: questionId))
+            for row in existing where !desiredIds.contains(row.questionId) {
+                context.delete(row)
+            }
+
+            for questionId in desiredIds where !existingIds.contains(questionId) {
+                context.insert(FavoriteQuestion(federalState: activeFederalState, questionId: questionId))
+            }
+            try context.save()
+            return true
+        } catch {
+            return false
         }
-        try? context.save()
     }
 }
