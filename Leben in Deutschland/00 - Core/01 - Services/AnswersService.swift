@@ -36,9 +36,11 @@ class AnswersService: ObservableObject {
     // MARK: - Learning Mode Answers
 
     /// Save an answer for a question in learning mode
-    func saveAnswer(_ answerIndex: Int, for questionId: String) {
-        guard persistAnswer(questionId: questionId, answerIndex: answerIndex) else { return }
+    @discardableResult
+    func saveAnswer(_ answerIndex: Int, for questionId: String) -> Bool {
+        guard persistAnswer(questionId: questionId, answerIndex: answerIndex) else { return false }
         learningAnswers[questionId] = answerIndex
+        return true
     }
 
     /// Get saved answer for a question
@@ -52,9 +54,11 @@ class AnswersService: ObservableObject {
     }
 
     /// Clear answer for a specific question
-    func clearAnswer(for questionId: String) {
-        guard deleteAnswer(questionId: questionId) else { return }
+    @discardableResult
+    func clearAnswer(for questionId: String) -> Bool {
+        guard deleteAnswer(questionId: questionId) else { return false }
         learningAnswers.removeValue(forKey: questionId)
+        return true
     }
 
     /// Clear all answers (used in settings reset)

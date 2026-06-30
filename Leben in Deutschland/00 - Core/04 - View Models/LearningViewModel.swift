@@ -100,8 +100,7 @@ class LearningViewModel: ObservableObject {
     func checkAnswer() {
         guard let answer = selectedAnswer, let question = currentQuestion else { return }
         
-        // Save answer to persistent storage
-        answersService.saveAnswer(answer, for: question.id)
+        guard answersService.saveAnswer(answer, for: question.id) else { return }
         
         // Mark as answered
         answeredQuestions.insert(question.id)
@@ -128,8 +127,7 @@ class LearningViewModel: ObservableObject {
     func resetCurrentQuestion() {
         guard let question = currentQuestion else { return }
         
-        // Clear answer from persistent storage
-        answersService.clearAnswer(for: question.id)
+        guard answersService.clearAnswer(for: question.id) else { return }
         
         selectedAnswer = nil
         showCorrectAnswer = false
