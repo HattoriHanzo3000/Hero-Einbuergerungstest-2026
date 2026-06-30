@@ -30,7 +30,7 @@ struct SearchQuestionDetailView: View {
             onToggleTranslation: { showTranslation.toggle() },
             isTranslationActive: showTranslation,
             onToggleFavorite: {
-                if !favoritesManager.toggleFavorite(for: question.id, isPro: subscriptionManager.effectiveIsPro) {
+                if favoritesManager.toggleFavorite(for: question.id, isPro: subscriptionManager.effectiveIsPro).shouldPresentPaywall {
                     subscriptionManager.presentProLimitSheet(
                         titleKey: "limit_favorites_title",
                         messageKey: "limit_favorites_message",

@@ -148,9 +148,9 @@ class LearningViewModel: ObservableObject {
     
     @discardableResult
     func toggleFavorite(for questionId: String, isPro: Bool) -> Bool {
-        let ok = favoritesManager.toggleFavorite(for: questionId, isPro: isPro)
-        if ok { objectWillChange.send() }
-        return ok
+        let outcome = favoritesManager.toggleFavorite(for: questionId, isPro: isPro)
+        if outcome == .toggled { objectWillChange.send() }
+        return !outcome.shouldPresentPaywall
     }
     
     func previousQuestion() {

@@ -17,39 +17,17 @@ final class HomeStatisticsService: HomeStatisticsProviding {
             coordinator.reloadForFederalState(resolvedState)
         }
 
+        let manager = SpacedRepetitionManager.shared
         let totalQuestions = LayoutMetrics.totalFederalQuestions
-        let statistics = SpacedRepetitionManager.shared.statistics.values
-
-        let familiar = statistics.filter { $0.correctCount == 1 }.count
-        let reinforced = statistics.filter { $0.correctCount == 2 }.count
-        let mastered = statistics.filter { $0.correctCount == 3 }.count
-        let expert = statistics.filter { $0.correctCount >= 4 }.count
-
-        let totalContribution = statistics.reduce(0.0) { sum, stats in
-            sum + readinessContribution(correctCount: stats.correctCount)
-        }
-        let readinessFromStats = Int((totalContribution / Double(totalQuestions)) * 100)
+        let buckets = manager.progressBuckets(totalQuestions: totalQuestions)
 
         return HomeStatisticsModel(
-            readinessPercentage: min(max(readinessFromStats, 0), 100),
-            familiar: familiar,
-            reinforced: reinforced,
-            mastered: mastered,
-            expert: expert,
+            readinessPercentage: manager.readinessPercentage(totalQuestions: totalQuestions),
+            familiar: buckets.familiar,
+            reinforced: buckets.reinforced,
+            mastered: buckets.mastered,
+            expert: buckets.expert,
             totalQuestions: totalQuestions
         )
-    }
-}
-
-// MARK: - Readiness Calculation Helper
-private extension HomeStatisticsService {
-    func readinessContribution(correctCount: Int) -> Double {
-        switch correctCount {
-        case 0: return 0.0
-        case 1: return 0.25
-        case 2: return 0.5
-        case 3: return 0.75
-        default: return 1.0
-        }
     }
 }

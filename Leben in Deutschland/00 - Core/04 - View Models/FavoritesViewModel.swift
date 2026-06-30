@@ -85,9 +85,9 @@ class FavoritesViewModel: ObservableObject {
     
     @discardableResult
     func toggleFavorite(for questionId: String, isPro: Bool) -> Bool {
-        let ok = favoritesManager.toggleFavorite(for: questionId, isPro: isPro)
-        if ok { /* Questions will reload automatically via Combine subscription */ }
-        return ok
+        let outcome = favoritesManager.toggleFavorite(for: questionId, isPro: isPro)
+        if outcome == .toggled { /* Questions will reload automatically via Combine subscription */ }
+        return !outcome.shouldPresentPaywall
     }
 }
 

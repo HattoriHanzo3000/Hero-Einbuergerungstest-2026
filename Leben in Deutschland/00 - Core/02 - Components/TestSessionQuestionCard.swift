@@ -212,7 +212,7 @@ struct TestSessionQuestionCard: View {
             if let currentQuestion = viewModel.currentQuestion {
                 Button(action: {
                     HapticManager.shared.lightImpact()
-                    if !favoritesManager.toggleFavorite(for: currentQuestion.originalId, isPro: subscriptionManager.effectiveIsPro) {
+                    if favoritesManager.toggleFavorite(for: currentQuestion.originalId, isPro: subscriptionManager.effectiveIsPro).shouldPresentPaywall {
                         subscriptionManager.presentProLimitSheet(
                             titleKey: "limit_favorites_title",
                             messageKey: "limit_favorites_message",

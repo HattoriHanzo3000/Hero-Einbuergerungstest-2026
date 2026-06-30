@@ -3,10 +3,20 @@ import Combine
 import SwiftData
 
 // MARK: - Favorites Managing
+enum FavoriteToggleOutcome: Equatable {
+    case toggled
+    case limitReached
+    case persistFailed
+
+    var shouldPresentPaywall: Bool {
+        self == .limitReached
+    }
+}
+
 protocol FavoritesManaging: AnyObject {
     func isFavorite(_ questionId: String) -> Bool
     @discardableResult
-    func toggleFavorite(for questionId: String, isPro: Bool) -> Bool
+    func toggleFavorite(for questionId: String, isPro: Bool) -> FavoriteToggleOutcome
 }
 
 // MARK: - Favorites Manager
@@ -43,20 +53,20 @@ final class FavoritesManager: ObservableObject, FavoritesManaging {
     }
 
     @discardableResult
-    func toggleFavorite(for questionId: String, isPro: Bool) -> Bool {
+    func toggleFavorite(for questionId: String, isPro: Bool) -> FavoriteToggleOutcome {
         var updatedIds = favoriteQuestionIds
         if let index = favoriteQuestionIds.firstIndex(of: questionId) {
             updatedIds.remove(at: index)
         } else {
             if !isPro && favoriteQuestionIds.count >= FreemiumLimits.freeFavoritesMax {
-                return false
+                return .limitReached
             }
             updatedIds.append(questionId)
         }
 
-        guard persist(desiredIds: updatedIds) else { return true }
+        guard persist(desiredIds: updatedIds) else { return .persistFailed }
         favoriteQuestionIds = updatedIds
-        return true
+        return .toggled
     }
 
     /// Reloads favorites from persistence (e.g. after app reset). Replaces in-memory state with stored state.

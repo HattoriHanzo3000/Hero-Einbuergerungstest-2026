@@ -15,7 +15,14 @@ final class HomeViewModel: ObservableObject {
     init(statisticsProvider: HomeStatisticsProviding, stateManager: StateManager) {
         self.statisticsProvider = statisticsProvider
         self.stateManager = stateManager
-        self.statistics = statisticsProvider.loadStatistics(selectedState: stateManager.selectedState)
+        self.statistics = .placeholder
+
+        SpacedRepetitionManager.shared.$statistics
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshStatistics()
+            }
+            .store(in: &cancellables)
 
         stateManager.$selectedState
             .dropFirst()
