@@ -72,8 +72,7 @@ final class AppRatingManager: AppRatingManaging {
     }
 
     func requestReviewIfEligible() {
-        guard isEligibleForReviewRequest() else { return }
-        requestReview()
+        guard isEligibleForReviewRequest(), requestReview() else { return }
         defaults.set(Date(), forKey: lastPromptDateKey)
     }
 
@@ -84,10 +83,15 @@ final class AppRatingManager: AppRatingManaging {
 
     // MARK: - Private Methods
 
-    private func requestReview() {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
-            return
-        }
+    @discardableResult
+    private func requestReview() -> Bool {
+        guard let windowScene = activeWindowScene else { return false }
         AppStore.requestReview(in: windowScene)
+        return true
+    }
+
+    private var activeWindowScene: UIWindowScene? {
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        return scenes.first(where: { $0.activationState == .foregroundActive }) ?? scenes.first
     }
 }
